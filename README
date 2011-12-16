@@ -11,7 +11,7 @@ Project description:
 Candidate calendar widget for Dojo 1.8+
 -------------------------------------------------------------------------------
 Dependencies:
-Dojo Core, Dijit, dojox.html
+Dojo Core, Dijit, dojox.html, dojox.widget
 -------------------------------------------------------------------------------
 Documentation:
 When available, will reside at:
