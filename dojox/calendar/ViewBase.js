@@ -2,8 +2,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 				"dojo/_base/event", "dojo/_base/html", "dojo/_base/sniff", "dojo/query", "dojo/dom", 
 				"dojo/dom-construct", "dojo/on", "dojo/date", "dojo/date/locale", "dijit/_WidgetBase", 
 				"./_StoreMixin", "dojox/widget/_Invalidating", "dojox/widget/Selection", "dojox/calendar/time"],
-  
-	function(declare, lang, arr, win, event, html, has, query, dom, domConstruct, on, date, locale, 
+  	function(declare, lang, arr, win, event, html, has, query, dom, domConstruct, on, date, locale, 
 		_WidgetBase, _StoreMixin, _Invalidating, Selection, timeUtil){
 	
 	/*=====
@@ -252,7 +251,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 			//	reuse: Boolean
 			//		Whether use the specified instance or create a new one. Default is false.			
 			//	returns: Date
-			return timeUtil.floor(date, unit, steps, reuse, this.classFuncObj);
+			return timeUtil.floor(date, unit, steps, reuse, this.dateClassObj);
 		},
 
 		isToday: function(date){
@@ -344,8 +343,8 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 			}
 			
 			return [
-				new this.newDate(cal.compare(start1, start2)>0 ? start1: start2, renderData),
-				new this.newDate(cal.compare(end1, end2)>0 ? end2: end1, renderData)
+				this.newDate(cal.compare(start1, start2)>0 ? start1: start2, renderData),
+				this.newDate(cal.compare(end1, end2)>0 ? end2: end1, renderData)
 			];
 		},
 		
@@ -1819,16 +1818,30 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 			//	summary:
 			//		Event dispatched when an editing gesture is beginning.
 		},
+		
+		_waDojoxAddIssue: function(d, unit, steps){
+			//	summary:
+			//		Workaround an issue of dojox.date.XXXXX.date.add() function 
+			//		that does not support the subtraction of time correctly (normalization issues). 
+			var cal = this.renderData.dateFuncObj;
+			if(this._calendar != "gregorian" && steps < 0){
+				var gd = d.toGregorian();
+				gd = date.add(gd, unit, steps);
+				return new this.renderData.dateClassObj(gd);
+			}else{
+				return cal.add(d, unit, steps);
+			}
+		},
 						
 		_computeItemEditingTimes: function(item, editKind, rendererKind, times, eventSource){
 			var cal = this.renderData.dateFuncObj;
 			var p = this._edProps;
 			var diff = cal.difference(p.editingTimeFrom[0], times[0], "millisecond");
-			times[0] = cal.add(p.editingItemRefTime[0], "millisecond", diff);
+			times[0] = this._waDojoxAddIssue(p.editingItemRefTime[0], "millisecond", diff);
 			
 			if(editKind == "resizeBoth"){
 				diff = cal.difference(p.editingTimeFrom[1], times[1], "millisecond");
-				times[1] = cal.add(p.editingItemRefTime[1], "millisecond", diff); 
+				times[1] = this._waDojoxAddIssue(p.editingItemRefTime[1], "millisecond", diff); 
 			}
 			return times;
 		},
