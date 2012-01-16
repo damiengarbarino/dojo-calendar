@@ -1,12 +1,12 @@
 define(["dojo/_base/lang", "dojo/date", "dojo/cldr/supplemental"], function(lang, date, cldr) {
 
-var time = lang.getObject("dojox.calendar.time", true);
+var time = {};
 
 /*=====
 dojox.calendar.time = {
 	// summary: Advanced date manipulation utilities.
 };
-time = dojox.calendar.time;
+var time = dojox.calendar.time;
 =====*/
 
 time.newDate = function(obj, dateClassObj){
