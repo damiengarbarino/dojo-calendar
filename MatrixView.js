@@ -1,9 +1,42 @@
-define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_TemplatedMixin",
-	"dojo/_base/html", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/event", "dojo/_base/lang", 
-	"dojo/_base/sniff", "dojo/dom", "dojo/dom-class", "dojo/dom-geometry", "dojo/dom-construct", 
-	"dojo/query", "dojox/html/metrics", "dojo/_base/fx", "dojo/on", "dojo/i18n"],
+define([
+"dojo/_base/declare", 
+"dojo/_base/array", 
+"dojo/_base/event", 
+"dojo/_base/lang", 
+"dojo/_base/sniff", 
+"dojo/_base/fx", 
+"dojo/on", 
+"dojo/dom", 
+"dojo/dom-class", 
+"dojo/dom-style",
+"dojo/dom-geometry", 
+"dojo/dom-construct", 
+"dojo/query", 
+"dojox/html/metrics", 
+"dojo/i18n",
+"./ViewBase", 
+"dojo/text!./templates/MatrixView.html", 
+"dijit/_TemplatedMixin"],
 	
-	function(ViewBase, template, _TemplatedMixin, html, declare, arr, event, lang, has, dom, domClass, domGeometry, domConstruct, query, metrics, fx, on, i18n){
+function(
+declare, 
+arr, 
+event, 
+lang, 
+has, 
+fx, 
+on, 
+dom, 
+domClass, 
+domStyle,
+domGeometry,
+domConstruct, 
+query, 
+metrics, 
+i18n,
+ViewBase, 
+template, 
+_TemplatedMixin, ){
 	
 	/*=====
 	var ViewBase = dojox.calendar.ViewBase;
@@ -379,7 +412,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 			this._buildItemContainer(renderData, oldRenderData);
 			
 			if(this.buttonContainer && this.owner != null && this.owner.currentView == this){
-				html.style(this.buttonContainer, {"right":0, "left":0});
+				domStyle.set(this.buttonContainer, {"right":0, "left":0});
 			}
 		},	
 		
@@ -576,7 +609,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 
 			query("tr", rowHeaderTable).forEach(function(tr, i){
 
-				html.style(tr, "height", this._getRowHeight(i) + "px");
+				domStyle.set(tr, "height", this._getRowHeight(i) + "px");
 				
 				var d = renderData.dates[i][0];
 				
@@ -694,7 +727,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 
 			query("tr", table).forEach(function (tr, row){
 				
-				html.style(tr, "height", this._getRowHeight(row) + "px");
+				domStyle.set(tr, "height", this._getRowHeight(row) + "px");
 				
 				tr.className = "";
 				// compatibility layer for IE7 & 8 that does not support :first-child and :last-child pseudo selectors
@@ -817,7 +850,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 			}
 
 			query(".dojoxCalendarItemContainerRow", table).forEach(function(tr, i){
-				html.style(tr, "height", this._getRowHeight(i) + "px");
+				domStyle.set(tr, "height", this._getRowHeight(i) + "px");
 				rows.push(tr.childNodes[0].childNodes[0]);
 			}, this); 
 
@@ -854,7 +887,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 			if(this.layoutDuringResize || apply){
 				this._layoutRenderers(this.renderData);
 			}else{
-				html.style(this.itemContainer, "opacity", 0);
+				domStyle.set(this.itemContainer, "opacity", 0);
 				this._recycleItemRenderers();
 				this._recycleExpandRenderers();
 				if(this._resizeTimer != undefined){
@@ -865,7 +898,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 					this._resizeRowsImpl(this.itemContainer, "tr");
 					this._layoutRenderers(this.renderData);
 					if(this.resizeAnimationDuration == 0){
-						html.style(this.itemContainer, "opacity", 1);
+						domStyle.set(this.itemContainer, "opacity", 1);
 					}else{
 						fx.fadeIn({node:this.itemContainer, curve:[0, 1]}).play(this.resizeAnimationDuration);
 					}					
@@ -918,7 +951,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 					
 					this._recycleExpandRenderers();
 					this._recycleItemRenderers();
-					html.style(this.itemContainer, "display", "none");
+					domStyle.set(this.itemContainer, "display", "none");
 					
 					this._expandAnimation = new fx.Animation({
 						curve: [oldSize, size],
@@ -931,7 +964,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 							this._expandAnimation = null;
 							this._collapseRowImpl(false);
 							this._resizeRows();
-							html.style(this.itemContainer, "display", "block");
+							domStyle.set(this.itemContainer, "display", "block");
 							setTimeout(lang.hitch(this, function(){								
 								this._layoutRenderers(rd);								
 							}), 100);
@@ -998,7 +1031,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 					//debugger;
 					this._recycleExpandRenderers();
 					this._recycleItemRenderers();
-					html.style(this.itemContainer, "display", "none");
+					domStyle.set(this.itemContainer, "display", "none");
 					
 					this._expandAnimation = new fx.Animation({
 						curve: [oldSize, size],
@@ -1010,7 +1043,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 						}),
 						onEnd: lang.hitch(this, function(){
 							this._expandAnimation = null;
-							html.style(this.itemContainer, "display", "block");
+							domStyle.set(this.itemContainer, "display", "block");
 							setTimeout(lang.hitch(this, function(){
 								this._expandRowImpl(size, true);
 							}), 100);
@@ -1124,7 +1157,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 		_resizeRowsImpl: function(tableNode, query){
 			var rd = this.renderData;
 			dojo.query(query, tableNode).forEach(function(tr, i){
-				html.style(tr, "height", this._getRowHeight(i)+"px");
+				domStyle.set(tr, "height", this._getRowHeight(i)+"px");
 			}, this);
 		},
 
@@ -1209,7 +1242,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 				if(remove){
 					ir.domNode.parentNode.removeChild(ir.domNode);
 				}
-				html.style(ir.domNode, "display", "none");
+				domStyle.set(ir.domNode, "display", "none");
 			}
 			this._ddRendererPool = this._ddRendererPool.concat(this._ddRendererList);
 			this._ddRendererList = [];
@@ -1314,7 +1347,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 			//	focused: Boolean
 			//		Whether the item is focused not not.
 						
-			html.style(renderer.container, {"zIndex": edited || selected ? renderer.renderer.mobile ? 100 : 0: item.lane == undefined ? 1 : item.lane+1});
+			domStyle.set(renderer.container, {"zIndex": edited || selected ? renderer.renderer.mobile ? 100 : 0: item.lane == undefined ? 1 : item.lane+1});
 		},
 
 		_layoutRenderers: function(renderData){
@@ -1625,7 +1658,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 						w++;
 					} ;
 
-					html.style(ir.container, {
+					domStyle.set(ir.container, {
 						"top": (fullHeight ? this.cellPaddingTop : posY) + "px",
 						"left": item.start + "px",
 						"width": w + "px",
@@ -1687,7 +1720,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 								item.end = item.start + celPos.w;
 							}
 								 
-							html.style(ir.container, {
+							domStyle.set(ir.container, {
 								"top": (fullHeight ? this.cellPaddingTop : posY) + "px",
 								"left": item.start + "px",
 								"width": celPos.w + "px",
@@ -1737,7 +1770,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 			}
 										
 			domConstruct.place(ir.container, cell);
-			html.style(ir.container, "display", "block");
+			domStyle.set(ir.container, "display", "block");
 		},
 		
 		_getCellAt: function(rowIndex, columnIndex, rtl){
@@ -1781,7 +1814,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 			dim.x -= rd.gridTablePosX;
 			this.layoutExpandRenderer(ir, d, items, dim, this.expandRendererHeight);
 			domConstruct.place(ir.domNode, cell);
-			html.style(ir.domNode, "display", "block");
+			domStyle.set(ir.domNode, "display", "block");
 		},
 		
 		layoutExpandRenderer: function(renderer, date, items, cellPosition, height){
@@ -1798,7 +1831,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 			//	cellPosition: Object
 			//		An object that contains the position (x and y properties) and size of the cell (w and h properties).
 						
-			html.style(renderer.domNode, {
+			domStyle.set(renderer.domNode, {
 				"left": cellPosition.x + "px",
 				"width": cellPosition.w + "px",
 				"height": height + "px",

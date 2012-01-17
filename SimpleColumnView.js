@@ -1,10 +1,44 @@
-define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo/text!./templates/SimpleColumnView.html",
-	"dojo/_base/html", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/lang", "dojo/_base/array",
-	"dojo/_base/sniff", "dojo/dom", "dojo/dom-class", "dojo/dom-geometry", "dojo/dom-construct", "dojo/query", 
-	"dojox/html/metrics", "dojo/_base/fx", "dojo/on"],
+define([
+"./ViewBase", 
+"dijit/_TemplatedMixin", 
+"./_VerticalScrollBarBase", 
+"dojo/text!./templates/SimpleColumnView.html",
+"dojo/_base/declare", 
+"dojo/_base/event", 
+"dojo/_base/lang", 
+"dojo/_base/array",
+"dojo/_base/sniff",
+"dojo/_base/fx", 
+"dojo/on"
+"dojo/dom", 
+"dojo/dom-class", 
+"dojo/dom-style", 
+"dojo/dom-geometry", 
+"dojo/dom-construct", 
+"dojo/query", 
+"dojox/html/metrics"],
+
 	
-	function(ViewBase, _TemplatedMixin, _VerticalScrollBarBase, template, html, declare, event, lang, arr, has, 
-					 dom, domClass, domGeometry, domConstruct, query, metrics, fx, on){
+function(
+ViewBase, 
+_TemplatedMixin, 
+_VerticalScrollBarBase, 
+template, 
+declare, 
+event, 
+lang, 
+arr, 
+has,
+fx, 
+on,
+dom, 
+domClass, 
+domStyle,
+domGeometry, 
+domConstruct, 
+query, 
+metrics, 
+){
 				
 	/*=====
 	var ViewBase = dojox.calendar.ViewBase;
@@ -470,7 +504,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 		
 		_createRendering: function(/*Object*/renderData, /*Object*/oldRenderData){
 
-			html.style(this.sheetContainer, "height", renderData.sheetHeight + "px");
+			domStyle.set(this.sheetContainer, "height", renderData.sheetHeight + "px");
 			// padding for the scroll bar.
 			this._configureScrollBar(renderData);
 			this._buildColumnHeader(renderData, oldRenderData);
@@ -481,23 +515,23 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 		
 		_configureScrollBar: function(renderData){
 			if(has("ie") && this.scrollBar){
-				html.style(this.scrollBar.domNode, "width", (renderData.scrollbarWidth + 1) + "px");
+				domStyle.set(this.scrollBar.domNode, "width", (renderData.scrollbarWidth + 1) + "px");
 			}
 						
 			var atRight = this.isLeftToRight() ? true : this.scrollBarRTLPosition == "right";
 			
 			if(this.scrollBar){
 				this.scrollBar.set("maximum", renderData.sheetHeight);			
-				html.style(this.scrollBar.domNode, atRight? "right" : "left", 0);
-				html.style(this.scrollBar.domNode, atRight? "left" : "right", "auto");
+				domStyle.set(this.scrollBar.domNode, atRight? "right" : "left", 0);
+				domStyle.set(this.scrollBar.domNode, atRight? "left" : "right", "auto");
 			}
-			html.style(this.scrollContainer, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
-			html.style(this.scrollContainer, atRight ? "left" : "right", "0");
-			html.style(this.header, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
-			html.style(this.header, atRight ? "left" : "right", "0");
+			domStyle.set(this.scrollContainer, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
+			domStyle.set(this.scrollContainer, atRight ? "left" : "right", "0");
+			domStyle.set(this.header, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
+			domStyle.set(this.header, atRight ? "left" : "right", "0");
 			if(this.buttonContainer && this.owner != null && this.owner.currentView == this){
-				html.style(this.buttonContainer, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
-				html.style(this.buttonContainer, atRight ? "left" : "right", "0");
+				domStyle.set(this.buttonContainer, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
+				domStyle.set(this.buttonContainer, atRight ? "left" : "right", "0");
 			}
 		},
 		
@@ -687,7 +721,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 				return;
 			}
 						
-			html.style(rowHeaderTable, "height", renderData.sheetHeight + "px");
+			domStyle.set(rowHeaderTable, "height", renderData.sheetHeight + "px");
 			
 			var tbodies = query("tbody", rowHeaderTable);			
 			var tbody, tr, td;
@@ -726,7 +760,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 				var td = query("td", tr)[0];
 				td.className = "";
 				if (has("ie") == 7) {
-					html.style(tr, "height", (renderData.slotSize-2) + "px");					
+					domStyle.set(tr, "height", (renderData.slotSize-2) + "px");					
 					if(i % rowPerH == 0){
 						d.setHours(this.renderData.minHours + (i/rowPerH));
 						this.styleRowHeaderCell(td, d.getHours(), renderData);					
@@ -737,7 +771,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 						return;
 					}									
 				}else{
-					html.style(tr, "height", renderData.hourSize + "px");
+					domStyle.set(tr, "height", renderData.hourSize + "px");
 					d.setHours(this.renderData.minHours + (i));
 					this.styleRowHeaderCell(td, d.getHours(), renderData);					
 					this._setText(td, this._formatRowHeaderLabel(d));
@@ -775,7 +809,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 				return;
 			}
 			
-			html.style(table, "height", renderData.sheetHeight + "px");											
+			domStyle.set(table, "height", renderData.sheetHeight + "px");											
 			
 			var nbRows = Math.floor(60 / renderData.slotDuration) * renderData.hourCount;
 			
@@ -849,7 +883,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 			
 			query("tr", table).forEach(function (tr, i){
 				
-				html.style(tr, "height", renderData.slotSize + "px");
+				domStyle.set(tr, "height", renderData.slotSize + "px");
 				
 				if(i == 0){
 					domClass.add(tr, "first-child");
@@ -927,7 +961,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 			
 			var bgCols = [];
 	
-			html.style(table, "height", renderData.sheetHeight + "px");			
+			domStyle.set(table, "height", renderData.sheetHeight + "px");			
 			
 			var count = renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0);
 			
@@ -981,7 +1015,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 			
 			query("td>div", table).forEach(function(div, i){
 
-				html.style(div, {
+				domStyle.set(div, {
 					"height":	renderData.sheetHeight + "px",
 					"marginBottom":	"-" + renderData.sheetHeight + "px"
 				});
@@ -1126,7 +1160,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 
 				var ir = this._createRenderer(item, "vertical", this.verticalRenderer, "dojoxCalendarVertical");
 
-				html.style(ir.container, {
+				domStyle.set(ir.container, {
 					"top": item.start + "px",
 					"left": posX + "%",
 					"width": w + "%",
@@ -1154,7 +1188,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 				}
 
 				domConstruct.place(ir.container, cell);
-				html.style(ir.container, "display", "block");
+				domStyle.set(ir.container, "display", "block");
 			}
 		},
 		

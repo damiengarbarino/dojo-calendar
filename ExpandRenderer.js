@@ -1,7 +1,26 @@
-define(["dojo/_base/declare", "dojo/_base/html", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/window", "dojo/on", "dojo/dom-class", 
-	"dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/ExpandRenderer.html"],
+define([
+"dojo/_base/declare", 
+"dojo/_base/lang", 
+"dojo/_base/event", 
+"dojo/_base/window", 
+"dojo/on", 
+"dojo/dom-class", 
+"dojo/dom-style",
+"dijit/_WidgetBase", 
+"dijit/_TemplatedMixin", 
+"dojo/text!./templates/ExpandRenderer.html"],
 	 
-	function(declare, html, lang, event, win, on, domClass, _WidgetBase, _TemplatedMixin, template){
+function(
+declare, 
+lang, 
+event, 
+win, 
+on, 
+domClass, 
+domStyle, 
+_WidgetBase, 
+_TemplatedMixin, 
+template){
 	
 	//	module:
 	//		dojox/calendar/ExpandRenderer
@@ -54,8 +73,8 @@ define(["dojo/_base/declare", "dojo/_base/html", "dojo/_base/lang", "dojo/_base/
 		columnIndex: -1,
 		
 		_setExpandedAttr: function(value){
-			html.style(this.expand, "display", value ? "none" : "inline-block");
-			html.style(this.collapse, "display", value ? "inline-block" : "none"); 
+			domStyle.set(this.expand, "display", value ? "none" : "inline-block");
+			domStyle.set(this.collapse, "display", value ? "inline-block" : "none"); 
 			this._set("expanded", value);
 		},
 

@@ -1,9 +1,43 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/window", 
-				"dojo/_base/event", "dojo/_base/html", "dojo/_base/sniff", "dojo/query", "dojo/dom", 
-				"dojo/dom-construct", "dojo/on", "dojo/date", "dojo/date/locale", "dijit/_WidgetBase", 
-				"./_StoreMixin", "dojox/widget/_Invalidating", "dojox/widget/Selection", "dojox/calendar/time"],
-  	function(declare, lang, arr, win, event, html, has, query, dom, domConstruct, on, date, locale, 
-		_WidgetBase, _StoreMixin, _Invalidating, Selection, timeUtil){
+define([
+"dojo/_base/declare", 
+"dojo/_base/lang", 
+"dojo/_base/array", 
+"dojo/_base/window", 
+"dojo/_base/event", 
+"dojo/_base/sniff", 
+"dojo/query", 
+"dojo/dom", 
+"dojo/dom-style",
+"dojo/dom-construct", 
+"dojo/on", 
+"dojo/date", 
+"dojo/date/locale", 
+"dijit/_WidgetBase",  
+"dojox/widget/_Invalidating", 
+"dojox/widget/Selection", 
+"dojox/calendar/time",
+"./_StoreMixin"],
+
+function(
+declare, 
+lang, 
+arr, 
+win, 
+event, 
+html, 
+has, 
+query, 
+dom, 
+domStyle,
+domConstruct, 
+on, 
+date, 
+locale, 
+_WidgetBase, 
+_Invalidating, 
+Selection, 
+timeUtil, 
+_StoreMixin){
 	
 	/*=====
 		var _WidgetBase = dijit._WidgetBase;	
@@ -1032,7 +1066,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 				renderer.container.parentNode.removeChild(renderer.container);
 			}
 
-			html.style(renderer.container, "display", "none");
+			domStyle.set(renderer.container, "display", "none");
 
 			renderer.renderer.owner = null;
 			renderer.renderer.set("item", null);
@@ -1175,7 +1209,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 			//	focused: Boolean
 			//		Whether the item is focused not not.
 						
-			html.style(renderer.container, {"zIndex": edited || selected ? 20: item.lane == undefined ? 0 : item.lane});
+			domStyle.set(renderer.container, {"zIndex": edited || selected ? 20: item.lane == undefined ? 0 : item.lane});
 		},
 		
 		getIdentity: function(item){			

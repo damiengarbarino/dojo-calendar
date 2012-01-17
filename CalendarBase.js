@@ -1,5 +1,4 @@
 define([
-"dojo/_base/html", 
 "dojo/_base/declare", 
 "dojo/_base/sniff", 
 "dojo/_base/event", 
@@ -8,6 +7,7 @@ define([
 "dojo/cldr/supplemental",
 "dojo/dom", 
 "dojo/dom-class", 
+"dojo/dom-style",
 "dojo/dom-construct", 
 "dojo/date", 
 "dojo/date/locale", 
@@ -20,10 +20,8 @@ define([
 "dojox/widget/_Invalidating", 
 "dojox/widget/Selection", 
 "dojox/calendar/time", 
-"dojo/i18n!./nls/buttons"],
-	
-	function(
-html, 
+"dojo/i18n!./nls/buttons"],	
+function(
 declare, 
 has, 
 event, 
@@ -32,6 +30,7 @@ arr,
 cldr, 
 dom, 
 domClass, 
+domStyle,
 domConstruct, 
 date, 
 locale, 
@@ -467,12 +466,7 @@ _nls){
 			view.dateFuncObj = this.dateFuncObj;
 			view.dateClassObj = this.dateClassObj;
 			view.dateLocaleModule = this.dateLocaleModule;
-			html.style(view.domNode, "display", "none");
-			if(!has("ie") || has("ie") != 7){
-				//html.style(view.domNode, "opacity", "0");
-			}
-			//html.style(view.domNode, "visibility", "hidden");
-			//view._setVisibility("hidden");
+			domStyle.set(view.domNode, "display", "none");			
 			domClass.add(view.domNode, "view");
 			domConstruct.place(view.domNode, this.viewContainer);
 			this.onViewAdded(view);
@@ -632,31 +626,25 @@ _nls){
 			//	newView: dojox.calendar.ViewBase
 			//		The view to display.
 			if(oldView != null){
-				if(this.viewChangeDuration <= 0){
-					//html.style(oldView.domNode, "visibility", "hidden");
-					//oldView._setVisibility("hidden");
-					html.style(oldView.domNode, "display", "none");
+				if(this.viewChangeDuration <= 0){					
+					domStyle.set(oldView.domNode, "display", "none");
 				}else{
 					fx.fadeOut({
 						node: oldView.domNode, 
 						curve:[0, 1], 
-						onEnd: function(){
-							//oldView._setVisibility("hidden");
-							//html.style(oldView.domNode, "visibility", "hidden");
-							html.style(oldView.domNode, "display", "none");
+						onEnd: function(){							
+							domStyle.set(oldView.domNode, "display", "none");
 						}
 					}).play(this.viewChangeDuration);
 				}				
 			}
-			if(newView != null){								
-				//html.style(newView.domNode, "visibility", "visible");
-				//newView._setVisibility("visible");
-				html.style(newView.domNode, "display", "block");
+			if(newView != null){												
+				domStyle.set(newView.domNode, "display", "block");
 				newView.resize();
 				if(oldView != null && this.viewChangeDuration > 0){
 					fx.fadeIn({node:newView.domNode, curve:[0, 1]}).play(this.viewChangeDuration);
 				}else if(!has("ie") || has("ie") != 7){
-					html.style(newView.domNode, "opacity", "1");
+					domStyle.set(newView.domNode, "opacity", "1");
 				}
 			}
 		},

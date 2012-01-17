@@ -1,8 +1,43 @@
-define(["./SimpleColumnView", "dojo/text!./templates/ColumnView.html", "./ColumnViewSecondarySheet", 
-				"dojo/_base/html", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/lang", "dojo/_base/sniff", "dojo/dom", "dojo/dom-class", 
-				"dojo/dom-geometry", "dojo/dom-construct", "dojo/date", "dojo/date/locale", "dojo/query",	"dojox/html/metrics", "dojo/_base/fx", "dojo/on"],
+define([
+
+"dojo/_base/declare", 
+"dojo/_base/event", 
+"dojo/_base/lang", 
+"dojo/_base/sniff", 
+"dojo/_base/fx", 
+"dojo/dom",
+"dojo/dom-class",
+"dojo/dom-style", 
+"dojo/dom-geometry", 
+"dojo/dom-construct", 
+"dojo/on"
+"dojo/date", 
+"dojo/date/locale", 
+"dojo/query",	
+"dojox/html/metrics",
+"./SimpleColumnView", 
+"dojo/text!./templates/ColumnView.html", 
+"./ColumnViewSecondarySheet", ],
 	
-	function(SimpleColumnView, template, ColumnViewSecondarySheet, html, declare, event, lang, has, dom, domClass, domGeometry, domConstruct, date, locale, query, metrics, fx, on){
+function(
+declare, 
+event, 
+lang, 
+has, 
+fx, 
+dom, 
+domClass, 
+domStyle,
+domGeometry, 
+domConstruct,
+on,
+date, 
+locale, 
+query, 
+metrics,
+SimpleColumnView, 
+template, 
+ColumnViewSecondarySheet, ){
 				
 	/*=====
 	var SimpleColumnView = dojox.calendar.SimpleColumnView;
@@ -80,12 +115,12 @@ define(["./SimpleColumnView", "dojo/text!./templates/ColumnView.html", "./Column
 			//		The new height in pixels.
 			if(this.secondarySheetNode){
 				var headerH = domGeometry.getMarginBox(this.header).h;
-				html.style(this.secondarySheetNode, "height", height+"px");
+				domStyle.set(this.secondarySheetNode, "height", height+"px");
 				this.secondarySheet._resizeHander(null, true);
 				var top = (height + headerH + this.headerPadding)+"px";
-				html.style(this.scrollContainer, "top", top);
+				domStyle.set(this.scrollContainer, "top", top);
 				if(this.vScrollBar){
-					html.style(this.vScrollBar, "top", top);
+					domStyle.set(this.vScrollBar, "top", top);
 				}
 			}
 		},
@@ -172,8 +207,8 @@ define(["./SimpleColumnView", "dojo/text!./templates/ColumnView.html", "./Column
 			this.inherited(arguments);
 			if(this.secondarySheetNode){
 				var atRight = this.isLeftToRight() ? true : this.scrollBarRTLPosition == "right";
-				html.style(this.secondarySheetNode, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
-				html.style(this.secondarySheetNode, atRight ? "left" : "right", "0");
+				domStyle.set(this.secondarySheetNode, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
+				domStyle.set(this.secondarySheetNode, atRight ? "left" : "right", "0");
 			}
 		},
 		

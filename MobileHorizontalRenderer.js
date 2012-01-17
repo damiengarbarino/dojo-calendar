@@ -1,7 +1,18 @@
-define(["dojo/_base/declare", "dojo/_base/html", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
-	"dojox/calendar/_RendererMixin", "dojo/text!./templates/MobileHorizontalRenderer.html"],
+define([
+"dojo/_base/declare", 
+"dojo/dom-style", 
+"dijit/_WidgetBase", 
+"dijit/_TemplatedMixin",
+"dojox/calendar/_RendererMixin", 
+"dojo/text!./templates/MobileHorizontalRenderer.html"],
 	 
-	function(declare, html, _WidgetBase, _TemplatedMixin, _RendererMixin, template){
+function(
+declare, 
+domStyle, 
+_WidgetBase, 
+_TemplatedMixin, 
+_RendererMixin, 
+template){
 	
 	//	module:
 	//		dojox/calendar/HorizontalRenderer
@@ -42,14 +53,14 @@ define(["dojo/_base/declare", "dojo/_base/html", "dijit/_WidgetBase", "dijit/_Te
 			
 			if(elt == "startTimeLabel"){
 				if(this.labelContainer && (ltr && endHidden || !ltr && startHidden)){
-					html.style(this.labelContainer, "marginRight", this.arrowPadding+"px");
+					domStyle.set(this.labelContainer, "marginRight", this.arrowPadding+"px");
 				}else{
-					html.style(this.labelContainer, "marginRight", 0);
+					domStyle.set(this.labelContainer, "marginRight", 0);
 				}
 				if(this.labelContainer && (!ltr && endHidden || ltr && startHidden)){
-					html.style(this.labelContainer, "marginLeft", this.arrowPadding+"px");
+					domStyle.set(this.labelContainer, "marginLeft", this.arrowPadding+"px");
 				}else{
-					html.style(this.labelContainer, "marginLeft", 0);
+					domStyle.set(this.labelContainer, "marginLeft", 0);
 				}
 			}
 			

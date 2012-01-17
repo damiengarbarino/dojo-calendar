@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dojo/_base/event", "dojo/_base/lang", "dojo/on", "dojo/_base/html", "dijit/_WidgetBase"],
-function(declare, event, lang, on, html, _WidgetBase){
+define(["dojo/_base/declare", "dojo/_base/event", "dojo/_base/lang", "dojo/on", "dojo/dom-style", "dijit/_WidgetBase"],
+function(declare, event, lang, on, domStyle, _WidgetBase){
 	
 		return declare('dojox.calendar._VerticalScrollBarBase', [_WidgetBase], {
 		
@@ -68,7 +68,7 @@ function(declare, event, lang, on, html, _WidgetBase){
 			value = Math.max(value, this.minimum);
 			this.maximum = value;
 			
-			html.style(this.content, "height", value + "px");
+			domStyle.set(this.content, "height", value + "px");
 		}
 
 	});

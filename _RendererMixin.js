@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "dojo/_base/html", "dojo/_base/lang", "dojo/dom-class", "dojo/Stateful"],
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-class", "dojo/Stateful"],
 	 
-	function(declare, html, lang, domClass, Stateful){
+	function(declare, lang, domStyle, domClass, Stateful){
 	
 	//	module:
 	//		dojox/calendar/_RendererMixin
@@ -200,33 +200,33 @@ define(["dojo/_base/declare", "dojo/_base/html", "dojo/_base/lang", "dojo/dom-cl
 			
 			if(this.beforeIcon != null) {
 				visible = this._orientation != "horizontal" || this.isLeftToRight() ? startHidden : endHidden;
-				html.style(this.beforeIcon, "display", visible ? this._displayValue : "none");
+				domStyle.set(this.beforeIcon, "display", visible ? this._displayValue : "none");
 			}
 
 			if(this.afterIcon != null) {
 				visible = this._orientation != "horizontal" || this.isLeftToRight() ? endHidden : startHidden;
-				html.style(this.afterIcon, "display", visible ? this._displayValue : "none");
+				domStyle.set(this.afterIcon, "display", visible ? this._displayValue : "none");
 			}
 			
 			if(this.moveHandle){
 				visible = this._isElementVisible("moveHandle", startHidden, endHidden, size);
-				html.style(this.moveHandle, "display", visible?this._displayValue:"none");				
+				domStyle.set(this.moveHandle, "display", visible?this._displayValue:"none");				
 			}
 			
 			if(this.resizeStartHandle){
 				visible = this._isElementVisible("resizeStartHandle", startHidden, endHidden, size);
-				html.style(this.resizeStartHandle, "display", visible?this._displayValue:"none");				
+				domStyle.set(this.resizeStartHandle, "display", visible?this._displayValue:"none");				
 			}
 			
 			if(this.resizeEndHandle){
 				visible = this._isElementVisible("resizeEndHandle", startHidden, endHidden, size);
-				html.style(this.resizeEndHandle, "display", visible?this._displayValue:"none");				
+				domStyle.set(this.resizeEndHandle, "display", visible?this._displayValue:"none");				
 			}
 			
 			if(this.startTimeLabel) {
 				visible = this._isElementVisible("startTimeLabel", startHidden, endHidden, size);
 				
-				html.style(this.startTimeLabel, "display", visible?this._displayValue:"none");
+				domStyle.set(this.startTimeLabel, "display", visible?this._displayValue:"none");
 				if(visible) {
 					this._setText(this.startTimeLabel, this._formatTime(rd, this.item.startTime));
 				}
@@ -234,7 +234,7 @@ define(["dojo/_base/declare", "dojo/_base/html", "dojo/_base/lang", "dojo/dom-cl
 			
 			if(this.endTimeLabel) {
 				visible = this._isElementVisible("endTimeLabel", startHidden, endHidden, size);
-				html.style(this.endTimeLabel, "display", visible?this._displayValue:"none");
+				domStyle.set(this.endTimeLabel, "display", visible?this._displayValue:"none");
 				if(visible) {
 					this._setText(this.endTimeLabel, this._formatTime(rd, this.item.endTime));
 				}
@@ -242,7 +242,7 @@ define(["dojo/_base/declare", "dojo/_base/html", "dojo/_base/lang", "dojo/dom-cl
 			
 			if(this.summaryLabel) {
 				visible = this._isElementVisible("summaryLabel", startHidden, endHidden, size);
-				html.style(this.summaryLabel, "display", visible?this._displayValue:"none");
+				domStyle.set(this.summaryLabel, "display", visible?this._displayValue:"none");
 				if(visible){
 					this._setText(this.summaryLabel, this.item.summary, true);
 				}
