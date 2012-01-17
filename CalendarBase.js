@@ -1,12 +1,50 @@
 define([
-	"dojo/_base/html", "dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/event", "dojo/_base/lang", "dojo/_base/array", "dojo/cldr/supplemental",
-	"dojo/dom", "dojo/dom-class", "dojo/dom-construct", "dojo/date", "dojo/date/locale", "dojo/_base/fx", "dojo/on", 
-	"dojo/i18n", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", 
-	"./_StoreMixin", "dojox/widget/_Invalidating", "dojox/widget/Selection", "dojox/calendar/time", "dojo/i18n!./nls/buttons"],
+"dojo/_base/html", 
+"dojo/_base/declare", 
+"dojo/_base/sniff", 
+"dojo/_base/event", 
+"dojo/_base/lang", 
+"dojo/_base/array", 
+"dojo/cldr/supplemental",
+"dojo/dom", 
+"dojo/dom-class", 
+"dojo/dom-construct", 
+"dojo/date", 
+"dojo/date/locale", 
+"dojo/_base/fx", 
+"dojo/on", 
+"dijit/_WidgetBase", 
+"dijit/_TemplatedMixin", 
+"dijit/_WidgetsInTemplateMixin", 
+"./_StoreMixin", 
+"dojox/widget/_Invalidating", 
+"dojox/widget/Selection", 
+"dojox/calendar/time", 
+"dojo/i18n!./nls/buttons"],
 	
-	function(html, declare, has, event, lang, arr, cldr, dom, domClass, 
-		domConstruct, date, locale, fx, on, i18n, _WidgetBase, _TemplatedMixin, 
-		_WidgetsInTemplateMixin, _StoreMixin, _Invalidating, Selection, timeUtil){
+	function(
+html, 
+declare, 
+has, 
+event, 
+lang, 
+arr, 
+cldr, 
+dom, 
+domClass, 
+domConstruct, 
+date, 
+locale, 
+fx, 
+on,  
+_WidgetBase, 
+_TemplatedMixin, 
+_WidgetsInTemplateMixin, 
+_StoreMixin, 
+_Invalidating, 
+Selection, 
+timeUtil,
+_nls){
 	
 	/*=====
 		var _WidgetBase = dijit._WidgetBase;	
@@ -764,22 +802,20 @@ define([
 		
 		configureButtons: function(){
 			//	summary:
-			//		Set the localized labels of the buttons and the event handlers. 
-			
-			var rb = i18n.getLocalization("dojox.calendar", "buttons");
+			//		Set the localized labels of the buttons and the event handlers. 					
 			
 			var h = [];
 			var rtl = !this.isLeftToRight();
 			
 			if(this.previousButton){
-				this.previousButton.set("label", rb[rtl?"nextButton":"previousButton"]);
+				this.previousButton.set("label", _nls[rtl?"nextButton":"previousButton"]);
 				h.push(
 					on(this.previousButton, "click", lang.hitch(this, rtl?this.previousRange:this.nextRange))
 				);	
 			}
 			
 			if(this.nextButton){
-				this.nextButton.set("label", rb[rtl?"previousButton":"nextButton"]);
+				this.nextButton.set("label", _nls[rtl?"previousButton":"nextButton"]);
 				h.push(
 					on(this.nextButton, "click", lang.hitch(this, rtl?this.nextRange:this.previousRange))
 				);	
@@ -792,35 +828,35 @@ define([
 			}
 			
 			if(this.todayButton){
-				this.todayButton.set("label", rb.todayButton);
+				this.todayButton.set("label", _nls.todayButton);
 				h.push(
 					on(this.todayButton, "click", lang.hitch(this, this.todayButtonClick))
 				);	
 			}
 			
 			if(this.dayButton){
-				this.dayButton.set("label", rb.dayButton);
+				this.dayButton.set("label", _nls.dayButton);
 				h.push(
 					on(this.dayButton, "click", lang.hitch(this, this.dayButtonClick))
 				);
 			}		
 			
 			if(this.weekButton){
-				this.weekButton.set("label", rb.weekButton);
+				this.weekButton.set("label", _nls.weekButton);
 				h.push(
 					on(this.weekButton, "click", lang.hitch(this, this.weekButtonClick))
 				);	
 			}		
 
 			if(this.fourDaysButton){
-				this.fourDaysButton.set("label", rb.fourDaysButton);
+				this.fourDaysButton.set("label", _nls.fourDaysButton);
 				h.push(
 					on(this.fourDaysButton, "click", lang.hitch(this, this.fourDaysButtonClick))
 				);
 			}
 			
 			if(this.monthButton){
-				this.monthButton.set("label", rb.monthButton);
+				this.monthButton.set("label", _nls.monthButton);
 				h.push(
 					on(this.monthButton, "click", lang.hitch(this, this.monthButtonClick))
 				);	
