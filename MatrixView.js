@@ -448,7 +448,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 			}
 			
 			// fill & configure		
-			query("td", table).forEach(lang.hitch(this, function(td, i){
+			query("td", table).forEach(function(td, i){
 				td.className = "";
 				var d = renderData.dates[0][i];
 				this._setText(td, this._formatColumnHeaderLabel(d));
@@ -458,7 +458,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 					domClass.add(td, "last-child");
 				}
 				this.styleColumnHeaderCell(td, d, renderData);
-			}));
+			}, this);
 			
 			if(this.yearColumnHeaderContent){
 				var d = renderData.dates[0][0];
@@ -574,7 +574,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 
 			// fill labels
 
-			query("tr", rowHeaderTable).forEach(lang.hitch(this, function(tr, i){
+			query("tr", rowHeaderTable).forEach(function(tr, i){
 
 				html.style(tr, "height", this._getRowHeight(i) + "px");
 				
@@ -592,7 +592,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 				this.styleRowHeaderCell(td, d, renderData);
 
 				this._setText(td, this._formatRowHeaderLabel(d));
-			}));
+			}, this);
 
 		},		
 		
@@ -692,7 +692,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 
 			// Set the CSS classes
 
-			query("tr", table).forEach(lang.hitch(this, function (tr, row){
+			query("tr", table).forEach(function (tr, row){
 				
 				html.style(tr, "height", this._getRowHeight(row) + "px");
 				
@@ -705,7 +705,7 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 					domClass.add(tr, "last-child");
 				}
 
-				query("td", tr).forEach(lang.hitch(this, function (td, col){
+				query("td", tr).forEach(function (td, col){
 					
 					td.className = "";
 					
@@ -723,8 +723,8 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 					this._setText(span, this.showCellLabel ? this._formatGridCellLabel(d, row, col): null);
 					
 					this.styleGridCell(td, d, renderData);
-				}));
-			})); 
+				}, this);
+			}, this); 
 
 		},
 		
@@ -816,10 +816,10 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 				}
 			}
 
-			query(".dojoxCalendarItemContainerRow", table).forEach(lang.hitch(this, function(tr, i){
+			query(".dojoxCalendarItemContainerRow", table).forEach(function(tr, i){
 				html.style(tr, "height", this._getRowHeight(i) + "px");
 				rows.push(tr.childNodes[0].childNodes[0]);
-			})); 
+			}, this); 
 
 			renderData.cells = rows;
 		},
@@ -1123,9 +1123,9 @@ define(["./ViewBase", "dojo/text!./templates/MatrixView.html", "dijit/_Templated
 
 		_resizeRowsImpl: function(tableNode, query){
 			var rd = this.renderData;
-			dojo.query(query, tableNode).forEach(dojo.hitch(this, function(tr, i){
+			dojo.query(query, tableNode).forEach(function(tr, i){
 				html.style(tr, "height", this._getRowHeight(i)+"px");
-			}));
+			}, this);
 		},
 
 		////////////////////////////////////////////

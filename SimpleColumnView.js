@@ -624,7 +624,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 			}
 			
 			// fill & configure		
-			query("td", table).forEach(lang.hitch(this, function(td, i){
+			query("td", table).forEach(function(td, i){
 				td.className = "";											
 				if(i == 0){
 					domClass.add(td, "first-child");
@@ -634,7 +634,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 				var d = renderData.dates[i];
 				this._setText(td, this._formatColumnHeaderLabel(d));
 				this.styleColumnHeaderCell(td, d, renderData);						
-			}));
+			}, this);
 			
 			if(this.yearColumnHeaderContent){
 				var d = renderData.dates[0];
@@ -722,7 +722,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 			// fill labels
 			var d = new Date(2000, 0, 1, 0, 0, 0);
 			
-			query("tr", rowHeaderTable).forEach(lang.hitch(this, function(tr, i){
+			query("tr", rowHeaderTable).forEach(function(tr, i){
 				var td = query("td", tr)[0];
 				td.className = "";
 				if (has("ie") == 7) {
@@ -742,7 +742,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 					this.styleRowHeaderCell(td, d.getHours(), renderData);					
 					this._setText(td, this._formatRowHeaderLabel(d));
 				}
-			}));
+			}, this);
 						
 		},		
 		
@@ -847,7 +847,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 			
 			// Set the CSS classes
 			
-			query("tr", table).forEach(lang.hitch(this, function (tr, i){
+			query("tr", table).forEach(function (tr, i){
 				
 				html.style(tr, "height", renderData.slotSize + "px");
 				
@@ -860,7 +860,7 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 				// the minutes part of the time of day displayed by the current tr
 				var m = (i * this.renderData.slotDuration) % 60;
 				
-				query("td", tr).forEach(lang.hitch(this, function (td, col){
+				query("td", tr).forEach(function (td, col){
 					
 					td.className = "";
 					
@@ -886,8 +886,8 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 							domClass.add(td, "quarterhour");
 							break;
 					}
-				}));				
-			})); 
+				}, this);				
+			}, this); 
 												 
 		},
 				
@@ -979,14 +979,14 @@ define(["./ViewBase", "dijit/_TemplatedMixin", "./_VerticalScrollBarBase", "dojo
 				}
 			}	
 			
-			query("td>div", table).forEach(lang.hitch(this, function(div, i){
+			query("td>div", table).forEach(function(div, i){
 
 				html.style(div, {
 					"height":	renderData.sheetHeight + "px",
 					"marginBottom":	"-" + renderData.sheetHeight + "px"
 				});
 				bgCols.push(div);		
-			}));
+			}, this);
 			
 			renderData.cells = bgCols;
 		},			
