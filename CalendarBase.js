@@ -1067,28 +1067,28 @@ _nls){
 		onRendererCreated: function(renderer){
 			//	summary:
 			//		Event dispatched when an item renderer has been created.
-			//	renderer: ibm_log.calendar._RendererMixin
+			//	renderer: dojox.calendar._RendererMixin
 			//		The renderer created.
 		},
 		
 		onRendererRecycled: function(renderer){
 			//	summary:
 			//		Event dispatched when an item renderer has been recycled.
-			//	renderer: ibm_log.calendar._RendererMixin
+			//	renderer: dojox.calendar._RendererMixin
 			//		The renderer created.
 		},
 		
 		onRendererReused: function(renderer){
 			//	summary:
 			//		Event dispatched when an item renderer that was recycled is reused.
-			//	renderer: ibm_log.calendar._RendererMixin
+			//	renderer: dojox.calendar._RendererMixin
 			//		The renderer created.
 		},
 		
 		onRendererDestroyed: function(renderer){
 			//	summary:
 			//		Event dispatched when an item renderer is destroyed.
-			//	renderer: ibm_log.calendar._RendererMixin
+			//	renderer: dojox.calendar._RendererMixin
 			//		The renderer created.
 		},
 		
