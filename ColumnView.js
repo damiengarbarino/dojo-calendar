@@ -1,5 +1,4 @@
-define([
-
+define([    
 "dojo/_base/declare", 
 "dojo/_base/event", 
 "dojo/_base/lang", 
@@ -10,34 +9,34 @@ define([
 "dojo/dom-style", 
 "dojo/dom-geometry", 
 "dojo/dom-construct", 
-"dojo/on"
+"dojo/on",
 "dojo/date", 
 "dojo/date/locale", 
 "dojo/query",	
 "dojox/html/metrics",
 "./SimpleColumnView", 
 "dojo/text!./templates/ColumnView.html", 
-"./ColumnViewSecondarySheet", ],
-	
+"./ColumnViewSecondarySheet"],
+
 function(
-declare, 
-event, 
-lang, 
-has, 
-fx, 
-dom, 
-domClass, 
-domStyle,
-domGeometry, 
-domConstruct,
-on,
-date, 
-locale, 
-query, 
-metrics,
-SimpleColumnView, 
-template, 
-ColumnViewSecondarySheet, ){
+	declare, 
+	event, 
+	lang, 
+	has, 
+	fx, 
+	dom, 
+	domClass, 
+	domStyle,
+	domGeometry, 
+	domConstruct,
+	on,
+	date, 
+	locale, 
+	query, 
+	metrics,
+	SimpleColumnView, 
+	template, 
+	ColumnViewSecondarySheet){
 				
 	/*=====
 	var SimpleColumnView = dojox.calendar.SimpleColumnView;

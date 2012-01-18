@@ -3,7 +3,8 @@ define([
 "dojo/_base/lang", 
 "dojo/_base/array", 
 "dojo/_base/window", 
-"dojo/_base/event", 
+"dojo/_base/event",
+"dojo/_base/html", 
 "dojo/_base/sniff", 
 "dojo/query", 
 "dojo/dom", 
@@ -16,37 +17,37 @@ define([
 "dojox/widget/_Invalidating", 
 "dojox/widget/Selection", 
 "dojox/calendar/time",
-"./_StoreMixin"],
+"./StoreMixin"],
 
 function(
-declare, 
-lang, 
-arr, 
-win, 
-event, 
-html, 
-has, 
-query, 
-dom, 
-domStyle,
-domConstruct, 
-on, 
-date, 
-locale, 
-_WidgetBase, 
-_Invalidating, 
-Selection, 
-timeUtil, 
-_StoreMixin){
+	declare, 
+	lang, 
+	arr, 
+	win, 
+	event, 
+	html, 
+	has, 
+	query, 
+	dom, 
+	domStyle,
+	domConstruct, 
+	on, 
+	date, 
+	locale, 
+	_WidgetBase, 
+	_Invalidating, 
+	Selection, 
+	timeUtil, 
+	StoreMixin){
 	
 	/*=====
 		var _WidgetBase = dijit._WidgetBase;	
 		var Selection = dojox.widget.Selection;	
 		var _Invalidating = dojox.widget._Invalidating;
-		var _StoreMixin = dojox.calendar._StoreMixin;
+		var StoreMixin = dojox.calendar.StoreMixin;
 	=====*/ 
 		
-	return declare("dojox.calendar.ViewBase", [_WidgetBase, _StoreMixin, _Invalidating, Selection], {
+	return declare("dojox.calendar.ViewBase", [_WidgetBase, StoreMixin, _Invalidating, Selection], {
 		//	module:
 		//		dojox/calendar/ViewBase
 		//	summary:

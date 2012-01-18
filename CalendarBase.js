@@ -16,7 +16,7 @@ define([
 "dijit/_WidgetBase", 
 "dijit/_TemplatedMixin", 
 "dijit/_WidgetsInTemplateMixin", 
-"./_StoreMixin", 
+"./StoreMixin", 
 "dojox/widget/_Invalidating", 
 "dojox/widget/Selection", 
 "dojox/calendar/time", 
@@ -39,7 +39,7 @@ on,
 _WidgetBase, 
 _TemplatedMixin, 
 _WidgetsInTemplateMixin, 
-_StoreMixin, 
+StoreMixin, 
 _Invalidating, 
 Selection, 
 timeUtil,
@@ -49,13 +49,13 @@ _nls){
 		var _WidgetBase = dijit._WidgetBase;	
 		var Selection = dojox.widget.Selection;	
 		var _Invalidating = dojox.widget._Invalidating;
-		var _StoreMixin = dojox.calendar._StoreMixin;
+		var StoreMixin = dojox.calendar.StoreMixin;
 		var _TemplatedMixin = dojox.calendar._TemplatedMixin;
 		var _WidgetsInTemplateMixin = dojox.calendar._WidgetsInTemplateMixin;
 		
 	=====*/ 
 	
-	return declare("dojox.calendar.CalendarBase", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _StoreMixin, _Invalidating, Selection], {
+	return declare("dojox.calendar.CalendarBase", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, StoreMixin, _Invalidating, Selection], {
 		
 		// module:
 		//		dojox/calendar/CalendarBase

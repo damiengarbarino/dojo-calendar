@@ -9,7 +9,8 @@ define([
 "dojo/_base/array",
 "dojo/_base/sniff",
 "dojo/_base/fx", 
-"dojo/on"
+"dojo/_base/html",
+"dojo/on",
 "dojo/dom", 
 "dojo/dom-class", 
 "dojo/dom-style", 
@@ -18,27 +19,26 @@ define([
 "dojo/query", 
 "dojox/html/metrics"],
 
-	
 function(
-ViewBase, 
-_TemplatedMixin, 
-_VerticalScrollBarBase, 
-template, 
-declare, 
-event, 
-lang, 
-arr, 
-has,
-fx, 
-on,
-dom, 
-domClass, 
-domStyle,
-domGeometry, 
-domConstruct, 
-query, 
-metrics, 
-){
+	ViewBase, 
+	_TemplatedMixin, 
+	_VerticalScrollBarBase, 
+	template, 
+	declare, 
+	event, 
+	lang, 
+	arr, 
+	has,
+	fx, 
+	html,
+	on,
+	dom, 
+	domClass, 
+	domStyle,
+	domGeometry, 
+	domConstruct, 
+	query, 
+	metrics){
 				
 	/*=====
 	var ViewBase = dojox.calendar.ViewBase;
