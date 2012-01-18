@@ -149,48 +149,6 @@ function(
 			//		protected
 		},
 
-		previousLog: null,
-		
-		log: function(name, content){
-			if (dom.byId("logBody")) {
-																
-				if (lang.isArray(content)){
-					var res = "";
-					for(var i=0; i<content.length; i+=2){
-						res += " " + content[i] + " " + content[i+1];
-					}
-					content = res;
-				}
-				
-				//if (name+content != this.previousLog){
-				if(true){
-					this.previousLog = name+content;
-					this.previousLogCount = 1;
-					var tr = domConstruct.create("tr", null, dom.byId("logBody"), "first");
-					var td = domConstruct.create("td", null, tr);
-					var now = new Date();
-					var time = now.getHours() + ":" + (now.getMinutes() < 10 ? "0" : "") + now.getMinutes() + ":" + (now.getSeconds() < 10 ? "0" : "") + now.getSeconds();
-					td.appendChild(win.doc.createTextNode(time));
-					td = domConstruct.create("td", null, tr);
-					td.appendChild(win.doc.createTextNode(name));
-					td = domConstruct.create("td", null, tr);
-					if(content != null){					
-				  	td.appendChild(win.doc.createTextNode(content));
-					}					
-					td = domConstruct.create("td", null, tr);
-				} else {
-					this.previousLogCount++;
-					var tr = query("tr:first-child", dom.byId("logBody"))[0];
-					td = tr.lastChild;
-					if(td.hasChildNodes()){						
-						td.removeChild(td.firstChild);
-					}
-					td.appendChild(win.doc.createTextNode(this.previousLogCount));					
-				}							
-			}
-			
-		},
-		
 		_setText: function(node, text, allowHTML){
 			//	summary:
 			//		Creates a text node under the parent node after having removed children nodes if any.
