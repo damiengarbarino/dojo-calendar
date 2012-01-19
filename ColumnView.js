@@ -43,7 +43,7 @@ function(
 	var ColumnViewSecondarySheet = dojox.calendar.ColumnViewSecondarySheet;
 	=====*/ 	
 	
-	return declare("dojox.calendar.ColumnView", [SimpleColumnView], {
+	return declare("dojox.calendar.ColumnView", SimpleColumnView, {
 		// module:
 		//		dojox/calendar/ColumnView
 		// summary:
