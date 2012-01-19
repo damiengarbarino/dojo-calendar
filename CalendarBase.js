@@ -785,6 +785,7 @@ _nls){
 		////////////////////////////////////////////////////
 		
 		postCreate: function(){
+			this.inherited(arguments);
 			this.configureButtons();
 		},
 		
