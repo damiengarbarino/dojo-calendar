@@ -136,6 +136,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		
 		_initItems: function(items){
 			this.set("items", items);
+			return items;
 		},
 		
 		_refreshItemsRendering: function(renderData){
@@ -181,6 +182,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		
 		_setStoreAttr: function(value){
 			this.displayedItemsInvalidated = true;
+			var r;
 			if(value){
 				var results = value.query(this.query);
 				if(results.observe){
@@ -190,12 +192,13 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 				results = results.map(lang.hitch(this, function(item){
 					return this.itemToRenderItem(item, value);
 				}));
-				Deferred.when(results, lang.hitch(this, this._initItems));
+				r = Deferred.when(results, lang.hitch(this, this._initItems));
 			}else{
 				// we remove the store
-				this._initItems([]);
+				r = this._initItems([]);
 			}
 			this._set("store", value);
+			return r;
 		}
 				
 	});
