@@ -1,0 +1,36 @@
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable td {
+  border-right: none;
+  border-left: 1px solid #cccccc;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable td span {
+  padding-right: 1px;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable tr td.last-child {
+  border-left: 1px solid #b5bcc7;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable tr td.first-child {
+  border-right: 1px solid #b5bcc7;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarContainerColumn {
+  margin-left: 5px;
+  margin-right: 35px;
+}
+.claro .dojoxCalendarMonthColumnView .dojoxCalendarColumnHeaderTable td {
+  border-left: 1px solid #cccccc;
+  border-right: none;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarColumnHeaderTable td.last-child {
+  border-left: 1px solid #b5bcc7;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarColumnHeaderTable td.first-child {
+  border-right: 1px solid #b5bcc7;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarEvent .summary {
+  text-align: right;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarEvent .startTime {
+  text-align: right;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarEvent .endTime {
+  text-align: right;
+}

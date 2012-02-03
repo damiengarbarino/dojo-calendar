@@ -339,7 +339,7 @@ function(
 		},
 		
 		_getStartTimeOfDayAttr: function(){
-			return _getStartTimeOfDay();
+			return this._getStartTimeOfDay();
 		},
 		
 		_setStartTimeOfDay: function(hour, minutes, maxDuration, easing){
