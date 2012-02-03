@@ -129,11 +129,7 @@
   text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid #b5bcc7;
-<<<<<<< HEAD
   color: #000000;
-=======
-  color: black;
->>>>>>> b9c0988759cda81ae4ac72c8b7cc3c40389824c1
   background-color: #efefef;
   background-image: url("images/titlebar.png");
   background-repeat: repeat-x;
@@ -170,11 +166,7 @@
   -webkit-user-select: none;
   khtml-user-select: none;
   user-select: none;
-<<<<<<< HEAD
   color: #000000;
-=======
-  color: black;
->>>>>>> b9c0988759cda81ae4ac72c8b7cc3c40389824c1
   -webkit-transition-duration: 0.2s;
   -moz-transition-duration: 0.2s;
   transition-duration: 0.2s;
@@ -188,11 +180,7 @@
  */
 .claro .dojoxCalendarColumnView .dojoxCalendarColumnHeaderTable .dojoxCalendarToday {
   font-weight: bold;
-<<<<<<< HEAD
   color: #ff0000;
-=======
-  color: red;
->>>>>>> b9c0988759cda81ae4ac72c8b7cc3c40389824c1
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarColumnHeaderTable .dojoxCalendarWeekend {
   color: #759dc0;
@@ -245,11 +233,7 @@
   text-align: right;
   border-top: 1px solid #b5bcc7;
   background-color: #e5f2fe;
-<<<<<<< HEAD
   color: #000000;
-=======
-  color: black;
->>>>>>> b9c0988759cda81ae4ac72c8b7cc3c40389824c1
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -265,10 +249,7 @@
   text-align: left;
   color: #FFF;
   cursor: default;
-<<<<<<< HEAD
   overflow: hidden;
-=======
->>>>>>> b9c0988759cda81ae4ac72c8b7cc3c40389824c1
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent .bg {
   position: absolute;
@@ -282,11 +263,7 @@
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   background-color: #9F0000;
-<<<<<<< HEAD
   filter: formatstring("alpha(opacity={0})", 90);
-=======
-  filter: alpha(opacity=90);
->>>>>>> b9c0988759cda81ae4ac72c8b7cc3c40389824c1
   opacity: 0.9;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent.Hovered .bg {
@@ -297,11 +274,7 @@
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent.Edited .bg {
   border: dashed 1px #FFFFFF;
-<<<<<<< HEAD
   filter: formatstring("alpha(opacity={0})", 70);
-=======
-  filter: alpha(opacity=70);
->>>>>>> b9c0988759cda81ae4ac72c8b7cc3c40389824c1
   opacity: 0.7;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent.Focused .bg {
@@ -328,11 +301,7 @@
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent .handle {
   z-index: 2;
   background: #00FF00;
-<<<<<<< HEAD
   filter: formatstring("alpha(opacity={0})", 0);
-=======
-  filter: alpha(opacity=0);
->>>>>>> b9c0988759cda81ae4ac72c8b7cc3c40389824c1
   opacity: 0;
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -438,11 +407,7 @@
 .claro .dojoxCalendarColumnView .dojoxCalendarMatrixView .dojoxCalendarEvent .handle {
   z-index: 2;
   background: #00FF00;
-<<<<<<< HEAD
   filter: formatstring("alpha(opacity={0})", 0);
-=======
-  filter: alpha(opacity=0);
->>>>>>> b9c0988759cda81ae4ac72c8b7cc3c40389824c1
   opacity: 0;
   -moz-user-select: none;
   -webkit-user-select: none;
