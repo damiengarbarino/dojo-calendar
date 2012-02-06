@@ -1192,6 +1192,14 @@ function(
 			}
 		},
 		
+		_sortItemsFunction: function(a, b){
+			var res = this.dateFuncObj.compare(a.startTime, b.startTime);
+			if(res == 0){
+				res = -1 * this.dateFuncObj.compare(a.endTime, b.endTime);
+			}
+			return this.isLeftToRight() ? res : -res;
+		},
+		
 		///////////////////////////////////////////////////////////////
 		//
 		// View to time projection

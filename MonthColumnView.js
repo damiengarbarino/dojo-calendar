@@ -997,7 +997,8 @@ function(
 			}
 			
 			var cell = renderData.cells[index];
-			var layoutItems = [];			
+			var layoutItems = [];
+			var rtl = !this.isLeftToRight();
 			
 			// step 1 compute projected position and size
 			for(var i = 0; i < items.length; i++){
@@ -1080,6 +1081,14 @@ function(
 				domConstruct.place(ir.container, cell);
 				domStyle.set(ir.container, "display", "block");
 			}
+		},
+		
+		_sortItemsFunction: function(a, b){
+			var res = this.dateFuncObj.compare(a.startTime, b.startTime);
+			if(res == 0){
+				res = -1 * this.dateFuncObj.compare(a.endTime, b.endTime);
+			}
+			return this.isLeftToRight() ? res : -res;
 		},
 		
 		///////////////////////////////////////////////////////////////
