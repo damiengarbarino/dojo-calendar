@@ -416,12 +416,12 @@ function(
 			
 			if(this.scrollable && this.autoScroll){
 							
-				var s = start.getDate() -1 - margin; // -1 because day of months starts at 1 and not 0
-				var e = end.getDate() -1 + margin;
+				var s = start.getDate() - margin; // -1 because day of months starts at 1 and not 0
+				var e = end.getDate() + margin;
 				
-				var viewStart = this.get("scrollPosition").position;
+				var viewStart = this.get("scrollPosition").date;
 				var r = domGeometry.getContentBox(this.scrollContainer);
-				var viewEnd = (this.get("scrollPosition").position + r.h); 
+				var viewEnd = (this.get("scrollPosition").date + (r.h/this.daySize)); 
 				
 				var visible = false;
 				var target = null;
@@ -997,8 +997,7 @@ function(
 			}
 			
 			var cell = renderData.cells[index];
-			var layoutItems = [];
-			var rtl = !this.isLeftToRight();
+			var layoutItems = [];			
 			
 			// step 1 compute projected position and size
 			for(var i = 0; i < items.length; i++){
