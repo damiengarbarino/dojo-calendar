@@ -224,6 +224,7 @@ function(
 						
 			rd.startTime = new rd.dateClassObj(rd.dates[0][0]);			
 			rd.endTime = new rd.dateClassObj(dates[dates.length-1]);
+			rd.endTime = rd.dateFuncObj.add(rd.endTime, "day", 1);
 						
 			rd.maxDayCount = maxDayCount;
 			rd.sheetHeight = rd.daySize * maxDayCount;
@@ -417,6 +418,9 @@ function(
 			if(this.scrollable && this.autoScroll){
 							
 				var s = start.getDate() - margin; // -1 because day of months starts at 1 and not 0
+				if(this.isStartOfDay(end)){
+					end = this._waDojoxAddIssue(end, "day", -1);
+				}
 				var e = end.getDate() + margin;
 				
 				var viewStart = this.get("scrollPosition").date;
