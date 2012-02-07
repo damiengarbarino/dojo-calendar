@@ -1301,7 +1301,7 @@ function(
 		///////////////////////////////////////////////////////////////
 						
 		_onScrollTimer_tick: function(){
-			this._scrollToPosition(this.scrollContainer.scrollTop + this._scrollProps.scrollStep);
+			this._setScrollImpl(this.scrollContainer.scrollTop + this._scrollProps.scrollStep);
 		},
 		
 		////////////////////////////////////////////
