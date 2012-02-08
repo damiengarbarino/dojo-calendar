@@ -1251,7 +1251,7 @@ function(
 			if(this.owner){
 				this.owner.set("selectionMode", value);
 			}else{
-				this.selectionMode;
+				this.inherited(arguments);
 			}			
 		},					
 		
@@ -1275,7 +1275,7 @@ function(
 			if(this.owner){
 				return this.owner.get("selectedItem");
 			}else{
-				return this.selectedItem;
+				return this.inherited(arguments);
 			}
 		},
 		
