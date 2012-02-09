@@ -1658,9 +1658,9 @@ function(
 					var fullHeight = this.isItemBeingEdited(item) && !this.liveLayout && this._isEditing;
 					var h = fullHeight ? cellH - this.cellPaddingTop : irHeight;
 					var w = item.end - item.start;
-					if (has("ie") != 7 && has("ie") != 8) {
+					if (has("ie") >= 9 && item.start + w < this.itemContainer.offsetWidth) {
 						w++;
-					} ;
+					};
 
 					domStyle.set(ir.container, {
 						"top": (fullHeight ? this.cellPaddingTop : posY) + "px",
