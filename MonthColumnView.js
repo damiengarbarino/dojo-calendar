@@ -482,7 +482,7 @@ function(
 
 			var oldRd = this.renderData;
 			var rd = this._createRenderData();
-			this.renderData = rd;
+			this.renderData = rd;			
 			this._createRendering(rd, oldRd);
 			this._layoutRenderers(rd);
 		},
@@ -795,14 +795,14 @@ function(
 					var span = query("span", td)[0];
 					this._setText(span, this.showCellLabel ? this._formatGridCellLabel(d, row, col): null);
 					
-					this.styleGridCell(td, d, renderData);
+					this.styleGridCell(td, d, col, row, renderData);
 					
 				}, this);
 			}, this); 
 
 		},
 		
-		styleGridCell: function(node, date, renderData){
+		styleGridCell: function(node, date, col, row, renderData){
 			//	summary:
 			//		Styles the CSS classes to the node that displays a column.
 			//		By default this method is setting the "dojoxCalendarToday" class name if the 
@@ -821,7 +821,7 @@ function(
 				domClass.add(node, "dojoxCalendarToday");
 			}else if(this.isWeekEnd(date)){
 				domClass.add(node, "dojoxCalendarWeekend");
-			}	
+			}					
 		},
 							
 		_buildItemContainer: function(renderData, oldRenderData){
@@ -960,38 +960,52 @@ function(
 			}
 		},
 		
-		_defaultItemToRendererKindFunc: function(item){
+		_defaultItemToRendererKindFunc: function(item){			
 			if(item.allDay){
 				return "vertical";
 			}
 			var dur = Math.abs(this.renderData.dateFuncObj.difference(item.startTime, item.endTime, "minute"));
-			return dur >= 1440 ? "vertical" : null;			
+			return dur >= 1440 ? "vertical" : null;
+		},
+		
+		_layoutRenderers: function(renderData){
+			this.hiddenEvents = {};
+			this.inherited(arguments);
 		},
 		
 		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items){
 			
 			var verticalItems = [];
+			var bgItems = [];
 			renderData.colW = this.itemContainer.offsetWidth / renderData.columnCount;
 			
 			for(var i=0; i<items.length; i++){
 				var item = items[i];
 				if(this._itemToRendererKind(item) == "vertical"){
 					verticalItems.push(item);
+				}else{					
+					bgItems[item.startTime.getDate()-1] = true;
+					bgItems[item.endTime.getDate()-1] = true;
 				}
 			}
 			
 			if(verticalItems.length > 0){
 				this._layoutVerticalItems(renderData, index, start, end, verticalItems);
 			}
+			this._layoutBgItems(renderData, index, start, end, bgItems);
 		},
 		
 		_dateToYCoordinate: function(renderData, d, start){
+			var pos = 0;
 			if(start){
-				return (d.getDate()-1) * this.renderData.daySize;
+				pos = (d.getDate()-1) * this.renderData.daySize;
 			}else{
 				var d2 = this._waDojoxAddIssue(d, "day", -1);
-				return this.renderData.daySize + ((d2.getDate()-1) * this.renderData.daySize);
+				pos = this.renderData.daySize + ((d2.getDate()-1) * this.renderData.daySize);
 			}			 
+			pos += (d.getHours()*60+d.getMinutes())*this.renderData.daySize/1440;
+			
+			return pos;
 		},
 		
 		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
@@ -1084,6 +1098,24 @@ function(
 				domConstruct.place(ir.container, cell);
 				domStyle.set(ir.container, "display", "block");
 			}
+		},
+		
+		_getCellAt: function(rowIndex, columnIndex, rtl){
+			if((rtl == undefined || rtl == true) && !this.isLeftToRight()){
+				columnIndex = this.renderData.columnCount -1 - columnIndex;
+			}
+			return this.gridTable.childNodes[0].childNodes[rowIndex].childNodes[columnIndex];
+		},
+		
+		_layoutBgItems: function(/*Object*/renderData, /*Integer*/col, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+			var rtl = !this.isLeftToRight();
+			
+			for(var row in items) {
+				if(items[row]){
+					var node = this._getCellAt(row, col, rtl);
+					domClass.add(node, "dojoxCalendarHiddenEvents");
+				}
+			}			
 		},
 		
 		_sortItemsFunction: function(a, b){
