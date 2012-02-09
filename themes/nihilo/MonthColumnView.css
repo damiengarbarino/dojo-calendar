@@ -51,6 +51,10 @@
   font-weight: bold;
   color: #ff2200;
 }
+.nihilo .dojoxCalendarMonthColumnView .dojoxCalendarGridTable .dojoxCalendarHiddenEvents {
+  background-color: #FEFEFE;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVQImWNYtmzZfwaiAE6VAAURBeNfdra/AAAAAElFTkSuQmCC) repeat;
+}
 .nihilo .dojoxCalendarMonthColumnView .dojoxCalendarGridTable tr td.last-child {
   border-right: 1px solid #cccccc;
 }
