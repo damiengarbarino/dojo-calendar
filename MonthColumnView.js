@@ -87,6 +87,12 @@ function(
 		//	showCellLabel: Boolean
 		//		Whether display or not the grid cells label (usually the day of month).
 		showCellLabel: true,
+		
+		//	showHiddenItems: Boolean
+		//		Whether show or not the hidden items.
+		//		By default the events that are shorter than a day are not displayed using vertical renderers by this widget.
+		//		But the grid cells that contains one or several hidden items display a decoration.
+		showHiddenItems: true,
 			
 		//	verticalRenderer: Class
 		//		The class use to create vertical renderers.
@@ -122,7 +128,7 @@ function(
 		constructor: function(){
 			this.invalidatingProperties = ["columnCount", "startDate", "daySize", "percentOverlap", "verticalRenderer",
 				"columnHeaderDatePattern", "horizontalGap", "scrollBarRTLPosition", "itemToRendererKindFunc", 
-				"layoutPriorityFunction", "textDir", "items"];
+				"layoutPriorityFunction", "textDir", "items", "showCellLabel", "showHiddenItems"];
 			this._columnHeaderHandlers = [];
 		},
 		
@@ -983,7 +989,7 @@ function(
 				var item = items[i];
 				if(this._itemToRendererKind(item) == "vertical"){
 					verticalItems.push(item);
-				}else{	
+				}else if(this.showHiddenItems){	
 					hiddenItems.push(item);					
 				}
 			}
