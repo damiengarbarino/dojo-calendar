@@ -976,23 +976,24 @@ function(
 		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items){
 			
 			var verticalItems = [];
-			var bgItems = [];
+			var hiddenItems = [];
 			renderData.colW = this.itemContainer.offsetWidth / renderData.columnCount;
 			
 			for(var i=0; i<items.length; i++){
 				var item = items[i];
 				if(this._itemToRendererKind(item) == "vertical"){
 					verticalItems.push(item);
-				}else{					
-					bgItems[item.startTime.getDate()-1] = true;
-					bgItems[item.endTime.getDate()-1] = true;
+				}else{	
+					hiddenItems.push(item);					
 				}
 			}
 			
 			if(verticalItems.length > 0){
 				this._layoutVerticalItems(renderData, index, start, end, verticalItems);
 			}
-			this._layoutBgItems(renderData, index, start, end, bgItems);
+			if(hiddenItems.length > 0){
+				this._layoutBgItems(renderData, index, start, end, hiddenItems);
+			}
 		},
 		
 		_dateToYCoordinate: function(renderData, d, start){
@@ -1107,9 +1108,37 @@ function(
 			return this.gridTable.childNodes[0].childNodes[rowIndex].childNodes[columnIndex];
 		},
 		
+		invalidateLayout: function(){
+			//make sure to clear hiddens object state
+			query("td", this.gridTable).forEach(function(td){
+				domClass.remove(td, "dojoxCalendarHiddenEvents");
+			});
+			this.inherited(arguments);			
+		},
+		
 		_layoutBgItems: function(/*Object*/renderData, /*Integer*/col, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
-			for(var row in items) {
-				if(items[row]){
+			var bgItems = {};
+			for(var i = 0; i < items.length; i++){
+				
+				var item = items[i];
+				var overlap = this.computeRangeOverlap(renderData, item.startTime, item.endTime, startTime, endTime);
+				var start = overlap[0].getDate()-1;
+				// handle use case where end time is first day of next month.
+				var end;
+				if(this.isStartOfDay(overlap[1])){
+					end = this._waDojoxAddIssue(overlap[1], "day", -1);
+					end = end.getDate();
+				}else{
+					end = overlap[1].getDate()-1;
+				}
+				
+				for (var d=start; d<=end; d++){
+					bgItems[d] = true;
+				}
+			}					
+	
+			for(var row in bgItems) {
+				if(bgItems[row]){
 					var node = this._getCellAt(row, col, false);
 					domClass.add(node, "dojoxCalendarHiddenEvents");
 				}
