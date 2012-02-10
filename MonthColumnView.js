@@ -1108,11 +1108,9 @@ function(
 		},
 		
 		_layoutBgItems: function(/*Object*/renderData, /*Integer*/col, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
-			var rtl = !this.isLeftToRight();
-			
 			for(var row in items) {
 				if(items[row]){
-					var node = this._getCellAt(row, col, rtl);
+					var node = this._getCellAt(row, col, false);
 					domClass.add(node, "dojoxCalendarHiddenEvents");
 				}
 			}			
