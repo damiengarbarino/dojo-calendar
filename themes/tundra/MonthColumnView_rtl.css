@@ -2,8 +2,12 @@
   border-right: none;
   border-left: 1px solid #cccccc;
 }
-.tundra .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable td span {
-  padding-right: 1px;
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable td span {
+  padding-right: 3px;
+}
+.claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable .dojoxCalendarHiddenEvents {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAICAYAAADTLS5CAAAAFElEQVQImWP4z8Dw/1dU1H8GyhgANcclWWHC27gAAAAASUVORK5CYII=) repeat-y;
+  background-position: top right;
 }
 .tundra .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable tr td.last-child {
   border-left: 1px solid #cccccc;
