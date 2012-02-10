@@ -1133,7 +1133,7 @@ function(
 				var end;
 				if(this.isStartOfDay(overlap[1])){
 					end = this._waDojoxAddIssue(overlap[1], "day", -1);
-					end = end.getDate();
+					end = end.getDate()-1;
 				}else{
 					end = overlap[1].getDate()-1;
 				}
