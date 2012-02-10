@@ -37,7 +37,7 @@
   box-sizing: border-box;
 }
 .tundra .dojoxCalendarMonthColumnView .dojoxCalendarGridTable td span {
-  padding-left: 1px;
+  padding-left: 3px;
 }
 .tundra .dojoxCalendarMonthColumnView .dojoxCalendarGridTable tr:first-child td {
   border-top: 1px solid transparent;
@@ -53,7 +53,7 @@
 }
 .tundra .dojoxCalendarMonthColumnView .dojoxCalendarGridTable .dojoxCalendarHiddenEvents {
   background-color: #FEFEFE;
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVQImWNYtmzZfwaiAE6VAAURBeNfdra/AAAAAElFTkSuQmCC) repeat;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAF0lEQVQYlWP4z8Dw/1dU1H8GXGBkKAAA+IglWfcls2QAAAAASUVORK5CYII=) repeat-y;
 }
 .tundra .dojoxCalendarMonthColumnView .dojoxCalendarGridTable tr td.last-child {
   border-right: 1px solid #cccccc;
