@@ -52,8 +52,10 @@
   color: #ff0000;
 }
 .claro .dojoxCalendarMonthColumnView .dojoxCalendarGridTable .dojoxCalendarHiddenEvents {
-  background-color: #FEFEFE;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAF0lEQVQYlWP4z8Dw/1dU1H8GXGBkKAAA+IglWfcls2QAAAAASUVORK5CYII=) repeat-y;
+}
+.claro .dojoxCalendarMonthColumnView .dojoxCalendarGridTable .dojoxCalendarToday.dojoxCalendarHiddenEvents {
+  background: #fff0b4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAF0lEQVQYlWP4z8Dw/1dU1H8GXGBkKAAA+IglWfcls2QAAAAASUVORK5CYII=) repeat-y;
 }
 .claro .dojoxCalendarMonthColumnView .dojoxCalendarGridTable tr td.last-child {
   border-right: 1px solid #b5bcc7;

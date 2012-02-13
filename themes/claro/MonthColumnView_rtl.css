@@ -7,8 +7,10 @@
   paddint-left: 0px;
 }
 .claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable .dojoxCalendarHiddenEvents {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAICAYAAADTLS5CAAAAFElEQVQImWP4z8Dw/1dU1H8GyhgANcclWWHC27gAAAAASUVORK5CYII=) repeat-y;
-  background-position: top right;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAICAYAAADTLS5CAAAAFElEQVQImWP4z8Dw/1dU1H8GyhgANcclWWHC27gAAAAASUVORK5CYII=) repeat-y right top;
+}
+.claro .dojoxCalendarMonthColumnView .dojoxCalendarGridTable .dojoxCalendarToday.dojoxCalendarHiddenEvents {
+  background: #fff0b4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAICAYAAADTLS5CAAAAFElEQVQImWP4z8Dw/1dU1H8GyhgANcclWWHC27gAAAAASUVORK5CYII=) repeat-y right top;
 }
 .claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable tr td.last-child {
   border-left: 1px solid #b5bcc7;
