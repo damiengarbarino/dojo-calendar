@@ -223,7 +223,7 @@
   height: 100%;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td.dummy {
-  border-top: 1px solid #e5f2fe;
+  border-top: 1px solid #efefef;
 }
 /* 
  * The ColumnView.styleRowHeaderCell method that can be subclassed to add/remove css classes per hour.
@@ -232,14 +232,14 @@
   vertical-align: top;
   text-align: right;
   border-top: 1px solid #b5bcc7;
-  background-color: #e5f2fe;
+  background-color: #efefef;
   color: #000000;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable tr:first-child td {
-  border-top: 1px solid #e5f2fe;
+  border-top: 1px solid #efefef;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td span {
   padding-right: 4px;
@@ -402,7 +402,7 @@
   border-left: 1px solid #b5bcc7;
   border-right: 1px solid #b5bcc7;
   border-bottom: 1px solid #b5bcc7;
-  background-color: #e5f2fe;
+  background-color: #efefef;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarMatrixView .dojoxCalendarEvent .handle {
   z-index: 2;
