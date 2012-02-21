@@ -68,17 +68,23 @@ function(
 		},
 		
 		configureButtons: function(){
-			// configure the 6 month button
+			// configure the 6 months button
 			this.inherited(arguments);
 			if(this.sixMonthButton){
 				// should set label from resource bundle here!
 				this._buttonHandles.push(
-					on(this.sixMonthButton, "click", lang.hitch(this, function(){
+					on(this.sixMonthButton, "click", lang.hitch(this, function(){						
 						this.set("dateIntervalSteps", 6);
 						this.set("dateInterval", "month");
 					}))
 				);	
 			}
+		},
+		
+		matrixViewRowHeaderClick: function(e){
+			this.set("dateInterval", "week");
+			this.set("dateIntervalSteps", 1);
+			this.set("date", e.date);
 		}
 		
 	});
