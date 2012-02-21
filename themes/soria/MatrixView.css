@@ -180,6 +180,7 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   color: #293a4b;
+  cursor: pointer;
 }
 .soria .dojoxCalendarMatrixView .dojoxCalendarRowHeaderTable td.last-child {
   border-bottom: 1px solid #b1badf;

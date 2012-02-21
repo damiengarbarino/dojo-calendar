@@ -180,15 +180,16 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   color: #293a4b;
+  cursor: pointer;
 }
 .nihilo .dojoxCalendarMatrixView .dojoxCalendarRowHeaderTable td.last-child {
   border-bottom: 1px solid #cccccc;
 }
 .nihilo .dojoxCalendarMatrixView .dojoxCalendarRowHeaderTable td.Hover {
-  background-color: #ffffff;
+  background-color: #f5f5f5;
 }
 .nihilo .dojoxCalendarMatrixView .dojoxCalendarRowHeaderTable td.Active {
-  background-color: #ffffff;
+  background-color: #cccccc;
 }
 .nihilo .dojoxCalendarMatrixView .dojoxCalendarContainer {
   position: absolute;
