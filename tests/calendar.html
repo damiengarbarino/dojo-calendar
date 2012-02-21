@@ -159,6 +159,14 @@
 							selectionChanged(e.newValue);							
 						});	
 						
+						calendar.on("itemEditEnd", function(e){
+							selectionChanged(e.item);
+						});
+						
+						calendar.on("timeIntervalChange", function(e){
+							dateChooser.set("value", e.startTime);
+						});
+						
 						allDayCB.on("change", function(value){
 							
 							itemStartTimeEditor.set("disabled", value);

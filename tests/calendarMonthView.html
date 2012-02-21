@@ -6,16 +6,16 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>Calendar Sample: Desktop</title>				
 		<style type="text/css">
-			@import "../themes/claro/Calendar.css";
-			@import "../themes/claro/MonthColumnView.css";
+			@import "../themes/tundra/Calendar.css";
+			@import "../themes/tundra/MonthColumnView.css";
 			@import "calendar.css";			
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/dijit.css";
-			@import "../../../dijit/themes/claro/claro.css";
+			@import "../../../dijit/themes/tundra/tundra.css";
 		</style>			
 	</head>
 	
-	<body class="claro">
+	<body class="tundra">
 		<script type="text/javascript" 
 						data-dojo-config="async: true, parseOnLoad: true, paths : {'demo' : '../dojox/calendar/tests'},"
 		 				src="../../../dojo/dojo.js"></script>
@@ -105,6 +105,41 @@
 						calendar.set("date", startOfWeek);
 						
 						calendar.on("gridDoubleClick", function(e){
+							
+							if(e.triggerEvent.ctrlKey){
+								// drill down
+								calendar.set("date", e.date);
+								calendar.set("dateIntervalSteps", 1);
+								calendar.set("dateInterval", "day");								
+								return;
+							}
+							
+							if(e.triggerEvent.shiftKey){
+								// drill up								
+								var dis = calendar.get("dateIntervalSteps");
+								var di = calendar.get("dateInterval");
+								var d = e.date;
+								switch(e.source.viewKind){
+									case "columns":
+										if(dis == 1){
+											di = "day";
+											dis = 7;
+											d = calendar.floorToWeek(e.date);
+										}else{
+											di = "month";
+											dis = 1;
+										}																			
+										break;
+									case "matrix":
+										di = "month";
+										dis = 6;
+										break;																										
+								}
+								calendar.set("date", e.date);
+								calendar.set("dateIntervalSteps", dis);
+								calendar.set("dateInterval", di);								
+								return;
+							}
 
 							// create a event when double-clicking on grid.
 							var start, end;
@@ -125,7 +160,7 @@
 								startTime: start,
 								endTime: end,
 								calendar: "cal1",
-								allDay: e.source.viewKind == "matrix"
+								allDay: e.source.viewKind != "columns"
 							};
 							
 							id++;		
@@ -188,6 +223,14 @@
 						calendar.on("change", function(e){							
 							selectionChanged(e.newValue);							
 						});	
+						
+						calendar.on("itemEditEnd", function(e){
+							selectionChanged(e.item);
+						});
+						
+						calendar.on("timeIntervalChange", function(e){
+							dateChooser.set("value", e.startTime);
+						});
 						
 						allDayCB.on("change", function(value){
 							
