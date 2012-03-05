@@ -1681,9 +1681,11 @@ function(
 				this.rendererList = p.editRendererList.concat(this.rendererList);
 				lang.mixin(this.itemToRenderer, p.editItemToRenderer);
 			}
+			
+			var store = this.get("store");
 						
 			this._onItemEditEnd(lang.mixin(this._createItemEditEvent(), {
-				item: p.editedItem,
+				item: this.renderItemToItem(p.editedItem, store),
 				eventSource: eventSource,
 				completed: !canceled
 			}));
