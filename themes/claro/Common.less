@@ -23,7 +23,7 @@
 }
 
 .opacity(@op){
-	filter:formatstring("alpha(opacity={0})", @op);
+	filter:alpha(opacity=@op);
 	opacity:@op/100;
 }
 
@@ -41,10 +41,9 @@
 }
 
 .glass-view(){
-	z-index: 2;
-	background:#00FF00; 
-	.opacity(0);
-	.select-none
+	z-index: 2;	
+	background-color: #F00;	
+	.select-none;
 }
 
 .header-background(){
@@ -59,7 +58,6 @@
 	background-color: #abd6ff;
   border-color: #769dc0;
 }
-
 
 .header-active-background(){
 	cursor: pointer;		

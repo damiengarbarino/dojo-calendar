@@ -265,7 +265,7 @@
 }
 .tundra .dojoxCalendarMatrixView .dojoxCalendarEvent.dojoxCalendarHorizontal.Edited .bg {
   border: dashed 1px #FFF;
-  filter: formatstring("alpha(opacity={0})", 30);
+  filter: alpha(opacity=30);
   opacity: 0.3;
 }
 .tundra .dojoxCalendarMatrixView .dojoxCalendarEvent.dojoxCalendarHorizontal.Focused .bg {
@@ -280,7 +280,7 @@
 .tundra .dojoxCalendarMatrixView .dojoxCalendarEvent.dojoxCalendarLabel.Edited {
   border: dashed 1px #FFF;
   background: #600;
-  filter: formatstring("alpha(opacity={0})", 30);
+  filter: alpha(opacity=30);
   opacity: 0.3;
   color: #FFF;
 }
@@ -304,7 +304,7 @@
 .tundra .dojoxCalendarMatrixView .dojoxCalendarEvent .handle {
   z-index: 2;
   background: #00FF00;
-  filter: formatstring("alpha(opacity={0})", 0);
+  filter: alpha(opacity=0);
   opacity: 0;
   -moz-user-select: none;
   -webkit-user-select: none;

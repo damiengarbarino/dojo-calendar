@@ -262,7 +262,7 @@
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   background-color: #9F0000;
-  filter: formatstring("alpha(opacity={0})", 90);
+  filter: alpha(opacity=90);
   opacity: 0.9;
 }
 .claro .dojoxCalendarSimpleColumnView .dojoxCalendarEvent.Hovered .bg {
@@ -273,7 +273,7 @@
 }
 .claro .dojoxCalendarSimpleColumnView .dojoxCalendarEvent.Edited .bg {
   border: dashed 1px #FFFFFF;
-  filter: formatstring("alpha(opacity={0})", 70);
+  filter: alpha(opacity=70);
   opacity: 0.7;
 }
 .claro .dojoxCalendarSimpleColumnView .dojoxCalendarEvent.Focused .bg {
@@ -299,9 +299,7 @@
 }
 .claro .dojoxCalendarSimpleColumnView .dojoxCalendarEvent .handle {
   z-index: 2;
-  background: #00FF00;
-  filter: formatstring("alpha(opacity={0})", 0);
-  opacity: 0;
+  background-color: #F00;
   -moz-user-select: none;
   -webkit-user-select: none;
   khtml-user-select: none;

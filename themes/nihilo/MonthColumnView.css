@@ -178,7 +178,7 @@
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   background-color: #9F0000;
-  filter: formatstring("alpha(opacity={0})", 90);
+  filter: alpha(opacity=90);
   opacity: 0.9;
 }
 .nihilo .dojoxCalendarMonthColumnView .dojoxCalendarEvent.Hovered .bg {
@@ -189,7 +189,7 @@
 }
 .nihilo .dojoxCalendarMonthColumnView .dojoxCalendarEvent.Edited .bg {
   border: dashed 1px #FFFFFF;
-  filter: formatstring("alpha(opacity={0})", 70);
+  filter: alpha(opacity=70);
   opacity: 0.7;
 }
 .nihilo .dojoxCalendarMonthColumnView .dojoxCalendarEvent.Focused .bg {
@@ -216,7 +216,7 @@
 .nihilo .dojoxCalendarMonthColumnView .dojoxCalendarEvent .handle {
   z-index: 2;
   background: #00FF00;
-  filter: formatstring("alpha(opacity={0})", 0);
+  filter: alpha(opacity=0);
   opacity: 0;
   -moz-user-select: none;
   -webkit-user-select: none;
