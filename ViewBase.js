@@ -634,7 +634,8 @@ function(
 		},
 
 		_setItemsAttr: function(value){
-			this._set("items", value);			
+			this._set("items", value);
+			this.displayedItemsInvalidated = true;
 		},
 
 		_refreshItemsRendering: function(){

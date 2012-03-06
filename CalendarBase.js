@@ -657,6 +657,10 @@ _nls){
 		
 		_setItemsAttr: function(value){
 			this._set("items", value);
+			if(this.currentView){
+				this.currentView.set("items", value);
+				this.currentView.invalidateRendering();
+			}
 		},
 		
 		/////////////////////////////////////////////////////
