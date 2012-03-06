@@ -14,7 +14,7 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 	var _RendererMixin = dojox.calendar._RendererMixin;
 	=====*/ 
 
-	return declare("dojox.calendar.mobile.MobileVerticalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
+	return declare("dojox.calendar.MobileVerticalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
 		
 		templateString: template,
 		mobile: true,

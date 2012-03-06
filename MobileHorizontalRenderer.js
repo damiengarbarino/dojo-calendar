@@ -15,17 +15,17 @@ _RendererMixin,
 template){
 	
 	//	module:
-	//		dojox/calendar/HorizontalRenderer
+	//		dojox/calendar/MobileHorizontalRenderer
 	//	summary:
-	//		dojox.calendar.HorizontalRenderer widget
+	//		dojox.calendar.MobileHorizontalRenderer widget
 	
 	/*=====
 	var _WidgetBase = dijit._WidgetBase;
-	var _TemplatedMixin = dijit._TemplatedMixin;x
+	var _TemplatedMixin = dijit._TemplatedMixin;
 	var _RendererMixin = dojox.calendar._RendererMixin;
 	=====*/ 
 
-	return declare("dojox.calendar.HorizontalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
+	return declare("dojox.calendar.MobileHorizontalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
 		
 		templateString: template,
 		
