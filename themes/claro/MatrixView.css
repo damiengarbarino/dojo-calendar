@@ -304,6 +304,8 @@
 .claro .dojoxCalendarMatrixView .dojoxCalendarEvent .handle {
   z-index: 2;
   background-color: #F00;
+  filter: alpha(opacity=0);
+  opacity: 0;
   -moz-user-select: none;
   -webkit-user-select: none;
   khtml-user-select: none;

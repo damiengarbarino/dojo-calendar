@@ -23,8 +23,7 @@
 }
 
 .opacity(@op){
-	filter:alpha(opacity=@op);
-	opacity:@op/100;
+	filter:alpha(opacity=@op); opacity:@op/100;
 }
 
 .transition-duration(@dur: 0s){
@@ -43,6 +42,7 @@
 .glass-view(){
 	z-index: 2;	
 	background-color: #F00;	
+	.opacity(0);
 	.select-none;
 }
 
