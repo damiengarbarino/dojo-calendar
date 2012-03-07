@@ -113,9 +113,9 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			}
 			var item = {};
 			item[store.idProperty] = renderItem.id;
-			item[this.summaryAttr] = renderItem[this.summaryAttr];
-			item[this.startTimeAttr] = (this.encodeDate && this.encodeDate(renderItem[this.startTimeAttr])) || renderItem[this.startTimeAttr];
-			item[this.endTimeAttr] = (this.encodeDate && this.encodeDate(renderItem[this.endTimeAttr])) || renderItem[this.endTimeAttr];
+			item[this.summaryAttr] = renderItem.summary;
+			item[this.startTimeAttr] = (this.encodeDate && this.encodeDate(renderItem.startTime)) || renderItem.startTime;
+			item[this.endTimeAttr] = (this.encodeDate && this.encodeDate(renderItem.endTime)) || renderItem.endTime;
 			return lang.mixin(store.get(renderItem.id), item);
 		},			
 		
