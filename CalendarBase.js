@@ -1012,6 +1012,11 @@ _nls){
 			//	summary:
 			//		Event dispatched when an item renderer has been double-clicked.
 		},
+
+		onItemContextMenu: function(e){
+			//	summary:
+			//		Event dispatched when an item renderer has been context-clicked.
+		},
 		
 		onItemEditBegin: function(e){
 			//	summary:

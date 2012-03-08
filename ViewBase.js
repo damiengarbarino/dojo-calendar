@@ -1461,7 +1461,15 @@ function(
 			//	summary:
 			//		Event dispatched when an item renderer has been double-clicked.
 		},
+
+		_onItemContextMenu: function(e){
+			this._dispatchCalendarEvt(e, "onItemContextMenu");	
+		},
 		
+		onItemContextMenu: function(e){
+			//	summary:
+			//		Event dispatched when an item renderer has been context-clicked.
+		},		
 		//////////////////////////////////////////////////////////
 		//
 		//	Editing
@@ -1705,7 +1713,7 @@ function(
 					// Inject new properties in data store item				
 					// and apply data changes
 					var store = this.get("store");
-					store.put(this.renderItemToItem(e.item, store));
+					store.put(e.item, store);
 				}else{			
 					e.item.startTime = this._editStartTimeSave; 
 					e.item.endTime = this._editEndTimeSave;
