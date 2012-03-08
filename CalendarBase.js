@@ -244,9 +244,7 @@ _nls){
 		},
 		
 		_refreshItemsRendering: function(){
-			if(this.currentView){
-				this.currentView._refreshItemsRendering();
-			}
+			this.currentView._refreshItemsRendering();
 		},
 				
 		_validateProperties: function(){
@@ -1011,6 +1009,11 @@ _nls){
 		onItemDoubleClick: function(e){
 			//	summary:
 			//		Event dispatched when an item renderer has been double-clicked.
+		},
+
+		onItemContextMenu: function(e){
+			//	summary:
+			//		Event dispatched when an item renderer has been context-clicked.
 		},
 		
 		onItemEditBegin: function(e){
