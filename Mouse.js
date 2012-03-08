@@ -45,6 +45,15 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				}));
 				renderer.__handles.push(h);
 				
+				h = on(renderer.domNode, "contextmenu", lang.hitch(this, function(e){
+					this._onItemContextMenu({
+						triggerEvent: e,
+						renderer: renderer,
+						item: this.renderItemToItem(renderer.item, this.get("store"))
+					});
+				}));
+				renderer.__handles.push(h);
+				
 				if(renderer.resizeStartHandle){
 					h = on(renderer.resizeStartHandle, "mousedown", lang.hitch(this, function(e){
 						// allow user selection so NOT stopEvent

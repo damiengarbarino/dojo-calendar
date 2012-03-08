@@ -1461,7 +1461,15 @@ function(
 			//	summary:
 			//		Event dispatched when an item renderer has been double-clicked.
 		},
+
+		_onItemContextMenu: function(e){
+			this._dispatchCalendarEvt(e, "onItemContextMenu");	
+		},
 		
+		onItemContextMenu: function(e){
+			//	summary:
+			//		Event dispatched when an item renderer has been context-clicked.
+		},		
 		//////////////////////////////////////////////////////////
 		//
 		//	Editing
