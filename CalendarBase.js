@@ -244,7 +244,9 @@ _nls){
 		},
 		
 		_refreshItemsRendering: function(){
-			this.currentView._refreshItemsRendering();
+			if(this.currentView){
+				this.currentView._refreshItemsRendering();
+			}
 		},
 				
 		_validateProperties: function(){
