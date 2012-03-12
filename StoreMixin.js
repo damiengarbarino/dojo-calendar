@@ -2,18 +2,16 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 	 
 	function(declare, arr, html, lang, domClass, Stateful, Deferred){
 	
-	//	module:
-	//		dojox/calendar/StoreMixin
-	//	summary:
-	//		dojox.calendar.StoreMixin widget
-	//	description:
-	//		This mixin contains the store management.
-	
 	/*=====
 	var Stateful = dojo.Stateful;
 	=====*/
 
 	return declare("dojox.calendar.StoreMixin", Stateful, {
+		
+		//	module:
+		//		dojox/calendar/StoreMixin
+		//	summary:
+		//		This mixin contains the store management.
 		
 		//	store: dojo.store.Store
 		//		The store that contains the events to display.

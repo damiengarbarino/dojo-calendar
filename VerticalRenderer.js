@@ -3,11 +3,6 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 	
 	function(declare, _WidgetBase, _TemplatedMixin, _RendererMixin, template){
 	
-	//	module:
-	//		dojox/calendar/VerticalRenderer
-	//	summary:
-	//		dojox.calendar.VerticalRenderer widget
-	
 	/*=====
 	var _WidgetBase = dijit._WidgetBase;
 	var _TemplatedMixin = dijit._TemplatedMixin;
@@ -15,6 +10,11 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 	=====*/ 
 
 	return declare("dojox.calendar.VerticalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
+		
+		//	module:
+		//		dojox/calendar/VerticalRenderer
+		//	summary:
+		//		The default item vertical renderer.		
 		
 		templateString: template,
 		

@@ -3,11 +3,6 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 	 
 	function(declare, _WidgetBase, _TemplatedMixin, _RendererMixin, template){
 	
-	//	module:
-	//		dojox/calendar/LabelRenderer
-	//	summary:
-	//		dojox.calendar.LabelRenderer widget
-	
 	/*=====
 	var _WidgetBase = dijit._WidgetBase;
 	var _TemplatedMixin = dijit._TemplatedMixin;x
@@ -15,6 +10,11 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 	=====*/ 
 
 	return declare("dojox.calendar.LabelRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
+		
+		//	module:
+		//		dojox/calendar/LabelRenderer
+		//	summary:
+		//		The default item label renderer. 
 		
 		templateString: template,
 		
