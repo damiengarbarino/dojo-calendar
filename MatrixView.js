@@ -889,7 +889,11 @@ function(
 			}
 			
 			if(this.layoutDuringResize || apply){
-				this._layoutRenderers(this.renderData);
+				// Use a time for FF (at least). In FF the cell size and position info are not ready yet. 
+				setTimeout(lang.hitch(this, function(){
+					this._layoutRenderers(this.renderData);
+				  }), 20);
+								
 			}else{
 				domStyle.set(this.itemContainer, "opacity", 0);
 				this._recycleItemRenderers();
