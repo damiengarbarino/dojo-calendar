@@ -757,25 +757,21 @@ function(
 			var d = new Date(2000, 0, 1, 0, 0, 0);
 			
 			query("tr", rowHeaderTable).forEach(function(tr, i){
-				var td = query("td", tr)[0];
-				td.className = "";
+				var td = query("td", tr)[0];				
+				td.className = "";				
+				
+				var size = renderData.hourSize;
 				if (has("ie") == 7) {
-					domStyle.set(tr, "height", (renderData.slotSize-2) + "px");					
-					if(i % rowPerH == 0){
-						d.setHours(this.renderData.minHours + (i/rowPerH));
-						this.styleRowHeaderCell(td, d.getHours(), renderData);					
-						this._setText(td, this._formatRowHeaderLabel(d));
-					}else{
-						domClass.add(td, "dummy");
-						this._setText(td, "&nbsp;", true);
-						return;
-					}									
-				}else{
-					domStyle.set(tr, "height", renderData.hourSize + "px");
-					d.setHours(this.renderData.minHours + (i));
-					this.styleRowHeaderCell(td, d.getHours(), renderData);					
-					this._setText(td, this._formatRowHeaderLabel(d));
+					// ie7 workaournd: do not take border into account.
+					size -= 2;					
 				}
+
+				domStyle.set(tr, "height", size + "px");
+				
+				d.setHours(this.renderData.minHours + (i));
+				this.styleRowHeaderCell(td, d.getHours(), renderData);					
+				this._setText(td, this._formatRowHeaderLabel(d));
+
 			}, this);
 						
 		},		
