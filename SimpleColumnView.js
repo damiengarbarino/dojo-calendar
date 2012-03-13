@@ -733,11 +733,6 @@ function(
 			}
 									
 			var count = renderData.hourCount - (oldRenderData ? oldRenderData.hourCount : 0);
-			if (has("ie") == 7) {
-				var rowPerH = Math.floor(60 / renderData.slotDuration);
-				count = rowPerH * renderData.hourCount - 
-					(oldRenderData ? Math.floor(60 / oldRenderData.slotDuration) * oldRenderData.hourCount : 0);
-			}
 			
 			// Build HTML structure
 			if(count>0){ // creation
