@@ -47,10 +47,8 @@ function(
 	
 	return declare("dojox.calendar.MatrixView", [ViewBase, _TemplatedMixin], {
 		
-		// module:
-		//		dojox/calendar/MatrixView
 		// summary:
-		//		dojox.calendar.MatrixView widget
+		//		The matrix view is a calendar view that displaying a matrix where each cell is a day.
 
 		templateString: template,
 	

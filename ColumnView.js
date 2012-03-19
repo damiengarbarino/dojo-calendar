@@ -44,10 +44,7 @@ function(
 	=====*/ 	
 	
 	return declare("dojox.calendar.ColumnView", SimpleColumnView, {
-		// module:
-		//		dojox/calendar/ColumnView
 		// summary:
-		//		dojox.calendar.ColumnView widget
 		//		This class defines a simple column view that also uses a secondary 
 		//		sheet to display long or all day events. 
 		//		By default an dojox.calendar.ColumnViewSecondarySheet instance is created.

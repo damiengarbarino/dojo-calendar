@@ -2,11 +2,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 	 
 	function(declare, arr, html, lang, domClass, Stateful, Deferred){
 	
-	//	module:
-	//		dojox/calendar/StoreMixin
 	//	summary:
-	//		dojox.calendar.StoreMixin widget
-	//	description:
 	//		This mixin contains the store management.
 	
 	/*=====

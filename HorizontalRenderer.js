@@ -14,10 +14,6 @@ _TemplatedMixin,
 _RendererMixin, 
 template){
 	
-	//	module:
-	//		dojox/calendar/HorizontalRenderer
-	//	summary:
-	//		dojox.calendar.HorizontalRenderer widget
 	
 	/*=====
 	var _WidgetBase = dijit._WidgetBase;
@@ -26,6 +22,9 @@ template){
 	=====*/ 
 
 	return declare("dojox.calendar.HorizontalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
+		
+		//	summary:
+		//		The default item horizontal renderer.
 		
 		templateString: template,
 		

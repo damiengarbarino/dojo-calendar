@@ -13,10 +13,7 @@ define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
 	
 	return declare("dojox.calendar.ColumnViewSecondarySheet", MatrixView, {
 		
-		// module:
-		//		dojox/calendar/ColumnViewSecondarySheet
 		// summary:
-		//		dojox.calendar.ColumnViewSecondarySheet widget
 		//		This class defines a matrix view designed to be embedded in a column view, 
 		//		usually to display long or all day events on one row. 
 

@@ -49,10 +49,9 @@ function(
 	=====*/ 	
 	
 	return declare("dojox.calendar.MonthColumnView", [ViewBase, _TemplatedMixin], {
-		// module:
-		//		dojox/calendar/MonthColumnView
+		
 		// summary:
-		//		dojox.calendar.MonthColumnView widget
+		//		The month column view is a calendar view used to display a month per column where each cell of the column is a day.
 
 		baseClass: "dojoxCalendarMonthColumnView",
 		

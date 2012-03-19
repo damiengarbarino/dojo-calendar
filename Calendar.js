@@ -20,14 +20,11 @@ define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView
 	=====*/ 
 	
 	return declare("dojox.calendar.Calendar", CalendarBase, {
+		// summary:		
+		//		This class defines a calendar widget that display events in time.
+		
 		
 		templateString: template,
-		
-		// module:
-		//		dojox/calendar/Calendar
-		// summary:
-		//		dojox.calendar.Calendar widget
-		//		This class defines a calendar widget that display events in time.
 		
 		_createDefaultViews: function(){
 			//	summary:

@@ -13,12 +13,7 @@ _WidgetBase,
 _TemplatedMixin, 
 _RendererMixin, 
 template){
-	
-	//	module:
-	//		dojox/calendar/MobileHorizontalRenderer
-	//	summary:
-	//		dojox.calendar.MobileHorizontalRenderer widget
-	
+		
 	/*=====
 	var _WidgetBase = dijit._WidgetBase;
 	var _TemplatedMixin = dijit._TemplatedMixin;
@@ -26,6 +21,9 @@ template){
 	=====*/ 
 
 	return declare("dojox.calendar.MobileHorizontalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
+		
+		//	summary:
+		//		The mobile specific item horizontal renderer.		
 		
 		templateString: template,
 		

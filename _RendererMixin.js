@@ -2,18 +2,14 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 	 
 	function(declare, lang, domStyle, domClass, Stateful){
 	
-	//	module:
-	//		dojox/calendar/_RendererMixin
-	//	summary:
-	//		dojox.calendar._RendererMixin widget
-	//	description:
-	//		This class is the base class of calendar renderers.
-	
 	/*=====
 	var Stateful = dojo.Stateful;
 	=====*/
 
 	return declare("dojox.calendar._RendererMixin", Stateful, {
+
+		//	summary:
+		//		This class is the base class of calendar renderers.
 		
 		//	item: Object
 		//		The layout item displayed by this renderer.

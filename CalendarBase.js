@@ -57,10 +57,7 @@ _nls){
 	
 	return declare("dojox.calendar.CalendarBase", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, StoreMixin, _Invalidating, Selection], {
 		
-		// module:
-		//		dojox/calendar/CalendarBase
 		// summary:
-		//		dojox.calendar.CalendarBase widget
 		//		This class defines a generic calendar widget that manages several views to display event in time.
 		
 		baseClass: "dojoxCalendar",

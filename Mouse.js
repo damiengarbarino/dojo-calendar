@@ -2,12 +2,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	function(arr, lang, declare, win, domGeometry, on, event, keys){
 			
 	return declare("dojox.calendar.Mouse", null, {
-		// module:
-		//		dojox/calendar/Mouse
+		
 		// summary:
 		//		This plugin is managing the mouse interactions on item renderers displayed by a calendar view.
-		
-				
+					
 		//	triggerExtent: Number 
 		//		The distance in pixels along the vertical or horizontal axis to cover with the 
 		//		mouse button down before triggering the editing gesture.
