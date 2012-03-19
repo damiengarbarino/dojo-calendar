@@ -48,6 +48,7 @@ function(
 	=====*/ 
 		
 	return declare("dojox.calendar.ViewBase", [_WidgetBase, StoreMixin, _Invalidating, Selection], {
+		
 		//	summary:
 		//		The dojox.calendar.ViewBase widget is the base of calendar view widgets
 		
