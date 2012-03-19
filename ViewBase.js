@@ -48,10 +48,8 @@ function(
 	=====*/ 
 		
 	return declare("dojox.calendar.ViewBase", [_WidgetBase, StoreMixin, _Invalidating, Selection], {
-		//	module:
-		//		dojox/calendar/ViewBase
 		//	summary:
-		//		The dojox.calendar.ViewBase widget is the base of calendar views widgets
+		//		The dojox.calendar.ViewBase widget is the base of calendar view widgets
 		
 		//	datePackage: Object
 		//		JavaScript namespace to find Calendar routines. Uses Gregorian Calendar routines at dojo.date by default.

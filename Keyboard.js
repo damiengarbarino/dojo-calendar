@@ -1,9 +1,8 @@
 define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", "dojo/_base/event", "dojo/keys"],
 	function(arr, lang, declare, on, event, keys){
-
+	
 	return declare("dojox.calendar.Keyboard", null, {
-		// module:
-		//		dojox/calendar/Keyboard
+
 		// summary:
 		//		This mixin is managing the keyboard interactions on a calendar view.
 		

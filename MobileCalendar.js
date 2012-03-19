@@ -19,11 +19,8 @@ define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView
 	
 	return declare("dojox.calendar.MobileCalendar", CalendarBase, {
 		
-		// module:
-		//		dojox/calendar/Calendar
 		// summary:
-		//		dojox.calendar.Calendar widget
-		//		This class defines a calendar widget that display events in time.
+		//		This class defines a calendar widget that display events in time designed to be used in mobile environment.
 		
 		templateString: template,
 		

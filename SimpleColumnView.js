@@ -47,10 +47,8 @@ function(
 	=====*/ 	
 	
 	return declare("dojox.calendar.SimpleColumnView", [ViewBase, _TemplatedMixin], {
-		// module:
-		//		dojox/calendar/SimpleColumnView
 		// summary:
-		//		dojox.calendar.SimpleColumnView widget
+		//		The simple column view is displaying a day per column. Each cell of a column is a time slot.
 
 		baseClass: "dojoxCalendarSimpleColumnView",
 		

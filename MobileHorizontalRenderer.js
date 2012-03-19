@@ -22,8 +22,6 @@ template){
 
 	return declare("dojox.calendar.MobileHorizontalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
 		
-		//	module:
-		//		dojox/calendar/MobileHorizontalRenderer
 		//	summary:
 		//		The mobile specific item horizontal renderer.
 		

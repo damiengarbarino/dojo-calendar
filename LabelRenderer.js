@@ -11,8 +11,6 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 
 	return declare("dojox.calendar.LabelRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
 		
-		//	module:
-		//		dojox/calendar/LabelRenderer
 		//	summary:
 		//		The default item label renderer. 
 		

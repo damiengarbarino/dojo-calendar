@@ -8,8 +8,6 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 
 	return declare("dojox.calendar.StoreMixin", Stateful, {
 		
-		//	module:
-		//		dojox/calendar/StoreMixin
 		//	summary:
 		//		This mixin contains the store management.
 		
