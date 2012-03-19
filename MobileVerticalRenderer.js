@@ -2,7 +2,7 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 	"dojox/calendar/_RendererMixin", "dojo/text!./templates/MobileVerticalRenderer.html"],
 	 
 	function(declare, _WidgetBase, _TemplatedMixin, _RendererMixin, template){
-		
+	
 	/*=====
 	var _WidgetBase = dijit._WidgetBase;
 	var _TemplatedMixin = dijit._TemplatedMixin;
@@ -10,9 +10,9 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 	=====*/ 
 
 	return declare("dojox.calendar.MobileVerticalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
-		
+				
 		//	summary:
-		//		The mobile specific item horizontal renderer.		
+		//		The mobile specific item vertical renderer.
 		
 		templateString: template,
 		mobile: true,
@@ -28,6 +28,26 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 		postCreate: function() {
 			this.inherited(arguments);
 			this._applyAttributes();
+		},
+		
+		_isElementVisible: function(elt, startHidden, endHidden, size){
+			var d;
+			
+			switch(elt){
+				case "startTimeLabel":
+					d = this.item.startTime;
+					if(this.item.allDay || this.owner.isStartOfDay(d)){
+						return false;
+					}
+					break;
+				case "endTimeLabel":
+					d = this.item.endTime;
+					if(this.item.allDay || this.owner.isStartOfDay(d)){
+						return false;
+					}
+					break;
+			}
+			return this.inherited(arguments);
 		}
 	});
 });
