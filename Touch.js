@@ -3,9 +3,9 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 	function(arr, lang, declare, dom, domGeometry, win, on, event, keys){
 			
 	return declare("dojox.calendar.Touch", null, {
-		// summary:
-		//		This plugin is managing the touch interactions on item renderers displayed by a calendar view.
 		
+		// summary:
+		//		This plugin is managing the touch interactions on item renderers displayed by a calendar view.		
 				
 		//	touchStartEditingTimer: Integer
 		//		The delay of one touch over the renderer before setting the item in editing mode.		

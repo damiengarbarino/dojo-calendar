@@ -4,8 +4,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	return declare("dojox.calendar.Mouse", null, {
 
 		// summary:
-		//		This plugin is managing the mouse interactions on item renderers displayed by a calendar view.
-		
+		//		This plugin is managing the mouse interactions on item renderers displayed by a calendar view.		
 				
 		//	triggerExtent: Number 
 		//		The distance in pixels along the vertical or horizontal axis to cover with the 
