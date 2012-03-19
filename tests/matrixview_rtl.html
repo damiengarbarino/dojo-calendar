@@ -8,6 +8,8 @@
 		<style type="text/css">
 			@import "../themes/claro/MatrixView.css";
 			@import "matrixview.css";
+			@import "../themes/claro/MatrixView_rtl.css";
+			@import "matrixview_rtl.css";
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/dijit.css";
 			@import "../../../dijit/themes/claro/claro.css";
@@ -137,10 +139,10 @@
 								return item.calendar == "cal1" ? "Calendar1" : "Calendar2"
 							},
 							isItemMoveEnabled: function(item, kind){
-								return matrixView.editable && win.doc.appState.moveDisabledMap[item.id] !== true;
+								return win.doc.appState.moveDisabledMap[item.id] !== true;
 							},
 							isItemResizeEnabled: function(item, kind){
-								return matrixView.editable && win.doc.appState.resizeDisabledMap[item.id] !== true;
+								return win.doc.appState.resizeDisabledMap[item.id] !== true;
 							}
 						}, "calendarNode");
 
