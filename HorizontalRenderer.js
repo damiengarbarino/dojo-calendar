@@ -22,8 +22,6 @@ template){
 
 	return declare("dojox.calendar.HorizontalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
 		
-		//	module:
-		//		dojox/calendar/HorizontalRenderer
 		//	summary:
 		//		The default item horizontal renderer. 
 		

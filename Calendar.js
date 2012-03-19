@@ -23,8 +23,6 @@ define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView
 		
 		templateString: template,
 		
-		// module:
-		//		dojox/calendar/Calendar
 		// summary:
 		//		dojox.calendar.Calendar widget
 		//		This class defines a calendar widget that display events in time.

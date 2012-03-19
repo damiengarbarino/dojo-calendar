@@ -11,8 +11,6 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 
 	return declare("dojox.calendar.MobileVerticalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
 				
-		//	module:
-		//		dojox/calendar/MobileVerticalRenderer
 		//	summary:
 		//		The mobile specific item vertical renderer.
 		

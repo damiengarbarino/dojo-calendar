@@ -29,8 +29,6 @@ template){
 
 	return declare("dojox.calendar.ExpandRenderer", [_WidgetBase, _TemplatedMixin], {
 		
-		//	module:
-		//		dojox/calendar/ExpandRenderer
 		//	summary:
 		//		The default renderer display in MatrixView cells where some item renderers cannot be displayed because of size constraints.
 		

@@ -44,8 +44,7 @@ function(
 	=====*/ 	
 	
 	return declare("dojox.calendar.ColumnView", SimpleColumnView, {
-		// module:
-		//		dojox/calendar/ColumnView
+
 		// summary:
 		//		dojox.calendar.ColumnView widget
 		//		This class defines a simple column view that also uses a secondary 
