@@ -48,7 +48,7 @@ function(
 	return declare("dojox.calendar.MatrixView", [ViewBase, _TemplatedMixin], {
 		
 		// summary:
-		//		The matrix view is a calendar view that displaying a matrix of where each cell is a day.
+		//		The matrix view is a calendar view that displaying a matrix where each cell is a day.
 
 		templateString: template,
 	
