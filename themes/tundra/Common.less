@@ -23,7 +23,7 @@
 }
 
 .opacity(@op){
-	filter:alpha(opacity=@op);
+	filter: ~"alpha(opacity=@{op})";	
 	opacity:@op/100;
 }
 
