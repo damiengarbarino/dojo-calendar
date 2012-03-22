@@ -207,11 +207,11 @@
 	font-weight: bold;
 }
 
-.dojoxCalendarMonthColumnView .dojoxCalendarEvent .endTime {
+.dojoxCalendarColumnView .dojoxCalendarEvent .endTime {
 	position: absolute;		
 	font-weight: bold;	
-	bottom:3px;
-	left: 6px;
+	bottom:10px;
+	left: 3px;
 }
 
 .dojoxCalendarMonthColumnView .dojoxCalendarEvent .beforeIcon {
@@ -225,11 +225,26 @@
 	text-align: center;
 }
 
-.dojoxCalendarMonthColumnView .dojoxCalendarEvent .handle {
+.dojoxCalendarColumnView .dojoxCalendarEvent .handle {
 	.glass-view;
 }
 
-.dojoxCalendarMonthColumnView .dojoxCalendarEvent .moveHandle {
+.dojoxCalendarEvent .resizeHandle div {
+	position:absolute;
+	left: 3px;
+	right: 3px;	
+	top: 2px;
+	height: 24px;	
+	background-color: #fff;
+	.opacity(30);
+	.rounded-corners(5px);	
+}
+
+.dojoxCalendarEvent .resizeHandle div:active {
+	.opacity(60);	
+}
+
+.dojoxCalendarColumnView .dojoxCalendarEvent .moveHandle {
 	position: absolute;
 	top:0;
 	width:100%;
@@ -237,20 +252,36 @@
 	cursor:move;	
 }
 
-.dojoxCalendarMonthColumnView .dojoxCalendarEvent .resizeStartHandle {
+.dojoxCalendarColumnView .dojoxCalendarEvent .resizeStartHandle {
 	position: absolute;
-	top:0;
-	width:100%;
-	height:10px;
-	cursor:n-resize;	
+	top:0;	
+	left: 0;
+	right: 0;
+	height:30px;
+	z-index: 2;
 }
 
-.dojoxCalendarMonthColumnView .dojoxCalendarEvent .resizeEndHandle {
+.dojoxCalendarColumnView .dojoxCalendarEvent .resizeEndHandle {
 	position: absolute;
-	bottom:0;
-	width:100%;
-	height:10px;
-	cursor:n-resize;	
+	bottom:0;	
+	left: 0;
+	right: 0;	
+	height:30px;
+	z-index: 2;
+}
+
+.dojoxCalendarColumnView .dojoxCalendarEvent dl {
+	margin: 0;
+}
+
+.dojoxCalendarColumnView .dojoxCalendarEvent dd {
+	margin: 0;
+	padding: 0 3px;
+	text-align: left;
+}
+
+.dojoxCalendarEvent.Edited dd {
+	margin-top: 7px
 }
 
 .dojoxCalendarMonthColumnView .dojoxCalendarEvent dl {

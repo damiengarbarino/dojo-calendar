@@ -10,35 +10,34 @@
 						@import "../../../dojo/resources/dojo.css";
 						@import "../../../dijit/themes/dijit.css";
 						@import "../../../dijit/themes/claro/claro.css";
-						@import "tablet.css";
-				</style>
+						@import "columntablet.css";
+				</style>				
 		</head>
-
-		<body class="iphone">
-				<script type="text/javascript"
+		<body>
+				<script type="text/javascript" 
 						data-dojo-config="async: true, parseOnLoad: true"
 		 				src="../../../dojo/dojo.js"></script>
-
+		 				
 				<script type="text/javascript">
-
+					
 						require(["dojo/ready", "dojo/_base/declare",
-				"dojo/on", "dojo/date/locale", "dojox/mobile",
-				"dojo/date", "dojo/dom", "dojo/dom-construct", "dojo/_base/window",
+				"dojo/on", "dojo/date/locale", "dojox/mobile", 
+				"dojo/date", "dojo/dom", "dojo/dom-construct", "dojo/_base/window", 
 				"dojox/mobile/CheckBox", "dojox/calendar/ColumnView", "dojox/calendar/ColumnViewSecondarySheet", "dojox/calendar/Touch", "dojox/calendar/MobileVerticalRenderer",
 				"dojox/calendar/HorizontalRenderer", "dojox/calendar/ExpandRenderer",
-				"dojo/store/Memory", "dojo/store/Observable", "dojox/mobile/Button", "dijit/TitlePane", "dojox/gesture/swipe"],
-
+				"dojo/store/Memory", "dojo/store/Observable", "dojox/gesture/swipe"],
+				 
 				function(ready, declare, on, locale, mobile, date, dom, domConstruct, win,
-					CheckBox, ColumnView, ColumnViewSecondarySheet, CalendarTouch, MobileVerticalRenderer, HorizontalRenderer, ExpandRenderer, Memory, Observable, Button, TitlePane, swipe){
+					CheckBox, ColumnView, ColumnViewSecondarySheet, CalendarTouch, MobileVerticalRenderer, HorizontalRenderer, ExpandRenderer, Memory, Observable, swipe){
 							ready(function(){
-
+								
 								var dateClassObj = Date;
 								var modelBase = [
-									{	day: 1,	start: [0, 0], duration: 1440, allDay: true	},
-									{	day: 2,	start: [10, 00], duration: 270	},
+									{	day: 1,	start: [0, 0], duration: 1440, allDay: true	}, 
+									{	day: 2,	start: [10, 00], duration: 270	}, 
 									{	day: 2,	start: [12, 0],	duration: 240	}
 								];
-
+								
 								var someData = [];
 								var startOfWeek = new dateClassObj();
 								startOfWeek.setHours(0);
@@ -46,7 +45,7 @@
 								startOfWeek.setSeconds(0);
 								startOfWeek.setMilliseconds(0);
 								startOfWeek = date.add(startOfWeek, "day", -startOfWeek.getDay());
-
+								
 								for (var i = 0; i < modelBase.length; i++) {
 									var newObj = {
 										id: i,
@@ -61,8 +60,8 @@
 									newObj.endTime = date.add(newObj.startTime, "minute", modelBase[i].duration);
 									someData.push(newObj);
 								}
-
-
+								
+																
 								var id = i;
 								var secondarySheetClass = declare([ColumnViewSecondarySheet, CalendarTouch]);
 								colView = declare([ColumnView, CalendarTouch])({
@@ -78,26 +77,26 @@
 									maxHours: 22,
 									timeSlotDuration: 30
 								}, "calendarNode");
-
+								
 								var goNextRange = function(direction){
 									var days = (direction == "left" ? 1 : -1) * colView.get("columnCount");
-									var startDate = colView.get("startDate");
-									var newStartDate = colView.renderData.dateFuncObj.add(startDate, "day", days);
+									var startDate = colView.get("startDate");									
+									var newStartDate = colView.renderData.dateFuncObj.add(startDate, "day", days);									
 									colView.set("startDate", newStartDate);
-
-									//TODO Add animation
+									
+									//TODO Add animation 
 								};
-
+								
 								on(colView.itemContainer, swipe.end, function(e){
 									if(e.time < 200 && Math.abs(e.dx) > 50){
 										goNextRange(e.dx < 0 ? "left" : "right");
 									}
 								});
-
-
+								
+								
 								colView.snapSteps = 15;
 								colView.liveLayout = false;
-
+								
 								var id=4;
 								colView.on("gridDoubleClick", function(e){
 
@@ -110,7 +109,7 @@
 										start = colView.floorToDay(e.date, false, colView.renderData);
 										end = date.add(start, "day", 1);
 									}
-
+		
 									var item = {
 										id: id,
 										summary: "New event " + id,
@@ -118,18 +117,18 @@
 										endTime: end,
 										allDay: e.sheet == "secondary"
 									};
-
-									id++;
+									
+									id++;		
 									colView.store.add(item);
-
+									
 									colView.set("selectedItem", item);
 									colView.set("focusedItem", item);
-
+									
 								});
-
+								
 								var startDateSave;
 								var columnCountSave;
-
+								
 								colView.on("columnHeaderClick", function(e){
 									if (colView.get("columnCount") == 1) {
 										colView.set("startDate", startDateSave);
@@ -142,13 +141,13 @@
 									}
 								});
 
-
+								
 							});
 						});
 				</script>
-
+				
 				<div id="calendarNode">
 				</div>
-
+				
 		</body>
 </html>

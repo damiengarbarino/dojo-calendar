@@ -23,7 +23,8 @@
 }
 
 .opacity(@op){
-	filter:alpha(opacity=@op); opacity:@op/100;
+	opacity:@op/100;
+	filter: ~"alpha(opacity=@{op})";	
 }
 
 .transition-duration(@dur: 0s){
