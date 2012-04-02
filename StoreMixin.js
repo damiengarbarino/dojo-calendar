@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base/lang", "dojo/dom-class", "dojo/Stateful", "dojo/_base/Deferred"],
-	 
-	function(declare, arr, html, lang, domClass, Stateful, Deferred){
+define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base/lang", "dojo/dom-class",
+	"dojo/Stateful", "dojo/when"],
+	function(declare, arr, html, lang, domClass, Stateful, when){
 	
 	/*=====
 	var Stateful = dojo.Stateful;
@@ -188,7 +188,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 				results = results.map(lang.hitch(this, function(item){
 					return this.itemToRenderItem(item, value);
 				}));
-				r = Deferred.when(results, lang.hitch(this, this._initItems));
+				r = when(results, lang.hitch(this, this._initItems));
 			}else{
 				// we remove the store
 				r = this._initItems([]);
