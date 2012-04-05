@@ -47,11 +47,8 @@ time.floorToDay = function(d, reuse, dateClassObj){
 		d = time.newDate(d, dateClassObj);
 	}
 	
-	d.setHours(0);
-	d.setMinutes(0);
-	d.setSeconds(0);
-	d.setMilliseconds(0);
-	
+	d.setHours(0, 0, 0, 0);
+		
 	return d;
 };
 
@@ -72,10 +69,7 @@ time.floorToMonth = function(d, reuse, dateClassObj){
 	}
 	
 	d.setDate(1);
-	d.setHours(0);
-	d.setMinutes(0);
-	d.setSeconds(0);
-	d.setMilliseconds(0);
+	d.setHours(0, 0, 0, 0);
 	
 	return d;
 };
@@ -86,13 +80,16 @@ time.floorToWeek = function(d, dateClassObj, dateFuncObj, firstDayOfWeek, locale
 	//		Floors the specified date to the beginning of week.
 	//	d: Date
 	//		Date to floor.
-	//	firstDayOfWeek: Integer?
-	//		Optional day of week that overrides the one provided by the CLDR.
+	//	dateClassObj: Object?
+	//		The Date class used, by default the native Date.	
 	//	dateFuncObj: Object?
 	//		Object that contains the "add" method. By default dojo.date is used.
+	//	firstDayOfWeek: Integer?
+	//		Optional day of week that overrides the one provided by the CLDR.	
 	//	locale: String?
 	//		Optional locale used to determine first day of week.
-	dateFuncObj = dateFuncObj || date;  
+	dateClassObj = dateClassObj || Date; 
+	dateFuncObj = dateFuncObj || date;  	
 	
 	var fd = firstDayOfWeek == undefined || firstDayOfWeek < 0 ? cldr.getFirstDayOfWeek(locale) : firstDayOfWeek;
 	var day = d.getDay();
@@ -115,10 +112,8 @@ time.floor = function(date, unit, steps, reuse, dateClassObj){
 	//		Valid for "minute" or "hour" units.
 	//	reuse: Boolean
 	//		Whether use the specified instance or create a new one. Default is false.	
-	//	firstDayOfWeek: Integer?
-	//		Optional day of week that overrides the one provided by the CLDR.
-	//	locale: String?
-	//		Optional locale used to determine first day of week.
+	//	dateClassObj: Object?
+	//		The Date class used, by default the native Date.	
 	
 	//	returns: Date
 	var d = time.floorToDay(date, reuse, dateClassObj);
