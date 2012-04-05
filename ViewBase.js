@@ -1275,7 +1275,7 @@ function(
 			if(this.owner){
 				return this.owner.get("selectedItem");
 			}else{
-				return this.inherited(arguments);
+				return this.selectedItem; // no getter on super class (dojox.widget.Selection)
 			}
 		},
 		
