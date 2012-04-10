@@ -54,7 +54,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				
 				if(renderer.resizeStartHandle){
 					h = on(renderer.resizeStartHandle, "mousedown", lang.hitch(this, function(e){
-						// allow user selection so NOT stopEvent
 						this._onRendererHandleMouseDown(e, renderer, "resizeStart");
 					}));
 					renderer.__handles.push(h);
@@ -62,7 +61,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				
 				if(renderer.moveHandle){
 					h = on(renderer.moveHandle, "mousedown", lang.hitch(this, function(e){
-						// allow user selection so NOT stopEvent
 						this._onRendererHandleMouseDown(e, renderer, "move");
 					}));
 					renderer.__handles.push(h);
@@ -70,7 +68,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				
 				if(renderer.resizeEndHandle){
 					h = on(renderer.resizeEndHandle, "mousedown", lang.hitch(this, function(e){
-						// allow user selection so NOT stopEvent
 						this._onRendererHandleMouseDown(e, renderer, "resizeEnd");
 					}));
 					renderer.__handles.push(h);
@@ -129,19 +126,24 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 		
 		onItemRollOver: function(e){
-			//	Summary:
+			//	summary:
 			//		Event dispatched when the mouse cursor in going over an item renderer. 
 		},
 		
 		_onItemRollOut: function(e){
 			this._dispatchCalendarEvt(e, "onItemRollOut");
 		},
+		
 		onItemRollOut: function(e){
-			//	Summary:
+			//	summary:
 			//		Event dispatched when the mouse cursor in leaving an item renderer.
 		},
 		
 		_rendererMouseDownHandler: function(e, renderer){
+			
+			//	summary:
+			//		Callback if the user clicked on the item renderer but not on a handle.
+			//		Manages item selection.
 			
 			event.stop(e);				
 			
@@ -156,6 +158,14 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		
 		_onRendererHandleMouseDown: function(e, renderer, editKind){
 			
+			//	summary:
+			//		Callback if the user clicked on a handle of an item renderer.
+			//		Manages item selection and editing gesture. If editing is not allowed, 
+			//		resize handles are not displayed and so this callback will never be called.
+			//		In that case selected is managed by the _rendererMouseDownHandler function.
+			
+			event.stop(e);				
+			
 			this.showFocus = false;
 			
 			// save item here as calling endItemEditing may call a relayout and changes the item.
@@ -169,6 +179,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				}
 				
 				this.selectFromEvent(e, this.renderItemToItem(renderer.item, this.get("store")), renderer, true);
+				
+				if(this._setTabIndexAttr){
+					this[this._setTabIndexAttr].focus();
+				}
 				
 				this._edProps = {
 					editKind: editKind,
