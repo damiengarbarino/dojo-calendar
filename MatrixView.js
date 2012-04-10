@@ -389,7 +389,8 @@ function(
 			this.renderData = this._createRenderData();
 
 			this._createRendering(this.renderData, oldRd);
-			this._layoutRenderers(this.renderData);
+			
+			this._layoutRenderers(this.renderData);						
 		},
 		
 		_createRendering: function(renderData, oldRenderData){
@@ -890,7 +891,8 @@ function(
 				// Use a time for FF (at least). In FF the cell size and position info are not ready yet. 
 				setTimeout(lang.hitch(this, function(){
 					this._layoutRenderers(this.renderData);
-				}), 20);				
+				  }), 20);
+								
 			}else{
 				domStyle.set(this.itemContainer, "opacity", 0);
 				this._recycleItemRenderers();
@@ -1563,27 +1565,37 @@ function(
 				var item = items[i];
 				
 				d = this.floorToDay(item.startTime, false, rd);
+								
+				var comp = this.dateFuncObj.compare;
 				
 				// iterate on columns overlapped by this item to create one item per column
-				while(d < item.endTime && d < rd.endTime){
+				while(comp(d, item.endTime) == -1 && comp(d, endTime) == -1){
 					
 					var dayEnd = cal.add(d, "day", 1);
 					dayEnd = this.floorToDay(dayEnd, true);
 					
 					var overlap = this.computeRangeOverlap(rd, item.startTime, item.endTime, d, dayEnd);
 					var startOffset = cal.difference(startTime, this.floorToDay(overlap[0], false, rd), "day");
-					
-					var list = layoutItems[startOffset];
-					if(list == null){
-						list = [];
-						layoutItems[startOffset] = list;
+										
+					if(startOffset >= this.columnCount){
+						// If the offset is greater than the column count
+						// the item will be processed in another row.
+						break;
 					}
 					
-					list.push(lang.mixin(
-						{	startOffset: startOffset,
-							range: overlap,
-							item: item
-						}, item));
+					if(startOffset >= 0){					
+						var list = layoutItems[startOffset];
+						if(list == null){
+							list = [];
+							layoutItems[startOffset] = list;
+						}
+						
+						list.push(lang.mixin(
+							{	startOffset: startOffset,
+								range: overlap,
+								item: item
+							}, item));
+					}
 					
 					d = cal.add(d, "day", 1);
 					this.floorToDay(d, true);
