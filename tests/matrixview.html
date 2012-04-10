@@ -138,10 +138,10 @@
 								return item.calendar == "cal1" ? "Calendar1" : "Calendar2"
 							},
 							isItemMoveEnabled: function(item, kind){
-								return win.doc.appState.moveDisabledMap[item.id] !== true;
+								return this.isItemEditable(item, kind) && win.doc.appState.moveDisabledMap[item.id] !== true;
 							},
 							isItemResizeEnabled: function(item, kind){
-								return win.doc.appState.resizeDisabledMap[item.id] !== true;
+								return this.isItemEditable(item, kind) && win.doc.appState.resizeDisabledMap[item.id] !== true;
 							}
 						}, "calendarNode");
 
