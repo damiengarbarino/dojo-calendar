@@ -124,7 +124,7 @@ function(
 		},
 		
 		_scrollBar_onScroll: function(value){
-			this.scrollContainer.scrollTop = value;
+			this._setScrollPosition(value);
 		},
 		
 		buildRendering: function(){
@@ -315,7 +315,7 @@ function(
 		
 		_getStartTimeOfDay: function(){			
 			var v = (this.get("maxHours") - this.get("minHours")) * 
-				this.scrollContainer.scrollTop / this.renderData.sheetHeight;
+				this._getScrollPosition() / this.renderData.sheetHeight;
 			
 			return {
 				hours: this.renderData.minHours + Math.floor(v),
@@ -325,7 +325,7 @@ function(
 		
 		_getEndTimeOfDay: function(){
 			var v = (this.get("maxHours") - this.get("minHours")) * 
-				(this.scrollContainer.scrollTop + this.scrollContainer.offsetHeight) / this.renderData.sheetHeight;
+				(this._getScrollPosition() + this.scrollContainer.offsetHeight) / this.renderData.sheetHeight;
 			
 			return {
 				hours: this.renderData.minHours + Math.floor(v),
@@ -386,10 +386,12 @@ function(
 					this._scrollAnimation.stop();
 				}
 				
-				var duration = Math.abs(((position - this.scrollContainer.scrollTop) * maxDuration) / this.renderData.sheetHeight);
+				var scrollPos = this._getScrollPosition();
+				
+				var duration = Math.abs(((position - scrollPos) * maxDuration) / this.renderData.sheetHeight);
 				
 				this._scrollAnimation = new fx.Animation({
-					curve: [this.scrollContainer.scrollTop, position],
+					curve: [scrollPos, position],
 					duration: duration,
 					easing: easing,
 					onAnimate: lang.hitch(this, function(position) {
@@ -405,7 +407,7 @@ function(
 		},
 		
 		_setScrollImpl: function(v){
-			this.scrollContainer.scrollTop = v;
+			this._setScrollPosition(v);
 			if(this.scrollBar){
 				this.scrollBar.set("value", v);
 			}
@@ -1286,7 +1288,7 @@ function(
 																											
 			g.moved= false;
 			g.start= e.touches[0].screenY;
-			g.scrollTop= this.scrollContainer.scrollTop;
+			g.scrollTop= this._getScrollPosition();
 		},
 		
 		_onGridTouchMove: function(e){
@@ -1511,7 +1513,7 @@ function(
 		},
 				
 		_onScrollTimer_tick: function(){
-			this._scrollToPosition(this.scrollContainer.scrollTop + this._scrollProps.scrollStep);
+			this._scrollToPosition(this._getScrollPosition() + this._scrollProps.scrollStep);
 		},
 		
 		////////////////////////////////////////////

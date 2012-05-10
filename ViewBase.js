@@ -82,7 +82,7 @@ function(
 		//		Optional function to format the time of day of the item renderers.
 		//		The function takes the date and render data object as arguments and returns a String.
 		formatItemTimeFunc: null,
-		
+				
 		_getFormatItemTimeFuncAttr: function(){
 			if(this.owner != null){
 				return this.owner.get("formatItemTimeFunc");
@@ -565,6 +565,19 @@ function(
 			return false;
 		},
 		
+		//	scrollMethod: String
+		//		Method used to scroll the view, for example the scroll of column view.
+		//		Valid value are: 
+		//			| "auto": let the view decide (default), 
+		//			| "css": use css 3d transform,
+		//			| "dom": use the scrollTop property.
+		_scrollMethod: "auto",
+		
+		_setScrollMethodAttr: function(value){
+			this._scrollMethod = value;
+			this._domScroll = undefined;
+		},
+		
 		_startAutoScroll: function(step){
 			
 				var sp = this._scrollProps;
@@ -592,6 +605,58 @@ function(
 		},
 		
 		_onScrollTimer_tick: function(pos){
+		},
+		
+		_scrollPos: 0,
+		
+		getCSSPrefix: function(){
+			//	summary:
+			//		Utility method that return the specific CSS prefix
+			//		for non standard CSS properties. Ex: -moz-border-radius.
+			if(has("ie")){
+				return "-ms-";
+			}
+			if(has("webkit")){
+				return "-webkit-";
+			}
+			if(has("mozilla")){
+				return "-moz-";
+			}
+			if(has("opera")){
+				return "-o-";
+			}			
+		},				
+		
+		_setScrollPosition: function(pos){
+			
+			if(this._scrollPos == pos){
+				return;
+			}
+			
+			// determine scroll method once.
+			if(this._domScroll === undefined){
+			
+				var sm = this._scrollMethod;
+				if(sm === "auto"){					
+					this._domScroll = !has("ios") && !has("android") && !has("webkit");
+				}else{
+					this._domScroll = sm === "dom";
+				}
+			}
+			
+			this._scrollPos = pos;
+			
+			if(this._domScroll){
+				this.scrollContainer.scrollTop = pos;				
+			}else{
+				
+				domStyle.set(this.sheetContainer, this.getCSSPrefix()+"transform", "translateY(-"+pos+"px)");
+				//this.sheetContainer.style[this.getCSSPrefix()+"transform"] = "translateY(-"+pos+"px)";
+			}
+		},
+		
+		_getScrollPosition: function(){
+			return this._scrollPos; 
 		},
 		
 		scrollView: function(dir){
