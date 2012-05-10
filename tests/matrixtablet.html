@@ -52,7 +52,7 @@
 							{day: 5, start: [0,0], duration: 1440, allDay:true},
 							{day: 6, start: [0,0], duration: 2*1440, allDay:true}
 						];
-						
+																
 						// TODO manage first day of week
 						floorToWeek= function(d){
 							d.setHours(0);
@@ -99,7 +99,7 @@
 						// Calendar creation & configuration
 						
 						matrixView = declare([MatrixView, CalendarTouch])({
-							
+							startDate: startOfWeek,
 							store: new Observable(new Memory({data: someData})),		
 							horizontalRenderer: HorizontalRenderer,
 							horizontalRendererHeight: 20,
@@ -109,6 +109,30 @@
 							expandRendererHeight: 20,
 							verticalGap:2							
 						}, "calendarNode");
+						
+						setRowWidth = function(value){
+							matrixView.grid.style.left = value + "px";
+							matrixView.yearColumnHeader.style.width = value + "px";
+							matrixView.columnHeader.style.left = value + "px";
+							matrixView.rowHeader.style.width = value + "px";
+							matrixView.itemContainer.style.left = value + "px";							
+						}
+						
+						window.onresize = window.onorientationchange = function(e){
+							var n = matrixView.domNode;
+							if(n.offsetWidth > n.offsetHeight){
+								matrixView.columnHeaderLabelLength = "wide";
+								matrixView.set("rowCount", 2);								
+								setRowWidth(50);
+							}else{
+								matrixView.columnHeaderLabelLength = "abbr";
+								matrixView.set("rowCount", 4);
+								setRowWidth(20);
+								
+							}
+						};
+						
+						window.onresize();
 
 						// Events management
 						
