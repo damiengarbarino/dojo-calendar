@@ -12,6 +12,7 @@ define([
 "dojo/date", 
 "dojo/date/locale", 
 "dojo/_base/fx", 
+"dojo/fx",
 "dojo/on", 
 "dijit/_WidgetBase", 
 "dijit/_TemplatedMixin", 
@@ -33,7 +34,8 @@ domClass,
 domStyle,
 domConstruct, 
 date, 
-locale, 
+locale,
+coreFx,
 fx, 
 on,  
 _WidgetBase, 
@@ -628,7 +630,7 @@ _nls){
 				if(this.viewChangeDuration <= 0){					
 					domStyle.set(oldView.domNode, "display", "none");
 				}else{
-					fx.fadeOut({
+					coreFx.fadeOut({
 						node: oldView.domNode, 
 						curve:[0, 1], 
 						onEnd: function(){							
@@ -641,7 +643,7 @@ _nls){
 				domStyle.set(newView.domNode, "display", "block");
 				newView.resize();
 				if(oldView != null && this.viewChangeDuration > 0){
-					fx.fadeIn({node:newView.domNode, curve:[0, 1]}).play(this.viewChangeDuration);
+					coreFx.fadeIn({node:newView.domNode, curve:[0, 1]}).play(this.viewChangeDuration);
 				}else if(!has("ie") || has("ie") != 7){
 					domStyle.set(newView.domNode, "opacity", "1");
 				}
@@ -739,12 +741,79 @@ _nls){
 		//
 		////////////////////////////////////////////////////
 		
+		
+		//	animateRange: Boolean
+		//		Indicates that the previous/next range method will be animated.
+		animateRange: true,
+		
+		//	animationRangeDuration: Integer
+		//		The duration of the next/previous range animation.
+		animationRangeDuration: 400,
+		
+		_animateRange : function(node, toLeft, fadeIn, xFrom, xTo, onEnd){
+			//	summary:
+			//		Animates the current view using a synchronous fade and horizontal translation.
+			//	toLeft: Boolean
+			//		Whether the view is moved to the left or to the right.
+			//	fadeIn: Boolean
+			//		Whether the view is faded in or out.
+			//	xFrom: Integer
+			//		Position before the animation
+			//	xTo: Integer
+			//		Position after the animation
+			//	onEnd: Function
+			//		Function called when the animation is finished.
+			
+			if(this.animateRangeTimer){ // cleanup previous call not finished
+				clearTimeout(this.animateRangeTimer);
+				delete this.animateRangeTimer;
+			}
+			
+			var fadeFunc = fadeIn ? coreFx.fadeIn : coreFx.fadeOut;								
+			domStyle.set(node, {left: xFrom + "px", right: (-xFrom) + "px"});
+						
+			fx.combine([
+				coreFx.animateProperty({
+					node: node, 
+					properties: {left: xTo, right: -xTo},
+					duration: this.animationRangeDuration/2,
+					onEnd: onEnd									
+				}),
+				fadeFunc({node: node, duration: this.animationRangeDuration/2})
+			]).play();
+		},
+		
+		_animGotoRange: function(next, handle){			
+			var ltr = this.isLeftToRight();
+			var node = this.currentView.domNode;
+			this._animateRange(node, next && ltr, false, 0, next ? -100 : 100, 
+				lang.hitch(this, function(){
+					if(handle){
+						lang.hitch(this, handle)();
+					}else{
+						this._navigate(next? 1 : -1);
+					}									
+					this.animateRangeTimer = setTimeout(lang.hitch(this, function(){
+						this._animateRange(node, !next, true, next ? 100 : -100, 0);
+					}), 50);
+				}
+			));
+		},
+		
 		nextRange: function(){
-			this._navigate(1);
+			if(this.animateRange){
+				this._animGotoRange(true);
+			}else{
+				this._navigate(1);
+			}
 		},
 		
 		previousRange: function(){
-			this._navigate(-1);
+			if(this.animateRange){
+				this._animGotoRange(false);
+			}else{
+				this._navigate(-1);
+			}
 		},
 		
 		_navigate: function(dir){
@@ -861,7 +930,7 @@ _nls){
 			//	summary:
 			//		The action triggered when the today button is clicked.
 			//		By default, calls the goToday() method.
-			this.goToday();
+			this.goToday();							
 		},
 		dayButtonClick: function(e){
 			//	summary:

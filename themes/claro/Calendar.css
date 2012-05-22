@@ -17,6 +17,7 @@
   right: 0;
   top: 31px;
   bottom: 0;
+  overflow: hidden;
 }
 .claro .dojoxCalendar .view {
   position: absolute;
