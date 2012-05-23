@@ -64,6 +64,28 @@
 				ExtendedCalendar){
 
 					ready(function(){
+										
+						var hints = [
+							"Hint: Create an event by clicking and dragging on the grid while maintaining the control key",
+							"Hint: Drill down the view by clicking row or column header cells",
+							"Hint: Drill down the view by double-clicking a grid cell while maintaining the shift and control key",
+							"Hint: Drill up by double-clicking the grid while maintaining the shift key",
+							"Hint: Move an event by clicking on it and dragging it",
+							"Hint: Resize an event by clicking on one of its ends and dragging it"
+						];
+						
+						hintIdx = 0;
+						dom.byId("hint").innerHTML = hints[0];
+												
+						setInterval(function(){
+							fx.fadeOut({node: "hint", 
+								onEnd: function(){
+									hintIdx = hintIdx+1>hints.length-1 ? 0 : hintIdx+1;
+									dom.byId("hint").innerHTML = hints[hintIdx];
+									fx.fadeIn({node: "hint"}).play(500); 									
+								}
+							}).play(500);
+						}, 10000);
 																	
 						calendar.set("cssClassFunc", function(item){
 							// Use custom css classes on renderers depending of a parameter (calendar). 
@@ -108,7 +130,7 @@
 						
 						calendar.on("gridDoubleClick", function(e){
 							
-							if(e.triggerEvent.ctrlKey){
+							if(e.triggerEvent.ctrlKey && e.triggerEvent.shiftKey){
 								// drill down
 								calendar.set("date", e.date);
 								calendar.set("dateIntervalSteps", 1);
@@ -147,8 +169,8 @@
 						
 						var createItem = function(view, d, e){
 						
-							// create item by maintaining control key
-							if(!e.ctrlKey){
+							// create item by maintaining control key only
+							if(!e.ctrlKey || e.shiftKey || e.altKey){
 								return;
 							}
 						
@@ -410,11 +432,13 @@
 		    </div>
 		    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:false, region:'center'">
 		        <div data-dojo-id="calendar" data-dojo-type="demo.ExtendedCalendar" 
-					style="position:absolute;left:10px;top:10px;bottom:10px;right:10px">
+					style="position:absolute;left:10px;top:10px;bottom:30px;right:10px">
 					<div data-dojo-type="dijit.Menu" data-dojo-id="calendarContextMenu" style="display: none;">
 		                <div data-dojo-type="dijit.MenuItem" data-dojo-id="contextMenuDelete" data-dojo-props="iconClass:'dijitIcon dijitIconDelete'">Delete</div>
 		            </div>	
 			    </div>
+	   	        <div id="hint" style="position:absolute;left:10px;height:15px;bottom:10px;right:10px;color:#999;overflow:auto"></div> 
+	
 			</div>																							
 		</div>																		
 						
