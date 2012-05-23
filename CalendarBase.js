@@ -328,24 +328,63 @@ _nls){
 					return;
 				}
 				
-				this._configureView(view, index, timeInterval, duration);
-				
-				if(index != this._currentViewIndex){
-					if(this.currentView == null){
-						view.set("items", this.items);
-						this.set("currentView", view);			
+				if(this.animateRange && (!has("ie") || has("ie")>8) ){
+					if(this.currentView){ // there's a view to animate
+						var ltr = this.isLeftToRight();
+						var inLeft = this._animRangeInDir=="left" || this._animRangeInDir == null; 
+						var outLeft = this._animRangeOutDir=="left" || this._animRangeOutDir == null;
+						this._animateRange(this.currentView.domNode, outLeft && ltr, false, 0, outLeft ? -100 : 100, 
+							lang.hitch(this, function(){
+								this.animateRangeTimer = setTimeout(lang.hitch(this, function(){
+									this._applyViewChange(view, index, timeInterval, duration);
+									this._animateRange(this.currentView.domNode, inLeft && ltr, true, inLeft ? -100 : 100, 0);
+									this._animRangeInDir = null;
+									this._animRangeOutDir = null;
+								}), 100);	// setTimeout give time for layout of view.							
+							}));
 					}else{
-						
-						if(this.items == null || this.items.length == 0){
-							this.set("currentView", view);
-							view.set("items", this.items);
-						}else{
-							this.currentView = view;
-							view.set("items", this.items);
-							this.set("currentView", view);													
-						}																	
-					}											
+						this._applyViewChange(view, index, timeInterval, duration);						
+					}
+				}else{					
+					this._applyViewChange(view, index, timeInterval, duration);
 				}
+			}
+		},
+		
+		_applyViewChange: function(view, index, timeInterval, duration){			
+			//	summary:
+			//		Applies the changes of a view time and changes the currently visible view if needed.
+			//	view: ViewBase
+			//		The view that is configured and is or will be shown.
+			//	index: Integer
+			//		The view index in the internal structure.
+			//	timeInterval: Date[]
+			//		The time interval displayed by the calendar.
+			//	duration: Integer
+			//		The duration in days of the time interval.
+			
+			this._configureView(view, index, timeInterval, duration);
+			
+			if(index != this._currentViewIndex){
+				if(this.currentView == null){
+					view.set("items", this.items);
+					this.set("currentView", view);			
+				}else{					
+					if(this.items == null || this.items.length == 0){
+						this.set("currentView", view);
+						if(this.animateRange && (!has("ie") || has("ie")>8) ){
+							domStyle.set(this.currentView.domNode, "opacity", 0);
+						}
+						view.set("items", this.items);
+					}else{
+						this.currentView = view;
+						view.set("items", this.items);
+						this.set("currentView", view);
+						if(this.animateRange && (!has("ie") || has("ie")>8) ){
+							domStyle.set(this.currentView.domNode, "opacity", 0);
+						}
+					}																	
+				}											
 			}
 		},
 		
@@ -626,25 +665,13 @@ _nls){
 			//		The previously displayed view or null.
 			//	newView: dojox.calendar.ViewBase
 			//		The view to display.
-			if(oldView != null){
-				if(this.viewChangeDuration <= 0){					
-					domStyle.set(oldView.domNode, "display", "none");
-				}else{
-					coreFx.fadeOut({
-						node: oldView.domNode, 
-						curve:[0, 1], 
-						onEnd: function(){							
-							domStyle.set(oldView.domNode, "display", "none");
-						}
-					}).play(this.viewChangeDuration);
-				}				
+			if(oldView != null){									
+				domStyle.set(oldView.domNode, "display", "none");							
 			}
 			if(newView != null){												
 				domStyle.set(newView.domNode, "display", "block");
-				newView.resize();
-				if(oldView != null && this.viewChangeDuration > 0){
-					coreFx.fadeIn({node:newView.domNode, curve:[0, 1]}).play(this.viewChangeDuration);
-				}else if(!has("ie") || has("ie") != 7){
+				newView.resize();				
+				if(!has("ie") || has("ie") > 7){
 					domStyle.set(newView.domNode, "opacity", "1");
 				}
 			}
@@ -781,39 +808,34 @@ _nls){
 				}),
 				fadeFunc({node: node, duration: this.animationRangeDuration/2})
 			]).play();
-		},
+		},			
 		
-		_animGotoRange: function(next, handle){			
-			var ltr = this.isLeftToRight();
-			var node = this.currentView.domNode;
-			this._animateRange(node, next && ltr, false, 0, next ? -100 : 100, 
-				lang.hitch(this, function(){
-					if(handle){
-						lang.hitch(this, handle)();
-					}else{
-						this._navigate(next? 1 : -1);
-					}									
-					this.animateRangeTimer = setTimeout(lang.hitch(this, function(){
-						this._animateRange(node, !next, true, next ? 100 : -100, 0);
-					}), 50);
-				}
-			));
-		},
+		//	_animRangeOutDir: Boolean
+		//		Direction of the range animation when the view 'leaving' the screen. 
+		//		Valid values are: 
+		//		| null: auto value,
+		//		| "left": hides to left side (right in right to left).
+		//		| "right": hides to right side (left in right to left).
+		_animRangeOutDir: null,
+
+		//	_animRangeInDir: Boolean
+		//		Direction of the range animation when the view 'entering' the screen. 
+		//		Valid values are: 
+		//		| null: auto value,
+		//		| "left": shows from left side (right in right to left).
+		//		| "right": shows from  right side (left in right to left).
+		_animRangeOutDir: null,		
 		
 		nextRange: function(){
-			if(this.animateRange){
-				this._animGotoRange(true);
-			}else{
-				this._navigate(1);
-			}
+			this._animRangeOutDir = "left";
+			this._animRangeInDir = "right";			
+			this._navigate(1);			
 		},
 		
 		previousRange: function(){
-			if(this.animateRange){
-				this._animGotoRange(false);
-			}else{
-				this._navigate(-1);
-			}
+			this._animRangeOutDir = "right";
+			this._animRangeInDir =  "left";			
+			this._navigate(-1);			
 		},
 		
 		_navigate: function(dir){
