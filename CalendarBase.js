@@ -140,6 +140,19 @@ _nls){
 		//		Map of property/value passed to the constructor of the matrix view.
 		matrixViewProps: null,
 		
+		//	createOnGridClick: Boolean
+		//		Indicates whether the user can create new event by clicking and dragging the grid.
+		//		A createItem function must be defined on the view or the calendar object.
+		createOnGridClick: false,
+		
+		//	createItemFunc: Function
+		//		A user supplied function that creates a new event.
+		//		This function is used when createOnGridClick is set to true and the user is clicking and dragging on the grid.
+		//		This view takes two parameters:
+		//		| view: the current view,
+		//		| d: the date at the clicked location.
+		createItemFunc: null,
+				
 		_currentViewIndex: -1,
 		
 		views: null,
@@ -1073,8 +1086,8 @@ _nls){
 			//	returns: Boolean
 			
 			return this.isItemEditable() && this.resizeEnabled;
-		},
-		
+		},			
+
 		////////////////////////////////////////////////////////////////////////
 		//
 		// Widget events

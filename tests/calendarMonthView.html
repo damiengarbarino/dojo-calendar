@@ -142,17 +142,26 @@
 								calendar.set("dateInterval", di);								
 								return;
 							}
-
-							// create a event when double-clicking on grid.
+									
+						});
+						
+						var createItem = function(view, d, e){
+						
+							// create item by maintaining control key
+							if(!e.ctrlKey){
+								return;
+							}
+						
+							// create a new event
 							var start, end;
 							var colView = calendar.columnView;
 							var cal = calendar.dateFuncObj;
 							
-							if(e.source == colView){
-								start = calendar.floorDate(e.date, "minute", colView.timeSlotDuration);
-								end = cal.add(start, "hour", 1);
+							if(view == colView){
+								start = calendar.floorDate(d, "minute", colView.timeSlotDuration);
+								end = cal.add(start, "minute", colView.timeSlotDuration); 
 							}else{
-								start = calendar.floorToDay(e.date);
+								start = calendar.floorToDay(d);
 								end = cal.add(start, "day", 1);
 							}
 							
@@ -162,17 +171,16 @@
 								startTime: start,
 								endTime: end,
 								calendar: "cal1",
-								allDay: e.source.viewKind != "columns"
+								allDay: view.viewKind == "matrix"
 							};
 							
-							id++;		
-							calendar.store.add(item);
+							id++;	
 							
-							calendar.set("selectedItem", item);
-							calendar.get("currentView").set("focusedItem", item);
-							
-							selectionChanged(item);						
-						});	
+							return item;							
+						}
+						
+						calendar.set("createOnGridClick", true);
+						calendar.set("createItemFunc", createItem);		
 												
 						var calendarVisibility = [true, true];
 						

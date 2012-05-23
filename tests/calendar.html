@@ -21,14 +21,14 @@
 		
 			<script type="text/javascript">
 
-			require(["dojo/ready", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/fx", "dojo/on", 
+			require(["dojo/ready", "dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/array", "dojo/_base/fx", "dojo/on", 
 			         "dojo/date/locale", "dojo/parser",	"dojo/dom", "dojo/dom-construct",	"dojo/store/Memory", 
 			         "dojo/store/Observable",	"dojox/calendar/Calendar", "dijit/Calendar",  "dijit/TitlePane", 
 			         "dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dijit/form/CheckBox", 
 			         "dijit/form/TextBox", "dijit/form/DateTextBox", "dijit/form/TimeTextBox", 
 			         "dijit/form/Button", "dijit/form/ComboBox", "dijit/Menu", "dijit/MenuItem"	],
 
-				function(ready, lang, arr, fx, on, locale, parser, dom, domConstruct,
+				function(ready, lang, has, arr, fx, on, locale, parser, dom, domConstruct,
 					Memory, Observable, Calendar){
 
 					ready(function(){
@@ -74,18 +74,23 @@
 						calendar.set("store", new Observable(new Memory({data: someData})));
 						calendar.set("date", startOfWeek);
 						
-						calendar.on("gridDoubleClick", function(e){
-
-							// create a event when double-clicking on grid.
+						var createItem = function(view, d, e){
+						
+							// create item by maintaining control key
+							if(!e.ctrlKey){
+								return;
+							}
+						
+							// create a new event
 							var start, end;
 							var colView = calendar.columnView;
 							var cal = calendar.dateFuncObj;
 							
-							if(e.source == colView){
-								start = calendar.floorDate(e.date, "minute", colView.timeSlotDuration);
-								end = cal.add(start, "hour", 1);
+							if(view == colView){
+								start = calendar.floorDate(d, "minute", colView.timeSlotDuration);
+								end = cal.add(start, "minute", colView.timeSlotDuration); 
 							}else{
-								start = calendar.floorToDay(e.date);
+								start = calendar.floorToDay(d);
 								end = cal.add(start, "day", 1);
 							}
 							
@@ -95,17 +100,16 @@
 								startTime: start,
 								endTime: end,
 								calendar: "cal1",
-								allDay: e.source.viewKind == "matrix"
+								allDay: view.viewKind == "matrix"
 							};
 							
-							id++;		
-							calendar.store.add(item);
+							id++;	
 							
-							calendar.set("selectedItem", item);
-							calendar.get("currentView").set("focusedItem", item);
-							
-							selectionChanged(item);						
-						});	
+							return item;							
+						}
+						
+						calendar.set("createOnGridClick", true);
+						calendar.set("createItemFunc", createItem);						
 						
 						
 						var calendarVisibility = [true, true];
@@ -273,11 +277,13 @@
 							calendar.currentView.invalidateLayout();
 						});											
 						
+						
 						fx.fadeOut({
 							node:"loadingPanel", 
 							onEnd: function(node){
 								node.parentNode.removeChild(node)
 							}}).play(500);
+						
 
 					});
 			});
