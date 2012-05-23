@@ -571,11 +571,28 @@ function(
 		//			| "auto": let the view decide (default), 
 		//			| "css": use css 3d transform,
 		//			| "dom": use the scrollTop property.
-		_scrollMethod: "auto",
+		scrollMethod: "auto",
 		
 		_setScrollMethodAttr: function(value){
-			this._scrollMethod = value;
-			this._domScroll = undefined;
+			if(this.scrollMethod != value){
+				this.scrollMethod = value;
+				
+				// reset
+				if(this._domScroll !== undefined){
+					if(this._domScroll){
+						domStyle.set(this.sheetContainer, this._cssPrefix+"transform", "translateY(-"+pos+"px)");
+					}else{
+						this.scrollContainer.scrollTop = 0
+					}
+				}
+				
+				delete this._domScroll;
+				var pos = this._getScrollPosition();
+				delete this._scrollPos;
+				
+				this._setScrollPosition(pos);				
+			}
+			
 		},
 		
 		_startAutoScroll: function(step){
@@ -636,7 +653,7 @@ function(
 			// determine scroll method once.
 			if(this._domScroll === undefined){
 			
-				var sm = this._scrollMethod;
+				var sm = this.get("scrollMethod");
 				if(sm === "auto"){					
 					this._domScroll = !has("ios") && !has("android") && !has("webkit");
 				}else{
@@ -645,13 +662,14 @@ function(
 			}
 			
 			this._scrollPos = pos;
-			
-			if(this._domScroll){
+							
+			if(this._domScroll){				
 				this.scrollContainer.scrollTop = pos;				
-			}else{
-				
-				domStyle.set(this.sheetContainer, this.getCSSPrefix()+"transform", "translateY(-"+pos+"px)");
-				//this.sheetContainer.style[this.getCSSPrefix()+"transform"] = "translateY(-"+pos+"px)";
+			}else{			
+				if(!this._cssPrefix){
+					this._cssPrefix =  this.getCSSPrefix();
+				}
+				domStyle.set(this.sheetContainer, this._cssPrefix+"transform", "translateY(-"+pos+"px)");
 			}
 		},
 		
