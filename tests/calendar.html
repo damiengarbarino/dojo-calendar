@@ -21,17 +21,37 @@
 		
 			<script type="text/javascript">
 
-			require(["dojo/ready", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/fx", "dojo/on", 
+			require(["dojo/ready", "dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/array", "dojo/_base/fx", "dojo/on", 
 			         "dojo/date/locale", "dojo/parser",	"dojo/dom", "dojo/dom-construct",	"dojo/store/Memory", 
 			         "dojo/store/Observable",	"dojox/calendar/Calendar", "dijit/Calendar",  "dijit/TitlePane", 
 			         "dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dijit/form/CheckBox", 
 			         "dijit/form/TextBox", "dijit/form/DateTextBox", "dijit/form/TimeTextBox", 
 			         "dijit/form/Button", "dijit/form/ComboBox", "dijit/Menu", "dijit/MenuItem"	],
 
-				function(ready, lang, arr, fx, on, locale, parser, dom, domConstruct,
+				function(ready, lang, has, arr, fx, on, locale, parser, dom, domConstruct,
 					Memory, Observable, Calendar){
 
 					ready(function(){
+					
+						var hints = [
+							"Hint: Create an event by clicking and dragging on the grid while maintaining the control key",
+							"Hint: Move an event by clicking on it and dragging it",
+							"Hint: Resize an event by clicking on one of its ends and dragging it"
+						];
+						
+						hintIdx = 0;
+						dom.byId("hint").innerHTML = hints[0];
+												
+						setInterval(function(){
+							fx.fadeOut({node: "hint", 
+								onEnd: function(){
+									hintIdx = hintIdx+1>hints.length-1 ? 0 : hintIdx+1;
+									dom.byId("hint").innerHTML = hints[hintIdx];
+									fx.fadeIn({node: "hint"}).play(500); 									
+								}
+							}).play(500);
+						}, 10000);
+					
 						
 						calendar.set("cssClassFunc", function(item){
 							// Use custom css classes on renderers depending of a parameter (calendar). 
@@ -74,18 +94,23 @@
 						calendar.set("store", new Observable(new Memory({data: someData})));
 						calendar.set("date", startOfWeek);
 						
-						calendar.on("gridDoubleClick", function(e){
-
-							// create a event when double-clicking on grid.
+						var createItem = function(view, d, e){
+						
+							// create item by maintaining control key
+							if(!e.ctrlKey || e.shiftKey || e.altKey){
+								return;
+							}
+						
+							// create a new event
 							var start, end;
 							var colView = calendar.columnView;
 							var cal = calendar.dateFuncObj;
 							
-							if(e.source == colView){
-								start = calendar.floorDate(e.date, "minute", colView.timeSlotDuration);
-								end = cal.add(start, "hour", 1);
+							if(view == colView){
+								start = calendar.floorDate(d, "minute", colView.timeSlotDuration);
+								end = cal.add(start, "minute", colView.timeSlotDuration); 
 							}else{
-								start = calendar.floorToDay(e.date);
+								start = calendar.floorToDay(d);
 								end = cal.add(start, "day", 1);
 							}
 							
@@ -95,17 +120,16 @@
 								startTime: start,
 								endTime: end,
 								calendar: "cal1",
-								allDay: e.source.viewKind == "matrix"
+								allDay: view.viewKind == "matrix"
 							};
 							
-							id++;		
-							calendar.store.add(item);
+							id++;	
 							
-							calendar.set("selectedItem", item);
-							calendar.get("currentView").set("focusedItem", item);
-							
-							selectionChanged(item);						
-						});	
+							return item;							
+						}
+						
+						calendar.set("createOnGridClick", true);
+						calendar.set("createItemFunc", createItem);						
 						
 						
 						var calendarVisibility = [true, true];
@@ -273,11 +297,13 @@
 							calendar.currentView.invalidateLayout();
 						});											
 						
+						
 						fx.fadeOut({
 							node:"loadingPanel", 
 							onEnd: function(node){
 								node.parentNode.removeChild(node)
 							}}).play(500);
+						
 
 					});
 			});
@@ -335,11 +361,12 @@
 		    </div>
 		    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:false, region:'center'">
 		        <div data-dojo-id="calendar" data-dojo-type="dojox.calendar.Calendar" 
-					style="position:absolute;left:10px;top:10px;bottom:10px;right:10px">
+					style="position:absolute;left:10px;top:10px;bottom:30px;right:10px">
 					<div data-dojo-type="dijit.Menu" data-dojo-id="calendarContextMenu" style="display: none;">
 		                <div data-dojo-type="dijit.MenuItem" data-dojo-id="contextMenuDelete" data-dojo-props="iconClass:'dijitIcon dijitIconDelete'">Delete</div>
 		            </div>	
 				</div>
+				<div id="hint" style="position:absolute;left:10px;height:15px;bottom:10px;right:10px;color:#999;overflow:auto"></div>
 		    </div>
 		    
 		</div>																		

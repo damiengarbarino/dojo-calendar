@@ -1404,9 +1404,44 @@ function(
 		
 		////////////////////////////////////////////////////////////////////
 		//
-		// Events
+		// Event creation
 		//
 		///////////////////////////////////////////////////////////////////
+		
+		//	createItemFunc: Function
+		//		A user supplied function that creates a new event.
+		//		This view takes two parameters:
+		//		| view: the current view,
+		//		| d: the date at the clicked location.
+		//		| e: the mouse event (can be used to return null for example)
+		createItemFunc: null,
+				
+		_getCreateItemFuncAttr: function(){			
+			if(this.owner){
+				return this.owner.get("createItemFunc");
+			}else{
+				return this.createItemFunc;
+			}
+		},
+		
+		//	createOnGridClick: Boolean
+		//		Indicates whether the user can create new event by clicking and dragging the grid.
+		//		A createItem function must be defined on the view or the calendar object.
+		createOnGridClick: false,
+		
+		_getCreateOnGridClickAttr: function(){
+			if(this.owner){
+				return this.owner.get("createOnGridClick");
+			}else{
+				return this.createOnGridClick;
+			}
+		},
+		
+		////////////////////////////////////////////////////////////////////
+		//
+		// Event creation
+		//
+		///////////////////////////////////////////////////////////////////	
 		
 		_gridMouseDown: false,
 				
@@ -1427,9 +1462,41 @@ function(
 			if(this._setTabIndexAttr){
 				this[this._setTabIndexAttr].focus();
 			}
+								
+			if(this._onRendererHandleMouseDown){
+				
+				var f = this.get("createItemFunc");
+				
+				if(!f){
+					return;
+				}
+				
+				var newItem = f(this, this.getTime(e), e);
+								
+				var store = this.get("store");
+											
+				if(!newItem || store == null){
+					return;
+				}
+				
+				store.put(newItem);
+				
+				// renderer created when item put in store
+				var renderer = this.getRenderers(newItem)[0];
+				
+				if(!renderer){
+					return;
+				}
+				this._onRendererHandleMouseDown(e, renderer.renderer, "resizeEnd");
+			}
+		},
+		
+		_onGridMouseMove: function(e){
+			
 		},
 		
 		_onGridMouseUp: function(e){
+			
 		},
 		
 		_onGridTouchStart: function(e){
