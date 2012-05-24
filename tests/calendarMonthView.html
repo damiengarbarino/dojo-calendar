@@ -193,7 +193,7 @@
 								startTime: start,
 								endTime: end,
 								calendar: "cal1",
-								allDay: view.viewKind == "matrix"
+								allDay: view.viewKind != "columns" // use viewKind to manage secondary sheet of columns view
 							};
 							
 							id++;	
