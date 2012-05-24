@@ -169,9 +169,12 @@
 						
 						var createItem = function(view, d, e){
 						
-							// create item by maintaining control key only
-							if(!e.ctrlKey || e.shiftKey || e.altKey || !calendar1CB.get("checked")){
-								return;
+							var cal1 = calendar1CB.get("checked");
+							var cal2 = calendar2CB.get("checked");
+						
+							// create item by maintaining control key
+							if(!e.ctrlKey || e.shiftKey || e.altKey || (!cal1 && !cal2)){
+								return null;
 							}
 						
 							// create a new event
@@ -192,7 +195,7 @@
 								summary: "New event " + id,
 								startTime: start,
 								endTime: end,
-								calendar: "cal1",
+								calendar: cal1 ? "cal1" : "cal2",
 								allDay: view.viewKind != "columns" // use viewKind to manage secondary sheet of columns view
 							};
 							
