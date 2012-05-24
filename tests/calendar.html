@@ -97,7 +97,7 @@
 						var createItem = function(view, d, e){
 						
 							// create item by maintaining control key
-							if(!e.ctrlKey || e.shiftKey || e.altKey){
+							if(!e.ctrlKey || e.shiftKey || e.altKey || !calendar1CB.get("checked")){
 								return;
 							}
 						
