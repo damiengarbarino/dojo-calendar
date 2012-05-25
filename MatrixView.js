@@ -40,11 +40,6 @@ function(
 	template, 
 	_TemplatedMixin){
 	
-	/*=====
-	var ViewBase = dojox.calendar.ViewBase;
-	var _TemplatedMixin = dijit._TemplatedMixin;
-	=====*/ 	
-	
 	return declare("dojox.calendar.MatrixView", [ViewBase, _TemplatedMixin], {
 		
 		// summary:
@@ -56,103 +51,101 @@ function(
 		
 		_setTabIndexAttr: "domNode",
 		
-		//	viewKind: String
+		// viewKind: String
 		//		Type of the view. Used by the calendar widget to determine how to configure the view.
 		//		This view kind is "matrix".
 		viewKind: "matrix",
 
-		//	renderData: Object
+		// renderData: Object
 		//		The render data object contains all the data needed to render the widget.
 		renderData: null,
 		
-		//	startDate: Date
+		// startDate: Date
 		//		The start date of the time interval displayed.
 		//		If not set at initialization time, will be set to current day.
 		startDate: null,
 		
-		//	refStartTime: Date?
+		// refStartTime: Date?
 		//		(Optional) Start of the time interval of interest. 
 		//		It is used to style differently the displayed rows out of the 
 		//		time interval of interest.  		
 		refStartTime: null,
 		
-		//	refStartTime: Date?
+		// refStartTime: Date?
 		//		(Optional) End of the time interval of interest. 
 		//		It is used to style differently the displayed rows out of the 
 		//		time interval of interest.  
 		refEndTime: null,
 				
-		//	columnCount: Integer
+		// columnCount: Integer
 		//		The number of column to display (from the startDate).
 		columnCount: 7,
 		
-		//	rowCount: Integer
+		// rowCount: Integer
 		//		The number of rows to display (from the startDate).
 		rowCount: 5,
 			
-		//	horizontalRenderer: Class
+		// horizontalRenderer: Class
 		//		The class use to create horizontal renderers.
 		horizontalRenderer: null,
 		
-		//	labelRenderer: Class
+		// labelRenderer: Class
 		//		The class use to create label renderers.
 		labelRenderer: null,
 
-		//	expandRenderer: Class
+		// expandRenderer: Class
 		//		The class use to create drill down renderers.		
 		expandRenderer: null,
 		
-		//	percentOverlap: Integer
+		// percentOverlap: Integer
 		//		The percentage of the renderer width used to superimpose one item renderers on another 
 		//		when two events are overlapping. By default 0.
 		percentOverlap: 0,
 		
-		//	verticalGap: Integer
+		// verticalGap: Integer
 		//		The number of pixels between two item renderers that are overlapping each other if the percentOverlap property is 0.
 		verticalGap: 2,
 		
-		//	horizontalRendererHeight: Integer
+		// horizontalRendererHeight: Integer
 		//		The height in pixels of the horizontal and label renderers that is applied by the layout.
 		horizontalRendererHeight: 17,
 		
-		//	horizontalRendererHeight: Integer
+		// horizontalRendererHeight: Integer
 		//		The height in pixels of the horizontal and label renderers that is applied by the layout.
 		labelRendererHeight: 14,
 		
-		//	expandRendererHeight: Integer
+		// expandRendererHeight: Integer
 		//		The height in pixels of the expand/collapse renderers that is applied by the layout.
 		expandRendererHeight: 15,
 		
-		//	cellPaddingTop: Integer
+		// cellPaddingTop: Integer
 		//		The top offset in pixels of each cell applied by the layout.
 		cellPaddingTop: 16,
 		
-		//	expandDuration: Integer
+		// expandDuration: Integer
 		//		Duration of the animation when expanding or collapsing a row.
 		expandDuration: 300,
 		
-		//	expandEasing: Function
+		// expandEasing: Function
 		//		Easing function of the animation when expanding or collapsing a row (null by default).
 		expandEasing: null,
 		
-		//	layoutDuringResize: Boolean
+		// layoutDuringResize: Boolean
 		//		Indicates if the item renderers' position and size is updated or if they are hidden during a resize of the widget. 
 		layoutDuringResize: false,
 		
-		//	roundToDay: Boolean
+		// roundToDay: Boolean
 		//		For horizontal renderers that are not filling entire days, whether fill the day or not.
 		roundToDay: true,
 		
-		//	showCellLabel: Boolean
+		// showCellLabel: Boolean
 		//		Whether display or not the grid cells label (usually the day of month).
 		showCellLabel: true,
 		
-		//	tags
-		//		private
+		// scrollable: [private] Boolean
 		scrollable: false,
-		
-		//	tags
-		//		private
+
+		// resizeCursor: [private] Boolean
 		resizeCursor: "e-resize",
 		
 		constructor: function(){
@@ -307,12 +300,12 @@ function(
 		//////////////////////////////////////////
 
 		_formatRowHeaderLabel: function(/*Date*/d){
-			//	summary:
+			// summary:
 			//		Computes the row header label for the specified time of day.
 			//		By default the getWeekNumberLabel() function is called. 
 			//		The rowHeaderDatePattern property can be used to set a 
 			//		custom date pattern to the formatter.
-			//	d: Date
+			// d: Date
 			//		The date to format	
 			if(this.rowHeaderDatePattern){
 				return this.renderData.dateLocaleModule.format(d, {
@@ -326,25 +319,25 @@ function(
 		},
 	
 		_formatColumnHeaderLabel: function(d){
-			//	summary:
+			// summary:
 			//		Computes the column header label for the specified date.
 			//		By default a formatter is used, optionally the <code>columnHeaderLabelLength</code> 
 			//		property can be used to specify the length of the string.
-			//	d: Date
+			// d: Date
 			//		The date to format 
 			return this.renderData.dateLocaleModule.getNames('days', this.columnHeaderLabelLength ? this.columnHeaderLabelLength : 'wide', 'standAlone')[d.getDay()];
 		},
 		
 		_formatGridCellLabel: function(d, row, col){
-			//	summary:
+			// summary:
 			//		Computes the column header label for the specified date.
 			//		By default a formatter is used, optionally the <code>cellHeaderLongPattern</code> and <code>cellHeaderShortPattern</code> 
 			//		properties can be used to set a custom date pattern to the formatter.
-			//	d: Date
+			// d: Date
 			//		The date to format.
-			//	row: Integer
+			// row: Integer
 			//		The row that displays the current date.
-			//	col: Integer
+			// col: Integer
 			//		The column that displays the current date.
 
 			var isFirstDayOfMonth = row == 0 && col == 0 || d.getDate() == 1;
@@ -394,11 +387,11 @@ function(
 		},
 		
 		_createRendering: function(renderData, oldRenderData){
-			//	summary:
+			// summary:
 			//		Creates the HTML structure (grid, place holders, headers, etc)
-			//	renderData: Object
+			// renderData: Object
 			//		The new render data
-			//	oldRenderData: Object
+			// oldRenderData: Object
 			//		The previous render data
 			
 			if(renderData.rowHeight <= 0){
@@ -418,13 +411,13 @@ function(
 		},	
 		
 		_buildColumnHeader: function(/*Object*/ renderData, /*Object*/oldRenderData){
-			//	summary:
+			// summary:
 			//		Creates incrementally the HTML structure of the column header and configures its content.
 			//
-			//	renderData:
+			// renderData:
 			//		The render data to display.
 			//
-			//	oldRenderData:
+			// oldRenderData:
 			//		The previously render data displayed, if any.
 
 			var table = this.columnHeaderTable;
@@ -502,14 +495,14 @@ function(
 		},
 		
 		styleColumnHeaderCell: function(node, date, renderData){
-			//	summary:
+			// summary:
 			//		Styles the CSS classes to the node that displays a column header cell.
 			//		By default this method is setting the "dojoxCalendarWeekend" if the day of week represents a weekend.
-			//	node: Node
+			// node: Node
 			//		The DOM node that displays the column in the grid.
-			//	date: Date
+			// date: Date
 			//		The date displayed by this column
-			//	renderData: Object			
+			// renderData: Object			
 			//		The render data.
 			if(this.isWeekEnd(date)){
 				return domClass.add(node, "dojoxCalendarWeekend");
@@ -539,13 +532,13 @@ function(
 		 
 		_buildRowHeader: function(renderData, oldRenderData){
 			
-			//	summary:
+			// summary:
 			//		Creates incrementally the HTML structure of the row header and configures its content.			
 			//
-			//	renderData:
+			// renderData:
 			//		The render data to display.
 			//
-			//	oldRenderData:
+			// oldRenderData:
 			//		The previously render data displayed, if any.
 			
 			var rowHeaderTable = this.rowHeaderTable;
@@ -631,26 +624,26 @@ function(
 		},		
 		
 		styleRowHeaderCell: function(node, date, renderData){
-			//	summary:
+			// summary:
 			//		Styles the CSS classes to the node that displays a row header cell.
 			//		By default this method is doing nothing.
-			//	node: Node
+			// node: Node
 			//		The DOM node that displays the column in the grid.
-			//	date: Date
+			// date: Date
 			//		The date in the week.
-			//	renderData: Object
+			// renderData: Object
 			//		The render data.
 				
 		},
 	
 		_buildGrid: function (renderData, oldRenderData){
-			//	summary:
+			// summary:
 			//		Creates incrementally the HTML structure of the grid and configures its content.
 			//
-			//	renderData:
+			// renderData:
 			//		The render data to display.
 			//
-			//	oldRenderData:
+			// oldRenderData:
 			//		The previously render data displayed, if any.
 
 			var table = this.gridTable;
@@ -763,17 +756,17 @@ function(
 		},
 		
 		styleGridCell: function(node, date, renderData){
-			//	summary:
+			// summary:
 			//		Styles the CSS classes to the node that displays a column.
 			//		By default this method is setting the 
 			//			| "dojoxCalendarToday" class name if the date displayed is the current date, 
 			//			| "dojoxCalendarWeekend" if the date represents a weekend or
 			//			| "dojoxCalendarDayDisabled" if the date is out of the [refStartTime, refEndTime] interval.
-			//	node: Node
+			// node: Node
 			//		The DOM node that displays the column in the grid.
-			//	date: Date
+			// date: Date
 			//		The date displayed by this column
-			//	renderData: Object
+			// renderData: Object
 			//
 			var cal = renderData.dateFuncObj;
 			if(this.isToday(date)){				
@@ -788,13 +781,13 @@ function(
 		},
 
 		_buildItemContainer: function(renderData, oldRenderData){
-			//	summary:
+			// summary:
 			//		Creates the HTML structure of the item container and configures its content.
 			//
-			//	renderData:
+			// renderData:
 			//		The render data to display.
 			//
-			//	oldRenderData:
+			// oldRenderData:
 			//		The previously render data displayed, if any.
 			
 			var table = this.itemContainerTable;
@@ -861,11 +854,11 @@ function(
 		},
 
 		_resizeHander: function(e, apply){
-			//	summary:
+			// summary:
 			//		Refreshes and apply the row height according to the widget height.
-			//	e: Event
+			// e: Event
 			//		The resize event (optional)
-			//	apply: Boolean
+			// apply: Boolean
 			//		Whether take into account the layoutDuringResize flag to relayout item while resizing or not.
 
 			var rd = this.renderData;
@@ -914,7 +907,7 @@ function(
 
 		},
 		
-		//	resizeAnimationDuration: Integer
+		// resizeAnimationDuration: Integer
 		//		Duration, in milliseconds, of the fade animation showing the item renderers after a widget resize.
 		resizeAnimationDuration: 0,
 		
@@ -925,17 +918,17 @@ function(
 		//////////////////////////////////////////////
 		
 		getExpandedRowIndex: function(){
-			//	summary:
+			// summary:
 			//		Returns the index of the expanded row or -1 if there's no row expanded.
 			return this.renderData.expandedRow == null ? -1 : this.renderData.expandedRow;
 		},
 		
 		collapseRow: function(duration, easing, apply){
-			//	summary:
+			// summary:
 			//		Collapses the expanded row, if any.
-			//	duration: Integer
+			// duration: Integer
 			//		Duration in milliseconds of the optional animation.
-			//	easing: Function
+			// easing: Function
 			//		Easing function of the optional animation.
 			
 			var rd = this.renderData;
@@ -998,15 +991,15 @@ function(
 		},
 		
 		expandRow: function(rowIndex, colIndex, duration, easing, apply){
-			//	summary:
+			// summary:
 			//		Expands the specified row.
-			//	rowIndex: Integer
+			// rowIndex: Integer
 			//		The index of the row to expand.
-			//	colIndex: Integer?
+			// colIndex: Integer?
 			//		The column index of the expand renderer that triggers the action, optional. 
-			//	duration: Integer?
+			// duration: Integer?
 			//		Duration in milliseconds of the optional animation.
-			//	easing: Function?
+			// easing: Function?
 			//		Easing function of the optional animation.
 			
 			var rd = this.renderData;
@@ -1075,14 +1068,14 @@ function(
 		},
 		
 		onExpandAnimationEnd: function(expand){
-			//	summary:
+			// summary:
 			//		Event dispatched at the end of an expand or collapse animation.
-			//	expand: Boolean
+			// expand: Boolean
 			//		Whether the finished animation was an expand or a collapse animation.
 		},
 		
 		_resizeRows: function(){
-			//	summary:
+			// summary:
 			//		Refreshes the height of the underlying HTML objects.
 			
 			if(this._getRowHeight(0) <= 0){
@@ -1185,9 +1178,9 @@ function(
 		},
 		
 		_destroyExpandRenderer: function(renderer){
-			//	summary: 
+			// summary: 
 			//		Destroys the expand renderer.
-			//	renderer: dojox.calendar._RendererMixin
+			// renderer: dojox.calendar._RendererMixin
 			//		The item renderer to destroy.
 			//	tags
 			//		protected
@@ -1266,7 +1259,7 @@ function(
 		//
 		///////////////////////////////////////////
 		
-		//	naturalRowHeight: Integer[]
+		// naturalRowHeight: Integer[]
 		//		After an item layout has been done, contains for each row the natural height of the row. 
 		//		Ie. the height, in pixels, needed to display all the item renderers. 
 		naturalRowsHeight: null,
@@ -1297,9 +1290,9 @@ function(
 		},
 		
 		_overlapLayoutPass3: function(lanes){
-			//	summary:
+			// summary:
 			//		Third pass of the overlap layout (optional). Compute the number of lanes used by sub interval.
-			//	lanes:Object[]
+			// lanes: Object[]
 			//		The array of lanes.
 			//	tags
 			//		private
@@ -1336,22 +1329,22 @@ function(
 		},
 		
 		applyRendererZIndex: function(item, renderer, hovered, selected, edited, focused){
-			//	summary:
+			// summary:
 			//		Applies the z-index to the renderer based on the state of the item.
 			//		This methods is setting a z-index of 20 is the item is selected or edited 
 			//		and the current lane value computed by the overlap layout (i.e. the renderers 
 			//		are stacked according to their lane).
-			//	item: Object
+			// item: Object
 			//		The render item.
-			//	renderer: Object
+			// renderer: Object
 			//		A renderer associated with the render item.
-			//	hovered: Boolean
+			// hovered: Boolean
 			//		Whether the item is hovered or not.
-			//	selected: Boolean
+			// selected: Boolean
 			//		Whether the item is selected or not.
-			//	edited: Boolean
+			// edited: Boolean
 			//		Whether the item is being edited not not.
-			//	focused: Boolean
+			// focused: Boolean
 			//		Whether the item is focused not not.
 						
 			domStyle.set(renderer.container, {"zIndex": edited || selected ? renderer.renderer.mobile ? 100 : 0: item.lane == undefined ? 1 : item.lane+1});
@@ -1836,17 +1829,17 @@ function(
 		},
 		
 		layoutExpandRenderer: function(renderer, date, items, cellPosition, height){
-			//	Summary:
+			// summary:
 			//		Computes and sets the position of the expand/collapse renderers.
 			//		By default the renderer is set to take the width of the cell and is placed at the bottom of the cell.
 			//		The renderer DOM node is in a row that takes all the grid width. 
-			//	renderer: Object
+			// renderer: Object
 			//		The renderer used in specified cell that indicates that some items cannot be displayed.
-			//	date: Date
+			// date: Date
 			//		The date displayed by the cell.
-			//	items: Object[]
+			// items: Object[]
 			//		The list of non visible items.
-			//	cellPosition: Object
+			// cellPosition: Object
 			//		An object that contains the position (x and y properties) and size of the cell (w and h properties).
 						
 			domStyle.set(renderer.domNode, {
@@ -1930,15 +1923,15 @@ function(
 		getTime: function(e, x, y, touchIndex){
 			// summary:
 			//		Returns the time displayed at the specified point by this component.
-			//	e: Event
+			// e: Event
 			//		Optional mouse event.
-			//	x: Number
+			// x: Number
 			//		Position along the x-axis with respect to the sheet container used if event is not defined.
-			//	y: Number
+			// y: Number
 			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
-			//	touchIndex: Integer
+			// touchIndex: Integer
 			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
-			//	returns: Date
+			// returns: Date
 			
 			var rd = this.renderData;
 			
@@ -2085,16 +2078,16 @@ function(
 		},
 		
 		onRowHeaderClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when a row header cell is clicked.
 		},
 		
 		expandRendererClickHandler: function(e, renderer){
-			//	summary:
+			// summary:
 			//		Default action when an expand renderer is clicked.
-			//	e: Event
+			// e: Event
 			//		The mouse event.
-			//	renderer: Object
+			// renderer: Object
 			//		The expand renderer.
 			
 			event.stop(e);

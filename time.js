@@ -1,24 +1,20 @@
 define(["dojo/_base/lang", "dojo/date", "dojo/cldr/supplemental"], function(lang, date, cldr) {
 
+// summary: Advanced date manipulation utilities.
+
 var time = {};
 
-/*=====
-dojox.calendar.time = {
-	// summary: Advanced date manipulation utilities.
-};
-var time = dojox.calendar.time;
-=====*/
 
 time.newDate = function(obj, dateClassObj){
-	//	summary:
+	// summary:
 	//		Creates a new Date object.
-	//	obj: Object
+	// obj: Object
 	//		This object can have several values:
 	//		|the time in milliseconds since gregorian epoch.
 	//		|a Date instance
-	//	dateClassObj: Object?
+	// dateClassObj: Object?
 	//		The Date class used, by default the native Date.
-	//	returns: Date
+	// returns: Date
 	dateClassObj = dateClassObj || Date;  
 	
 	if(typeof(obj) == "number"){
@@ -32,15 +28,15 @@ time.newDate = function(obj, dateClassObj){
 };
 
 time.floorToDay = function(d, reuse, dateClassObj){
-	//	summary:
+	// summary:
 	//		Floors the specified date to the start of day.
-	//	date: Date
+	// date: Date
 	//		The date to floor.
-	//	reuse: Boolean
+	// reuse: Boolean
 	//		Whether use the specified instance or create a new one. Default is false.
-	//	dateClassObj: Object?
+	// dateClassObj: Object?
 	//		The Date class used, by default the native Date.	
-	//	returns: Date
+	// returns: Date
 	dateClassObj = dateClassObj || Date;  
 	
 	if(!reuse){
@@ -53,15 +49,15 @@ time.floorToDay = function(d, reuse, dateClassObj){
 };
 
 time.floorToMonth = function(d, reuse, dateClassObj){
-	//	summary:
+	// summary:
 	//		Floors the specified date to the start of the date's month.
-	//	date: Date
+	// date: Date
 	//		The date to floor.
-	//	reuse: Boolean
+	// reuse: Boolean
 	//		Whether use the specified instance or create a new one. Default is false.
-	//	dateClassObj: Object?
+	// dateClassObj: Object?
 	//		The Date class used, by default the native Date.	
-	//	returns: Date
+	// returns: Date
 	dateClassObj = dateClassObj || Date;  
 	
 	if(!reuse){
@@ -76,17 +72,17 @@ time.floorToMonth = function(d, reuse, dateClassObj){
 
 
 time.floorToWeek = function(d, dateClassObj, dateFuncObj, firstDayOfWeek, locale){
-	//	summary:
+	// summary:
 	//		Floors the specified date to the beginning of week.
-	//	d: Date
+	// d: Date
 	//		Date to floor.
-	//	dateClassObj: Object?
+	// dateClassObj: Object?
 	//		The Date class used, by default the native Date.	
-	//	dateFuncObj: Object?
+	// dateFuncObj: Object?
 	//		Object that contains the "add" method. By default dojo.date is used.
-	//	firstDayOfWeek: Integer?
+	// firstDayOfWeek: Integer?
 	//		Optional day of week that overrides the one provided by the CLDR.	
-	//	locale: String?
+	// locale: String?
 	//		Optional locale used to determine first day of week.
 	dateClassObj = dateClassObj || Date; 
 	dateFuncObj = dateFuncObj || date;  	
@@ -102,20 +98,20 @@ time.floorToWeek = function(d, dateClassObj, dateFuncObj, firstDayOfWeek, locale
 };
 
 time.floor = function(date, unit, steps, reuse, dateClassObj){
-	//	summary:
+	// summary:
 	//		floors the date to the unit.
-	//	date: Date
+	// date: Date
 	//		The date/time to floor.
-	//	unit: String
+	// unit: String
 	//		The unit. Valid values are "minute", "hour", "day".
-	//	steps: Integer
+	// steps: Integer
 	//		Valid for "minute" or "hour" units.
-	//	reuse: Boolean
+	// reuse: Boolean
 	//		Whether use the specified instance or create a new one. Default is false.	
-	//	dateClassObj: Object?
-	//		The Date class used, by default the native Date.	
-	
-	//	returns: Date
+	// dateClassObj: Object?
+	//		The Date class used, by default the native Date.
+	// returns: Date
+
 	var d = time.floorToDay(date, reuse, dateClassObj);
 	
 	switch(unit){
@@ -133,27 +129,27 @@ time.floor = function(date, unit, steps, reuse, dateClassObj){
 };
 
 time.isStartOfDay = function(d, dateClassObj, dateFuncObj){
-	//	summary:
+	// summary:
 	//		Tests if the specified date represents the starts of day. 
-	//	d:Date
+	// d: Date
 	//		The date to test.
-	//	dateClassObj: Object?
+	// dateClassObj: Object?
 	//		The Date class used, by default the native Date.	
-	//	dateFuncObj: Object?
+	// dateFuncObj: Object?
 	//		Object that contains the "add" method. By default dojo.date is used.
-	//	returns: Boolean
+	// returns: Boolean
 	dateFuncObj = dateFuncObj || date;
 	return dateFuncObj.compare(this.floorToDay(d, false, dateClassObj), d) == 0;
 };
 
 time.isToday = function(d, dateClassObj){
-	//	summary:
+	// summary:
 	//		Returns whether the specified date is in the current day.
-	//	d: Date
+	// d: Date
 	//		The date to test.
-	//	dateClassObj: Object?
+	// dateClassObj: Object?
 	//		The Date class used, by default the native Date.
-	//	returns: Boolean
+	// returns: Boolean
 	dateClassObj = dateClassObj || Date;
 	var today = new dateClassObj();
 	return d.getFullYear() == today.getFullYear() &&

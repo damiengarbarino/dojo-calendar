@@ -2,44 +2,40 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 	 
 	function(declare, lang, domStyle, domClass, Stateful){
 	
-	/*=====
-	var Stateful = dojo.Stateful;
-	=====*/
-
 	return declare("dojox.calendar._RendererMixin", Stateful, {
 		
-		//	summary:
+		// summary:
 		//		This class is the base class of calendar renderers.
 		
-		//	item: Object
+		// item: Object
 		//		The layout item displayed by this renderer.
 		item: null,
 		
-		//	owner: dojox.calendar._ViewBase
+		// owner: dojox.calendar._ViewBase
 		//		The view that contains this renderer.
 		owner: null,
 		
-		//	edited: Boolean
+		// edited: Boolean
 		//		Indicates that the item displayed by this renderer is in editing mode.
 		edited: false,
 		
-		//	focused: Boolean
+		// focused: Boolean
 		//		Indicates that the item displayed by this renderer is focused.
 		focused: false,
 		
-		//	hovered: Boolean
+		// hovered: Boolean
 		//		Indicates that the item displayed by this renderer is hovered.
 		hovered: false,
 		
-		//	selected: Boolean
+		// selected: Boolean
 		//		Indicates that the item displayed by this renderer is selected.
 		selected: false,
 		
-		//	moveEnabled: Boolean
+		// moveEnabled: Boolean
 		//		Whether the event displayed by this renderer can be moved.
 		moveEnabled: true,
 		
-		//	resizeEnabled: Boolean
+		// resizeEnabled: Boolean
 		//		Whether the event displayed by this renderer can be resized.
 		resizeEnabled: true,
 		
@@ -174,11 +170,11 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 		
 		updateRendering: function (w, h) {
 			
-			//	summary:
+			// summary:
 			//		Updates the visual appearance of the renderer according the new values of the properties and the new size of the component.
-			//	w: Number?
+			// w: Number?
 			//		The width in pixels of the renderer.
-			//	h: Number?
+			// h: Number?
 			//		The height in pixels of the renderer.
 		
 			h = h || this.item.h;

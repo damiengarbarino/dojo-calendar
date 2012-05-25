@@ -40,45 +40,39 @@ function(
 	timeUtil, 
 	StoreMixin){
 	
-	/*=====
-		var _WidgetBase = dijit._WidgetBase;	
-		var Selection = dojox.widget.Selection;	
-		var _Invalidating = dojox.widget._Invalidating;
-		var StoreMixin = dojox.calendar.StoreMixin;
-	=====*/ 
-		
+
 	return declare("dojox.calendar.ViewBase", [_WidgetBase, StoreMixin, _Invalidating, Selection], {
 		
-		//	summary:
+		// summary:
 		//		The dojox.calendar.ViewBase widget is the base of calendar view widgets
 		
-		//	datePackage: Object
+		// datePackage: Object
 		//		JavaScript namespace to find Calendar routines. Uses Gregorian Calendar routines at dojo.date by default.
 		datePackage: date,
 		
 		_calendar: "gregorian",
 		
-		//	viewKind: String
+		// viewKind: String
 		//		Kind of the view. Used by the calendar widget to determine how to configure the view.
 		viewKind: null,
 		
-		//	_layoutStep: Integer
+		// _layoutStep: Integer
 		//		The number of units displayed by a visual layout unit (i.e. a column or a row) 
-		//	tags
+		// tags:
 		//		protected
 		_layoutStep: 1,
 		
-		//	_layoutStep: Integer
+		// _layoutStep: Integer
 		//		The unit displayed by a visual layout unit (i.e. a column or a row) 
-		//	tags
+		// tags:
 		//		protected
 		_layoutUnit: "day",
 		
-		//	resizeCursor:String
+		// resizeCursor: String
 		//		CSS value to apply to the cursor while resizing an item renderer. 
 		resizeCursor: "n-resize",
 		
-		//	formatItemTimeFunc: Func
+		// formatItemTimeFunc: Function
 		//		Optional function to format the time of day of the item renderers.
 		//		The function takes the date and render data object as arguments and returns a String.
 		formatItemTimeFunc: null,
@@ -91,16 +85,14 @@ function(
 			}
 		},
 		
-		// The listerners added by the view itself.
+		// The listeners added by the view itself.
 		_viewHandles: null,
 		
-		//	doubleTapDelay: Integer
+		// doubleTapDelay: Integer
 		//		The maximum time amount in milliseconds between to touchstart events that trigger a double-tap event.  
 		doubleTapDelay: 300,
 		
-		//	tags
-		//		private
-		constructor: function(/*Object*/args){
+		constructor: function(/*Object*/ args){
 			args = args || {};
 			this._calendar = args.datePackage ? args.datePackage.substr(args.datePackage.lastIndexOf(".")+1) : this._calendar;
 			this.datePackage = args.datePackage || this.datePackage;
@@ -148,18 +140,18 @@ function(
 		},
 		
 		_validateProperties: function(){
-			//	summary:
+			// summary:
 			//		Validates the widget properties before the rendering pass.
-			//	tags
+			// tags:
 			//		protected
 		},
 
 		_setText: function(node, text, allowHTML){
-			//	summary:
+			// summary:
 			//		Creates a text node under the parent node after having removed children nodes if any.
-			//	node: Node
+			// node: Node
 			//		The node that will contain the text node.
-			//	text: String
+			// text: String
 			//		The text to set to the text node.
 			while(node.hasChildNodes()){
 				node.removeChild(node.lastChild);
@@ -178,15 +170,15 @@ function(
 		},
 		
 		isAscendantHasClass: function(node, ancestor, className){
-			//	summary:
+			// summary:
 			//		Determines if a node has an ascendant node that has the css class specified.
-			//	node: Node
+			// node: Node
 			//		The DOM node.
-			//	ancestor: Node
+			// ancestor: Node
 			//		The ancestor node used to limit the search in hierarchy.
-			//	className: String
+			// className: String
 			//		The css class name.
-			//	returns: Boolean
+			// returns: Boolean
 			
 			while(node != ancestor && node != document){
 				
@@ -200,20 +192,20 @@ function(
 		},
 		
 		isWeekEnd: function(date){
-			//	summary:
+			// summary:
 			//		Determines whether the specified date is a week-end.
 			//		This method is using dojo.date.locale.isWeekend() method as
 			//		dojox.date.XXXX calendars are not supporting this method.
-			//	date: Date
+			// date: Date
 			//		The date to test.  
 			return locale.isWeekend(date);
 		},
 		
 		getWeekNumberLabel: function(date){
-			//	summary:
+			// summary:
 			//		Returns the week number string from dojo.date.locale.format() method as
 			//		dojox.date.XXXX calendar are not supporting the "w" pattern.
-			//	date: Date
+			// date: Date
 			//		The date to format.
 			if(date.toGregorian){
 				date = date.toGregorian();
@@ -224,68 +216,68 @@ function(
 		},
 		
 		floorToDay: function(date, reuse){
-			//	summary:
+			// summary:
 			//		Floors the specified date to the start of day.
-			//	date: Date
+			// date: Date
 			//		The date to floor.
-			//	reuse: Boolean
+			// reuse: Boolean
 			//		Whether use the specified instance or create a new one. Default is false.
-			//	returns: Date
+			// returns: Date
 			return timeUtil.floorToDay(date, reuse, this.dateClassObj);
 		},
 		
 		floorToMonth: function(date, reuse){
-			//	summary:
+			// summary:
 			//		Floors the specified date to the start of the date's month.
-			//	date: Date
+			// date: Date
 			//		The date to floor.
-			//	reuse: Boolean
+			// reuse: Boolean
 			//		Whether use the specified instance or create a new one. Default is false.
-			//	returns: Date
+			// returns: Date
 			return timeUtil.floorToMonth(date, reuse, this.dateClassObj);
 		},
 		
 				
 		floorDate: function(date, unit, steps, reuse){
-			//	summary:
+			// summary:
 			//		floors the date to the unit.
-			//	date: Date
+			// date: Date
 			//		The date/time to floor.
-			//	unit: String
+			// unit: String
 			//		The unit. Valid values are "minute", "hour", "day".
-			//	steps: Integer
+			// steps: Integer
 			//		For "day" only 1 is valid.
-			//	reuse: Boolean
+			// reuse: Boolean
 			//		Whether use the specified instance or create a new one. Default is false.			
-			//	returns: Date
+			// returns: Date
 			return timeUtil.floor(date, unit, steps, reuse, this.dateClassObj);
 		},
 
 		isToday: function(date){
-			//	summary:
+			// summary:
 			//		Returns whether the specified date is in the current day.
-			//	date: Date
+			// date: Date
 			//		The date to test.
-			//	renderData: Object
+			// renderData: Object
 			//		The current renderData
-			//	returns: Boolean
+			// returns: Boolean
 			return timeUtil.isToday(date, this.dateClassObj);
 		},
 		
 		isStartOfDay: function(d){
-			//	summary:
+			// summary:
 			//		Tests if the specified date represents the starts of day. 
-			//	d:Date
+			// d:Date
 			//		The date to test.
-			//	returns: Boolean
+			// returns: Boolean
 			return timeUtil.isStartOfDay(d, this.dateClassObj, this.dateFuncObj);
 		},
 		
 		isOverlapping: function(renderData, start1, end1, start2, end2, includeLimits){
-			//	summary:
+			// summary:
 			//		Computes if the first time range defined by the start1 and end1 parameters 
 			//		is overlapping the second time range defined by the start2 and end2 parameters.
-			//	renderData: Object
+			// renderData: Object
 			//		The render data.
 			//	start1: Date
 			//		The start time of the first time range.
@@ -295,9 +287,9 @@ function(
 			//		The start time of the second time range.
 			//	end2: Date
 			//		The end time of the second time range.
-			//	includeLimits: Boolean
+			// includeLimits: Boolean
 			//		Whether include the end time or not.
-			//	returns: Boolean
+			// returns: Boolean
 			if(start1 == null || start2 == null || end1 == null || end2 == null){
 				return false;
 			}
@@ -315,22 +307,22 @@ function(
 		},			 
 			 
 		computeRangeOverlap: function(renderData, start1, end1, start2, end2, includeLimits){
-			//	summary:
+			// summary:
 			//		Computes the overlap time range of the time ranges.
 			//		Returns a vector of Date with at index 0 the start time and at index 1 the end time.
-			//	renderData: Object.
+			// renderData: Object.
 			//		The render data.
-			//	start1: Date
+			// start1: Date
 			//		The start time of the first time range.
-			//	end1: Date
+			// end1: Date
 			//		The end time of the first time range.
-			//	start2: Date
+			// start2: Date
 			//		The start time of the second time range.
-			//	end2: Date
+			// end2: Date
 			//		The end time of the second time range.
-			//	includeLimits: Boolean
+			// includeLimits: Boolean
 			//		Whether include the end time or not.
-			//	returns: Date[]
+			// returns: Date[]
 			var cal = renderData.dateFuncObj;
 			
 			if(start1 == null || start2 == null || end1 == null || end2 == null){
@@ -356,13 +348,13 @@ function(
 		},
 		
 		isSameDay : function(date1, date2){
-			//	summary:
+			// summary:
 			//		Tests if the specified dates are in the same day.
-			//	date1: Date
+			// date1: Date
 			//		The first date.
-			//	date2: Date
+			// date2: Date
 			//		The second date.
-			//	returns: Boolean
+			// returns: Boolean
 			if(date1 == null || date2 == null){
 				return false; 
 			}
@@ -374,17 +366,17 @@ function(
 		},
 		
 		computeProjectionOnDate: function(renderData, refDate, date, max){
-			//	summary:
+			// summary:
 			//		Computes the time to pixel projection in a day.
-			//	renderData: Object
+			// renderData: Object
 			//		The render data.
-			//	refDate: Date
+			// refDate: Date
 			//		The reference date that defines the destination date.
-			//	date: Date
+			// date: Date
 			//		The date to project.
-			//	max: Integer
+			// max: Integer
 			//		The size in pixels of the representation of a day.
-			//	returns: Number
+			// returns: Number
 		
 			var cal = renderData.dateFuncObj;
 			
@@ -477,35 +469,35 @@ function(
 		getTime: function(e, x, y, touchIndex){
 			// summary:
 			//		Returns the time displayed at the specified point by this component.
-			//	e: Event
+			// e: Event
 			//		Optional mouse event.
-			//	x: Number
+			// x: Number
 			//		Position along the x-axis with respect to the sheet container used if event is not defined.
-			//	y: Number
+			// y: Number
 			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
-			//	touchIndex: Integer
+			// touchIndex: Integer
 			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
-			//	returns: Date
+			// returns: Date
 			return null;
 		},
 		
 		newDate: function(obj){
-			//	summary:
+			// summary:
 			//		Creates a new Date object.
-			//	obj: Object
+			// obj: Object
 			//		This object can have several values:
 			//		|the time in milliseconds since gregorian epoch.
 			//		|a Date instance
-			//	returns: Date
+			// returns: Date
 			return timeUtil.newDate(obj, this.dateClassObj);			
 		},
 		
 		_isItemInView: function(item){
-			//	summary:
+			// summary:
 			//		Computes whether the specified item is entirely in the view or not.
-			//	item: Object
+			// item: Object
 			//		The item to test
-			//	returns: Boolean	
+			// returns: Boolean	
 			var rd = this.renderData;
 			var cal = rd.dateFuncObj;
 			
@@ -521,11 +513,11 @@ function(
 		},
 		
 		_ensureItemInView: function(item){
-			//	summary:
+			// summary:
 			//		If needed, moves the item to be entirely in view.
-			//	item: Object
+			// item: Object
 			//		The item to test
-			//	returns: Boolean
+			// returns: Boolean
 			//		Whether the item has been moved to be in view or not.
 			var rd = this.renderData;
 			var cal = rd.dateFuncObj;
@@ -551,11 +543,11 @@ function(
 		//
 		/////////////////////////////////////////////////////////
 				
-		//	scrollable: Boolean
+		// scrollable: Boolean
 		//		Indicates whether the view can be scrolled or not.
 		scrollable: true,
 		
-		//	autoScroll: Boolean
+		// autoScroll: Boolean
 		//		Indicates whether the view can be scrolled automatically. 
 		//		Auto scrolling is used when moving focus to a non visible renderer using keyboard 
 		//		and while editing an item. 
@@ -565,7 +557,7 @@ function(
 			return false;
 		},
 		
-		//	scrollMethod: String
+		// scrollMethod: String
 		//		Method used to scroll the view, for example the scroll of column view.
 		//		Valid value are: 
 		//			| "auto": let the view decide (default), 
@@ -627,7 +619,7 @@ function(
 		_scrollPos: 0,
 		
 		getCSSPrefix: function(){
-			//	summary:
+			// summary:
 			//		Utility method that return the specific CSS prefix
 			//		for non standard CSS properties. Ex: -moz-border-radius.
 			if(has("ie")){
@@ -678,28 +670,26 @@ function(
 		},
 		
 		scrollView: function(dir){
-			//	summary:
+			// summary:
 			//		If the view is scrollable, scrolls it to the specified direction.
-			//	dir: Integer
+			// dir: Integer
 			//		Direction of the scroll. Valid values are -1 and 1.
-			//
 		},
 		
 		ensureVisibility: function(start, end, margin, visibilityTarget, duration){
-			//	summary:
+			// summary:
 			//		Scrolls the view if the [start, end] time range is not visible or only partially visible.
-			//	start: Date
+			// start: Date
 			//		Start time of the range of interest.
-			//	end: Date
+			// end: Date
 			//		End time of the range of interest.
-			//	margin: int
+			// margin: int
 			//		Margin in minutes around the time range.
-			//	visibilityTarget: String
+			// visibilityTarget: String
 			//		The end(s) of the time range to make visible.
 			//		Valid values are: "start", "end", "both".	
-			//	duration: Number
+			// duration: Number
 			//		Optional, the maximum duration of the scroll animation.
-
 		},
 
 	  ////////////////////////////////////////////////////////
@@ -727,7 +717,7 @@ function(
 		},
 		
 		invalidateLayout: function(){
-			//	summary:
+			// summary:
 			//		trigger a re-layout of the renderers.
 			this._layoutRenderers(this.renderData);
 		},
@@ -743,16 +733,13 @@ function(
 		////////////////////////////////////////////////////////
 				
 		computeOverlapping: function(layoutItems, func){
-			//	summary:
+			// summary:
 			//		Computes the overlap layout of a list of items. A lane and extent properties are added to each layout item.
-			//
-			//	layoutItems: Object[]
+			// layoutItems: Object[]
 			//		List of layout items, each item must have a start and end properties.
-			//
-			//	addedPass: Function
+			// addedPass: Function
 			//		Whether computes the extent of each item renderer on free sibling lanes.
-			//
-			//	returns: Object 
+			// returns: Object
 			
 			if(layoutItems.length == 0){
 				return {
@@ -781,13 +768,13 @@ function(
 		},
 
 		_layoutPass1: function (layoutItem, lanes){
-			//	summary:
+			// summary:
 			//		First pass of the overlap layout. Find a lane where the item can be placed or create a new one.
-			//	layoutItem: Object
+			// layoutItem: Object
 			//		An object that contains a start and end properties at least.
-			//	lanes:
+			// lanes:
 			//		The array of lanes.
-			//	tags
+			// tags:
 			//		private
 			var stop = true;
 			
@@ -819,23 +806,23 @@ function(
 		
 		
 		_layoutInterval: function(renderData, index, start, end, items){
-			//	summary:
+			// summary:
 			//		For each item in the items list: retrieve a renderer, compute its location and size and add it to the DOM.
-			//	renderData: Object
+			// renderData: Object
 			//		The render data.
-			//	index: Integer
+			// index: Integer
 			//		The index of the interval.
-			//	start: Date
+			// start: Date
 			//		The start time of the displayed date interval.
-			//	end: Date
+			// end: Date
 			//		The end time of the displayed date interval.
-			//	items: Object[]
+			// items: Object[]
 			//		The list of the items to represent.
-			//	tags
+			// tags:
 			//		protected
 		},
 		
-		//	layoutPriorityFunction: Function
+		// layoutPriorityFunction: Function
 		//		An optional comparison function use to determine the order the item will be laid out
 		//		The function is used to sort an array and must, as any sorting function, take two items 
 		//		as argument and must return an integer whose sign define order between arguments.
@@ -851,11 +838,11 @@ function(
 		},
 		
 		_layoutRenderers: function(renderData){
-			//	summary:
+			// summary:
 			//		Renders the data items. This method will call the _layoutInterval() method.
-			//	renderData: Object
+			// renderData: Object
 			//		The render data.
-			//	tags
+			// tags:
 			//		protected
 			if(!renderData.items){
 				return;
@@ -943,34 +930,28 @@ function(
 			this.itemToRenderer = {};
 		},
 				
-		//	rendererPool: Array
+		// rendererPool: [protected] Array
 		//		The stack of recycled renderers available.
-		//	tags
-		//		protected
 		rendererPool: null,
 		
-		//	rendererList: Array
+		// rendererList: [protected] Array
 		//		The list of used renderers
-		//	tags
-		//		protected
 		rendererList: null,
 		
-		//	itemToRenderer: Object
+		// itemToRenderer: [protected] Object
 		//		The associated array item to renderer list.
-		//	tags
-		//		protected
 		itemToRenderer: null,
 		
 		getRenderers: function(item){
-			//	summary:
+			// summary:
 			//		Returns the renderers that are currently used to displayed the speficied item.
 			//		Returns an array of objects that contains two properties:
 			//			| container: The DOM node that contains the renderer.
 			//			| renderer: The dojox.calendar._RendererMixin instance.
 			//		Do not keep references on the renderers are they are recycled and reused for other items.
-			//	item: Object
+			// item: Object
 			//		The data or render item.
-			//	returns: Object[]
+			// returns: Object[]
 			if(item == null || item.id == null){
 				return null;
 			}
@@ -980,18 +961,18 @@ function(
 		
 		_rendererHandles: {},
 		
-		//	itemToRendererKindFunc: Function
+		// itemToRendererKindFunc: Function
 		//		An optional function to associate a kind of renderer ("horizontal", "label" or null) with the specified item.
 		//		By default, if an item is lasting more that 24 hours an horizontal item is used, otherwise a label is used.
 		itemToRendererKindFunc: null,
 		
 		_itemToRendererKind: function(item){
-			//	summary: 
+			// summary: 
 			//		Associates a kind of renderer with a data item.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	returns: String
-			//	tags
+			// returns: String
+			// tags:
 			//		protected			
 			if(this.itemToRendererKindFunc){
 				return this.itemToRendererKindFunc(item);
@@ -1004,16 +985,16 @@ function(
 		},
 
 		_createRenderer: function(item, kind, rendererClass, cssClass){			
-			//	summary: 
+			// summary: 
 			//		Creates an item renderer of the specified kind. A renderer is an object with the "container" and "instance" properties.
-			//	item: Object
+			// item: Object
 			//		The data item.
-			//	kind: String
+			// kind: String
 			//		The kind of renderer.
-			//	rendererClass: Object
+			// rendererClass: Object
 			//		The class to instanciate to create the renderer.
-			//	returns: Object
-			//	tags
+			// returns: Object
+			// tags:
 			//		protected				
 						
 			if(item != null && kind != null && rendererClass != null){
@@ -1070,22 +1051,22 @@ function(
 		},	
 						
 		onRendererCreated: function(renderer){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been created.			
 		},	
 		
 		onRendererRecycled: function(renderer){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been recycled.			
 		},
 		
 		onRendererReused: function(renderer){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer that was recycled is reused.			
 		},
 		
 		onRendererDestroyed: function(renderer){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer is destroyed.			
 		},
 				
@@ -1097,16 +1078,16 @@ function(
 		},
 									
 		onRenderersLayoutDone: function(view){
-			//	summary:
+			// summary:
 			//		Event triggered when item renderers layout has been done.
 		},
 
 		_recycleRenderer: function(renderer, remove){
-			//	summary: 
+			// summary: 
 			//		Recycles the item renderer to be reused in the future.
-			//	renderer: dojox.calendar._RendererMixin
+			// renderer: dojox.calendar._RendererMixin
 			//		The item renderer to recycle.
-			//	tags
+			// tags:
 			//		protected			
 								
 			this.onRendererRecycled(renderer);
@@ -1130,11 +1111,11 @@ function(
 		},
 							
 		_destroyRenderer: function(renderer){
-			//	summary: 
+			// summary: 
 			//		Destroys the item renderer.
-			//	renderer: dojox.calendar._RendererMixin
+			// renderer: dojox.calendar._RendererMixin
 			//		The item renderer to destroy.
-			//	tags
+			// tags:
 			//		protected
 			this.onRendererDestroyed(renderer);
 			
@@ -1195,11 +1176,11 @@ function(
 		},
 	
 		updateRenderers: function(obj, stateOnly){
-			//	summary:
+			// summary:
 			//		Updates all the renderers that represents the specified item(s).
-			//	obj: Object
+			// obj: Object
 			//		A render item or an array of render items.
-			//	stateOnly: Boolean
+			// stateOnly: Boolean
 			//		Whether only the state of the item has changed (selected, edited, edited, focused) or a more global change has occured.
 			if(obj == null){
 				return;
@@ -1248,22 +1229,22 @@ function(
 		},
 		
 		applyRendererZIndex: function(item, renderer, hovered, selected, edited, focused){
-			//	summary:
+			// summary:
 			//		Applies the z-index to the renderer based on the state of the item.
 			//		This methods is setting a z-index of 20 is the item is selected or edited 
 			//		and the current lane value computed by the overlap layout (i.e. the renderers 
 			//		are stacked according to their lane).
-			//	item: Object
+			// item: Object
 			//		The render item.
-			//	renderer: Object
+			// renderer: Object
 			//		A renderer associated with the render item.
-			//	hovered: Boolean
+			// hovered: Boolean
 			//		Whether the item is hovered or not.
-			//	selected: Boolean
+			// selected: Boolean
 			//		Whether the item is selected or not.
-			//	edited: Boolean
+			// edited: Boolean
 			//		Whether the item is being edited not not.
-			//	focused: Boolean
+			// focused: Boolean
 			//		Whether the item is focused not not.
 						
 			domStyle.set(renderer.container, {"zIndex": edited || selected ? 20: item.lane == undefined ? 0 : item.lane});
@@ -1301,11 +1282,11 @@ function(
 		hoveredItem: null,
 		
 		isItemHovered: function(item){
-			//	summary:
+			// summary:
 			//		Returns whether the specified item is hovered or not.
-			//	item: Object
+			// item: Object
 			//		The item.
-			//	returns: Boolean								
+			// returns: Boolean								
 			if (this._isEditing && this._edProps){
 				return item.id == this._edProps.editedItem.id;
 			}else{
@@ -1316,11 +1297,11 @@ function(
 		},
 		
 		isItemFocused: function(item){
-			//	summary:
+			// summary:
 			//		Returns whether the specified item is focused or not.
-			//	item: Object
+			// item: Object
 			//		The item.
-			//	returns: Boolean
+			// returns: Boolean
 			return this._isItemFocused ? this._isItemFocused(item) : false;
 		},
 		
@@ -1408,13 +1389,20 @@ function(
 		//
 		///////////////////////////////////////////////////////////////////
 		
-		//	createItemFunc: Function
-		//		A user supplied function that creates a new event.
-		//		This view takes two parameters:
-		//		| view: the current view,
-		//		| d: the date at the clicked location.
-		//		| e: the mouse event (can be used to return null for example)
 		createItemFunc: null,
+		/*=====
+		createItemFunc: function(view, d, e){
+		 	// summary:
+			//		A user supplied function that creates a new event.
+			// view:
+			//		the current view,
+			// d:
+			//		the date at the clicked location.
+			// e:
+			//		the mouse event (can be used to return null for example)
+		},
+		=====*/
+
 				
 		_getCreateItemFuncAttr: function(){			
 			if(this.owner){
@@ -1424,7 +1412,7 @@ function(
 			}
 		},
 		
-		//	createOnGridClick: Boolean
+		// createOnGridClick: Boolean
 		//		Indicates whether the user can create new event by clicking and dragging the grid.
 		//		A createItem function must be defined on the view or the calendar object.
 		createOnGridClick: false,
@@ -1572,7 +1560,7 @@ function(
 		},
 		
 		onGridClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the grid has been clicked.
 
 		},
@@ -1589,7 +1577,7 @@ function(
 		},
 				
 		onGridDoubleClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the grid has been double-clicked.			
 		},
 		
@@ -1598,7 +1586,7 @@ function(
 		},
 		
 		onItemClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been clicked.
 		},
 		
@@ -1607,7 +1595,7 @@ function(
 		},
 		
 		onItemDoubleClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been double-clicked.
 		},
 
@@ -1616,7 +1604,7 @@ function(
 		},
 		
 		onItemContextMenu: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been context-clicked.
 		},		
 		//////////////////////////////////////////////////////////
@@ -1626,12 +1614,12 @@ function(
 		//////////////////////////////////////////////////////////
 
 		_getStartEndRenderers: function(item){
-			//	summary:
+			// summary:
 			//		Returns an array that contains the first and last renderers of an item 			
 			//		that are currently displayed. They could be the same renderer if only one renderer is used.
-			//	item: Object
+			// item: Object
 			//		The render item.
-			//	retunrs: Object[]
+			// returns: Object[]
 
 			var list = this.itemToRenderer[item.id];
 
@@ -1673,16 +1661,16 @@ function(
 			return res;			
 		},
 								
-		//	editable: Boolean
+		// editable: Boolean
 		//		A flag that indicates whether or not the user can edit
 		//		items in the data provider.
 		//		If <code>true</code>, the item renderers in the control are editable.
 		//		The user can click on an item renderer, or use the keyboard or touch devices, to move or resize the associated event.
 		editable: true,
 
-		//	moveEnabled: Boolean
-		//	A flag that indicates whether the user can move items displayed.
-		//	If <code>true</code>, the user can move the items.
+		// moveEnabled: Boolean
+		//		A flag that indicates whether the user can move items displayed.
+		//		If <code>true</code>, the user can move the items.
 		moveEnabled: true,
 		
 		//	A flag that indicates whether the items can be resized.
@@ -1690,70 +1678,70 @@ function(
 		resizeEnabled: true,
 		
 		isItemEditable: function(item, rendererKind){
-			//	summary:
+			// summary:
 			//		Computes whether particular item renderer can be edited or not.
 			//		By default it is using the editable property value.
-			//	item: Object
+			// item: Object
 			//		The item represented by the renderer.
-			//	rendererKind: String
+			// rendererKind: String
 			//		The kind of renderer.
-			//	returns: Boolean
+			// returns: Boolean
 			return this.editable && (this.owner ? this.owner.isItemEditable() : true);
 		},
 
 		isItemMoveEnabled: function(item, rendererKind){
-			//	summary:
+			// summary:
 			//		Computes whether particular item renderer can be moved.
 			//		By default it is using the moveEnabled property value.
-			//	item: Object
+			// item: Object
 			//		The item represented by the renderer.
-			//	rendererKind: String
+			// rendererKind: String
 			//		The kind of renderer.
-			//	returns: Boolean
+			// returns: Boolean
 			return this.isItemEditable(item, rendererKind) && this.moveEnabled && 
 				(this.owner ? this.owner.isItemMoveEnabled(item, rendererKind): true);
 		},
 		
 		isItemResizeEnabled: function(item, rendererKind){
-			//	summary:
+			// summary:
 			//		Computes whether particular item renderer can be resized.
 			//		By default it is using the resizedEnabled property value.
-			//	item: Object
+			// item: Object
 			//		The item represented by the renderer.
-			//	rendererKind: String
+			// rendererKind: String
 			//		The kind of renderer.
-			//	returns: Boolean
+			// returns: Boolean
 			
 			return this.isItemEditable(item, rendererKind) && this.resizeEnabled && 
 				(this.owner ? this.owner.isItemResizeEnabled(item, rendererKind): true);
 		},
 
-		//	_isEditing: Boolean
+		// _isEditing: Boolean
 		//		Whether an item is being edited or not.
 		_isEditing: false,
 		
 		isItemBeingEdited: function(item){
-			//	summary:
+			// summary:
 			//		Returns whether an item is being edited or not.
-			//	item: Object
+			// item: Object
 			//		The item to test.
-			//	returns: Boolean
+			// returns: Boolean
 			return this._isEditing && this._edProps && this._edProps.editedItem && this._edProps.editedItem.id == item.id;
 		},
 		
 		_setEditingProperties: function(props){
-			//	summary:
+			// summary:
 			//		Registers the editing properties used by the editing functions.
 			//		This method should only be called by editing interaction mixins like Mouse, Keyboard and Touch.
 			this._edProps = props;
 		},
 		
 		_startItemEditing: function(item, eventSource){
-			//	summary:
+			// summary:
 			//		Configures the component, renderers to start one (mouse) of several (touch, keyboard) editing gestures.
-			//	item: Object
+			// item: Object
 			//		The item that will be edited.
-			//	eventSource: String
+			// eventSource: String
 			//		"mouse", "keyboard", "touch"
 			this._isEditing = true;			
 			var p = this._edProps;
@@ -1815,16 +1803,16 @@ function(
 		},
 		
 		onItemEditBegin: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the item is entering the editing mode.
 		},
 		
 		_endItemEditing: function(/*String*/eventSource, /*Boolean*/canceled){
-			//	summary:
+			// summary:
 			//		Leaves the item editing mode.
-			//	item: Object
+			// item: Object
 			//		The item that was edited.
-			//	eventSource: String
+			// eventSource: String
 			//		"mouse", "keyboard", "touch"
 			this._isEditing = false;					
 			
@@ -1871,7 +1859,7 @@ function(
 		},
 		
 		onItemEditEnd: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the item is leaving the editing mode.
 		},
 		
@@ -1895,17 +1883,17 @@ function(
 
 		
 		_startItemEditingGesture: function(dates, editKind, eventSource, e){
-			//	summary:
+			// summary:
 			//		Starts the editing gesture.
-			//	date: Date[]
+			// date: Date[]
 			//		The reference dates (at least one). 
-			//	editKind: String
+			// editKind: String
 			//		Kind of edit: "resizeBoth", "resizeStart", "resizeEnd" or "move".
-			//	eventSource: String
+			// eventSource: String
 			//		"mouse", "keyboard", "touch"
-			//	e: Event
+			// e: Event
 			//		The event at the origin of the editing gesture.
-			//	tags:
+			// tags:
 			//		private					
 			
 			var p = this._edProps;
@@ -1937,7 +1925,7 @@ function(
 		
 		
 		_onItemEditBeginGesture: function(e){
-			//	tags:
+			// tags:
 			//		private
 			var p = this._edProps;
 			
@@ -1983,12 +1971,12 @@ function(
 		},
 		
 		onItemEditBeginGesture: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when an editing gesture is beginning.
 		},
 		
 		_waDojoxAddIssue: function(d, unit, steps){
-			//	summary:
+			// summary:
 			//		Workaround an issue of dojox.date.XXXXX.date.add() function 
 			//		that does not support the subtraction of time correctly (normalization issues). 
 			var cal = this.renderData.dateFuncObj;
@@ -2015,17 +2003,17 @@ function(
 		},
 		
 		_moveOrResizeItemGesture: function(dates, eventSource, e){
-			//	summary:
+			// summary:
 			//		Moves or resizes an item.
-			//	dates: Date[]
+			// dates: Date[]
 			//		The reference dates.
-			//	editKind: String
+			// editKind: String
 			//		Kind of edit: "resizeStart", "resizeEnd", "resizeBoth" or "move".
-			//	eventSource: String
+			// eventSource: String
 			//		"mouse", "keyboard", "touch"
-			//	e: Event
+			// e: Event
 			//		The event at the origin of the editing gesture.
-			//	tags:
+			// tags:
 			//		private
 
 			if(!this._isEditing || dates[0] == null){
@@ -2246,7 +2234,7 @@ function(
 		_DAY_IN_MILLISECONDS: 24 * 60 * 60 * 1000,
 		
 		onItemEditMoveGesture: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched during a move editing gesture.
 		},
 				
@@ -2318,7 +2306,7 @@ function(
 		},
 		
 		onItemEditResizeGesture: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched during a resize editing gesture.
 		},
 		
@@ -2374,12 +2362,12 @@ function(
 		},
 		
 		onItemEditEndGesture: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched at the end of an editing gesture.
 		},
 		
 		ensureMinimalDuration: function(renderData, item, unit, steps, editKind){
-			//	summary:
+			// summary:
 			//		During the resize editing gesture, ensures that the item has the specified minimal duration.
 			//		renderData: Object
 			//			The render data.
@@ -2407,37 +2395,37 @@ function(
 			}
 		},
 		
-		//	doubleTapDelay: Integer
+		// doubleTapDelay: Integer
 		//		The maximum delay between two taps needed to trigger an "itemDoubleClick" event, in touch context.		
 		doubleTapDelay: 300,
 		
-		//	snapUnit: String
+		// snapUnit: String
 		//		The unit of the snapping to apply during the editing of an event.
 		//		"day", "hour" and "minute" are valid values. 
 		snapUnit: "minute",
 		
-		//	snapSteps: Integer
+		// snapSteps: Integer
 		//		The number of units used to compute the snapping of the edited item.
 		snapSteps: 15,
 		
-		//	minDurationUnit: "String"
+		// minDurationUnit: "String"
 		//		The unit used to define the minimal duration of the edited item.
 		//		"day", "hour" and "minute" are valid values.
 		minDurationUnit: "hour",
 		
-		//	minDurationSteps: Integer
+		// minDurationSteps: Integer
 		//		The number of units used to define the minimal duration of the edited item.
 		minDurationSteps: 1,
 		
-		//	liveLayout: Boolean
+		// liveLayout: Boolean
 		//		If true, all the events are laid out during the editing gesture. If false, only the edited event is laid out.
 		liveLayout: false,			
 		
-		//	stayInView: Boolean
+		// stayInView: Boolean
 		//		Specifies during editing, if the item is already in view, if the item must stay in the time range defined by the view or not.		
 		stayInView: true,
 		
-		//	allowStartEndSwap: Boolean
+		// allowStartEndSwap: Boolean
 		//		Specifies if the start and end time of an item can be swapped during an editing gesture. Note that using the keyboard this property is ignored.	
 		allowStartEndSwap: true,			
 		

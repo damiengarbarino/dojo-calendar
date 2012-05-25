@@ -22,7 +22,7 @@ function(
 					
 	return declare("demo.ExtendedCalendar", Calendar, {
 		
-		//	summary:
+		// summary:
 		//		A Calendar subclass that embeds a month column view.	
 		
 		templateString: template,

@@ -7,11 +7,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 		// summary:
 		//		This plugin is managing the touch interactions on item renderers displayed by a calendar view.		
 				
-		//	touchStartEditingTimer: Integer
+		// touchStartEditingTimer: Integer
 		//		The delay of one touch over the renderer before setting the item in editing mode.		
 		touchStartEditingTimer: 500,
 		
-		//	touchEndEditingTimer: Integer
+		// touchEndEditingTimer: Integer
 		//		The delay after which the item is leaving the editing mode after the previous editing gesture, in touch context.
 		touchEndEditingTimer: 10000,
 		
@@ -222,7 +222,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 						
 		},
 		
-		//	autoScrollTouchMargin: Integer
+		// autoScrollTouchMargin: Integer
 		//		The minimum number of minutes of margin around the edited event. 
 		autoScrollTouchMargin: 10,
 		
@@ -339,9 +339,9 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 		},
 		
 		_startTouchItemEditingGesture: function(e){
-			//	summary:
+			// summary:
 			//		Determines if a editing gesture is starting according to touches.  
-			//	tags:
+			// tags:
 			//		private
 
 			var p = this._edProps;
@@ -387,13 +387,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 		},
 		
 		_getTouchesOnRenderers: function(e, item){
-			//	summary:
+			// summary:
 			//		Returns the touch indices that are on a editing handles or body of the renderers 
-			//	tags:
+			// tags:
 			//		private
-			//	item: Object
+			// item: Object
 			//		The render item.
-			//	e: Event
+			// e: Event
 			//		The touch event.
 			
 			var irs = this._getStartEndRenderers(item);

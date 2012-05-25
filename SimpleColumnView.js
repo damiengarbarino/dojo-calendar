@@ -40,12 +40,6 @@ function(
 	query, 
 	metrics){
 				
-	/*=====
-	var ViewBase = dojox.calendar.ViewBase;
-	var _VerticalScrollBarBase = dojox.calendar._VerticalScrollBarBase;
-	var _TemplatedMixin = dijit._TemplatedMixin;
-	=====*/ 	
-	
 	return declare("dojox.calendar.SimpleColumnView", [ViewBase, _TemplatedMixin], {
 		
 		// summary:
@@ -55,7 +49,7 @@ function(
 		
 		templateString: template,
 		
-		//	viewKind: String
+		// viewKind: String
 		//		Type of the view. Used by the calendar widget to determine how to configure the view.
 		//		This view kind is "columns".
 		viewKind: "columns",
@@ -63,46 +57,46 @@ function(
 		// scroll container is the focusable item to enable scrolling using up and down arrows
 		_setTabIndexAttr: "domNode",
 		
-		//	renderData: Object
+		// renderData: Object
 		//		The render data is the object that contains all the properties needed to render the component.
 		renderData: null,		
 				
-		//	startDate: Date
+		// startDate: Date
 		//		The start date of the time interval displayed.
 		//		If not set at initialization time, will be set to current day.
 		startDate: null,
 			
-		//	columnCount: Integer
+		// columnCount: Integer
 		//		The number of column to display (from the startDate).
 		columnCount: 7,
 	
-		//	minHours: Integer
+		// minHours: Integer
 		//		The minimum hour to be displayed. It must be in the [0,24] interval.
 		minHours: 8,
 		
-		//	maxHours: Integer
+		// maxHours: Integer
 		//		The maximum hour to be displayed. It must be in the [0,24] interval.	
 		maxHours: 18,
 		
-		//	hourSize: Integer
+		// hourSize: Integer
 		//		The desired size in pixels of an hour on the screen.
 		//		Note that the effective size may be different as the time slot size must be an integer.
 		hourSize: 100,
 		
-		//	timeSlotDuration: Integer
+		// timeSlotDuration: Integer
 		//		Duration of the time slot in minutes. Must be a divisor of 60.
 		timeSlotDuration: 15,
 		
-		//	verticalRenderer: Class
+		// verticalRenderer: Class
 		//		The class use to create vertical renderers.
 		verticalRenderer: null,
 		
-		//	percentOverlap: Integer
+		// percentOverlap: Integer
 		//		The percentage of the renderer width used to superimpose one item renderer on another 
 		//		when two events are overlapping.
 		percentOverlap: 70,
 		
-		//	horizontalGap: Integer
+		// horizontalGap: Integer
 		//		The number of pixels between two item renderers that are overlapping each other if the percentOverlap property is 0.
 		horizontalGap: 4,
 		
@@ -274,10 +268,10 @@ function(
 		//////////////////////////////////////////
 		
 		_formatRowHeaderLabel: function(/*Date*/d){
-			//	summary:
+			// summary:
 			//		Computes the row header label for the specified time of day.
 			//		By default a formatter is used, optionally the <code>rowHeaderTimePattern</code> property can be used to set a custom time pattern to the formatter.
-			//	d: Date
+			// d: Date
 			//		The date to format	
 			return this.renderData.dateLocaleModule.format(d, {
 				selector: "time", 
@@ -286,10 +280,10 @@ function(
 		},
 	
 		_formatColumnHeaderLabel: function(/*Date*/d){			
-			//	summary:
+			// summary:
 			//		Computes the column header label for the specified date.
 			//		By default a formatter is used, optionally the <code>columnHeaderDatePattern</code> property can be used to set a custom date pattern to the formatter.
-			//	d: Date
+			// d: Date
 			//		The date to format 
 			return this.renderData.dateLocaleModule.format(d, {
 				selector: "date", 
@@ -304,11 +298,11 @@ function(
 		//
 		//////////////////////////////////////////
 		
-		//	startTimeOfDay: Object
+		// startTimeOfDay: Object
 		//		The scroll position of the view. The value is an object made of "hours" and "minutes" properties.
 		startTimeOfDay: null,
 				
-		//	scrollBarRTLPosition: String
+		// scrollBarRTLPosition: String
 		//		Position of the scroll bar in right-to-left display.
 		//		Valid values are "left" and "right", default value is "left".
 		scrollBarRTLPosition: "left",
@@ -415,18 +409,18 @@ function(
 		
 		ensureVisibility: function(start, end, visibilityTarget, margin, duration){
 			
-			//	summary:
+			// summary:
 			//		Scrolls the view if the [start, end] time range is not visible or only partially visible.
-			//	start: Date
+			// start: Date
 			//		Start time of the range of interest.
-			//	end: Date
+			// end: Date
 			//		End time of the range of interest.
-			//	margin: int
+			// margin: int
 			//		Margin in minutes around the time range.
-			//	visibilityTarget: String
+			// visibilityTarget: String
 			//		The end(s) of the time range to make visible.
 			//		Valid values are: "start", "end", "both".	
-			//	duration: Number
+			// duration: Number
 			//		Optional, the maximum duration of the scroll animation.
 			
 			margin = margin == undefined ? this.renderData.slotDuration : margin;
@@ -467,9 +461,9 @@ function(
 		},
 		
 		scrollView: function(dir){
-			//	summary:
+			// summary:
 			//		Scrolls the view to the specified direction of one time slot duration.
-			//	dir: Integer
+			// dir: Integer
 			//		Direction of the scroll. Valid values are -1 and 1.
 			//
 			var t = this._getStartTimeOfDay();
@@ -547,13 +541,13 @@ function(
 		},
 		
 		_buildColumnHeader: function(renderData, oldRenderData){				
-			//	summary:
+			// summary:
 			//		Creates incrementally the HTML structure of the column header and configures its content.
 			//
-			//	renderData:
+			// renderData:
 			//		The render data to display.
 			//
-			//	oldRenderData:
+			// oldRenderData:
 			//		The previously render data displayed, if any.
 
 			var table = this.columnHeaderTable;
@@ -688,15 +682,15 @@ function(
 		},
 		
 		styleColumnHeaderCell: function(node, date, renderData){
-			//	summary:
+			// summary:
 			//		Styles the CSS classes to the node that displays a column header cell.
 			//		By default this method is setting the "dojoxCalendarToday" class name if the 
 			//		date displayed is the current date or "dojoxCalendarWeekend" if the date represents a weekend.
-			//	node: Node
+			// node: Node
 			//		The DOM node that displays the column in the grid.
-			//	date: Date
+			// date: Date
 			//		The date displayed by this column
-			//	renderData: Object			
+			// renderData: Object			
 			//		The render data.
 			if(this.isToday(date)){				
 				return domClass.add(node, "dojoxCalendarToday");
@@ -707,13 +701,13 @@ function(
 		
 		_buildRowHeader: function(renderData, oldRenderData){
 
-			//	summary:
+			// summary:
 			//		Creates incrementally the HTML structure of the row header and configures its content.			
 			//
-			//	renderData:
+			// renderData:
 			//		The render data to display.
 			//
-			//	oldRenderData:
+			// oldRenderData:
 			//		The previously render data displayed, if any.
 			
 			var rowHeaderTable = this.rowHeaderTable;
@@ -773,26 +767,26 @@ function(
 		},		
 		
 		styleRowHeaderCell: function(node, h, renderData){
-			//	summary:
+			// summary:
 			//		Styles the CSS classes to the node that displays a row header cell.
 			//		By default this method is doing nothing.
-			//	node: Node
+			// node: Node
 			//		The DOM node that displays the column in the grid.
-			//	h: Integer
+			// h: Integer
 			//		The time of day displayed by this row header cell.
-			//	renderData: Object
+			// renderData: Object
 			//		The render data.
 				
 		},
 	
 		_buildGrid: function (renderData, oldRenderData){
-			//	summary:
+			// summary:
 			//		Creates incrementally the HTML structure of the grid and configures its content.
 			//
-			//	renderData:
+			// renderData:
 			//		The render data to display.
 			//
-			//	oldRenderData:
+			// oldRenderData:
 			//		The previously render data displayed, if any.				
 									
 			var table = this.gridTable;
@@ -918,15 +912,15 @@ function(
 		},
 				
 		styleGridColumn: function(node, date, renderData){
-			//	summary:
+			// summary:
 			//		Styles the CSS classes to the node that displays a column.
 			//		By default this method is setting the "dojoxCalendarToday" class name if the 
 			//		date displayed is the current date or "dojoxCalendarWeekend" if the date represents a weekend.
-			//	node: Node
+			// node: Node
 			//		The DOM node that displays the column in the grid.
-			//	date: Date
+			// date: Date
 			//		The date displayed by this column
-			//	renderData: Object
+			// renderData: Object
 			//
 			if(this.isToday(date)){				
 				return domClass.add(node, "dojoxCalendarToday");
@@ -936,13 +930,11 @@ function(
 		},
 							
 		_buildItemContainer: function(renderData, oldRenderData){
-			//	summary:
+			// summary:
 			//		Creates the HTML structure of the item container and configures its content.
-			//
-			//	renderData:
+			// renderData:
 			//		The render data to display.
-			//
-			//	oldRenderData:
+			// oldRenderData:
 			//		The previously render data displayed, if any.
 			
 			var table = this.itemContainerTable;
@@ -1024,11 +1016,11 @@ function(
 		///////////////////////////////////////////////////////////////
 		
 		_overlapLayoutPass2: function(lanes){
-			//	summary:
+			// summary:
 			//		Second pass of the overlap layout (optional). Compute the extent of each layout item.
-			//	lanes:
+			// lanes:
 			//		The array of lanes.
-			//	tags
+			// tags:
 			//		private
 			var i,j,lane, layoutItem;
 			// last lane, no extent possible
@@ -1201,15 +1193,15 @@ function(
 		getTime: function(e, x, y, touchIndex){
 			// summary:
 			//		Returns the time displayed at the specified point by this component.
-			//	e: Event
+			// e: Event
 			//		Optional mouse event.
-			//	x: Number
+			// x: Number
 			//		Position along the x-axis with respect to the sheet container used if event is not defined.
-			//	y: Number
+			// y: Number
 			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
-			//	touchIndex: Integer
+			// touchIndex: Integer
 			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
-			//	returns: Date
+			// returns: Date
 			
 			if (e != null){				
 				var refPos = domGeometry.position(this.itemContainer, true);
@@ -1385,7 +1377,7 @@ function(
 		},
 		
 		onColumnHeaderClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when a column header cell is dispatched.
 			//		e: Event
 			//		The event has the following properties:
@@ -1399,11 +1391,11 @@ function(
 		
 
 		getTimeOfDay: function (pos, rd) {
-			//	summary:
+			// summary:
 			//		Return the time of day associated to the specified position.
-			//	pos: Integer
+			// pos: Integer
 			//		The position in pixels.
-			//	rd: Object
+			// rd: Object
 			//		The render data.
 			var minH = rd.minHours*60;
 			var maxH = rd.maxHours*60;

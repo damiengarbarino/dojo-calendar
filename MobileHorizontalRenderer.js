@@ -14,15 +14,9 @@ _TemplatedMixin,
 _RendererMixin, 
 template){
 	
-	/*=====
-	var _WidgetBase = dijit._WidgetBase;
-	var _TemplatedMixin = dijit._TemplatedMixin;
-	var _RendererMixin = dojox.calendar._RendererMixin;
-	=====*/ 
-
 	return declare("dojox.calendar.MobileHorizontalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
 		
-		//	summary:
+		// summary:
 		//		The mobile specific item horizontal renderer.
 		
 		templateString: template,
@@ -41,7 +35,7 @@ template){
 		
 		_displayValue: "inline",
 		
-		//	arrowPadding: Integer
+		// arrowPadding: Integer
 		//		The padding size in pixels to apply to the label container on left and/or right side, to show the arrows correctly.
 		arrowPadding: 12, 
 		

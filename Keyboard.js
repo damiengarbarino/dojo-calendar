@@ -6,35 +6,35 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 		// summary:
 		//		This mixin is managing the keyboard interactions on a calendar view.
 		
-		//	keyboardUpDownUnit: String
+		// keyboardUpDownUnit: String
 		//		Unit used during editing of an event using the keyboard and the up or down keys were pressed. Valid values are "week", "day", "hours" "minute".
 		keyboardUpDownUnit: "minute",
 		
-		//	keyboardUpDownSteps: Integer		
+		// keyboardUpDownSteps: Integer
 		//		Steps used during editing of an event using the keyboard and the up or down keys were pressed.		
 		keyboardUpDownSteps: 15,		
 		
-		//	keyboardLeftRightUnit: String
+		// keyboardLeftRightUnit: String
 		//		Unit used during editing of an event using the keyboard and the left or right keys were pressed. Valid values are "week", "day", "hours" "minute".
 		keyboardLeftRightUnit: "day",
 		
-		//	keyboardLeftRightSteps: Integer
+		// keyboardLeftRightSteps: Integer
 		//		Unit used during editing of an event using the keyboard and the left or right keys were pressed.		
 		keyboardLeftRightSteps: 1,
 
-		//	allDayKeyboardUpDownSteps: Integer		
+		// allDayKeyboardUpDownSteps: Integer
 		//		Steps used during editing of an all day event using the keyboard and the up or down keys were pressed.
 		allDayKeyboardUpDownUnit: "day",
 		
-		//	allDayKeyboardUpDownUnit: String
+		// allDayKeyboardUpDownUnit: String
 		//		Unit used during editing of an all day event using the keyboard and the up or down keys were pressed. Valid values are "week", "day", "hours" "minute".		
 		allDayKeyboardUpDownSteps: 7,
 		
-		//	allDayKeyboardUpDownSteps: Integer		
+		// allDayKeyboardUpDownSteps: Integer
 		//		Steps used during editing of an all day event using the keyboard and the up or down keys were pressed.
 		allDayKeyboardLeftRightUnit: "day",
 		
-		//	allDayKeyboardLeftRightUnit: String
+		// allDayKeyboardLeftRightUnit: String
 		//		Unit used during editing of an all day event using the keyboard and the left or right keys were pressed. Valid values are "week", "day", "hours" "minute".
 		allDayKeyboardLeftRightSteps: 1,
 
@@ -43,11 +43,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 			this._viewHandles.push(on(this.domNode, "keydown", lang.hitch(this, this._onKeyDown)));
 		},
 		
-		//	resizeModfier: "ctrl"
+		// resizeModfier: "ctrl"
 		//		The modifier used to determine if the item is resized instead moved during the editing on an item.
 		resizeModifier: "ctrl",
 
-		//	maxScrollAnimationDuration: Number
+		// maxScrollAnimationDuration: Number
 		//		The duration in milliseconds to scroll the entire view. 
 		//		The scroll speed is constant when scrolling to show an item renderer. 
 		maxScrollAnimationDuration: 1000,
@@ -58,11 +58,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 		//
 		//////////////////////////////////////////////////////////////
 		
-		//	tabIndex: Integer
+		// tabIndex: Integer
 		//		Order fields are traversed when user hits the tab key
 		tabIndex: "0",
 		
-		//	focusedItem: Object
+		// focusedItem: Object
 		focusedItem: null,
 		
 		_isItemFocused: function(item){
@@ -93,15 +93,15 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 			//	Event dispatched when the focus has changed.
 		},
 
-		//	showFocus: Boolean
+		// showFocus: Boolean
 		//		Show or hide the focus graphic feedback on item renderers.
 		showFocus: false,		
 		
 		_focusNextItem: function(dir){			
-			//	summary:
+			// summary:
 			//		Moves the focus to the next item in the specified direction.
 			//		If there is no current child focused, the first (dir == 1) or last (dir == -1) is focused.
-			//	dir: Integer
+			// dir: Integer
 			//		The direction of the next child to focus.
 			//		* 1: Move focus to the next item in the list.
 			//		* -1: Move focus to the previous item in the list.
