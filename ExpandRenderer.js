@@ -22,49 +22,44 @@ _WidgetBase,
 _TemplatedMixin, 
 template){
 	
-	/*=====
-	var _WidgetBase = dijit._WidgetBase;
-	var _TemplatedMixin = dijit._TemplatedMixin;
-	=====*/
-
 	return declare("dojox.calendar.ExpandRenderer", [_WidgetBase, _TemplatedMixin], {
 		
-		//	summary:
+		// summary:
 		//		The default renderer display in MatrixView cells where some item renderers cannot be displayed because of size constraints.
 		
 		templateString: template,
 		
 		baseClass: "dojoxCalendarExpand",
 		
-		//	owner: dojox.calendar._ViewBase
+		// owner: dojox.calendar._ViewBase
 		//		The view that contains this renderer.
 		owner: null,
 
-		//	focused: Boolean
+		// focused: Boolean
 		//		Indicates that the renderer is focused.
 		focused: false,
 
-		//	up: Boolean
+		// up: Boolean
 		//		Indicates that the mouse cursor is over renderer.
 		up: false,
 
-		//	down: Boolean
+		// down: Boolean
 		//		Indicates that the renderer is pressed.
 		down: false,
 
-		//	date: Date
+		// date: Date
 		//		The date displayed by the cell where this renderer is used.
 		date: null,
 
-		//	items: Object[]
+		// items: Object[]
 		//		List of items that are not displayed in the cell because of the size constraints.
 		items: null,
 		
-		//	rowIndex: Integer
+		// rowIndex: Integer
 		//		Row index where this renderer is used.
 		rowIndex: -1,
 		
-		//	columnIndex: Integer
+		// columnIndex: Integer
 		//		Column index where this renderer is used.
 		columnIndex: -1,
 		

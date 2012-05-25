@@ -7,10 +7,6 @@ define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
 	function(MatrixView, template, html, declare, event, lang, has, dom, domClass, domGeometry, domConstruct, 
 		date, locale, query, metrics, fx, on, i18n, win){
 	
-	/*=====
-	var MatrixView = dojox.calendar.MatrixView;
-	=====*/ 	
-	
 	return declare("dojox.calendar.ColumnViewSecondarySheet", MatrixView, {
 		
 		// summary:
@@ -68,12 +64,12 @@ define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
 		},
 	
 		expandRendererClickHandler: function(e, renderer){
-			//	summary:
+			// summary:
 			//		Default action when an expand renderer is clicked.
 			//		This method will expand the secondary sheet to show all the events.
-			//	e: Event
+			// e: Event
 			//		The mouse event.
-			//	renderer: Object
+			// renderer: Object
 			//		The renderer that was clicked.
 			
 			event.stop(e);

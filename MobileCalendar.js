@@ -5,18 +5,6 @@ define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView
 	function(declare, lang, CalendarBase, ColumnView, ColumnViewSecondarySheet, VerticalRenderer, 
 					 MatrixView, HorizontalRenderer, LabelRenderer, ExpandRenderer, Touch, template){
 	
-	/*=====
-		var CalendarBase = dojox.calendar.CalendarBase;
-		var ColumnView = dojox.calendar.ColumnView;
-		var ColumnViewSecondarySheet = dojox.calendar.ColumnViewSecondarySheet;
-		var MatrixView = dojox.calendar.MatrixView;
-		var MobileVerticalRenderer = dojox.calendar.MobileVerticalRenderer;
-		var MobileHorizontalRenderer = dojox.calendar.MobileHorizontalRenderer;
-		var LabelRenderer = dojox.calendar.LabelRenderer;
-		var ExpandRenderer = dojox.calendar.ExpandRenderer;
-		var Touch = dojox.calendar.Touch;
-	=====*/ 
-	
 	return declare("dojox.calendar.MobileCalendar", CalendarBase, {
 		
 		// summary:
@@ -25,7 +13,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView
 		templateString: template,
 		
 		_createDefaultViews: function(){
-			//	summary:
+			// summary:
 			//		Creates the default views:
 			//		|	A ColumnView instance used to display one day to seven days time intervals,
 			//		| A MatrixView instance used to display the other time intervals.
@@ -57,7 +45,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView
 		},
 		
 		installDefaultViewsActions: function(views){
-			//	summary:
+			// summary:
 			//		Installs the default actions on newly created default views.
 			//		By default this action is registering:
 			//		| the matrixViewRowHeaderClick method	on the rowHeaderClick event of the matrix view.
