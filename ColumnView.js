@@ -37,12 +37,7 @@ function(
 	SimpleColumnView, 
 	template, 
 	ColumnViewSecondarySheet){
-				
-	/*=====
-	var SimpleColumnView = dojox.calendar.SimpleColumnView;
-	var ColumnViewSecondarySheet = dojox.calendar.ColumnViewSecondarySheet;
-	=====*/ 	
-	
+
 	return declare("dojox.calendar.ColumnView", SimpleColumnView, {
 
 		// summary:		
@@ -56,11 +51,11 @@ function(
 	
 		baseClass: "dojoxCalendarColumnView",
 		
-		//	secondarySheetClass: Class
+		// secondarySheetClass: Class
 		//		The secondary sheet class, by default dojox.calendar.ColumnViewSecondarySheet.
 		secondarySheetClass: ColumnViewSecondarySheet,
 		
-		//	secondarySheetProps: Object
+		// secondarySheetProps: Object
 		//		Secondary sheet constructor parameters.
 		secondarySheetProps: null,
 		
@@ -100,15 +95,15 @@ function(
 		},
 		
 		onRowHeaderClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the row header cell of the secondary sheet is clicked.
 		},
 		
 		resizeSecondarySheet: function(height){
-			//	summary:
+			// summary:
 			//		Resizes the secondary sheet header and relayout the other sub components according this new height.
 			//		Warning: this method is only available for the default template and default CSS.
-			//	height: Integer
+			// height: Integer
 			//		The new height in pixels.
 			if(this.secondarySheetNode){
 				var headerH = domGeometry.getMarginBox(this.header).h;
@@ -184,9 +179,9 @@ function(
 		},
 		
 		getSecondarySheet: function(){
-			//	summary:
+			// summary:
 			//		Returns the secondary sheet
-			//	returns: dojox.calendar.MatrixView
+			// returns: dojox.calendar.MatrixView
 			return this.secondarySheet;
 		},
 		

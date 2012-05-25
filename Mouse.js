@@ -25,7 +25,7 @@ function(
 		// summary:
 		//		This plugin is managing the mouse interactions on item renderers displayed by a calendar view.		
 				
-		//	triggerExtent: Number 
+		// triggerExtent: Number
 		//		The distance in pixels along the vertical or horizontal axis to cover with the 
 		//		mouse button down before triggering the editing gesture.
 		triggerExtent: 3,
@@ -134,7 +134,7 @@ function(
 		},
 		
 		onItemRollOver: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the mouse cursor in going over an item renderer. 
 		},
 		
@@ -143,13 +143,13 @@ function(
 		},
 		
 		onItemRollOut: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the mouse cursor in leaving an item renderer.
 		},
 		
 		_rendererMouseDownHandler: function(e, renderer){
 			
-			//	summary:
+			// summary:
 			//		Callback if the user clicked on the item renderer but not on a handle.
 			//		Manages item selection.
 			
@@ -166,7 +166,7 @@ function(
 		
 		_onRendererHandleMouseDown: function(e, renderer, editKind){
 			
-			//	summary:
+			// summary:
 			//		Callback if the user clicked on a handle of an item renderer.
 			//		Manages item selection and editing gesture. If editing is not allowed, 
 			//		resize handles are not displayed and so this callback will never be called.
