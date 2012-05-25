@@ -1,5 +1,24 @@
-define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window", "dojo/dom-geometry", "dojo/on", "dojo/_base/event", "dojo/keys"],
-	function(arr, lang, declare, win, domGeometry, on, event, keys){
+define([
+	"dojo/_base/array", 
+	"dojo/_base/declare",
+	"dojo/_base/event",
+	"dojo/_base/lang",
+	"dojo/_base/window", 
+	"dojo/dom-geometry",
+	"dojo/mouse",
+	"dojo/on", 	
+	"dojo/keys"],
+	
+function(
+	arr, 	
+	declare,
+	event,
+	lang, 	
+	win, 
+	domGeometry,
+	mouse,
+	on, 	
+	keys){
 			
 	return declare("dojox.calendar.Mouse", null, {
 
@@ -78,35 +97,23 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				}));
 				renderer.__handles.push(h);
 				
-				h = on(ir.container, "mouseover", lang.hitch(this, function(e){
+				h = on(ir.container, mouse.enter, lang.hitch(this, function(e){
 					if(!renderer.item) return;
-					if(!this._isCursorInRenderer){
-						this._isCursorInRenderer = true;
-						if(!this._editingGesture){
-							this._setHoveredItem(renderer.item.item, ir.renderer);
-							this._onItemRollOver(this.__fixEvt({
-								item: this.renderItemToItem(renderer.item, this.get("store")),
-								renderer: renderer,
-								triggerEvent: e
-							}));
-						}
-					}
+					
+					if(!this._editingGesture){
+						this._setHoveredItem(renderer.item.item, ir.renderer);
+						this._onItemRollOver(this.__fixEvt({
+							item: this.renderItemToItem(renderer.item, this.get("store")),
+							renderer: renderer,
+							triggerEvent: e
+						}));
+					}					
 				}));
 				renderer.__handles.push(h);
 				
-				h = on(renderer.domNode, "mouseout", lang.hitch(this, function(e){
+				h = on(renderer.domNode, mouse.leave, lang.hitch(this, function(e){
 					if(!renderer.item) return;
-					if(this._isCursorInRenderer && !this._editingGesture){
-						// mouseout is called in every sub node, let's determine if we really gone out of the renderer.
-						var node = e.relatedTarget;
-						while(node != e.currentTarget && node != win.doc.body && node != null){
-							node = node.parentNode;
-						}
-						if(node == e.currentTarget){
-							return;
-						}						
-						delete this._isCursorInRenderer;
-						
+					if(!this._editingGesture){						
 						this._setHoveredItem(null);
 						
 						this._onItemRollOut(this.__fixEvt({
@@ -115,7 +122,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 							triggerEvent: e
 						}));
 					}
-				}));				
+				}));
+				
 				renderer.__handles.push(h);
 				
 			}));			

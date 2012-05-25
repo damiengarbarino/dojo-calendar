@@ -15,7 +15,8 @@ define([
 "dojo/dom-class", 
 "dojo/dom-style", 
 "dojo/dom-geometry", 
-"dojo/dom-construct", 
+"dojo/dom-construct",
+"dojo/mouse", 
 "dojo/query", 
 "dojox/html/metrics"],
 
@@ -36,7 +37,8 @@ function(
 	domClass, 
 	domStyle,
 	domGeometry, 
-	domConstruct, 
+	domConstruct,
+	mouse,
 	query, 
 	metrics){
 				
@@ -136,7 +138,7 @@ function(
 					
 				this.scrollBar.on("scroll", lang.hitch(this, this._scrollBar_onScroll));
 				this._viewHandles.push(
-					on(this.scrollContainer, has("mozilla") ? "DOMMouseScroll" : "mousewheel", 
+					on(this.scrollContainer, mouse.wheel,
 						dojo.hitch(this, this._mouseWheelScrollHander)));
 			}
 		},
