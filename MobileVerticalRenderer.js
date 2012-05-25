@@ -3,15 +3,9 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 	 
 	function(declare, _WidgetBase, _TemplatedMixin, _RendererMixin, template){
 	
-	/*=====
-	var _WidgetBase = dijit._WidgetBase;
-	var _TemplatedMixin = dijit._TemplatedMixin;
-	var _RendererMixin = dojox.calendar._RendererMixin;
-	=====*/ 
-
 	return declare("dojox.calendar.MobileVerticalRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
 				
-		//	summary:
+		// summary:
 		//		The mobile specific item vertical renderer.
 		
 		templateString: template,

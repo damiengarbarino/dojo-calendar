@@ -46,17 +46,7 @@ _Invalidating,
 Selection, 
 timeUtil,
 _nls){
-	
-	/*=====
-		var _WidgetBase = dijit._WidgetBase;	
-		var Selection = dojox.widget.Selection;	
-		var _Invalidating = dojox.widget._Invalidating;
-		var StoreMixin = dojox.calendar.StoreMixin;
-		var _TemplatedMixin = dojox.calendar._TemplatedMixin;
-		var _WidgetsInTemplateMixin = dojox.calendar._WidgetsInTemplateMixin;
-		
-	=====*/ 
-	
+
 	return declare("dojox.calendar.CalendarBase", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, StoreMixin, _Invalidating, Selection], {
 		
 		// summary:		
@@ -64,88 +54,89 @@ _nls){
 		
 		baseClass: "dojoxCalendar",
 		
-		//	datePackage: Object
+		// datePackage: Object
 		//		JavaScript namespace to find Calendar routines. Uses Gregorian Calendar routines at dojo.date by default.
 		datePackage: date,
 		
-		//	startDate: Date
+		// startDate: Date
 		//		The start date of the displayed time interval.
 		startDate: null,
 
-		//	endDate: Date
+		// endDate: Date
 		//		The end date of the displayed time interval (included).		
 		endDate: null,
 		
-		//	date:Date
+		// date:Date
 		//		The reference date used to determine along with the <code>dateInterval</code> 
 		//		and <code>dateIntervalSteps</code> properties the time interval to display.
 		date: null,
 	
-		//	dateInterval:String
+		// dateInterval:String
 		//		The date interval used to compute along with the <code>date</code> and 
 		//		<code>dateIntervalSteps</code> the time interval to display.
 		//		Valid values are "day", "week" (default value) and "month".
 		dateInterval: "week",
 		
-		//	dateInterval:Integer
+		// dateInterval:Integer
 		//		The number of date intervals used to compute along with the <code>date</code> and 
 		//		<code>dateInterval</code> the time interval to display.
 		//		Default value is 1.		
 		dateIntervalSteps: 1,		
 		
-		//	viewContainer: Node
+		// viewContainer: Node
 		//		The DOM node that will contains the views.
 		viewContainer: null,
 		
-		//	firstDayOfWeek: Integer
+		// firstDayOfWeek: Integer
 		//		(Optional) The first day of week override. By default the first day of week is determined 
 		//		for the current locale (extracted from the CLDR).
 		//		Special value -1 (default value), means use locale dependent value.
 		firstDayOfWeek: -1, 
 		
-		//	formatItemTimeFunc: Function?
+		// formatItemTimeFunc: Function?
 		//		Optional function to format the time of day of the item renderers.
 		//		The function takes the date and render data object as arguments and returns a String.
 		formatItemTimeFunc: null,
 		
-		//	editable: Boolean
+		// editable: Boolean
 		//		A flag that indicates whether or not the user can edit
 		//		items in the data provider.
 		//		If <code>true</code>, the item renderers in the control are editable.
 		//		The user can click on an item renderer, or use the keyboard or touch devices, to move or resize the associated event.
 		editable: true,
 		
-		//	moveEnabled: Boolean
-		//	A flag that indicates whether the user can move items displayed.
-		//	If <code>true</code>, the user can move the items.
+		// moveEnabled: Boolean
+		//		A flag that indicates whether the user can move items displayed.
+		//		If <code>true</code>, the user can move the items.
 		moveEnabled: true,
 		
-		//	A flag that indicates whether the items can be resized.
-		//	If <code>true</code>, the control supports resizing of items.
+		// resizeEnabled: Boolean
+		//		A flag that indicates whether the items can be resized.
+		//		If <code>true</code>, the control supports resizing of items.
 		resizeEnabled: true,
 		
-		//	columnView: dojox.calendar.ColumnView
+		// columnView: dojox.calendar.ColumnView
 		//		The column view is displaying one day to seven days time intervals.
 		columnView: null,
 		
-		//	matrixView: dojox.calendar.MatrixView
+		// matrixView: dojox.calendar.MatrixView
 		//		The column view is displaying time intervals that lasts more than seven days.
 		matrixView: null,
 		
-		//	columnViewProps: Object
+		// columnViewProps: Object
 		//		Map of property/value passed to the constructor of the column view.
 		columnViewProps: null,
 		
-		//	matrixViewProps: Object
+		// matrixViewProps: Object
 		//		Map of property/value passed to the constructor of the matrix view.
 		matrixViewProps: null,
 		
-		//	createOnGridClick: Boolean
+		// createOnGridClick: Boolean
 		//		Indicates whether the user can create new event by clicking and dragging the grid.
 		//		A createItem function must be defined on the view or the calendar object.
 		createOnGridClick: false,
 		
-		//	createItemFunc: Function
+		// createItemFunc: Function
 		//		A user supplied function that creates a new event.
 		//		This function is used when createOnGridClick is set to true and the user is clicking and dragging on the grid.
 		//		This view takes two parameters:
@@ -249,7 +240,7 @@ _nls){
 		///////////////////////////////////////////////////
 		
 		refreshRendering: function(){
-			//	tags
+			// tags:
 			//		private
 			this.inherited(arguments);						
 			this._validateProperties();
@@ -365,15 +356,15 @@ _nls){
 		},
 		
 		_applyViewChange: function(view, index, timeInterval, duration){			
-			//	summary:
+			// summary:
 			//		Applies the changes of a view time and changes the currently visible view if needed.
-			//	view: ViewBase
+			// view: ViewBase
 			//		The view that is configured and is or will be shown.
-			//	index: Integer
+			// index: Integer
 			//		The view index in the internal structure.
-			//	timeInterval: Date[]
+			// timeInterval: Date[]
 			//		The time interval displayed by the calendar.
-			//	duration: Integer
+			// duration: Integer
 			//		The duration in days of the time interval.
 			
 			this._configureView(view, index, timeInterval, duration);
@@ -404,7 +395,7 @@ _nls){
 		_timeInterval: null,
 		
 		computeTimeInterval: function(){
-			//	summary:
+			// summary:
 			//		Computes the displayed time interval according to the date, dateInterval and 
 			//		dateIntervalSteps if date is not null or startDate and endDate properties otherwise.
 			//
@@ -439,9 +430,9 @@ _nls){
 		},
 		
 		onTimeIntervalChange: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the displayed time interval has changed.
-			//	e: Object
+			// e: Object
 			//		An event that contains the oldStartTime, startTime, oldEndTime and endTime properties.
 		},					
 		
@@ -451,7 +442,7 @@ _nls){
 		//
 		/////////////////////////////////////////////////////
 		
-		//	views: dojox.calendar.ViewBase[]
+		// views: dojox.calendar.ViewBase[]
 		//		The views displayed by the widget.
 		//		To add/remove only one view, prefer, respectively, the addView() or removeView() methods.
 		views: null,
@@ -478,18 +469,18 @@ _nls){
 		},
 		
 		_createDefaultViews: function(){
-			//	summary:
+			// summary:
 			//		Creates the default views.
 			//		This method does nothing and is designed to be overridden.
 			
 		},
 		
 		addView: function(view, index){
-			//	summary:
+			// summary:
 			//		Add a view to the calendar's view list.
-			//	view: dojox.calendar.ViewBase
+			// view: dojox.calendar.ViewBase
 			//		The view to add to the calendar.
-			//	index: Integer
+			// index: Integer
 			//		Optional, the index where to insert the view in current view list.					
 			if(index <= 0 || index > this.views.length){
 				index = this.views.length;
@@ -499,9 +490,9 @@ _nls){
 		},
 		
 		removeView: function(view){
-			//	summary:
+			// summary:
 			//		Removes a view from the calendar's view list.
-			//	view: dojox.calendar.ViewBase
+			// view: dojox.calendar.ViewBase
 			//		The view to remove from the calendar.
 			if(index < 0 || index >=  this.views.length){
 				return;
@@ -526,9 +517,9 @@ _nls){
 		},
 		
 		onViewAdded: function(view){
-			//	summary:
+			// summary:
 			//		Event dispatched when a view is added from the calendar.
-			//	view: dojox.calendar.ViewBase
+			// view: dojox.calendar.ViewBase
 			//		The view that has been added to the calendar.
 		},
 		
@@ -541,9 +532,9 @@ _nls){
 		},
 		
 		onViewRemoved: function(view){			
-			//	summary:
+			// summary:
 			//		Event dispatched when a view is removed from the calendar.
-			//	view: dojox.calendar.ViewBase
+			// view: dojox.calendar.ViewBase
 			//		The view that has been removed from the calendar.
 		},
 		
@@ -567,26 +558,26 @@ _nls){
 		},
 		
 		onCurrentViewChange: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the current view has changed.
-			//	e: Event
+			// e: Event
 			//		Object that contains the oldView and newView properties.
 		},
 		
 		_configureView: function(view, index, timeInterval, duration){
-			//	summary:
+			// summary:
 			//		Configures the view to show the specified time interval.
 			//		This method is computing and setting the 
 			//			| "startDate", "columnCount" for a column view,
 			//      | "startDate", "columnCount", "rowCount", "refStartTime" and "refEndTime" for a matrix view.
 			//		This method can be extended to configure other properties like layout properties for example.
-			//	view: dojox.calendar.ViewBase
+			// view: dojox.calendar.ViewBase
 			//		The view to configure.
-			//	index: Integer
+			// index: Integer
 			//		The index of the view in the Calendar view list.
-			//	timeInterval: Date[]
+			// timeInterval: Date[]
 			//		The time interval that will be displayed by the view.
-			//	duration: Integer
+			// duration: Integer
 			//		The duration, in days, of the displayed time interval.
 			var cal = this.dateFuncObj;
 			if(view.viewKind == "columns"){
@@ -616,26 +607,26 @@ _nls){
 		},
 		
 		_computeCurrentView: function(startDate, endDate, duration){
-			//	summary:
+			// summary:
 			//		If the time range is lasting less than seven days returns the column view or the matrix view otherwise.
-			//	startDate: Date
+			// startDate: Date
 			//		The start date of the displayed time interval
-			//	endDate: Date
+			// endDate: Date
 			//		The end date of the displayed time interval	
-			//	duration: Integer
+			// duration: Integer
 			//		Duration of the 		
-			//	return: dojox.calendar.ViewBase
+			// return: dojox.calendar.ViewBase
 			//		The view to display.
 			return duration <= 7 ? this.columnView : this.matrixView;
 		},
 		
 		matrixViewRowHeaderClick: function(e){
-			//	summary:
+			// summary:
 			//		Function called when the cell of a row header of the matrix view is clicked.
 			//		|	If another row is already expanded, collapse it and then expand the clicked row.
 			//		|	If the clicked row is already expadned, collapse it.
 			//		|	If no row is expanded, expand the click row.
-			//	e: Object
+			// e: Object
 			//		The row header click event.
 			var expIndex = this.matrixView.getExpandedRowIndex();
 				if(expIndex == e.index){
@@ -652,10 +643,10 @@ _nls){
 		},
 		
 		columnViewColumnHeaderClick: function(e){
-			//	summary:
+			// summary:
 			//		Function called when the cell of a column header of the column view is clicked.
 			//		Show the time range defined by the clicked date.
-			//	e: Object
+			// e: Object
 			//		The column header click event.
 			var cal = this.dateFuncObj;
 			if(cal.compare(e.date, this._timeInterval[0]) == 0 && this.dateInterval == "day" && this.dateIntervalSteps == 1){
@@ -667,16 +658,16 @@ _nls){
 			}
 		},
 		
-		//	viewFadeDuration: Integer
+		// viewFadeDuration: Integer
 		//		The duration in milliseconds of the fade animation when the current view is changing.
 		viewChangeDuration: 0,
 		
 		_showView: function(oldView, newView){
-			//	summary:
+			// summary:
 			//		Displays the current view.
-			//	oldView: dojox.calendar.ViewBase
+			// oldView: dojox.calendar.ViewBase
 			//		The previously displayed view or null.
-			//	newView: dojox.calendar.ViewBase
+			// newView: dojox.calendar.ViewBase
 			//		The view to display.
 			if(oldView != null){									
 				domStyle.set(oldView.domNode, "display", "none");							
@@ -711,67 +702,67 @@ _nls){
 		////////////////////////////////////////////////////
 		
 		floorToDay: function(date, reuse){
-			//	summary:
+			// summary:
 			//		Floors the specified date to the start of day.
-			//	date: Date
+			// date: Date
 			//		The date to floor.
-			//	reuse: Boolean
+			// reuse: Boolean
 			//		Whether use the specified instance or create a new one. Default is false.
-			//	returns: Date
+			// returns: Date
 			return timeUtil.floorToDay(date, reuse, this.dateClassObj);
 		},
 		
 		floorToWeek: function(d){
-			//	summary:
+			// summary:
 			//		Floors the specified date to the beginning of week.
-			//	date: Date
+			// date: Date
 			//		Date to floor.
 			return timeUtil.floorToWeek(d, this.dateClassObj, this.dateFuncObj, this.firstDayOfWeek, this.locale);
 		},
 		
 		newDate: function(obj){
-			//	summary:
+			// summary:
 			//		Creates a new Date object.
-			//	obj: Object
+			// obj: Object
 			//		This object can have several values:
 			//		|the time in milliseconds since gregorian epoch.
 			//		|a Date instance
-			//	returns: Date
+			// returns: Date
 			return timeUtil.newDate(obj, this.dateClassObj);			
 		},
 		
 		isToday: function(date){
-			//	summary:
+			// summary:
 			//		Returns whether the specified date is in the current day.
-			//	date: Date
+			// date: Date
 			//		The date to test.
-			//	renderData: Object
+			// renderData: Object
 			//		The current renderData
-			//	returns: Boolean
+			// returns: Boolean
 			return timeUtil.isToday(date, this.dateClassObj);
 		},
 		
 		isStartOfDay: function(d){
-			//	summary:
+			// summary:
 			//		Tests if the specified date represents the starts of day. 
-			//	d:Date
+			// d:Date
 			//		The date to test.
-			//	returns: Boolean
+			// returns: Boolean
 			return timeUtil.isStartOfDay(d, this.dateClassObj, this.dateFuncObj);
 		},
 		
 		floorDate: function(date, unit, steps, reuse){
-			//	summary:
+			// summary:
 			//		floors the date to the unit.
-			//	date: Date
+			// date: Date
 			//		The date/time to floor.
-			//	unit: String
+			// unit: String
 			//		The unit. Valid values are "minute", "hour", "day".
-			//	steps: Integer
+			// steps: Integer
 			//		For "day" only 1 is valid.
-			//	reuse: Boolean
+			// reuse: Boolean
 			//		Whether use the specified instance or create a new one. Default is false.			
-			//	returns: Date
+			// returns: Date
 			return timeUtil.floor(date, unit, steps, reuse, this.classFuncObj);
 		},
 		
@@ -782,26 +773,26 @@ _nls){
 		////////////////////////////////////////////////////
 		
 		
-		//	animateRange: Boolean
+		// animateRange: Boolean
 		//		Indicates that the previous/next range method will be animated.
 		animateRange: true,
 		
-		//	animationRangeDuration: Integer
+		// animationRangeDuration: Integer
 		//		The duration of the next/previous range animation.
 		animationRangeDuration: 400,
 		
 		_animateRange : function(node, toLeft, fadeIn, xFrom, xTo, onEnd){
-			//	summary:
+			// summary:
 			//		Animates the current view using a synchronous fade and horizontal translation.
-			//	toLeft: Boolean
+			// toLeft: Boolean
 			//		Whether the view is moved to the left or to the right.
-			//	fadeIn: Boolean
+			// fadeIn: Boolean
 			//		Whether the view is faded in or out.
-			//	xFrom: Integer
+			// xFrom: Integer
 			//		Position before the animation
-			//	xTo: Integer
+			// xTo: Integer
 			//		Position after the animation
-			//	onEnd: Function
+			// onEnd: Function
 			//		Function called when the animation is finished.
 			
 			if(this.animateRangeTimer){ // cleanup previous call not finished
@@ -823,7 +814,7 @@ _nls){
 			]).play();
 		},			
 		
-		//	_animRangeOutDir: Boolean
+		// _animRangeOutDir: Boolean
 		//		Direction of the range animation when the view 'leaving' the screen. 
 		//		Valid values are: 
 		//		| null: auto value,
@@ -831,7 +822,7 @@ _nls){
 		//		| "right": hides to right side (left in right to left).
 		_animRangeOutDir: null,
 
-		//	_animRangeInDir: Boolean
+		// _animRangeInDir: Boolean
 		//		Direction of the range animation when the view 'entering' the screen. 
 		//		Valid values are: 
 		//		| null: auto value,
@@ -876,7 +867,7 @@ _nls){
 		},
 		
 		goToday: function(){
-			//	summary:
+			// summary:
 			//		Changes the displayed time interval to show the current day.
 			//		Sets the date property to the current day, the dateInterval property to "day" and 
 			//		the "dateIntervalSteps" to 1.
@@ -897,7 +888,7 @@ _nls){
 		},
 		
 		configureButtons: function(){
-			//	summary:
+			// summary:
 			//		Set the localized labels of the buttons and the event handlers. 					
 			
 			var h = [];
@@ -962,13 +953,13 @@ _nls){
 		},
 		
 		todayButtonClick: function(e){
-			//	summary:
+			// summary:
 			//		The action triggered when the today button is clicked.
 			//		By default, calls the goToday() method.
 			this.goToday();							
 		},
 		dayButtonClick: function(e){
-			//	summary:
+			// summary:
 			//		The action triggerred when the day button is clicked.
 			//		By default, sets the dateInterval property to "day" and 
 			//		the "dateIntervalSteps" to 1.
@@ -980,7 +971,7 @@ _nls){
 		},
 		
 		weekButtonClick: function(e){
-			//	summary:
+			// summary:
 			//		The action triggered when the week button is clicked.
 			//		By default, sets the dateInterval property to "week" and 
 			//		the "dateIntervalSteps" to 1.
@@ -988,7 +979,7 @@ _nls){
 			this.set("dateIntervalSteps", 1);						
 		},
 		fourDaysButtonClick: function(e){
-			//	summary:
+			// summary:
 			//		The action triggerred when the 4 days button is clicked.
 			//		By default, sets the dateInterval property to "day" and 
 			//		the "dateIntervalSteps" to 4.
@@ -996,7 +987,7 @@ _nls){
 			this.set("dateIntervalSteps", 4);		
 		},
 		monthButtonClick: function(e){
-			//	summary:
+			// summary:
 			//		The action triggered when the month button is clicked.
 			//		By default, sets the dateInterval property to "month" and 
 			//		the "dateIntervalSteps" to 1.
@@ -1037,11 +1028,11 @@ _nls){
 		hoveredItem: null,
 		
 		isItemHovered: function(item){
-			//	summary:
+			// summary:
 			//		Returns whether the specified item is hovered or not.
-			//	item: Object
+			// item: Object
 			//		The item.
-			//	returns: Boolean								
+			// returns: Boolean								
 			return this.hoveredItem != null && this.hoveredItem.id == item.id;			
 		},
 		
@@ -1052,38 +1043,38 @@ _nls){
 		////////////////////////////////////////////////////////////////////////
 
 		isItemEditable: function(item, rendererKind){
-			//	summary:
+			// summary:
 			//		Computes whether particular item renderer can be edited.
 			//		By default it is using the editable property value.
-			//	item: Object
+			// item: Object
 			//		The item represented by the renderer.
-			//	rendererKind: String
+			// rendererKind: String
 			//		The kind of renderer.
-			//	returns: Boolean
+			// returns: Boolean
 			return this.editable;
 		},
 		
 		isItemMoveEnabled: function(item, rendererKind){
-			//	summary:
+			// summary:
 			//		Computes whether particular item renderer can be moved.
 			//		By default it is using the moveEnabled property value.
-			//	item: Object
+			// item: Object
 			//		The item represented by the renderer.
-			//	rendererKind: String
+			// rendererKind: String
 			//		The kind of renderer.
-			//	returns: Boolean
+			// returns: Boolean
 			return this.isItemEditable() && this.moveEnabled;
 		},
 		
 		isItemResizeEnabled: function(item, rendererKind){
-			//	summary:
+			// summary:
 			//		Computes whether particular item renderer can be resized.
 			//		By default it is using the resizedEnabled property value.
-			//	item: Object
+			// item: Object
 			//		The item represented by the renderer.
-			//	rendererKind: String
+			// rendererKind: String
 			//		The kind of renderer.
-			//	returns: Boolean
+			// returns: Boolean
 			
 			return this.isItemEditable() && this.resizeEnabled;
 		},			
@@ -1095,72 +1086,72 @@ _nls){
 		////////////////////////////////////////////////////////////////////////
 		
 		onGridClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the grid has been clicked.
 		},
 		
 		onGridDoubleClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the grid has been double-clicked.			
 		},	
 		
 		onItemClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been clicked.
 		},
 		
 		onItemDoubleClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been double-clicked.
 		},
 		
 		onItemContextMenu: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been context-clicked.
 		},
 		
 		onItemEditBegin: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the item is entering the editing mode.
 		},
 		
 		onItemEditEnd: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when the item is leaving the editing mode.
 		},
 		
 		onItemEditBeginGesture: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when an editing gesture is beginning.
 		},
 		
 		onItemEditMoveGesture: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched during a move editing gesture.			
 		},
 		
 		onItemEditResizeGesture: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched during a resize editing gesture.
 		},
 		
 		onItemEditEndGesture: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched at the end of an editing gesture.
 		},
 		
 		onItemRollOver: function(e){
-			//	Summary:
+			// Summary:
 			//		Event dispatched when the mouse cursor in going over an item renderer. 			
 		},
 		
 		onItemRollOut: function(e){
-			//	Summary:
+			// Summary:
 			//		Event dispatched when the mouse cursor in leaving an item renderer.
 		},
 		
 		onColumnHeaderClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when a column header cell is dispatched.
 			//		e: Event
 			//		The event has the following properties:
@@ -1173,40 +1164,40 @@ _nls){
 		},
 				
 		onRowHeaderClick: function(e){
-			//	summary:
+			// summary:
 			//		Event dispatched when a row header cell is clicked.
 		},		
 		
 		onRendererCreated: function(renderer){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been created.
-			//	renderer: dojox.calendar._RendererMixin
+			// renderer: dojox.calendar._RendererMixin
 			//		The renderer created.
 		},
 		
 		onRendererRecycled: function(renderer){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer has been recycled.
-			//	renderer: dojox.calendar._RendererMixin
+			// renderer: dojox.calendar._RendererMixin
 			//		The renderer created.
 		},
 		
 		onRendererReused: function(renderer){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer that was recycled is reused.
-			//	renderer: dojox.calendar._RendererMixin
+			// renderer: dojox.calendar._RendererMixin
 			//		The renderer created.
 		},
 		
 		onRendererDestroyed: function(renderer){
-			//	summary:
+			// summary:
 			//		Event dispatched when an item renderer is destroyed.
-			//	renderer: dojox.calendar._RendererMixin
+			// renderer: dojox.calendar._RendererMixin
 			//		The renderer created.
 		},
 		
 		onRenderersLayoutDone: function(view){
-			//	summary:
+			// summary:
 			//		Event triggered when item renderers layout has been done.				
 		}
 
