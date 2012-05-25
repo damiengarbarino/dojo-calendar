@@ -88,7 +88,7 @@
 						}, 10000);
 																	
 						calendar.set("cssClassFunc", function(item){
-							// Use custom css classes on renderers depending of a parameter (calendar). 
+							// Use custom css class on renderers depending of a parameter (calendar). 
 							return item.calendar == "cal1" ? "Calendar1" : "Calendar2"
 						});
 						
@@ -167,6 +167,7 @@
 									
 						});
 						
+						// Enable creation of event interactively by ctrl clicking grid.
 						var createItem = function(view, d, e){
 						
 							var cal1 = calendar1CB.get("checked");
@@ -206,7 +207,8 @@
 						
 						calendar.set("createOnGridClick", true);
 						calendar.set("createItemFunc", createItem);		
-												
+						
+						// filter out event according to their calendar
 						var calendarVisibility = [true, true];
 						
 						var itemToRendererKindFunc = function(item){
@@ -222,6 +224,7 @@
 						calendar.matrixView.set("itemToRendererKindFunc", itemToRendererKindFunc);
 						calendar.monthColumnView.set("itemToRendererKindFunc", itemToRendererKindFunc);
 						
+						// show context menu on right clicking an event
 						calendar.on("itemContextMenu", function(e){
 							dojo.stopEvent(e.triggerEvent);
 							calendarContextMenu._openMyself({ 
@@ -236,6 +239,7 @@
 							}); 							
 						});
 						
+						// refresh item panel on event selection.
 						var editedItem;
 						
 						selectionChanged = function(item){
@@ -277,6 +281,7 @@
 							selectionChanged(e.item);
 						});
 						
+						// configure item properties panel
 						calendar.on("timeIntervalChange", function(e){
 							dateChooser.set("value", e.startTime);
 						});
@@ -356,7 +361,7 @@
 							}
 						});
 																										
-																							
+						// Synchronize date picker.															
 						dateChooser.set("value", startOfWeek);
 						dateChooser.on("change", function(e){
 							var d = dateChooser.get("value");
@@ -373,6 +378,7 @@
 							calendar.currentView.invalidateLayout();
 						});											
 						
+						// Hide loading panel when application is ready
 						fx.fadeOut({
 							node:"loadingPanel", 
 							onEnd: function(node){

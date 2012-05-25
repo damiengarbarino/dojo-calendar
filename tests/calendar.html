@@ -33,6 +33,7 @@
 
 					ready(function(){
 					
+						// Display different hint every 10 seconds 
 						var hints = [
 							"Hint: Create an event by clicking and dragging on the grid while maintaining the control key",
 							"Hint: Move an event by clicking on it and dragging it",
@@ -52,14 +53,13 @@
 							}).play(500);
 						}, 10000);
 					
-						
+											
 						calendar.set("cssClassFunc", function(item){
-							// Use custom css classes on renderers depending of a parameter (calendar). 
+							// Use custom css class on renderers depending of a parameter (calendar).							
 							return item.calendar == "cal1" ? "Calendar1" : "Calendar2"
 						});
 						
-						// Calendar model creation
-						
+						// Calendar model creation						
 						var modelBase = [
 							{day: 1, start: [10,00], duration: 1400},
 							{day: 2, start: [10,30], duration: 120},
@@ -94,6 +94,7 @@
 						calendar.set("store", new Observable(new Memory({data: someData})));
 						calendar.set("date", startOfWeek);
 						
+						// Enable creation of event interactively by ctrl clicking grid.
 						var createItem = function(view, d, e){
 						
 							var cal1 = calendar1CB.get("checked");
@@ -134,7 +135,7 @@
 						calendar.set("createOnGridClick", true);
 						calendar.set("createItemFunc", createItem);						
 						
-						
+						// filter out event according to their calendar
 						var calendarVisibility = [true, true];
 						
 						var itemToRendererKindFunc = function(item){
@@ -149,6 +150,7 @@
 						calendar.columnView.secondarySheet.set("itemToRendererKindFunc", itemToRendererKindFunc);
 						calendar.matrixView.set("itemToRendererKindFunc", itemToRendererKindFunc);
 						
+						// show context menu on right clicking an event
 						calendar.on("itemContextMenu", function(e){
 							dojo.stopEvent(e.triggerEvent);
 							calendarContextMenu._openMyself({ 
@@ -163,6 +165,7 @@
 							}); 							
 						});
 						
+						// refresh item panel on event selection.
 						var editedItem;
 						
 						selectionChanged = function(item){
@@ -204,6 +207,7 @@
 							selectionChanged(e.item);
 						});
 						
+						// configure item properties panel
 						calendar.on("timeIntervalChange", function(e){
 							dateChooser.set("value", e.startTime);
 						});
@@ -283,7 +287,7 @@
 							}
 						});
 																										
-																							
+						// Synchronize date picker.																	
 						dateChooser.set("value", startOfWeek);
 						dateChooser.on("change", function(e){
 							var d = dateChooser.get("value");
@@ -300,7 +304,7 @@
 							calendar.currentView.invalidateLayout();
 						});											
 						
-						
+						// Hide loading panel when application is ready
 						fx.fadeOut({
 							node:"loadingPanel", 
 							onEnd: function(node){
