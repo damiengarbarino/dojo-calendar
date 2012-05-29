@@ -132,8 +132,8 @@ function(
 					
 				this.scrollBar.on("scroll", lang.hitch(this, this._scrollBar_onScroll));
 				this._viewHandles.push(
-					on(this.scrollContainer, mouse.wheel,
-						dojo.hitch(this, this._mouseWheelScrollHander)));
+						on(this.scrollContainer, mouse.wheel, 
+							dojo.hitch(this, this._mouseWheelScrollHander)));
 			}
 		},
 		
@@ -166,7 +166,7 @@ function(
 			
 			renderData.dateLocaleModule = this.dateLocaleModule;
 			renderData.dateClassObj = this.dateClassObj;
-			renderData.dateFuncObj = this.dateFuncObj; // arithmetics on Dates
+			renderData.dateModule = this.dateModule; // arithmetics on Dates
 			
 			renderData.dates = [];
 						
@@ -184,7 +184,7 @@ function(
 			
 			for(var col = 0; col < renderData.columnCount ; col++){
 				renderData.dates.push(d);
-				d = renderData.dateFuncObj.add(d, "day", 1);
+				d = renderData.dateModule.add(d, "day", 1);
 				d = this.floorToDay(d, false, renderData);
 			}
 
@@ -1179,9 +1179,9 @@ function(
 		},
 		
 		_sortItemsFunction: function(a, b){
-			var res = this.dateFuncObj.compare(a.startTime, b.startTime);
+			var res = this.dateModule.compare(a.startTime, b.startTime);
 			if(res == 0){
-				res = -1 * this.dateFuncObj.compare(a.endTime, b.endTime);
+				res = -1 * this.dateModule.compare(a.endTime, b.endTime);
 			}
 			return this.isLeftToRight() ? res : -res;
 		},
@@ -1426,7 +1426,7 @@ function(
 				// test if time range is overlapping [maxHours, next day min hours]
 				var rd = this.renderData;
 				
-				var len = rd.dateFuncObj.difference(item.startTime, item.endTime, "millisecond"); 
+				var len = rd.dateModule.difference(item.startTime, item.endTime, "millisecond"); 
 				var vLen = (24 - rd.maxHours + rd.minHours) * 3600000; // 60 * 60 * 1000, number of milliseconds in 1 minute
 				
 				if(len > vLen){ // longer events are always visible
@@ -1458,7 +1458,7 @@ function(
 									
 			// test if time range is overlapping [maxHours, next day min hours]
 			var rd = this.renderData;
-			var cal = rd.dateFuncObj;
+			var cal = rd.dateModule;
 			
 			var len = Math.abs(cal.difference(item.startTime, item.endTime, "millisecond")); 
 			var vLen = (24 - rd.maxHours + rd.minHours) * 3600000;

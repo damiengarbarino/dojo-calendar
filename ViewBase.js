@@ -94,13 +94,11 @@ function(
 		
 		constructor: function(/*Object*/ args){
 			args = args || {};
-			this._calendar = args.datePackage ? args.datePackage.substr(args.datePackage.lastIndexOf(".")+1) : this._calendar;
-			this.datePackage = args.datePackage || this.datePackage;
-			this.dateFuncObj = typeof this.datePackage == "string" ?
-				lang.getObject(this.datePackage, false) :// "string" part for back-compat, remove for 2.0
-				this.datePackage;
-			this.dateClassObj = this.dateFuncObj.Date || Date;
-			this.dateLocaleModule = lang.getObject("locale", false, this.dateFuncObj);
+			
+			this._calendar = args.datePackage ? args.datePackage.substr(args.datePackage.lastIndexOf(".")+1) : this._calendar; 
+			this.dateModule = args.datePackage ? lang.getObject(args.datePackage, false) : date; 
+			this.dateClassObj = this.dateModule.Date || Date; 
+			this.dateLocaleModule = args.datePackage ? lang.getObject(args.datePackage+".locale", false) : locale; 
 			
 			this.rendererPool = [];
 			this.rendererList = [];
@@ -270,7 +268,7 @@ function(
 			// d:Date
 			//		The date to test.
 			// returns: Boolean
-			return timeUtil.isStartOfDay(d, this.dateClassObj, this.dateFuncObj);
+			return timeUtil.isStartOfDay(d, this.dateClassObj, this.dateModule);
 		},
 		
 		isOverlapping: function(renderData, start1, end1, start2, end2, includeLimits){
@@ -294,7 +292,7 @@ function(
 				return false;
 			}
 			
-			var cal = renderData.dateFuncObj;
+			var cal = renderData.dateModule;
 			
 			if(includeLimits){
 				if(cal.compare(start1, end2) == 1 || cal.compare(start2, end1) == 1){
@@ -323,7 +321,7 @@ function(
 			// includeLimits: Boolean
 			//		Whether include the end time or not.
 			// returns: Date[]
-			var cal = renderData.dateFuncObj;
+			var cal = renderData.dateModule;
 			
 			if(start1 == null || start2 == null || end1 == null || end2 == null){
 				return null;
@@ -378,7 +376,7 @@ function(
 			//		The size in pixels of the representation of a day.
 			// returns: Number
 		
-			var cal = renderData.dateFuncObj;
+			var cal = renderData.dateModule;
 			
 			if(max <= 0 || cal.compare(date, refDate) == -1){
 				return 0;
@@ -453,7 +451,7 @@ function(
 				}
 				
 				var d2 = this.floorToDay(date);
-				var dp1 = renderData.dateFuncObj.add(refDate, "day", 1);
+				var dp1 = renderData.dateModule.add(refDate, "day", 1);
 				dp1 = this.floorToDay(dp1, false, renderData);
 				
 				if(cal.compare(d2, refDate) == 1 && cal.compare(d2, dp1) == 0 || cal.compare(d2, dp1) == 1){
@@ -499,7 +497,7 @@ function(
 			//		The item to test
 			// returns: Boolean	
 			var rd = this.renderData;
-			var cal = rd.dateFuncObj;
+			var cal = rd.dateModule;
 			
 			if(cal.compare(item.startTime, rd.startTime) == -1){
 				return false;
@@ -520,7 +518,7 @@ function(
 			// returns: Boolean
 			//		Whether the item has been moved to be in view or not.
 			var rd = this.renderData;
-			var cal = rd.dateFuncObj;
+			var cal = rd.dateModule;
 			
 			var duration = Math.abs(cal.difference(item.startTime, item.endTime, "millisecond"));
 			var fixed = false;
@@ -830,9 +828,9 @@ function(
 		layoutPriorityFunction: null,
 		
 		_sortItemsFunction: function(a, b){
-			var res = this.dateFuncObj.compare(a.startTime, b.startTime);
+			var res = this.dateModule.compare(a.startTime, b.startTime);
 			if(res == 0){
-				res = -1 * this.dateFuncObj.compare(a.endTime, b.endTime);
+				res = -1 * this.dateModule.compare(a.endTime, b.endTime);
 			}
 			return res;
 		},
@@ -851,7 +849,7 @@ function(
 			// recycle renderers first
 			this._recycleItemRenderers();
 			
-			var cal = renderData.dateFuncObj; 
+			var cal = renderData.dateModule; 
 			
 			// Date
 			var startDate = this.newDate(renderData.startTime);
@@ -1644,12 +1642,12 @@ function(
 				var ir = list[i].renderer;
 
 				if (!resizeStartFound){
-					resizeStartFound = rd.dateFuncObj.compare(ir.item.range[0], ir.item.startTime) == 0;
+					resizeStartFound = rd.dateModule.compare(ir.item.range[0], ir.item.startTime) == 0;
 					res[0] = ir;
 				}
 
 				if (!resizeEndFound){
-					resizeEndFound =  rd.dateFuncObj.compare(ir.item.range[1], ir.item.endTime) == 0;
+					resizeEndFound =  rd.dateModule.compare(ir.item.range[1], ir.item.endTime) == 0;
 					res[1] = ir;
 				}
 
@@ -1943,7 +1941,7 @@ function(
 				p.editingItemRefTime[1] = this.newDate(item.endTime);				
 			}		
 			
-			var cal = this.renderData.dateFuncObj;
+			var cal = this.renderData.dateModule;
 			
 			p.inViewOnce = this._isItemInView(item);
 			
@@ -1979,7 +1977,7 @@ function(
 			// summary:
 			//		Workaround an issue of dojox.date.XXXXX.date.add() function 
 			//		that does not support the subtraction of time correctly (normalization issues). 
-			var cal = this.renderData.dateFuncObj;
+			var cal = this.renderData.dateModule;
 			if(this._calendar != "gregorian" && steps < 0){
 				var gd = d.toGregorian();
 				gd = date.add(gd, unit, steps);
@@ -1990,7 +1988,7 @@ function(
 		},
 						
 		_computeItemEditingTimes: function(item, editKind, rendererKind, times, eventSource){
-			var cal = this.renderData.dateFuncObj;
+			var cal = this.renderData.dateModule;
 			var p = this._edProps;
 			var diff = cal.difference(p.editingTimeFrom[0], times[0], "millisecond");
 			times[0] = this._waDojoxAddIssue(p.editingItemRefTime[0], "millisecond", diff);
@@ -2023,7 +2021,7 @@ function(
 			var p = this._edProps;
 			var item = p.editedItem;
 			var rd = this.renderData;
-			var cal = rd.dateFuncObj;
+			var cal = rd.dateModule;
 			var editKind = p.editKind;
 					
 			var newTimes = [dates[0]];
@@ -2198,7 +2196,7 @@ function(
 				
 				var p = e.source._edProps;
 				var rd = this.renderData;
-				var cal = rd.dateFuncObj;
+				var cal = rd.dateModule;
 				var newStartTime, newEndTime;
 				
 				if(p.rendererKind == "label" || (this.roundToDay && !e.item.allDay)){
@@ -2246,7 +2244,7 @@ function(
 							
 				var p = e.source._edProps;
 				var rd = this.renderData;
-				var cal = rd.dateFuncObj;
+				var cal = rd.dateModule;
 				
 				var newStartTime = e.item.startTime;
 				var newEndTime = e.item.endTime;
@@ -2380,7 +2378,7 @@ function(
 			//		editKind: String
 			//			The edit kind: "resizeStart" or "resizeEnd".
 			var minTime;
-			var cal = renderData.dateFuncObj;
+			var cal = renderData.dateModule;
 			
 			if(editKind == "resizeStart"){
 				minTime = cal.add(item.endTime, unit, -steps);

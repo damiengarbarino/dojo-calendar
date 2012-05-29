@@ -285,7 +285,7 @@
 								if(!matrixView.isStartOfDay(editedItem.endTime)){
 									d = itemEndDateEditor.get("value");
 									matrixView.floorToDay(d, true);
-									d = matrixView.renderData.dateFuncObj.add(d, "day", 1);
+									d = matrixView.renderData.dateModule.add(d, "day", 1);
 									itemEndDateEditor.set("value", d);
 								}
 								
@@ -296,7 +296,7 @@
 								itemEndTimeEditor.set("value", editedItem.endTime);
 								d = itemEndDateEditor.get("value");
 								matrixView.floorToDay(d, true);
-								d = matrixView.renderData.dateFuncObj.add(d, "day", -1);
+								d = matrixView.renderData.dateModule.add(d, "day", -1);
 								itemEndDateEditor.set("value", d);
 							}
 							

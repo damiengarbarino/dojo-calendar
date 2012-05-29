@@ -265,7 +265,7 @@
 								if(!colView.isStartOfDay(editedItem.endTime)){
 									d = itemEndDateEditor.get("value");
 									colView.floorToDay(d, true);
-									d = colView.renderData.dateFuncObj.add(d, "day", 1);
+									d = colView.renderData.dateModule.add(d, "day", 1);
 									itemEndDateEditor.set("value", d);
 								}
 								
@@ -276,7 +276,7 @@
 								itemEndTimeEditor.set("value", editedItem.endTime);
 								d = itemEndDateEditor.get("value");
 								colView.floorToDay(d, true);
-								d = colView.renderData.dateFuncObj.add(d, "day", -1);
+								d = colView.renderData.dateModule.add(d, "day", -1);
 								itemEndDateEditor.set("value", d);
 							}
 							

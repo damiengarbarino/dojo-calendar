@@ -92,7 +92,7 @@
 								var goNextRange = function(direction){
 									var days = (direction == "left" ? 1 : -1) * colView.get("columnCount");
 									var startDate = colView.get("startDate");									
-									var newStartDate = colView.renderData.dateFuncObj.add(startDate, "day", days);									
+									var newStartDate = colView.renderData.dateModule.add(startDate, "day", days);									
 									colView.set("startDate", newStartDate);
 									
 									//TODO Add animation 

@@ -21,7 +21,7 @@ define(["doh", "../Calendar"],
 	
 		function test_DayInterval(doh){
 			var o = new Calendar();
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			var startDate = new Date(2011, 0, 5);
 			var res;
 			
@@ -39,7 +39,7 @@ define(["doh", "../Calendar"],
 		
 		function test_MultiDayInterval(doh){
 			var o = new Calendar();
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			var startDate = new Date(2011, 0, 5);
 			var res;
 			
@@ -59,7 +59,7 @@ define(["doh", "../Calendar"],
 			var o = new Calendar({
 				firstDayOfWeek: 0 // do not depend on locale
 			});
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			var startDate = new Date(2011, 0, 5);
 			var res;
 			
@@ -87,7 +87,7 @@ define(["doh", "../Calendar"],
 			var o = new Calendar({
 				firstDayOfWeek: 0 // do not depend on locale
 			});
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			var startDate = new Date(2011, 0, 5);
 			var res;
 			
@@ -113,7 +113,7 @@ define(["doh", "../Calendar"],
 		
 		function test_MonthInterval(doh){
 			var o = new Calendar();
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			var startDate = new Date(2011, 0, 5);
 			var res;
 			
@@ -131,7 +131,7 @@ define(["doh", "../Calendar"],
 		
 		function test_MultiMonthInterval(doh){
 			var o = new Calendar();
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			var startDate = new Date(2011, 0, 5);
 			var res;
 			

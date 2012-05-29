@@ -215,14 +215,14 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 			
 			var d = editKind == "resizeEnd" ? p.editedItem.endTime : p.editedItem.startTime;
 			
-			var newTime = this.renderData.dateFuncObj.add(d, unit, steps);
+			var newTime = this.renderData.dateModule.add(d, unit, steps);
 			
 			this._startItemEditingGesture([d], editKind, "keyboard", e);
 			this._moveOrResizeItemGesture([newTime], "keyboard", e);
 			this._endItemEditingGesture(editKind, "keyboard", e, false);
 			
 			if(editKind == "move"){
-				if(this.renderData.dateFuncObj.compare(newTime, d) == -1){
+				if(this.renderData.dateModule.compare(newTime, d) == -1){
 					this.ensureVisibility(p.editedItem.startTime, p.editedItem.endTime, "start");
 				}else{
 					this.ensureVisibility(p.editedItem.startTime, p.editedItem.endTime, "end");

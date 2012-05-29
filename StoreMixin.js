@@ -153,7 +153,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 					// this is a put, previous and new index identical
 					// check what changed
 					oldItem = this.items[previousIndex];
-					var cal = this.dateFuncObj; 
+					var cal = this.dateModule; 
 					layoutCanChange = cal.compare(newItem.startTime, oldItem.startTime) != 0 ||
 						cal.compare(newItem.endTime, oldItem.endTime) != 0;
 					// we want to keep the same item object and mixin new values

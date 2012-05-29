@@ -156,16 +156,12 @@ _nls){
 			this.invalidatingProperties = ["store", "items", "startDate", "endDate", "views", 
 				"date", "dateInterval", "dateIntervalSteps", "firstDayOfWeek"];
 			
-			// TODO: not dynamic??
 			args = args || {};
 			this._calendar = args.datePackage ? args.datePackage.substr(args.datePackage.lastIndexOf(".")+1) : this._calendar;
-			this.datePackage = args.datePackage || this.datePackage;
-			this.dateFuncObj = typeof this.datePackage == "string" ?
-				lang.getObject(this.datePackage, false) :// "string" part for back-compat, remove for 2.0
-				this.datePackage;
-			this.dateClassObj = this.dateFuncObj.Date || Date;
-			this.dateLocaleModule = lang.getObject("locale", false, this.dateFuncObj);
-			
+			this.dateModule = args.datePackage ? lang.getObject(args.datePackage, false) : date; 
+			this.dateClassObj = this.dateModule.Date || Date; 
+			this.dateLocaleModule = args.datePackage ? lang.getObject(args.datePackage+".locale", false) : locale; 
+						
 			this.invalidateRendering();
 		},
 		
@@ -253,7 +249,7 @@ _nls){
 		},
 				
 		_validateProperties: function(){
-			var cal = this.dateFuncObj;
+			var cal = this.dateModule;
 			var startDate = this.get("startDate");
 			var endDate = this.get("endDate");
 			var date = this.get("date");
@@ -323,7 +319,7 @@ _nls){
 				
 				this._timeInterval = timeInterval;
 				
-				var duration = this.dateFuncObj.difference(this._timeInterval[0], this._timeInterval[1], "day");
+				var duration = this.dateModule.difference(this._timeInterval[0], this._timeInterval[1], "day");
 				var view = this._computeCurrentView(timeInterval[0], timeInterval[1], duration);
 				
 				var index = arr.indexOf(this.views, view);
@@ -400,7 +396,7 @@ _nls){
 			//		dateIntervalSteps if date is not null or startDate and endDate properties otherwise.
 			//
 					
-			var cal = this.dateFuncObj;
+			var cal = this.dateModule;
 			var d = this.get("date");
 			
 			if(d == null){
@@ -507,7 +503,7 @@ _nls){
 			view.buttonContainer = this.buttonContainer;
 			view._calendar = this._calendar;
 			view.datePackage = this.datePackage;
-			view.dateFuncObj = this.dateFuncObj;
+			view.dateModule = this.dateModule;
 			view.dateClassObj = this.dateClassObj;
 			view.dateLocaleModule = this.dateLocaleModule;
 			domStyle.set(view.domNode, "display", "none");			
@@ -579,7 +575,7 @@ _nls){
 			//		The time interval that will be displayed by the view.
 			// duration: Integer
 			//		The duration, in days, of the displayed time interval.
-			var cal = this.dateFuncObj;
+			var cal = this.dateModule;
 			if(view.viewKind == "columns"){
 				view.set("startDate", timeInterval[0]);
 				view.set("columnCount", duration);
@@ -588,9 +584,9 @@ _nls){
 					var s = this.floorToWeek(timeInterval[0]);					
 					var e = this.floorToWeek(timeInterval[1]);
 					if(cal.compare(e, timeInterval[1]) != 0){
-						e = this.dateFuncObj.add(e, "week", 1);
+						e = this.dateModule.add(e, "week", 1);
 					}					
-					duration = this.dateFuncObj.difference(s, e, "day");
+					duration = this.dateModule.difference(s, e, "day");
 					view.set("startDate", s);
 					view.set("columnCount", 7);
 					view.set("rowCount", Math.ceil(duration/7));
@@ -648,7 +644,7 @@ _nls){
 			//		Show the time range defined by the clicked date.
 			// e: Object
 			//		The column header click event.
-			var cal = this.dateFuncObj;
+			var cal = this.dateModule;
 			if(cal.compare(e.date, this._timeInterval[0]) == 0 && this.dateInterval == "day" && this.dateIntervalSteps == 1){
 				this.set("dateInterval", "week");
 			}else{
@@ -717,7 +713,7 @@ _nls){
 			//		Floors the specified date to the beginning of week.
 			// date: Date
 			//		Date to floor.
-			return timeUtil.floorToWeek(d, this.dateClassObj, this.dateFuncObj, this.firstDayOfWeek, this.locale);
+			return timeUtil.floorToWeek(d, this.dateClassObj, this.dateModule, this.firstDayOfWeek, this.locale);
 		},
 		
 		newDate: function(obj){
@@ -748,7 +744,7 @@ _nls){
 			// d:Date
 			//		The date to test.
 			// returns: Boolean
-			return timeUtil.isStartOfDay(d, this.dateClassObj, this.dateFuncObj);
+			return timeUtil.isStartOfDay(d, this.dateClassObj, this.dateModule);
 		},
 		
 		floorDate: function(date, unit, steps, reuse){
@@ -844,7 +840,7 @@ _nls){
 		
 		_navigate: function(dir){
 			var d = this.get("date");
-			var cal = this.dateFuncObj;
+			var cal = this.dateModule;
 			
 			if(d == null){
 				var s = this.get("startDate");

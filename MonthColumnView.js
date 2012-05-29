@@ -186,7 +186,7 @@ function(
 					
 			rd.dateLocaleModule = this.dateLocaleModule;
 			rd.dateClassObj = this.dateClassObj;
-			rd.dateFuncObj = this.dateFuncObj; // arithmetics on Dates
+			rd.dateModule = this.dateModule; // arithmetics on Dates
 			
 			rd.dates = [];
 						
@@ -211,7 +211,7 @@ function(
 				
 				while(d.getMonth() == currentMonth){							
 					dates.push(d);
-					d = rd.dateFuncObj.add(d, "day", 1);
+					d = rd.dateModule.add(d, "day", 1);
 					d = this.floorToDay(d, false, rd);					
 				}
 				
@@ -224,7 +224,7 @@ function(
 						
 			rd.startTime = new rd.dateClassObj(rd.dates[0][0]);			
 			rd.endTime = new rd.dateClassObj(dates[dates.length-1]);
-			rd.endTime = rd.dateFuncObj.add(rd.endTime, "day", 1);
+			rd.endTime = rd.dateModule.add(rd.endTime, "day", 1);
 						
 			rd.maxDayCount = maxDayCount;
 			rd.sheetHeight = rd.daySize * maxDayCount;
@@ -813,7 +813,7 @@ function(
 			//		The date displayed by this column
 			// renderData: Object
 			//
-			var cal = renderData.dateFuncObj;
+			var cal = renderData.dateModule;
 			if(date == null){
 				return;
 			}
@@ -962,7 +962,7 @@ function(
 			if(item.allDay){
 				return "vertical";
 			}
-			var dur = Math.abs(this.renderData.dateFuncObj.difference(item.startTime, item.endTime, "minute"));
+			var dur = Math.abs(this.renderData.dateModule.difference(item.startTime, item.endTime, "minute"));
 			return dur >= 1440 ? "vertical" : null;
 		},
 		
@@ -1144,9 +1144,9 @@ function(
 		},
 		
 		_sortItemsFunction: function(a, b){
-			var res = this.dateFuncObj.compare(a.startTime, b.startTime);
+			var res = this.dateModule.compare(a.startTime, b.startTime);
 			if(res == 0){
-				res = -1 * this.dateFuncObj.compare(a.endTime, b.endTime);
+				res = -1 * this.dateModule.compare(a.endTime, b.endTime);
 			}
 			return this.isLeftToRight() ? res : -res;
 		},

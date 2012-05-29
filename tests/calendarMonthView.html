@@ -116,11 +116,11 @@
 								allDay: modelBase[id].allDay
 							}
 
-							newObj.startTime = calendar.dateFuncObj.add(newObj.startTime, "day", modelBase[id].day);
+							newObj.startTime = calendar.dateModule.add(newObj.startTime, "day", modelBase[id].day);
 							newObj.startTime.setHours(modelBase[id].start[0]);
 							newObj.startTime.setMinutes(modelBase[id].start[1]);
 
-							newObj.endTime = calendar.dateFuncObj.add(newObj.startTime, "minute", modelBase[id].duration);
+							newObj.endTime = calendar.dateModule.add(newObj.startTime, "minute", modelBase[id].duration);
 
 							someData.push(newObj);
 						}
@@ -181,7 +181,7 @@
 							// create a new event
 							var start, end;
 							var colView = calendar.columnView;
-							var cal = calendar.dateFuncObj;
+							var cal = calendar.dateModule;
 							
 							if(view == colView){
 								start = calendar.floorDate(d, "minute", colView.timeSlotDuration);
@@ -303,7 +303,7 @@
 								if(!calendar.isStartOfDay(editedItem.endTime)){
 									d = itemEndDateEditor.get("value");
 									calendar.floorToDay(d, true);
-									d = calendar.dateFuncObj.add(d, "day", 1);
+									d = calendar.dateModule.add(d, "day", 1);
 									itemEndDateEditor.set("value", d);
 								}
 								
@@ -314,7 +314,7 @@
 								itemEndTimeEditor.set("value", editedItem.endTime);
 								d = itemEndDateEditor.get("value");
 								calendar.floorToDay(d, true);
-								d = calendar.dateFuncObj.add(d, "day", -1);
+								d = calendar.dateModule.add(d, "day", -1);
 								itemEndDateEditor.set("value", d);
 							}
 							

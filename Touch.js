@@ -206,7 +206,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 					this._moveOrResizeItemGesture(times, "touch", e);
 					
 					if(p.editKind == "move"){
-						if(this.renderData.dateFuncObj.compare(p.editedItem.startTime, d) == -1){
+						if(this.renderData.dateModule.compare(p.editedItem.startTime, d) == -1){
 							this.ensureVisibility(p.editedItem.startTime, p.editedItem.endTime, "start", this.autoScrollTouchMargin);							
 						}else{
 							this.ensureVisibility(p.editedItem.startTime, p.editedItem.endTime, "end", this.autoScrollTouchMargin);

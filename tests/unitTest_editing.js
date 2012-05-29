@@ -12,7 +12,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				snapSteps: 1
 			});
 			
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			o.validateRendering();
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -67,7 +67,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				snapSteps: 15
 			});
 			
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			o.validateRendering();
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -122,7 +122,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				snapSteps: 1
 			});
 			
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			o.validateRendering();
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -177,7 +177,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				snapSteps: 5
 			});
 			
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			o.validateRendering();
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -234,7 +234,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				snapSteps: 1
 			});
 			
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			o.validateRendering();
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -270,7 +270,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				store: new Observable(new Memory({data: data}))
 			});
 			
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			o.validateRendering();					
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -339,7 +339,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				store: new Observable(new Memory({data: data}))
 			});
 			
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			o.validateRendering();					
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -409,7 +409,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				store: new Observable(new Memory({data: data}))
 			});
 			
-			var cal = o.dateFuncObj;			
+			var cal = o.dateModule;			
 			o.validateRendering();					
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -480,7 +480,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				snapSteps: 1
 			});
 			
-			var cal = o.dateFuncObj;			
+			var cal = o.dateModule;			
 			o.validateRendering();
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -536,7 +536,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				snapSteps: 5
 			});
 			
-			var cal = o.dateFuncObj;			
+			var cal = o.dateModule;			
 			o.validateRendering();
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -591,7 +591,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				store: new Observable(new Memory({data: data}))			
 			});
 			
-			var cal = o.dateFuncObj;			
+			var cal = o.dateModule;			
 			o.validateRendering();
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -646,7 +646,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				store: new Observable(new Memory({data: data}))			
 			});
 			
-			var cal = o.dateFuncObj;			
+			var cal = o.dateModule;			
 			o.validateRendering();
 			
 			var renderItem = o.itemToRenderItem(item, o.store);
@@ -704,7 +704,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 				snapSteps: 1
 			});
 			
-			var cal = o.dateFuncObj;
+			var cal = o.dateModule;
 			
 			o.validateRendering();
 			

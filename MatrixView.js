@@ -186,7 +186,7 @@ function(
 			
 			rd.dateLocaleModule = this.dateLocaleModule;
 			rd.dateClassObj = this.dateClassObj;
-			rd.dateFuncObj = this.dateFuncObj; // arithmetics on Dates
+			rd.dateModule = this.dateModule; // arithmetics on Dates
 			
 			rd.dates = [];
 			
@@ -211,14 +211,14 @@ function(
 				rd.dates.push([]);
 				for(var col = 0; col < rd.columnCount ; col++){
 					rd.dates[row].push(d);
-					d = rd.dateFuncObj.add(d, "day", 1);
+					d = rd.dateModule.add(d, "day", 1);
 					d = this.floorToDay(d, false, rd);					
 				}
 			}
 
 			rd.startTime = this.newDate(rd.dates[0][0], rd);
 			rd.endTime = this.newDate(rd.dates[rd.rowCount-1][rd.columnCount-1], rd);
-			rd.endTime = rd.dateFuncObj.add(rd.endTime, "day", 1);
+			rd.endTime = rd.dateModule.add(rd.endTime, "day", 1);
 			rd.endTime = this.floorToDay(rd.endTime, true);
 			
 			if(this.displayedItemsInvalidated){
@@ -768,7 +768,7 @@ function(
 			//		The date displayed by this column
 			// renderData: Object
 			//
-			var cal = renderData.dateFuncObj;
+			var cal = renderData.dateModule;
 			if(this.isToday(date)){				
 				domClass.add(node, "dojoxCalendarToday");
 			}else if(this.refStartTime != null && this.refEndTime != null && 
@@ -1249,7 +1249,7 @@ function(
 		},
 
 		_defaultItemToRendererKindFunc:function(item){
-			var dur = Math.abs(this.renderData.dateFuncObj.difference(item.startTime, item.endTime, "minute"));
+			var dur = Math.abs(this.renderData.dateModule.difference(item.startTime, item.endTime, "minute"));
 			return dur >= 1440 ? "horizontal" : "label";
 		}, 
 		
@@ -1271,7 +1271,7 @@ function(
 				s = this.floorToDay(s, false, this.renderData);
 			}
 			if(!this.isStartOfDay(e)){
-				e = this.renderData.dateFuncObj.add(e, "day", 1);
+				e = this.renderData.dateModule.add(e, "day", 1);
 				e = this.floorToDay(e, true);
 			}
 			return {startTime:s, endTime:e};
@@ -1282,9 +1282,9 @@ function(
 				a = this._roundItemToDay(a);
 				b = this._roundItemToDay(b);
 			}
-			var res = this.dateFuncObj.compare(a.startTime, b.startTime);
+			var res = this.dateModule.compare(a.startTime, b.startTime);
 			if(res == 0){
-				res = -1 * this.dateFuncObj.compare(a.endTime, b.endTime);
+				res = -1 * this.dateModule.compare(a.endTime, b.endTime);
 			}
 			return res;
 		},
@@ -1443,7 +1443,7 @@ function(
 			}
 
 			var rd = this.renderData;
-			var cal = rd.dateFuncObj;
+			var cal = rd.dateModule;
 			var cell = rd.cells[index];
 			var irHeight = this.horizontalRendererHeight;
 			var vOverlap = this.percentOverlap / 100;
@@ -1550,7 +1550,7 @@ function(
 			
 			var d;
 			var rd = this.renderData;
-			var cal = rd.dateFuncObj;
+			var cal = rd.dateModule;
 			
 			var layoutItems = [];
 			
@@ -1559,7 +1559,7 @@ function(
 				
 				d = this.floorToDay(item.startTime, false, rd);
 								
-				var comp = this.dateFuncObj.compare;
+				var comp = this.dateModule.compare;
 				
 				// iterate on columns overlapped by this item to create one item per column
 				//while(d < item.endTime && d < rd.endTime){
@@ -1625,7 +1625,7 @@ function(
 		_layoutHorizontalItemsImpl: function(index, layoutItems, hOverlapLayout, hasHiddenItems, hiddenItems){
 			
 			var rd = this.renderData;
-			var cal = rd.dateFuncObj;
+			var cal = rd.dateModule;
 			var cell = rd.cells[index];
 			var cellH = this._getRowHeight(index);
 			var irHeight = this.horizontalRendererHeight;
@@ -1694,7 +1694,7 @@ function(
 		_layoutLabelItemsImpl: function(index, layoutItems, hasHiddenItems, hiddenItems, hOffsets){
 			var d, list, posY;
 			var rd = this.renderData;
-			var cal = rd.dateFuncObj;
+			var cal = rd.dateModule;
 			var cell = rd.cells[index];
 			var cellH = this._getRowHeight(index);
 			var irHeight = this.labelRendererHeight;
@@ -1814,7 +1814,7 @@ function(
 		_layoutExpandRendererImpl: function(rowIndex, colIndex, items, expanded){
 			var d, ir;		
 			var rd = this.renderData;
-			var cal = rd.dateFuncObj;
+			var cal = rd.dateModule;
 			var cell = rd.cells[rowIndex];					
 			
 			ir = this._getExpandRenderer(
@@ -1867,7 +1867,7 @@ function(
 			if(p.rendererKind == "label"){
 				// noop
 			}else if(e.editKind == "move" && (item.allDay || this.roundToDay)){							
-				var cal = this.renderData.dateFuncObj;
+				var cal = this.renderData.dateModule;
 				p.dayOffset = cal.difference(
 					this.floorToDay(dates[0], false, this.renderData), 
 					refTime, "day");
@@ -1877,7 +1877,7 @@ function(
 		},
 		
 		_computeItemEditingTimes: function(item, editKind, rendererKind, times, eventSource){
-			var cal = this.renderData.dateFuncObj;
+			var cal = this.renderData.dateModule;
 			var p = this._edProps;
 			
 			if(rendererKind == "label"){ // noop
@@ -1991,7 +1991,7 @@ function(
 			var date = null;
 			if(row < rd.dates.length && col < this.renderData.dates[row].length){
 				date = this.newDate(this.renderData.dates[row][col]); 
-				date = this.renderData.dateFuncObj.add(date, "minute", tm);
+				date = this.renderData.dateModule.add(date, "minute", tm);
 			}
 			
 			return date;
