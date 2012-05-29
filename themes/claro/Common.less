@@ -16,6 +16,9 @@
 
 @label-color: #000;
 
+@event-border: 1px solid #260000;
+@event-border-focused: dashed 1px #FFFFFF;	
+
 .border-box(){
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -55,16 +58,16 @@
 
 .header-hover-background(){
 	background-image: url("images/titlebar.png");
-  background-repeat: repeat-x;  	
+  	background-repeat: repeat-x;  	
 	background-color: #abd6ff;
-  border-color: #769dc0;
+  	border-color: #769dc0;
 }
 
 .header-active-background(){
 	cursor: pointer;		
-  background-color: #7dbefa;
-  border-color: #769dc0;
-  background-position: 0 -136px;
+	background-color: #7dbefa;
+	border-color: #769dc0;
+	background-position: 0 -136px;
 	.transition-duration(0s);
 }
 
@@ -72,4 +75,19 @@
   border-radius: @radius;
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
+}
+
+.top-rounded-corners (@radius: 5px) {
+  border-top-left-radius: @radius;
+  border-top-right-radius: @radius;
+  -webkit-border-top-left-radius: @radius;
+  -webkit-border-top-right-radius: @radius;
+  -moz-border-top-right-radius: @radius;
+  -moz-border-top-left-radius: @radius;
+}
+
+.top-left-right-border(@style){
+	border-top: @style;
+	border-left: @style;
+	border-right: @style;
 }

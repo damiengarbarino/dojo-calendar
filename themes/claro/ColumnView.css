@@ -273,21 +273,61 @@
   background-color: #660000;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent.Edited .bg {
-  border: dashed 1px #FFFFFF;
+  border: dashed 1px #ffffff;
   filter: alpha(opacity=70);
   opacity: 0.7;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent.Focused .bg {
-  border: dashed 1px #FFFFFF;
+  border: dashed 1px #ffffff;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent .startTime {
   font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-top-right-radius: 5px;
+  -moz-border-top-left-radius: 5px;
+  background-color: #6c0000;
+  white-space: nowrap;
+  padding: 1px 2px 2px 1px;
+  border-top: 1px solid #260000;
+  border-left: 1px solid #260000;
+  border-right: 1px solid #260000;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarEvent.Focused .startTime {
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-top-right-radius: 5px;
+  -moz-border-top-left-radius: 5px;
+  background-color: #6c0000;
+  white-space: nowrap;
+  padding: 1px 2px 2px 1px;
+  border-top: dashed 1px #ffffff;
+  border-left: dashed 1px #ffffff;
+  border-right: dashed 1px #ffffff;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarEvent.Hovered .startTime {
+  background-color: #990000;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarEvent.Selected .startTime {
+  background-color: #330000;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarEvent.Edited .startTime {
+  background-color: #6c0000;
+  border-top: dashed 1px #ffffff;
+  border-left: dashed 1px #ffffff;
+  border-right: dashed 1px #ffffff;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent .endTime {
   position: absolute;
   font-weight: bold;
   bottom: 3px;
   left: 6px;
+  white-space: nowrap;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent .beforeIcon {
   text-align: center;

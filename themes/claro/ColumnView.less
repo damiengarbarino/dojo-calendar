@@ -266,7 +266,7 @@
 	top: 0;
 	bottom: 0;
 	z-index: -1;
-	border: 1px solid #260000;	
+	border: @event-border;
 	.rounded-corners;
 	background-color: #9F0000;
 	.opacity(90);
@@ -281,19 +281,47 @@
 }
 
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent.Edited .bg {
-	border: dashed 1px #FFFFFF;
+	border: @event-border-focused;
 	.opacity(70);
 }
 
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent.Focused .bg {
-	border: dashed 1px #FFFFFF;
+	border: @event-border-focused;
 }
 
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent .summary {
 }
 
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent .startTime {
-	font-weight: bold;
+	font-weight: bold;	
+	.top-rounded-corners;
+	background-color: #9F0000 - #330000;
+	white-space: nowrap;
+	padding: 1px 2px 2px 1px;	
+	.top-left-right-border(@event-border);
+	
+}
+
+.claro .dojoxCalendarColumnView .dojoxCalendarEvent.Focused .startTime {
+	font-weight: bold;	
+	.top-rounded-corners;
+	background-color: #9F0000 - #330000;
+	white-space: nowrap;
+	padding: 1px 2px 2px 1px;
+	.top-left-right-border(@event-border-focused);
+}
+
+.claro .dojoxCalendarColumnView .dojoxCalendarEvent.Hovered .startTime {
+	background-color: #CC0000 - #330000;
+}
+
+.claro .dojoxCalendarColumnView .dojoxCalendarEvent.Selected .startTime {
+	background-color: #660000 - #330000;
+}
+
+.claro .dojoxCalendarColumnView .dojoxCalendarEvent.Edited .startTime {
+	background-color: #9F0000 - #330000;
+	.top-left-right-border(@event-border-focused);
 }
 
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent .endTime {
@@ -301,6 +329,7 @@
 	font-weight: bold;	
 	bottom:3px;
 	left: 6px;
+	white-space:nowrap;
 }
 
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent .beforeIcon {
