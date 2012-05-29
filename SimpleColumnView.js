@@ -132,7 +132,7 @@ function(
 					
 				this.scrollBar.on("scroll", lang.hitch(this, this._scrollBar_onScroll));
 				this._viewHandles.push(
-						on(this.scrollContainer, mouse.wheel, 
+						on(this.scrollContainer, has("mozilla") ? "DOMMouseScroll" : "mousewheel",  
 							dojo.hitch(this, this._mouseWheelScrollHander)));
 			}
 		},
@@ -473,10 +473,9 @@ function(
 			this._setStartTimeOfDay(Math.floor(t/60), t%60);
 		},
 		
-		_mouseWheelScrollHander: function(e){
+		_mouseWheelScrollHander: function(e){						
 			var dir = has("mozilla") ? -e.detail : e.wheelDelta;
-			dir = dir > 0 ? -1 : 1;
-			this.scrollView(dir);
+			this.scrollView(dir > 0 ? -1 : 1);
 		},		
 		
 		//////////////////////////////////////////
@@ -516,19 +515,21 @@ function(
 			}
 						
 			var atRight = this.isLeftToRight() ? true : this.scrollBarRTLPosition == "right";
+			var rPos = atRight ? "right" : "left";
+			var lPos = atRight? "left" : "right";
 			
 			if(this.scrollBar){
 				this.scrollBar.set("maximum", renderData.sheetHeight);			
-				domStyle.set(this.scrollBar.domNode, atRight? "right" : "left", 0);
+				domStyle.set(this.scrollBar.domNode, rPos, 0);
 				domStyle.set(this.scrollBar.domNode, atRight? "left" : "right", "auto");
 			}
-			domStyle.set(this.scrollContainer, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
-			domStyle.set(this.scrollContainer, atRight ? "left" : "right", "0");
-			domStyle.set(this.header, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
-			domStyle.set(this.header, atRight ? "left" : "right", "0");
+			domStyle.set(this.scrollContainer, rPos, renderData.scrollbarWidth + "px");
+			domStyle.set(this.scrollContainer, lPos, "0");
+			domStyle.set(this.header, rPos, renderData.scrollbarWidth + "px");
+			domStyle.set(this.header, lPos, "0");
 			if(this.buttonContainer && this.owner != null && this.owner.currentView == this){
-				domStyle.set(this.buttonContainer, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
-				domStyle.set(this.buttonContainer, atRight ? "left" : "right", "0");
+				domStyle.set(this.buttonContainer, rPos, renderData.scrollbarWidth + "px");
+				domStyle.set(this.buttonContainer, lPos, "0");
 			}
 		},
 		
