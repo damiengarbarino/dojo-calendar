@@ -151,18 +151,25 @@ function(
 			//		The node that will contain the text node.
 			// text: String
 			//		The text to set to the text node.
-			while(node.hasChildNodes()){
-				node.removeChild(node.lastChild);
-			}				
-			if(text != null){
-				var tNode = win.doc.createElement("span");
-				this.applyTextDir(tNode, text);
-				node.appendChild(tNode);
-				node = tNode;
-				if(allowHTML){
-					node.innerHTML = text;
-				}else{
-					node.appendChild(win.doc.createTextNode(text));
+			if(text != null){			
+				if(!allowHTML && node.hasChildNodes()){
+					// span > textNode
+					node.childNodes[0].childNodes[0].nodeValue = text;
+				}else{												
+			
+					while(node.hasChildNodes()){
+						node.removeChild(node.lastChild);
+					}				
+			
+					var tNode = win.doc.createElement("span");
+					this.applyTextDir(tNode, text);					
+					
+					if(allowHTML){
+						tNode.innerHTML = text;
+					}else{
+						tNode.appendChild(win.doc.createTextNode(text));
+					}
+					node.appendChild(tNode);
 				}
 			}
 		},
