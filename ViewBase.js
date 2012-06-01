@@ -561,7 +561,7 @@ function(
 		_autoScroll: function(gx, gy, orientation){
 			return false;
 		},
-		
+			
 		// scrollMethod: String
 		//		Method used to scroll the view, for example the scroll of column view.
 		//		Valid value are: 

@@ -159,7 +159,7 @@ function(
 					
 				this.scrollBar.on("scroll", lang.hitch(this, this._scrollBar_onScroll));
 				this._viewHandles.push(
-					on(this.scrollContainer, has("mozilla") ? "DOMMouseScroll" : "mousewheel",  
+					on(this.scrollContainer, mouse.wheel,  
 						dojo.hitch(this, this._mouseWheelScrollHander)));
 			}
 		},
@@ -461,9 +461,8 @@ function(
 			this._setScrollPosition(pos);
 		},
 		
-		_mouseWheelScrollHander: function(e){
-			var dir = has("mozilla") ? -e.detail : e.wheelDelta;
-			this.scrollView(dir > 0 ? -1 : 1);
+		_mouseWheelScrollHander: function(e){			
+			this.scrollView(e.wheelDelta > 0 ? -1 : 1);
 		},		
 		
 		//////////////////////////////////////////
