@@ -90,21 +90,33 @@ template){
 		},
 
 		_onClick: function(e){
+			// tags:
+			//		private
+
 			if(this.owner && this.owner.expandRendererClickHandler){
 				this.owner.expandRendererClickHandler(e, this);
 			}
 		},
 
 		_onMouseDown: function(e){
+			// tags:
+			//		private
+
 			event.stop(e);
 			this.set("down", true);
 		},
 
 		_onMouseUp: function(e){
+			// tags:
+			//		private
+
 			this.set("down", false);
 		},
 
 		_onMouseOver: function(e){
+			// tags:
+			//		private
+
 			if(!this.up){
 				var buttonDown = e.button == 1;
 				this.set("up", !buttonDown);
@@ -113,6 +125,9 @@ template){
 		},
 
 		_onMouseOut: function(e){
+			// tags:
+			//		private
+
 			var node = e.relatedTarget;
 			while(node != e.currentTarget && node != win.doc.body && node != null){
 				node = node.parentNode;

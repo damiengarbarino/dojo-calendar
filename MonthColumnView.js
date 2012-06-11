@@ -147,10 +147,14 @@ function(
 		},
 		
 		_scrollBar_onScroll: function(value){
+			// tags:
+			//		private
 			this.scrollContainer.scrollTop = value;
 		},
 		
 		buildRendering: function(){
+			// tags:
+			//		private
 			this.inherited(arguments);
 			if(this.vScrollBar){
 				this.scrollBar = new _VerticalScrollBarBase(
@@ -285,6 +289,8 @@ function(
 			//		Computes the column header label for the specified date.
 			// d: Date
 			//		The date to format
+			// tags:
+			//		protected
 			
 			var len = "wide";
 			
@@ -308,6 +314,8 @@ function(
 			//		The row that displays the current date.
 			// col: Integer
 			//		The column that displays the current date.
+			// tags:
+			//		protected
 
 			var format, rb;
 			
@@ -357,6 +365,8 @@ function(
 		},
 		
 		_setScrollPosition: function(date, maxDuration, easing){
+			// tags:
+			//		private
 			
 			if(date < 1){
 				date = 1
@@ -391,6 +401,9 @@ function(
 		},
 		
 		_setScrollImpl: function(v){
+			// tags:
+			//		private
+			
 			this.scrollContainer.scrollTop = v;
 			if(this.scrollBar){
 				this.scrollBar.set("value", v);
@@ -461,7 +474,11 @@ function(
 			this._setScrollPosition(pos);
 		},
 		
-		_mouseWheelScrollHander: function(e){			
+		_mouseWheelScrollHander: function(e){
+			// summary:
+			//		Mouse wheel handler.
+			// tags:
+			//		protected
 			this.scrollView(e.wheelDelta > 0 ? -1 : 1);
 		},		
 		
@@ -486,7 +503,8 @@ function(
 		},
 		
 		_createRendering: function(/*Object*/renderData, /*Object*/oldRenderData){
-
+			// tags:
+			//		private
 			domStyle.set(this.sheetContainer, "height", renderData.sheetHeight + "px");
 			// padding for the scroll bar.
 			this._configureScrollBar(renderData);
@@ -520,6 +538,9 @@ function(
 		},
 		
 		_columnHeaderClick: function(e){
+			// tags:
+			//		private
+
 			event.stop(e);
 			var index = query("td", this.columnHeaderTable).indexOf(e.currentTarget);
 			this._onColumnHeaderClick({
@@ -538,6 +559,9 @@ function(
 			//
 			// oldRenderData:
 			//		The previously render data displayed, if any.
+			// tags:
+			//		private
+
 
 			var table = this.columnHeaderTable;
 			
@@ -657,6 +681,9 @@ function(
 		},
 		
 		_cleanupColumnHeader: function(){
+			// tags:
+			//		private
+
 			while(this._columnHeaderHandlers.length > 0){
 				var list = this._columnHeaderHandlers.pop();
 				while(list.length > 0){
@@ -675,6 +702,9 @@ function(
 			//		The date displayed by this column
 			// renderData: Object			
 			//		The render data.			
+			// tags:
+			//		protected
+
 		},
 		
 		_buildGrid: function (renderData, oldRenderData){
@@ -686,6 +716,9 @@ function(
 			//
 			// oldRenderData:
 			//		The previously render data displayed, if any.
+			// tags:
+			//		private
+
 
 			var table = this.gridTable;
 			
@@ -812,7 +845,10 @@ function(
 			// date: Date
 			//		The date displayed by this column
 			// renderData: Object
-			//
+			//	The render data.
+			// tags:
+			//		protected
+
 			var cal = renderData.dateModule;
 			if(date == null){
 				return;
@@ -831,6 +867,9 @@ function(
 			//		The render data to display.
 			// oldRenderData:
 			//		The previously render data displayed, if any.
+			// tags:
+			//		private
+
 			
 			var table = this.itemContainerTable;
 			
@@ -958,7 +997,10 @@ function(
 			}
 		},
 		
-		_defaultItemToRendererKindFunc: function(item){			
+		_defaultItemToRendererKindFunc: function(item){
+			// tags:
+			//		private
+
 			if(item.allDay){
 				return "vertical";
 			}
@@ -972,7 +1014,9 @@ function(
 		},
 		
 		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items){
-			
+			// tags:
+			//		private
+
 			var verticalItems = [];
 			var hiddenItems = [];
 			renderData.colW = this.itemContainer.offsetWidth / renderData.columnCount;
@@ -995,6 +1039,9 @@ function(
 		},
 		
 		_dateToYCoordinate: function(renderData, d, start){
+			// tags:
+			//		private
+
 			var pos = 0;
 			if(start){
 				pos = (d.getDate()-1) * this.renderData.daySize;
@@ -1008,7 +1055,9 @@ function(
 		},
 		
 		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
-			
+			// tags:
+			//		private
+
 			if(this.verticalRenderer == null){
 				return;
 			}
@@ -1100,6 +1149,9 @@ function(
 		},
 		
 		_getCellAt: function(rowIndex, columnIndex, rtl){
+			// tags:
+			//		private
+
 			if((rtl == undefined || rtl == true) && !this.isLeftToRight()){
 				columnIndex = this.renderData.columnCount -1 - columnIndex;
 			}
@@ -1115,6 +1167,9 @@ function(
 		},
 		
 		_layoutBgItems: function(/*Object*/renderData, /*Integer*/col, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+			// tags:
+			//		private
+
 			var bgItems = {};
 			for(var i = 0; i < items.length; i++){
 				
@@ -1144,6 +1199,9 @@ function(
 		},
 		
 		_sortItemsFunction: function(a, b){
+			// tags:
+			//		private
+
 			var res = this.dateModule.compare(a.startTime, b.startTime);
 			if(res == 0){
 				res = -1 * this.dateModule.compare(a.endTime, b.endTime);
@@ -1225,6 +1283,10 @@ function(
 		
 		_onGridMouseUp: function(e){
 			
+			// tags:
+			//		private
+
+			
 			this.inherited(arguments);
 			
 			if (this._gridMouseDown) {
@@ -1238,6 +1300,9 @@ function(
 		},			
 			
 		_onGridTouchStart: function(e){
+			// tags:
+			//		private
+
 			
 			this.inherited(arguments);			
 			
@@ -1249,7 +1314,9 @@ function(
 		},
 		
 		_onGridTouchMove: function(e){
-			
+			// tags:
+			//		private
+
 			this.inherited(arguments);						
 			
 			if (e.touches.length > 1 && !this._isEditing){
@@ -1287,6 +1354,9 @@ function(
 		},
 		
 		_onGridTouchEnd: function(e){
+			// tags:
+			//		private
+
 			//event.stop(e);
 								
 			this.inherited(arguments);
@@ -1338,6 +1408,9 @@ function(
 		},
 		
 		_onColumnHeaderClick: function(e){
+			// tags:
+			//		private
+
 			this._dispatchCalendarEvt(e, "onColumnHeaderClick");
 		},
 		
@@ -1352,6 +1425,9 @@ function(
 			//			|		The date displayed by the column.
 			//			| triggerEvent: Event
 			//			|		The origin event.
+			// tags:
+			//		callback
+
 		},
 		
 
@@ -1362,6 +1438,9 @@ function(
 		///////////////////////////////////////////////////////////////
 						
 		_onScrollTimer_tick: function(){
+			// tags:
+			//		private
+
 			this._setScrollImpl(this.scrollContainer.scrollTop + this._scrollProps.scrollStep);
 		},
 		

@@ -160,10 +160,10 @@ function(
 			
 			// For Dojo 1.8
 			//	this._viewHandles.push(
-			//		ViewPort.on("resize", lang.hitch(this, this._resizeHander)));
+			//		ViewPort.on("resize", lang.hitch(this, this._resizeHandler)));
 			
 			// pre 1.8 compat code
-			this._viewHandles.push(on(window, "resize", lang.hitch(this, this._resizeHander)));
+			this._viewHandles.push(on(window, "resize", lang.hitch(this, this._resizeHandler)));
 			
 		},
 		
@@ -307,6 +307,9 @@ function(
 			//		custom date pattern to the formatter.
 			// d: Date
 			//		The date to format	
+			// tags:
+			//		protected
+
 			if(this.rowHeaderDatePattern){
 				return this.renderData.dateLocaleModule.format(d, {
 					selector: 'date',
@@ -325,6 +328,9 @@ function(
 			//		property can be used to specify the length of the string.
 			// d: Date
 			//		The date to format 
+			// tags:
+			//		protected
+
 			return this.renderData.dateLocaleModule.getNames('days', this.columnHeaderLabelLength ? this.columnHeaderLabelLength : 'wide', 'standAlone')[d.getDay()];
 		},
 		
@@ -339,6 +345,9 @@ function(
 			//		The row that displays the current date.
 			// col: Integer
 			//		The column that displays the current date.
+			// tags:
+			//		protected
+
 
 			var isFirstDayOfMonth = row == 0 && col == 0 || d.getDate() == 1;
 			var format, rb;
@@ -393,6 +402,8 @@ function(
 			//		The new render data
 			// oldRenderData: Object
 			//		The previous render data
+			// tags:
+			//		private
 			
 			if(renderData.rowHeight <= 0){
 				renderData.columnCount = 0;
@@ -419,7 +430,8 @@ function(
 			//
 			// oldRenderData:
 			//		The previously render data displayed, if any.
-
+			// tags:
+			//		private
 			var table = this.columnHeaderTable;
 			
 			if(!table){
@@ -504,6 +516,9 @@ function(
 			//		The date displayed by this column
 			// renderData: Object			
 			//		The render data.
+			// tags:
+			//		protected
+
 			if(this.isWeekEnd(date)){
 				return domClass.add(node, "dojoxCalendarWeekend");
 			}	
@@ -512,7 +527,10 @@ function(
 		_rowHeaderHandles: null,
 		
 		_cleanupRowHeader: function(){
-			while(this._rowHeaderHandles.length > 0){					
+			// tags:
+			//		private
+
+			while(this._rowHeaderHandles.length > 0){
 				var list = this._rowHeaderHandles.pop();
 				while(list.length>0){
 					list.pop().remove();
@@ -522,6 +540,9 @@ function(
 
 		
 		_rowHeaderClick: function(e){
+			// tags:
+			//		private
+
 			var index = query("td", this.rowHeaderTable).indexOf(e.currentTarget);
 			this._onRowHeaderClick({
 				index: index,
@@ -540,6 +561,8 @@ function(
 			//
 			// oldRenderData:
 			//		The previously render data displayed, if any.
+			// tags:
+			//		private
 			
 			var rowHeaderTable = this.rowHeaderTable;
 			
@@ -633,6 +656,9 @@ function(
 			//		The date in the week.
 			// renderData: Object
 			//		The render data.
+			// tags:
+			//		protected
+
 				
 		},
 	
@@ -645,6 +671,8 @@ function(
 			//
 			// oldRenderData:
 			//		The previously render data displayed, if any.
+			// tags:
+			//		private
 
 			var table = this.gridTable;
 			
@@ -767,7 +795,9 @@ function(
 			// date: Date
 			//		The date displayed by this column
 			// renderData: Object
-			//
+			// tags:
+			//		protected
+
 			var cal = renderData.dateModule;
 			if(this.isToday(date)){				
 				domClass.add(node, "dojoxCalendarToday");
@@ -789,6 +819,8 @@ function(
 			//
 			// oldRenderData:
 			//		The previously render data displayed, if any.
+			// tags:
+			//		private
 			
 			var table = this.itemContainerTable;
 			
@@ -853,13 +885,15 @@ function(
 			renderData.cells = rows;
 		},
 
-		_resizeHander: function(e, apply){
+		_resizeHandler: function(e, apply){
 			// summary:
 			//		Refreshes and apply the row height according to the widget height.
 			// e: Event
 			//		The resize event (optional)
 			// apply: Boolean
 			//		Whether take into account the layoutDuringResize flag to relayout item while resizing or not.
+			// tags:
+			//		private
 
 			var rd = this.renderData;
 			
@@ -980,6 +1014,9 @@ function(
 		},
 		
 		_collapseRowImpl: function(apply){
+			// tags:
+			//		private
+
 			var rd = this.renderData;
 			delete rd.expandedRow;
 			delete rd.expandedRowHeight;
@@ -1058,6 +1095,9 @@ function(
 		},
 		
 		_expandRowImpl: function(size, layout){
+			// tags:
+			//		private
+
 			var rd = this.renderData;
 			rd.expandedRowHeight = size;
 			this._computeRowsHeight(rd, rd.sheetHeight-size);
@@ -1072,11 +1112,16 @@ function(
 			//		Event dispatched at the end of an expand or collapse animation.
 			// expand: Boolean
 			//		Whether the finished animation was an expand or a collapse animation.
+			// tags:
+			//		callback
+
 		},
 		
 		_resizeRows: function(){
 			// summary:
 			//		Refreshes the height of the underlying HTML objects.
+			// tags:
+			//		private\
 			
 			if(this._getRowHeight(0) <= 0){
 				return;
@@ -1094,9 +1139,13 @@ function(
 		},
 		
 		_computeRowsHeight:function(renderData, max){
-			// 1. Determine if it's better to add or remove pixels
-			// 2. distribute added/removed pixels on first and last rows.
+			// summary:
+			//		1. Determine if it's better to add or remove pixels
+			//		2. distribute added/removed pixels on first and last rows.
 			//		if rows are not too small, it is not noticeable.
+			// tags:
+			//		private
+
 			var rd = renderData == null ? this.renderData : renderData;
 			
 			max = max || rd.sheetHeight;
@@ -1140,6 +1189,9 @@ function(
 		},
 
 		_getRowHeight: function(index){
+			// tags:
+			//		private
+
 			var rd = this.renderData;
 			if(index == rd.expandedRow){
 				return rd.expandedRowHeight;
@@ -1155,6 +1207,8 @@ function(
 		},
 
 		_resizeRowsImpl: function(tableNode, query){
+			// tags:
+			//		private
 			var rd = this.renderData;
 			dojo.query(query, tableNode).forEach(function(tr, i){
 				domStyle.set(tr, "height", this._getRowHeight(i)+"px");
@@ -1214,6 +1268,9 @@ function(
 		_ddRendererPool: null,
 
 		_getExpandRenderer: function(date, items, rowIndex, colIndex, expanded){
+			// tags:
+			//		private
+			
 			if(this.expandRenderer == null){
 				return null;
 			}
@@ -1235,6 +1292,9 @@ function(
 		},
 		
 		_recycleExpandRenderers: function(remove){
+			// tags:
+			//		private
+			
 			for(var i=0; i<this._ddRendererList.length; i++){
 				var ir = this._ddRendererList[i];
 				ir.set("Up", false);
@@ -1249,6 +1309,8 @@ function(
 		},
 
 		_defaultItemToRendererKindFunc:function(item){
+			// tags:
+			//		private
 			var dur = Math.abs(this.renderData.dateModule.difference(item.startTime, item.endTime, "minute"));
 			return dur >= 1440 ? "horizontal" : "label";
 		}, 
@@ -1265,6 +1327,9 @@ function(
 		naturalRowsHeight: null,
 		
 		_roundItemToDay: function(item){
+			// tags:
+			//		private
+			
 			var s = item.startTime, e = item.endTime;
 			
 			if(!this.isStartOfDay(s)){
@@ -1278,6 +1343,9 @@ function(
 		},
 		
 		_sortItemsFunction: function(a, b){
+			// tags:
+			//		private
+			
 			if(this.roundToDay){
 				a = this._roundItemToDay(a);
 				b = this._roundItemToDay(b);
@@ -1346,11 +1414,15 @@ function(
 			//		Whether the item is being edited not not.
 			// focused: Boolean
 			//		Whether the item is focused not not.
+			// tags:
+			//		private
 						
 			domStyle.set(renderer.container, {"zIndex": edited || selected ? renderer.renderer.mobile ? 100 : 0: item.lane == undefined ? 1 : item.lane+1});
 		},
 
 		_layoutRenderers: function(renderData){
+			// tags:
+			//		private
 			if(renderData == null || renderData.items == null || renderData.rowHeight <= 0){
 				return;
 			}					
@@ -1371,18 +1443,13 @@ function(
 			this.inherited(arguments);
 		},
 
-		getDateString: function(d){
-			return this.renderData.dateLocaleModule.format(d, {
-				selector: "date", 
-				formatLength: "medium"
-			});
-		},
-		
 		_offsets: null,
 
 		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items){
-
-      if(this.renderData.cells == null){
+			// tags:
+			//		private
+			
+			if(this.renderData.cells == null){
 				return;
 			}
 			var horizontalItems = [];
@@ -1438,6 +1505,9 @@ function(
 		},
 
 		_createHorizontalLayoutItems: function(/*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+			// tags:
+			//		private
+			
 			if(this.horizontalRenderer == null){
 				return;
 			}
@@ -1524,6 +1594,8 @@ function(
 		},
 		
 		_computeHorizontalOverlapLayout: function(layoutItems, offsets){
+			// tags:
+			//		private
 			
 			var rd = this.renderData;
 			var irHeight = this.horizontalRendererHeight;
@@ -1544,6 +1616,9 @@ function(
 		},
 		
 		_createLabelLayoutItems: function(/*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+			// tags:
+			//		private
+			
 			if(this.labelRenderer == null){
 				return;
 			}
@@ -1599,12 +1674,18 @@ function(
 		},
 
 		_computeLabelOffsets: function(layoutItems, offsets){
+			// tags:
+			//		private
+			
 			for(var i=0; i<this.renderData.columnCount; i++){
 				offsets[i] = layoutItems[i] == null ? 0 : layoutItems[i].length * (this.labelRendererHeight + this.verticalGap);
 			}
 		},			
 
 		_computeColHasHiddenItems: function(index, hOffsets, lOffsets){
+			// tags:
+			//		private
+			
 			var res = [];
 			var cellH = this._getRowHeight(index);
 			var h;
@@ -1623,6 +1704,9 @@ function(
 		},
 
 		_layoutHorizontalItemsImpl: function(index, layoutItems, hOverlapLayout, hasHiddenItems, hiddenItems){
+			
+			// tags:
+			//		private
 			
 			var rd = this.renderData;
 			var cal = rd.dateModule;
@@ -1692,6 +1776,8 @@ function(
 		},
 		
 		_layoutLabelItemsImpl: function(index, layoutItems, hasHiddenItems, hiddenItems, hOffsets){
+			// tags:
+			//		private
 			var d, list, posY;
 			var rd = this.renderData;
 			var cal = rd.dateModule;
@@ -1758,6 +1844,9 @@ function(
 		},
 		
 		_applyRendererLayout: function(item, ir, cell, w, h, kind){
+			// tags:
+			//		private
+			
 			var edited = this.isItemBeingEdited(item);
 			var selected = this.isItemSelected(item);
 			var hovered = this.isItemHovered(item);
@@ -1785,6 +1874,9 @@ function(
 		},
 		
 		_getCellAt: function(rowIndex, columnIndex, rtl){
+			// tags:
+			//		private
+			
 			if((rtl == undefined || rtl == true) && !this.isLeftToRight()){
 				columnIndex = this.renderData.columnCount -1 - columnIndex;
 			}
@@ -1792,6 +1884,9 @@ function(
 		},
 	
 		_layoutExpandRenderers: function(index, hasHiddenItems, hiddenItems){
+			// tags:
+			//		private
+			
 			if(!this.expandRenderer){
 				return;
 			}
@@ -1812,6 +1907,9 @@ function(
 		},
 		
 		_layoutExpandRendererImpl: function(rowIndex, colIndex, items, expanded){
+			// tags:
+			//		private
+			
 			var d, ir;		
 			var rd = this.renderData;
 			var cal = rd.dateModule;
@@ -1841,7 +1939,8 @@ function(
 			//		The list of non visible items.
 			// cellPosition: Object
 			//		An object that contains the position (x and y properties) and size of the cell (w and h properties).
-						
+			// tags:
+			//		private
 			domStyle.set(renderer.domNode, {
 				"left": cellPosition.x + "px",
 				"width": cellPosition.w + "px",
@@ -1857,6 +1956,8 @@ function(
 		//////////////////////////////////////////////
 		
 		_onItemEditBeginGesture: function(e){
+			// tags:
+			//		private
 			var p = this._edProps;
 			
 			var item = p.editedItem;
@@ -1877,6 +1978,8 @@ function(
 		},
 		
 		_computeItemEditingTimes: function(item, editKind, rendererKind, times, eventSource){
+			// tags:
+			//		private
 			var cal = this.renderData.dateModule;
 			var p = this._edProps;
 			
@@ -2004,6 +2107,8 @@ function(
 		//////////////////////////////////////////////
 		
 		_onGridMouseUp: function(e){
+			// tags:
+			//		private
 			
 			this.inherited(arguments);
 			
@@ -2018,7 +2123,8 @@ function(
 		},
 		
 		_onGridTouchEnd: function(e){
-
+			// tags:
+			//		private
 			this.inherited(arguments);
 
 			var g = this._gridProps;
@@ -2075,11 +2181,15 @@ function(
 		
 		_onRowHeaderClick: function(e){
 			this._dispatchCalendarEvt(e, "onRowHeaderClick");
+			// tags:
+			//		private
 		},
 		
 		onRowHeaderClick: function(e){
 			// summary:
 			//		Event dispatched when a row header cell is clicked.
+			// tags:
+			//		callback
 		},
 		
 		expandRendererClickHandler: function(e, renderer){
@@ -2089,6 +2199,8 @@ function(
 			//		The mouse event.
 			// renderer: Object
 			//		The expand renderer.
+			// tags:
+			//		protected
 			
 			event.stop(e);
 			

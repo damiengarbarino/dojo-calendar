@@ -26,6 +26,8 @@ define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
 		layoutDuringResize: true,
 		
 		_defaultItemToRendererKindFunc: function(item){
+			// tags:
+			//		private
 			return item.allDay ? "horizontal" : null;
 		},
 		
@@ -71,6 +73,9 @@ define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
 			//		The mouse event.
 			// renderer: Object
 			//		The renderer that was clicked.
+			// tags:
+			//		callback
+
 			
 			event.stop(e);
 			var h = domGeometry.getMarginBox(this.domNode).h;			
@@ -83,6 +88,9 @@ define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
 		},
 		
 		_getExpandedHeight: function(){
+			// tags:
+			//		private
+
 			return this.naturalRowsHeight[0] + this.expandRendererHeight + this.verticalGap + this.verticalGap;
 		},
 		

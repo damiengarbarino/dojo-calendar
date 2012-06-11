@@ -15,7 +15,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView
 		_createDefaultViews: function(){
 			// summary:
 			//		Creates the default views:
-			//		|	A ColumnView instance used to display one day to seven days time intervals,
+			//		| A ColumnView instance used to display one day to seven days time intervals,
 			//		| A MatrixView instance used to display the other time intervals.
 			//		The views are mixed with Mouse and Keyboard to allow editing items using mouse and keyboard.
 

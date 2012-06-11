@@ -103,12 +103,35 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 		},
 		
 		_setText: function(node, text, allowHTML){
+			// summary:
+			//		Set the text to the specified node.
+			// node: Node
+			//		The parent node.
+			// text: String
+			//		The text to display.
+			// allowHTML: Boolean
+			//		Whether text is containing HTML formatting.
+			// tags:
+			//		protected
+			
 			if(this.owner){
 				this.owner._setText(node, text, allowHTML);
 			}			
 		},
 		
 		_isElementVisible: function(elt, startHidden, endHidden, size){
+			// summary:
+			//		Determine whether the item renderer sub element is visible or not.
+			// elt: String
+			//		The element node.
+			// startHidden: Boolean
+			//		Indicates that the start of time interval displayed by this item renderer is not the start of the displayed event. 
+			// endHidden: Boolean
+			//		Indicates that the end of time interval displayed by this item renderer is not the end of the displayed event.
+			// size: Integer
+			//		The size of the item renderer on the time axis. 
+			// tags:
+			//		protected
 			var visible;
 			var limit = this.visibilityLimits[elt];
 			
@@ -155,6 +178,14 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 		},
 		
 		_formatTime: function(rd, d){
+			// summary:
+			//		Returns the time formatted string.
+			// rd: Object
+			//		The render data.
+			// d: Date
+			//		The time to format.
+			// tags:
+			//		protected
 			if(this.owner){
 				var f = this.owner.get("formatItemTimeFunc");
 				if(f != null){
@@ -169,7 +200,6 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 		},
 		
 		updateRendering: function (w, h) {
-			
 			// summary:
 			//		Updates the visual appearance of the renderer according the new values of the properties and the new size of the component.
 			// w: Number?
