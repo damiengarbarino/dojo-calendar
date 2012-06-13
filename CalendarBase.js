@@ -640,7 +640,7 @@ _nls){
 			//		The end date of the displayed time interval	
 			// duration: Integer
 			//		Duration of the 		
-			// return: dojox.calendar.ViewBase
+			// returns: dojox/calendar/ViewBase
 			//		The view to display.
 			// tags:
 			//		protected
