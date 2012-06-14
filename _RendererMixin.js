@@ -11,7 +11,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 		//		The layout item displayed by this renderer.
 		item: null,
 		
-		// owner: dojox.calendar._ViewBase
+		// owner: dojox/calendar/_ViewBase
 		//		The view that contains this renderer.
 		owner: null,
 		

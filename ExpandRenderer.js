@@ -31,7 +31,7 @@ template){
 		
 		baseClass: "dojoxCalendarExpand",
 		
-		// owner: dojox.calendar._ViewBase
+		// owner: dojox/calendar/_ViewBase
 		//		The view that contains this renderer.
 		owner: null,
 

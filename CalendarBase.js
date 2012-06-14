@@ -115,11 +115,11 @@ _nls){
 		//		If <code>true</code>, the control supports resizing of items.
 		resizeEnabled: true,
 		
-		// columnView: dojox.calendar.ColumnView
+		// columnView: dojox/calendar/ColumnView
 		//		The column view is displaying one day to seven days time intervals.
 		columnView: null,
 		
-		// matrixView: dojox.calendar.MatrixView
+		// matrixView: dojox/calendar/MatrixView
 		//		The column view is displaying time intervals that lasts more than seven days.
 		matrixView: null,
 		
@@ -485,7 +485,7 @@ _nls){
 		addView: function(view, index){
 			// summary:
 			//		Add a view to the calendar's view list.
-			// view: dojox.calendar.ViewBase
+			// view: dojox/calendar/ViewBase
 			//		The view to add to the calendar.
 			// index: Integer
 			//		Optional, the index where to insert the view in current view list.
@@ -502,7 +502,7 @@ _nls){
 		removeView: function(view){
 			// summary:
 			//		Removes a view from the calendar's view list.
-			// view: dojox.calendar.ViewBase
+			// view: dojox/calendar/ViewBase
 			//		The view to remove from the calendar.
 			// tags:
 			//		protected
@@ -532,7 +532,7 @@ _nls){
 		onViewAdded: function(view){
 			// summary:
 			//		Event dispatched when a view is added from the calendar.
-			// view: dojox.calendar.ViewBase
+			// view: dojox/calendar/ViewBase
 			//		The view that has been added to the calendar.
 			// tags:
 			//		callback
@@ -550,7 +550,7 @@ _nls){
 		onViewRemoved: function(view){			
 			// summary:
 			//		Event dispatched when a view is removed from the calendar.
-			// view: dojox.calendar.ViewBase
+			// view: dojox/calendar/ViewBase
 			//		The view that has been removed from the calendar.
 			// tags:
 			//		callback
@@ -590,10 +590,10 @@ _nls){
 			// summary:
 			//		Configures the view to show the specified time interval.
 			//		This method is computing and setting the 
-			//			| "startDate", "columnCount" for a column view,
-			//      | "startDate", "columnCount", "rowCount", "refStartTime" and "refEndTime" for a matrix view.
+			//		| "startDate", "columnCount" for a column view,
+			//		| "startDate", "columnCount", "rowCount", "refStartTime" and "refEndTime" for a matrix view.
 			//		This method can be extended to configure other properties like layout properties for example.
-			// view: dojox.calendar.ViewBase
+			// view: dojox/calendar/ViewBase
 			//		The view to configure.
 			// index: Integer
 			//		The index of the view in the Calendar view list.
@@ -651,9 +651,9 @@ _nls){
 		matrixViewRowHeaderClick: function(e){
 			// summary:
 			//		Function called when the cell of a row header of the matrix view is clicked.
-			//		|	If another row is already expanded, collapse it and then expand the clicked row.
-			//		|	If the clicked row is already expadned, collapse it.
-			//		|	If no row is expanded, expand the click row.
+			//		| If another row is already expanded, collapse it and then expand the clicked row.
+			//		| If the clicked row is already expadned, collapse it.
+			//		| If no row is expanded, expand the click row.
 			// e: Object
 			//		The row header click event.
 			// tags:
@@ -699,9 +699,9 @@ _nls){
 		_showView: function(oldView, newView){
 			// summary:
 			//		Displays the current view.
-			// oldView: dojox.calendar.ViewBase
+			// oldView: dojox/calendar/ViewBase
 			//		The previously displayed view or null.
-			// newView: dojox.calendar.ViewBase
+			// newView: dojox/calendar/ViewBase
 			//		The view to display.
 			// tags:
 			//		protected
@@ -762,8 +762,8 @@ _nls){
 			//		Creates a new Date object.
 			// obj: Object
 			//		This object can have several values:
-			//		|the time in milliseconds since gregorian epoch.
-			//		|a Date instance
+			//		| the time in milliseconds since gregorian epoch.
+			//		| a Date instance
 			// returns: Date
 			return timeUtil.newDate(obj, this.dateClassObj);			
 		},
@@ -1228,14 +1228,14 @@ _nls){
 		onColumnHeaderClick: function(e){
 			// summary:
 			//		Event dispatched when a column header cell is dispatched.
-			//		e: Event
+			// e: Event
 			//		The event has the following properties:
-			//			| index: Integer
-			//			|		The column index. 
-			//			| date: Date
-			//			|		The date displayed by the column.
-			//			| triggerEvent: Event
-			//			|		The origin event.
+			//		| index: Integer
+			//		|		The column index. 
+			//		| date: Date
+			//		|		The date displayed by the column.
+			//		| triggerEvent: Event
+			//		|		The origin event.
 			// tags:
 			//		callback
 		},
@@ -1250,7 +1250,7 @@ _nls){
 		onRendererCreated: function(renderer){
 			// summary:
 			//		Event dispatched when an item renderer has been created.
-			// renderer: dojox.calendar._RendererMixin
+			// renderer: dojox/calendar/_RendererMixin
 			//		The renderer created.
 			// tags:
 			//		callback
@@ -1259,7 +1259,7 @@ _nls){
 		onRendererRecycled: function(renderer){
 			// summary:
 			//		Event dispatched when an item renderer has been recycled.
-			// renderer: dojox.calendar._RendererMixin
+			// renderer: dojox/calendar/_RendererMixin
 			//		The renderer created.
 			// tags:
 			//		callback
@@ -1268,7 +1268,7 @@ _nls){
 		onRendererReused: function(renderer){
 			// summary:
 			//		Event dispatched when an item renderer that was recycled is reused.
-			// renderer: dojox.calendar._RendererMixin
+			// renderer: dojox/calendar/_RendererMixin
 			//		The renderer created.
 			// tags:
 			//		callback
@@ -1277,7 +1277,7 @@ _nls){
 		onRendererDestroyed: function(renderer){
 			// summary:
 			//		Event dispatched when an item renderer is destroyed.
-			// renderer: dojox.calendar._RendererMixin
+			// renderer: dojox/calendar/_RendererMixin
 			//		The renderer created.
 			// tags:
 			//		callback

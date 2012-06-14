@@ -63,6 +63,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 		tabIndex: "0",
 		
 		// focusedItem: Object
+		//		The data item that currently has the focus.
 		focusedItem: null,
 		
 		_isItemFocused: function(item){

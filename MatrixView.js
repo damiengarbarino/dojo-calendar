@@ -1121,7 +1121,7 @@ function(
 			// summary:
 			//		Refreshes the height of the underlying HTML objects.
 			// tags:
-			//		private\
+			//		private
 			
 			if(this._getRowHeight(0) <= 0){
 				return;
@@ -1234,7 +1234,7 @@ function(
 		_destroyExpandRenderer: function(renderer){
 			// summary: 
 			//		Destroys the expand renderer.
-			// renderer: dojox.calendar._RendererMixin
+			// renderer: dojox/calendar/_RendererMixin
 			//		The item renderer to destroy.
 			//	tags
 			//		protected
