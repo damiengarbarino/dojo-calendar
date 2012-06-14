@@ -190,7 +190,7 @@ function(
 		getSecondarySheet: function(){
 			// summary:
 			//		Returns the secondary sheet
-			// returns: dojox.calendar.MatrixView
+			// returns: dojox/calendar/MatrixView
 			return this.secondarySheet;
 		},
 		

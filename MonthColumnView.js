@@ -418,7 +418,7 @@ function(
 			//		Start time of the range of interest.
 			// end: Date
 			//		End time of the range of interest.
-			// margin: int
+			// margin: Integer
 			//		Margin in minutes around the time range.
 			// visibilityTarget: String
 			//		The end(s) of the time range to make visible.
@@ -845,7 +845,7 @@ function(
 			// date: Date
 			//		The date displayed by this column
 			// renderData: Object
-			//	The render data.
+			//		The render data.
 			// tags:
 			//		protected
 
@@ -1307,7 +1307,7 @@ function(
 			this.inherited(arguments);			
 			
 			var g = this._gridProps;						
-																											
+
 			g.moved= false;
 			g.start= e.touches[0].screenY;
 			g.scrollTop= this.scrollContainer.scrollTop;
@@ -1419,12 +1419,12 @@ function(
 			//		Event dispatched when a column header cell is dispatched.
 			// e: Event
 			//		The event has the following properties:
-			//			| index: Integer
-			//			|		The column index. 
-			//			| date: Date
-			//			|		The date displayed by the column.
-			//			| triggerEvent: Event
-			//			|		The origin event.
+			//		| index: Integer
+			//		|		The column index. 
+			//		| date: Date
+			//		|		The date displayed by the column.
+			//		| triggerEvent: Event
+			//		|		The origin event.
 			// tags:
 			//		callback
 

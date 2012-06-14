@@ -1146,7 +1146,7 @@ function(
 		_recycleRenderer: function(renderer, remove){
 			// summary: 
 			//		Recycles the item renderer to be reused in the future.
-			// renderer: dojox.calendar._RendererMixin
+			// renderer: dojox/calendar/_RendererMixin
 			//		The item renderer to recycle.
 			// tags:
 			//		protected			
@@ -1174,7 +1174,7 @@ function(
 		_destroyRenderer: function(renderer){
 			// summary: 
 			//		Destroys the item renderer.
-			// renderer: dojox.calendar._RendererMixin
+			// renderer: dojox/calendar/_RendererMixin
 			//		The item renderer to destroy.
 			// tags:
 			//		protected
@@ -1224,7 +1224,7 @@ function(
 			//		Update the moveEnabled and resizeEnabled properties of a renderer according to its event current editing state.
 			// item: Object
 			//		The event data item.
-			// renderer: dojox.calendar._RendererMixin
+			// renderer: dojox/calendar/_RendererMixin
 			//		The item renderer.
 			// tags:
 			//		protected
@@ -1342,7 +1342,7 @@ function(
 			//		Sets the current hovered item.
 			// item: Object
 			//		The data item.
-			// renderer: dojox.calendar._RendererMixin
+			// renderer: dojox/calendar/_RendererMixin
 			//		The item renderer.
 			// tags:
 			//		protected
