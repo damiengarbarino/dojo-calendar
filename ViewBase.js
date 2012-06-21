@@ -490,8 +490,8 @@ function(
 			//		Creates a new Date object.
 			// obj: Object
 			//		This object can have several values:
-			//		|the time in milliseconds since gregorian epoch.
-			//		|a Date instance
+			//		- the time in milliseconds since gregorian epoch.
+			//		- a Date instance
 			// returns: Date
 			return timeUtil.newDate(obj, this.dateClassObj);			
 		},
@@ -576,9 +576,9 @@ function(
 		// scrollMethod: String
 		//		Method used to scroll the view, for example the scroll of column view.
 		//		Valid value are: 
-		//			| "auto": let the view decide (default), 
-		//			| "css": use css 3d transform,
-		//			| "dom": use the scrollTop property.
+		//			- "auto": let the view decide (default), 
+		//			- "css": use css 3d transform,
+		//			- "dom": use the scrollTop property.
 		scrollMethod: "auto",
 		
 		_setScrollMethodAttr: function(value){
@@ -991,8 +991,8 @@ function(
 			// summary:
 			//		Returns the renderers that are currently used to displayed the speficied item.
 			//		Returns an array of objects that contains two properties:
-			//			| container: The DOM node that contains the renderer.
-			//			| renderer: The dojox.calendar._RendererMixin instance.
+			//		- container: The DOM node that contains the renderer.
+			//		- renderer: The dojox.calendar._RendererMixin instance.
 			//		Do not keep references on the renderers are they are recycled and reused for other items.
 			// item: Object
 			//		The data or render item.
