@@ -786,15 +786,16 @@ function(
 		styleGridCell: function(node, date, renderData){
 			// summary:
 			//		Styles the CSS classes to the node that displays a column.
-			//		By default this method is setting the 
-			//			| "dojoxCalendarToday" class name if the date displayed is the current date, 
-			//			| "dojoxCalendarWeekend" if the date represents a weekend or
-			//			| "dojoxCalendarDayDisabled" if the date is out of the [refStartTime, refEndTime] interval.
+			//		By default this method is setting the following CSS classes:
+			//		- "dojoxCalendarToday" class name if the date displayed is the current date, 
+			//		- "dojoxCalendarWeekend" if the date represents a weekend or
+			//		- "dojoxCalendarDayDisabled" if the date is out of the [refStartTime, refEndTime] interval.
 			// node: Node
 			//		The DOM node that displays the column in the grid.
 			// date: Date
 			//		The date displayed by this column
 			// renderData: Object
+			//		The render data.
 			// tags:
 			//		protected
 

@@ -140,8 +140,8 @@ _nls){
 		//		A user supplied function that creates a new event.
 		//		This function is used when createOnGridClick is set to true and the user is clicking and dragging on the grid.
 		//		This view takes two parameters:
-		//		| view: the current view,
-		//		| d: the date at the clicked location.
+		//		- view: the current view,
+		//		- d: the date at the clicked location.
 		createItemFunc: null,
 				
 		_currentViewIndex: -1,
@@ -589,9 +589,9 @@ _nls){
 		_configureView: function(view, index, timeInterval, duration){
 			// summary:
 			//		Configures the view to show the specified time interval.
-			//		This method is computing and setting the 
-			//		| "startDate", "columnCount" for a column view,
-			//		| "startDate", "columnCount", "rowCount", "refStartTime" and "refEndTime" for a matrix view.
+			//		This method is computing and setting the following properties:
+			//		- "startDate", "columnCount" for a column view,
+			//		- "startDate", "columnCount", "rowCount", "refStartTime" and "refEndTime" for a matrix view.
 			//		This method can be extended to configure other properties like layout properties for example.
 			// view: dojox/calendar/ViewBase
 			//		The view to configure.
@@ -651,9 +651,10 @@ _nls){
 		matrixViewRowHeaderClick: function(e){
 			// summary:
 			//		Function called when the cell of a row header of the matrix view is clicked.
-			//		| If another row is already expanded, collapse it and then expand the clicked row.
-			//		| If the clicked row is already expadned, collapse it.
-			//		| If no row is expanded, expand the click row.
+			//		The implementation is doing the foolowing actions:
+			//		- If another row is already expanded, collapse it and then expand the clicked row.
+			//		- If the clicked row is already expadned, collapse it.
+			//		- If no row is expanded, expand the click row.
 			// e: Object
 			//		The row header click event.
 			// tags:
@@ -762,8 +763,8 @@ _nls){
 			//		Creates a new Date object.
 			// obj: Object
 			//		This object can have several values:
-			//		| the time in milliseconds since gregorian epoch.
-			//		| a Date instance
+			//		- the time in milliseconds since gregorian epoch.
+			//		- a Date instance
 			// returns: Date
 			return timeUtil.newDate(obj, this.dateClassObj);			
 		},
@@ -857,17 +858,17 @@ _nls){
 		// _animRangeOutDir: Boolean
 		//		Direction of the range animation when the view 'leaving' the screen. 
 		//		Valid values are: 
-		//		| null: auto value,
-		//		| "left": hides to left side (right in right to left).
-		//		| "right": hides to right side (left in right to left).
+		//		- null: auto value,
+		//		- "left": hides to left side (right in right to left).
+		//		- "right": hides to right side (left in right to left).
 		_animRangeOutDir: null,
 
 		// _animRangeInDir: Boolean
 		//		Direction of the range animation when the view 'entering' the screen. 
 		//		Valid values are: 
-		//		| null: auto value,
-		//		| "left": shows from left side (right in right to left).
-		//		| "right": shows from  right side (left in right to left).
+		//		- null: auto value,
+		//		- "left": shows from left side (right in right to left).
+		//		- "right": shows from  right side (left in right to left).
 		_animRangeOutDir: null,		
 		
 		nextRange: function(){

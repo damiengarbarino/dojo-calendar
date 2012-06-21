@@ -988,6 +988,7 @@ function(
 			// date: Date
 			//		The date displayed by this column
 			// renderData: Object
+			//		The render data object.
 			// tags:
 			//		protected
 
