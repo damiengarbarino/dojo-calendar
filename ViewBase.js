@@ -40,6 +40,75 @@ function(
 	timeUtil, 
 	StoreMixin){
 	
+	/*=====
+	var __GridClickEventArgs = function(date, triggerEvent){
+		// summary:
+		//		The event dispatched when the grid is clicked or double-clicked.
+		// date: Date
+		//		The start of the previously displayed time interval, if any. 
+		// triggerEvent: Event
+		//		The event at the origin of this event.
+		
+		this.date = date;
+		this.triggerEvent = triggerEvent;
+	}
+	=====*/
+	
+	/*=====
+	var __ItemMouseEventArgs = function(item, renderer, triggerEvent){
+		// summary:
+		//		The event dispatched when an item is clicked, double-clicked or context-clicked.
+		// item: Object
+		//		The item clicked.
+		// renderer: dojox/calendar/_RendererMixin
+		//		The item renderer clicked.
+		// triggerEvent: Event
+		//		The event at the origin of this event.
+		
+		this.item = item;
+		this.renderer = renderer;
+		this.triggerEvent = triggerEvent;
+	}
+	=====*/
+	
+	/*=====
+	var __itemEditingEventArgs = function(item, editKind, dates, startTime, endTimesheet, source, eventSource, triggerEvent){
+		// summary:
+		//		An item editing event.
+		// item: Object
+		//		The date item that is being edited.
+		// editKind: String
+		//		Kind of edit: "resizeBoth", "resizeStart", "resizeEnd" or "move".
+		// dates: Date[]
+		//		The computed date/time of the during the event editing. One entry per edited date (touch use case).
+		// startTime: Date?
+		//		The start time of data item.
+		// endTime: Date?
+		//		The end time of data item.
+		// sheet: String
+		//		For views with several sheets (columns view for example), the sheet when the event occured.
+		// source: dojox/calendar/ViewBase
+		//		The view where the event occurred.
+		// eventSource: String
+		//		The device that triggered the event. This property can take the following values:
+		//		- "mouse", 
+		//		- "keyboard", 
+		//		- "touch"		
+		// triggerEvent: Event
+		//		The event at the origin of this event.
+			
+		this.item = item;
+		this.editKind = editKind;
+		this.dates = dates;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.sheet = sheet;
+		this.source = source;
+		this.eventSource = eventSource;
+		this.triggerEvent = triggerEvent;
+	}
+	=====*/
+	
 
 	return declare("dojox.calendar.ViewBase", [_WidgetBase, StoreMixin, _Invalidating, Selection], {
 		
@@ -1099,7 +1168,9 @@ function(
 						
 		onRendererCreated: function(renderer){
 			// summary:
-			//		Event dispatched when an item renderer has been created.	
+			//		Event dispatched when an item renderer has been created.
+			// renderer: dojox/calendar/_RendererMixin
+			//		The renderer created.
 			// tags:
 			//		callback
 		},	
@@ -1107,6 +1178,8 @@ function(
 		onRendererRecycled: function(renderer){
 			// summary:
 			//		Event dispatched when an item renderer has been recycled.
+			// renderer: dojox/calendar/_RendererMixin
+			//		The renderer recycled.
 			// tags:
 			//		callback
 
@@ -1114,7 +1187,9 @@ function(
 		
 		onRendererReused: function(renderer){
 			// summary:
-			//		Event dispatched when an item renderer that was recycled is reused.	
+			//		Event dispatched when an item renderer that was recycled is reused.
+			// renderer: dojox/calendar/_RendererMixin
+			//		The renderer reused.
 			// tags:
 			//		callback
 		},
@@ -1122,6 +1197,8 @@ function(
 		onRendererDestroyed: function(renderer){
 			// summary:
 			//		Event dispatched when an item renderer is destroyed.
+			// renderer: dojox/calendar/_RendererMixin
+			//		The renderer destroyed.
 			// tags:
 			//		callback
 		},
@@ -1680,6 +1757,8 @@ function(
 		onGridClick: function(e){
 			// summary:
 			//		Event dispatched when the grid has been clicked.
+			// e: __GridClickEventArgs
+			//		The event dispatched when the grid is clicked.
 			// tags:
 			//		callback
 		},
@@ -1701,6 +1780,8 @@ function(
 		onGridDoubleClick: function(e){
 			// summary:
 			//		Event dispatched when the grid has been double-clicked.
+			// e: __GridClickEventArgs
+			//		The event dispatched when the grid is double-clicked.
 			// tags:
 			//		protected
 
@@ -1716,6 +1797,8 @@ function(
 		onItemClick: function(e){
 			// summary:
 			//		Event dispatched when an item renderer has been clicked.
+			// e: __ItemMouseEventArgs
+			//		The event dispatched when an item is clicked.
 			// tags:
 			//		callback
 
@@ -1731,6 +1814,8 @@ function(
 		onItemDoubleClick: function(e){
 			// summary:
 			//		Event dispatched when an item renderer has been double-clicked.
+			// e: __ItemMouseEventArgs
+			//		The event dispatched when an item is double-clicked.
 			// tags:
 			//		callback
 
@@ -1746,6 +1831,8 @@ function(
 		onItemContextMenu: function(e){
 			// summary:
 			//		Event dispatched when an item renderer has been context-clicked.
+			// e: __ItemMouseEventArgs
+			//		The event dispatched when an item is context-clicked.
 			// tags:
 			//		callback
 
@@ -2142,6 +2229,8 @@ function(
 		onItemEditBeginGesture: function(e){
 			// summary:
 			//		Event dispatched when an editing gesture is beginning.
+			// e: __itemEditingEventArgs
+			//		The editing event.
 			// tags:
 			//		callback
 
@@ -2425,6 +2514,8 @@ function(
 		onItemEditMoveGesture: function(e){
 			// summary:
 			//		Event dispatched during a move editing gesture.
+			// e: __itemEditingEventArgs
+			//		The editing event.
 			// tags:
 			//		callback
 
@@ -2502,6 +2593,8 @@ function(
 		onItemEditResizeGesture: function(e){
 			// summary:
 			//		Event dispatched during a resize editing gesture.
+			// e: __itemEditingEventArgs
+			//		The editing event.
 			// tags:
 			//		callback
 
@@ -2565,6 +2658,8 @@ function(
 		onItemEditEndGesture: function(e){
 			// summary:
 			//		Event dispatched at the end of an editing gesture.
+			// e: __itemEditingEventArgs
+			//		The editing event.
 			// tags:
 			//		callback
 
