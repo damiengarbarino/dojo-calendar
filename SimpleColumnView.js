@@ -41,6 +41,22 @@ function(
 	mouse,
 	query, 
 	metrics){
+	
+	/*=====
+	var __ColumnClickEventArgs = function(index, date, triggerEvent){
+		// summary:
+		//		A column click event.
+		// index: Integer
+		//		The column index. 
+		// date: Date
+		//		The date displayed by the column.
+		// triggerEvent: Event
+		//		The origin event.
+		this.index = index;
+		this.date = date;
+		this.triggerEvent = triggerEvent;
+	}
+	=====*/
 				
 	return declare("dojox.calendar.SimpleColumnView", [ViewBase, _TemplatedMixin], {
 		
@@ -1469,20 +1485,15 @@ function(
 			this._dispatchCalendarEvt(e, "onColumnHeaderClick");
 		},
 		
+		
+		
 		onColumnHeaderClick: function(e){
 			// summary:
 			//		Event dispatched when a column header cell is dispatched.
-			//		e: Event
-			//		The event has the following properties:
-			//		| index: Integer
-			//		|		The column index. 
-			//		| date: Date
-			//		|		The date displayed by the column.
-			//		| triggerEvent: Event
-			//		|		The origin event.
+			// e: __ColumnClickEventArgs
+			//		The event has the following properties
 			// tags:
-			//		callback
-
+			//		callback					
 		},
 		
 
