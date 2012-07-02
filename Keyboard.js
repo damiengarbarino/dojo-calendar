@@ -108,6 +108,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 			//		If there is no current child focused, the first (dir == 1) or last (dir == -1) is focused.
 			// dir: Integer
 			//		The direction of the next child to focus.
+			//
 			//		* 1: Move focus to the next item in the list.
 			//		* -1: Move focus to the previous item in the list.
 			
