@@ -51,7 +51,7 @@ function(
 		
 		this.date = date;
 		this.triggerEvent = triggerEvent;
-	}
+	};
 	=====*/
 	
 	/*=====
@@ -68,7 +68,7 @@ function(
 		this.item = item;
 		this.renderer = renderer;
 		this.triggerEvent = triggerEvent;
-	}
+	};
 	=====*/
 	
 	/*=====
@@ -91,6 +91,7 @@ function(
 		//		The view where the event occurred.
 		// eventSource: String
 		//		The device that triggered the event. This property can take the following values:
+		//
 		//		- "mouse", 
 		//		- "keyboard", 
 		//		- "touch"		
@@ -106,7 +107,7 @@ function(
 		this.source = source;
 		this.eventSource = eventSource;
 		this.triggerEvent = triggerEvent;
-	}
+	};
 	=====*/
 	
 
@@ -125,16 +126,12 @@ function(
 		//		Kind of the view. Used by the calendar widget to determine how to configure the view.
 		viewKind: null,
 		
-		// _layoutStep: Integer
-		//		The number of units displayed by a visual layout unit (i.e. a column or a row) 
-		// tags:
-		//		protected
+		// _layoutStep: [protected] Integer
+		//		The number of units displayed by a visual layout unit (i.e. a column or a row)
 		_layoutStep: 1,
 		
-		// _layoutStep: Integer
-		//		The unit displayed by a visual layout unit (i.e. a column or a row) 
-		// tags:
-		//		protected
+		// _layoutStep: [protected] Integer
+		//		The unit displayed by a visual layout unit (i.e. a column or a row)
 		_layoutUnit: "day",
 		
 		// resizeCursor: String
@@ -350,13 +347,13 @@ function(
 			//		is overlapping the second time range defined by the start2 and end2 parameters.
 			// renderData: Object
 			//		The render data.
-			//	start1: Date
+			// start1: Date
 			//		The start time of the first time range.
-			//	end1: Date
+			// end1: Date
 			//		The end time of the first time range.
-			//	start2: Date
+			// start2: Date
 			//		The start time of the second time range.
-			//	end2: Date
+			// end2: Date
 			//		The end time of the second time range.
 			// includeLimits: Boolean
 			//		Whether include the end time or not.
@@ -559,6 +556,7 @@ function(
 			//		Creates a new Date object.
 			// obj: Object
 			//		This object can have several values:
+			//
 			//		- the time in milliseconds since gregorian epoch.
 			//		- a Date instance
 			// returns: Date
@@ -798,7 +796,7 @@ function(
 
 		},
 
-	  ////////////////////////////////////////////////////////
+	  	////////////////////////////////////////////////////////
 		//
 		// Store & Items
 		//
@@ -1035,7 +1033,7 @@ function(
 		_recycleItemRenderers: function(remove){
 			// summary:
 			//		Recycles all the item renderers.
-			//	remove: Boolean
+			// remove: Boolean
 			//		Whether remove the DOM node from it parent.
 			// tags:
 			//		protected
@@ -1109,7 +1107,7 @@ function(
 			// kind: String
 			//		The kind of renderer.
 			// rendererClass: Object
-			//		The class to instanciate to create the renderer.
+			//		The class to instantiate to create the renderer.
 			// returns: Object
 			// tags:
 			//		protected				
@@ -1907,9 +1905,10 @@ function(
 		//		A flag that indicates whether the user can move items displayed.
 		//		If <code>true</code>, the user can move the items.
 		moveEnabled: true,
-		
-		//	A flag that indicates whether the items can be resized.
-		//	If <code>true</code>, the control supports resizing of items.
+
+		// resizeEnabled: Boolean
+		//		A flag that indicates whether the items can be resized.
+		//		If `true`, the control supports resizing of items.
 		resizeEnabled: true,
 		
 		isItemEditable: function(item, rendererKind){
@@ -2729,7 +2728,7 @@ function(
 		//		Specifies if the start and end time of an item can be swapped during an editing gesture. Note that using the keyboard this property is ignored.	
 		allowStartEndSwap: true,			
 		
-		//	allowResizeLessThan24H: Boolean
+		// allowResizeLessThan24H: Boolean
 		//		If an event has a duration greater than 24 hours, indicates if using a resize gesture, it can be resized to last less than 24 hours.
 		//		This flag is usually used when two different kind of renderers are used (MatrixView) to prevent changing the kind of renderer during an editing gesture.
 		allowResizeLessThan24H: false
