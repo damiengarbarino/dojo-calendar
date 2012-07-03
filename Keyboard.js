@@ -109,8 +109,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 			// dir: Integer
 			//		The direction of the next child to focus.
 			//
-			//		* 1: Move focus to the next item in the list.
-			//		* -1: Move focus to the previous item in the list.
+			//		- 1: Move focus to the next item in the list.
+			//		- -1: Move focus to the previous item in the list.
 			
 			if(!this.renderData || !this.renderData.items || this.renderData.items.length == 0){
 				return null;
