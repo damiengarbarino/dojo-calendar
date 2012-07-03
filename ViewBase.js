@@ -2669,16 +2669,16 @@ function(
 		ensureMinimalDuration: function(renderData, item, unit, steps, editKind){
 			// summary:
 			//		During the resize editing gesture, ensures that the item has the specified minimal duration.
-			//		renderData: Object
-			//			The render data.
-			//		item: Object
-			//			The edited item.
-			//		unit: String
-			//			The unit used to define the minimal duration.
-			//		steps: Integer
-			//			The number of time units.
-			//		editKind: String
-			//			The edit kind: "resizeStart" or "resizeEnd".
+			// renderData: Object
+			//		The render data.
+			// item: Object
+			//		The edited item.
+			// unit: String
+			//		The unit used to define the minimal duration.
+			// steps: Integer
+			//		The number of time units.
+			// editKind: String
+			//		The edit kind: "resizeStart" or "resizeEnd".
 			var minTime;
 			var cal = renderData.dateModule;
 			
