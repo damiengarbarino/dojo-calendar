@@ -644,10 +644,11 @@ function(
 			
 		// scrollMethod: String
 		//		Method used to scroll the view, for example the scroll of column view.
-		//		Valid value are: 
-		//			- "auto": let the view decide (default), 
-		//			- "css": use css 3d transform,
-		//			- "dom": use the scrollTop property.
+		//		Valid value are:
+		//
+		//		- "auto": let the view decide (default),
+		//		- "css": use css 3d transform,
+		//		- "dom": use the scrollTop property.
 		scrollMethod: "auto",
 		
 		_setScrollMethodAttr: function(value){
