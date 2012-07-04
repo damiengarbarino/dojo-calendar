@@ -1253,7 +1253,7 @@ function(
 			//		Destroys the expand renderer.
 			// renderer: dojox/calendar/_RendererMixin
 			//		The item renderer to destroy.
-			//	tags
+			// tags:
 			//		protected
 			
 			arr.forEach(renderer.__handles, function(handle){
@@ -1379,7 +1379,7 @@ function(
 			//		Third pass of the overlap layout (optional). Compute the number of lanes used by sub interval.
 			// lanes: Object[]
 			//		The array of lanes.
-			//	tags
+			// tags:
 			//		private
 
 			var pos=0, posEnd=0;
