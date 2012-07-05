@@ -950,8 +950,7 @@ function(
 			query("td>div", table).forEach(function(div, i){
 
 				domStyle.set(div, {
-					"height":	renderData.sheetHeight + "px",
-					"marginBottom":	"-" + renderData.sheetHeight + "px"
+					"height": renderData.sheetHeight + "px"
 				});
 				bgCols.push(div);		
 			}, this);
