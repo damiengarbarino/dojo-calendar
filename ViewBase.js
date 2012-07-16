@@ -86,7 +86,7 @@ function(
 		// endTime: Date?
 		//		The end time of data item.
 		// sheet: String
-		//		For views with several sheets (columns view for example), the sheet when the event occured.
+		//		For views with several sheets (columns view for example), the sheet when the event occurred.
 		// source: dojox/calendar/ViewBase
 		//		The view where the event occurred.
 		// eventSource: String
