@@ -244,6 +244,7 @@ _nls){
 		//		A user supplied function that creates a new event.
 		//		This function is used when createOnGridClick is set to true and the user is clicking and dragging on the grid.
 		//		This view takes two parameters:
+		//
 		//		- view: the current view,
 		//		- d: the date at the clicked location.
 		createItemFunc: null,
