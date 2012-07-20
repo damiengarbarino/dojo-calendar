@@ -21,7 +21,7 @@ function(
 	keys){
 	
 	/*=====
-	var __ItemMouseEventArgs = function(item, renderer, triggerEvent){
+	var __ItemMouseEventArgs = {
 		// summary:
 		//		The event dispatched when an item is clicked, double-clicked or context-clicked.
 		// item: Object
@@ -30,11 +30,7 @@ function(
 		//		The item renderer clicked.
 		// triggerEvent: Event
 		//		The event at the origin of this event.
-		
-		this.item = item;
-		this.renderer = renderer;
-		this.triggerEvent = triggerEvent;
-	}
+	};
 	=====*/
 			
 	return declare("dojox.calendar.Mouse", null, {

@@ -41,7 +41,7 @@ function(
 	_TemplatedMixin){
 	
 	/*=====
-	var __HeaderClickEventArgs = function(index, date, triggerEvent){
+	var __HeaderClickEventArgs = {
 		// summary:
 		//		A column click event.
 		// index: Integer
@@ -50,10 +50,7 @@ function(
 		//		The date displayed by the column.
 		// triggerEvent: Event
 		//		The origin event.
-		this.index = index;
-		this.date = date;
-		this.triggerEvent = triggerEvent;
-	}
+	};
 	=====*/
 	
 	return declare("dojox.calendar.MatrixView", [ViewBase, _TemplatedMixin], {
