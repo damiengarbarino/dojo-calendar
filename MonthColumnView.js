@@ -45,7 +45,7 @@ function(
 	metrics){
 	
 	/*=====
-	var __ColumnClickEventArgs = function(index, date, triggerEvent){
+	var __ColumnClickEventArgs = {
 		// summary:
 		//		A column click event.
 		// index: Integer
@@ -54,10 +54,7 @@ function(
 		//		The date displayed by the column.
 		// triggerEvent: Event
 		//		The origin event.
-		this.index = index;
-		this.date = date;
-		this.triggerEvent = triggerEvent;
-	}
+	};
 	=====*/
 				
 	return declare("dojox.calendar.MonthColumnView", [ViewBase, _TemplatedMixin], {
