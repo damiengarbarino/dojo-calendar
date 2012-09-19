@@ -1618,13 +1618,14 @@ function(
 				
 				store.put(newItem);
 				
+				var renderers = this.getRenderers(newItem);
 				// renderer created when item put in store
-				var renderer = this.getRenderers(newItem)[0];
-				
-				if(!renderer){
-					return;
+				if(renderers && renderers.length>0){
+					var renderer = renderers[0];					
+					if(renderer){
+						this._onRendererHandleMouseDown(e, renderer.renderer, "resizeEnd");
+					}					
 				}
-				this._onRendererHandleMouseDown(e, renderer.renderer, "resizeEnd");
 			}
 		},
 		
