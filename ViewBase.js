@@ -1620,13 +1620,12 @@ function(
 				
 				// renderer created when item put in store
 				var renderers = this.getRenderers(newItem);				
-				
-				if(!renderers || renderers.length<1){
-					return;
+				if(renderers && renderers.length>0){
+					var renderer = renderers[0];					
+					if(renderer){
+						this._onRendererHandleMouseDown(e, renderer.renderer, "resizeEnd");
+					}					
 				}
-				
-				var renderer = renderers[0];
-				this._onRendererHandleMouseDown(e, renderer.renderer, "resizeEnd");
 			}
 		},
 		
