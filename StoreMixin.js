@@ -77,8 +77,8 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			return {
 				id: store.getIdentity(item),
 				summary: item[this.summaryAttr],
-				startTime: (this.decodeDate && this.decodeDate(item[this.startTimeAttr])) || this.newDate(item[this.startTimeAttr]),
-				endTime: (this.decodeDate && this.decodeDate(item[this.endTimeAttr])) || this.newDate(item[this.endTimeAttr]),
+				startTime: (this.decodeDate && this.decodeDate(item[this.startTimeAttr])) || this.newDate(item[this.startTimeAttr], this.dateClassObj),
+				endTime: (this.decodeDate && this.decodeDate(item[this.endTimeAttr])) || this.newDate(item[this.endTimeAttr], this.dateClassObj),
 				allDay: item[this.allDayAttr] != null ? item[this.allDayAttr] : false,
 				cssClass: this.cssClassFunc ? this.cssClassFunc(item) : null 
 			};
