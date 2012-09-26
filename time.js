@@ -33,7 +33,7 @@ time.newDate = function(obj, dateClassObj){
 	}else if(typeof obj == "string"){
 		d = stamp.fromISOString(obj);
 		if(d === null){
-			throw new Error(); // cannot build date
+			d = new dateClassObj(obj); // kept for backward compat, will throw error in dojo 1.9
 		}else if(dateClassObj !== Date){ // from Date to dateClassObj
 			d = new dateClassObj(d.getTime());
 		}
