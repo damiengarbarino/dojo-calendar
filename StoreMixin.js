@@ -94,7 +94,9 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			//	|		summary: String
 			//	|	}
 			//		By default it is building an object using the summaryAttr, startTimeAttr and endTimeAttr properties
-			//		and decodeDate property if not null.
+			//		and encodeDate property if not null. If the encodeDate property is null a Date object will be set in the start and end time.
+			//		When using a JsonRest store, for example, it is recommended to transfer dates using the ISO format (see dojo.date.stamp).
+			//		In that case, provide a custom function to the encodeDate property that is using the date ISO encoding provided by Dojo. 
 			// renderItem: Object
 			//		The render item. 
 			// store: dojo.store.api.Store
