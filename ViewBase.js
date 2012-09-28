@@ -93,6 +93,18 @@ function(
 	};
 	=====*/
 	
+	/*=====
+	var __rendererLifecycleEventArgs = {
+		// summary:
+		//		An renderer lifecycle event.
+		// renderer: Object
+		//		The renderer.		
+		// source: dojox/calendar/ViewBase
+		//		The view where the event occurred.
+		// item:Object?
+		//		The item that will be displayed by the renderer for the "rendererCreated" and "rendererReused" events. 
+	};
+	=====*/
 
 	return declare("dojox.calendar.ViewBase", [_WidgetBase, StoreMixin, _Invalidating, Selection], {
 		
@@ -1097,7 +1109,7 @@ function(
 						
 			if(item != null && kind != null && rendererClass != null){
 				
-				var res, renderer;
+				var res=null, renderer=null;
 				
 				var pool = this.rendererPool[kind];
 				
@@ -1124,12 +1136,12 @@ function(
 						kind: kind
 					};
 
-					this.onRendererCreated(res);
+					this._onRendererCreated({renderer:res, source:this, item:item});
 					
 				} else {
 					renderer = res.renderer; 
 					
-					this.onRendererReused(renderer);
+					this._onRendererReused({renderer:renderer, source:this, item:item});
 				}
 				
 				renderer.owner = this;
@@ -1146,41 +1158,77 @@ function(
 				return res;	
 			}
 			return null;
-		},	
-						
-		onRendererCreated: function(renderer){
+		},
+		
+		_onRendererCreated: function(e){
+			if(e.source == this){
+				this.onRendererCreated(e);
+			}
+			if(this.owner != null){
+				this.owner._onRendererCreated(e);
+			}
+		},
+		
+		onRendererCreated: function(e){
 			// summary:
 			//		Event dispatched when an item renderer has been created.
-			// renderer: dojox/calendar/_RendererMixin
-			//		The renderer created.
+			// e: __rendererLifecycleEventArgs
+			//		The renderer lifecycle event.
 			// tags:
 			//		callback
 		},	
 		
-		onRendererRecycled: function(renderer){
+		_onRendererRecycled: function(e){
+			if(e.source == this){
+				this.onRendererRecycled(e);
+			}
+			if(this.owner != null){
+				this.owner._onRendererRecycled(e);
+			}
+		},
+		
+		onRendererRecycled: function(e){
 			// summary:
 			//		Event dispatched when an item renderer has been recycled.
-			// renderer: dojox/calendar/_RendererMixin
-			//		The renderer recycled.
+			// e: __rendererLifecycleEventArgs
+			//		The renderer lifecycle event.
 			// tags:
 			//		callback
 
 		},
+						
+		_onRendererReused: function(e){
+			if(e.source == this){
+				this.onRendererReused(e);
+			}
+			if(this.owner != null){
+				this.owner._onRendererReused(e);
+			}
+		},
 		
-		onRendererReused: function(renderer){
+		onRendererReused: function(e){
 			// summary:
 			//		Event dispatched when an item renderer that was recycled is reused.
-			// renderer: dojox/calendar/_RendererMixin
-			//		The renderer reused.
+			// e: __rendererLifecycleEventArgs
+			//		The renderer lifecycle event.
 			// tags:
 			//		callback
 		},
 		
-		onRendererDestroyed: function(renderer){
+		_onRendererDestroyed: function(e){
+			if(e.source == this){
+				this.onRendererDestroyed(e);
+			}
+			if(this.owner != null){
+				this.owner._onRendererDestroyed(e);
+			}
+		},
+		
+		onRendererDestroyed: function(e){
 			// summary:
 			//		Event dispatched when an item renderer is destroyed.
-			// renderer: dojox/calendar/_RendererMixin
-			//		The renderer destroyed.
+			// e: __rendererLifecycleEventArgs
+			//		The renderer lifecycle event.
 			// tags:
 			//		callback
 		},
@@ -1191,7 +1239,7 @@ function(
 
 			this.onRenderersLayoutDone(view);
 			if(this.owner != null){
-				this.owner.onRenderersLayoutDone(view);
+				this.owner._onRenderersLayoutDone(view);
 			}				
 		},
 									
@@ -1210,7 +1258,7 @@ function(
 			// tags:
 			//		protected			
 								
-			this.onRendererRecycled(renderer);
+			this._onRendererRecycled({renderer:renderer, source:this});
 			
 			var pool = this.rendererPool[renderer.kind];
 			
@@ -1237,7 +1285,7 @@ function(
 			//		The item renderer to destroy.
 			// tags:
 			//		protected
-			this.onRendererDestroyed(renderer);
+			this._onRendererDestroyed({renderer:renderer, source:this});
 			
 			var ir = renderer.renderer;
 			

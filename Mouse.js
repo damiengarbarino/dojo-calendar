@@ -46,9 +46,9 @@ function(
 		postMixInProperties: function(){
 			this.inherited(arguments);
 			
-			this.on("rendererCreated", lang.hitch(this, function(ir){
+			this.on("rendererCreated", lang.hitch(this, function(irEvent){
 				
-				var renderer = ir.renderer;
+				var renderer = irEvent.renderer.renderer;
 				
 				var h;
 				if(!renderer.__handles){
@@ -110,11 +110,11 @@ function(
 				}));
 				renderer.__handles.push(h);
 				
-				h = on(ir.container, mouse.enter, lang.hitch(this, function(e){
+				h = on(irEvent.renderer.container, mouse.enter, lang.hitch(this, function(e){
 					if(!renderer.item) return;
 					
 					if(!this._editingGesture){
-						this._setHoveredItem(renderer.item.item, ir.renderer);
+						this._setHoveredItem(renderer.item.item, renderer);
 						this._onItemRollOver(this.__fixEvt({
 							item: this.renderItemToItem(renderer.item, this.get("store")),
 							renderer: renderer,

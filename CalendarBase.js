@@ -127,6 +127,19 @@ _nls){
 		//		The event at the origin of this event.
 	};
 	=====*/
+	
+	/*=====
+	var __rendererLifecycleEventArgs = {
+		// summary:
+		//		A renderer lifecycle event.
+		// renderer: Object
+		//		The renderer.		
+		// source: dojox/calendar/ViewBase
+		//		The view where the event occurred.
+		// item:Object?
+		//		The item that will be displayed by the renderer for the "rendererCreated" and "rendererReused" events.
+	};
+	=====*/
 
 	return declare("dojox.calendar.CalendarBase", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, StoreMixin, _Invalidating, Selection], {
 		
@@ -1352,40 +1365,60 @@ _nls){
 			//		callback
 		},		
 		
-		onRendererCreated: function(renderer){
+		_onRendererCreated: function(e){
+			this.onRendererCreated(e);
+		},
+		
+		onRendererCreated: function(e){
 			// summary:
 			//		Event dispatched when an item renderer has been created.
-			// renderer: dojox/calendar/_RendererMixin
-			//		The renderer created.
+			// e: __rendererLifecycleEventArgs
+			//		The renderer lifecycle event.
 			// tags:
 			//		callback
 		},
 		
-		onRendererRecycled: function(renderer){
+		_onRendererRecycled: function(e){
+			this.onRendererRecycled(e);
+		},
+		
+		onRendererRecycled: function(e){
 			// summary:
 			//		Event dispatched when an item renderer has been recycled.
-			// renderer: dojox/calendar/_RendererMixin
-			//		The renderer created.
+			// e: __rendererLifecycleEventArgs
+			//		The renderer lifecycle event.
 			// tags:
 			//		callback
 		},
 		
-		onRendererReused: function(renderer){
+		_onRendererReused: function(e){
+			this.onRendererReused(e);
+		},
+		
+		onRendererReused: function(e){
 			// summary:
 			//		Event dispatched when an item renderer that was recycled is reused.
-			// renderer: dojox/calendar/_RendererMixin
-			//		The renderer created.
+			// e: __rendererLifecycleEventArgs
+			//		The renderer lifecycle event.
 			// tags:
 			//		callback
 		},
 		
-		onRendererDestroyed: function(renderer){
+		_onRendererDestroyed: function(e){
+			this.onRendererDestroyed(e);
+		},
+		
+		onRendererDestroyed: function(e){
 			// summary:
 			//		Event dispatched when an item renderer is destroyed.
-			// renderer: dojox/calendar/_RendererMixin
-			//		The renderer created.
+			// e: __rendererLifecycleEventArgs
+			//		The renderer lifecycle event.
 			// tags:
 			//		callback
+		},
+		
+		_onRenderersLayoutDone: function(view){
+			this.onRenderersLayoutDone(view);
 		},
 		
 		onRenderersLayoutDone: function(view){

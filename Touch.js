@@ -17,9 +17,9 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 		
 		postMixInProperties: function(){
 			
-			this.on("rendererCreated", lang.hitch(this, function(ir){
+			this.on("rendererCreated", lang.hitch(this, function(irEvent){
 				
-				var renderer = ir.renderer;
+				var renderer = irEvent.renderer.renderer;
 				
 				
 				var h;
