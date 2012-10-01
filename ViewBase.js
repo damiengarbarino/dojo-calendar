@@ -1124,12 +1124,12 @@ function(
 						kind: kind
 					};
 
-					this.onRendererCreated(res);
+					this._onRendererCreated(res);
 					
 				} else {
 					renderer = res.renderer; 
 					
-					this.onRendererReused(renderer);
+					this._onRendererReused(renderer);
 				}
 				
 				renderer.owner = this;
@@ -1147,7 +1147,17 @@ function(
 			}
 			return null;
 		},	
-						
+		
+		_onRendererCreated: function(renderer){
+			this.onRendererCreated(renderer);
+			// workaround for a bubble up issue, properly fixed in master with a change of API.
+			// currently we only have a simple view or a view in a view, so testing owner.owner is enough.
+			var calendar = this.owner && this.owner.owner ? this.owner.owner : this.owner;
+			if(calendar){
+				calendar.onRendererCreated(renderer);
+			}
+		},
+		
 		onRendererCreated: function(renderer){
 			// summary:
 			//		Event dispatched when an item renderer has been created.
@@ -1156,6 +1166,14 @@ function(
 			// tags:
 			//		callback
 		},	
+		
+		_onRendererRecycled: function(renderer){
+			this.onRendererRecycled(renderer);
+			var calendar = this.owner && this.owner.owner ? this.owner.owner : this.owner;
+			if(calendar){
+				calendar.onRendererRecycled(renderer);
+			}
+		},
 		
 		onRendererRecycled: function(renderer){
 			// summary:
@@ -1167,6 +1185,14 @@ function(
 
 		},
 		
+		_onRendererReused: function(renderer){
+			this.onRendererReused(renderer);
+			var calendar = this.owner && this.owner.owner ? this.owner.owner : this.owner;
+			if(calendar){
+				calendar.onRendererReused(renderer);
+			}
+		},
+		
 		onRendererReused: function(renderer){
 			// summary:
 			//		Event dispatched when an item renderer that was recycled is reused.
@@ -1174,6 +1200,14 @@ function(
 			//		The renderer reused.
 			// tags:
 			//		callback
+		},
+		
+		_onRendererDestroyed: function(renderer){
+			this.onRendererDestroyed(renderer);
+			var calendar = this.owner && this.owner.owner ? this.owner.owner : this.owner;
+			if(calendar){
+				calendar.onRendererDestroyed(renderer);
+			}
 		},
 		
 		onRendererDestroyed: function(renderer){
@@ -1210,7 +1244,7 @@ function(
 			// tags:
 			//		protected			
 								
-			this.onRendererRecycled(renderer);
+			this._onRendererRecycled(renderer);
 			
 			var pool = this.rendererPool[renderer.kind];
 			
@@ -1237,7 +1271,7 @@ function(
 			//		The item renderer to destroy.
 			// tags:
 			//		protected
-			this.onRendererDestroyed(renderer);
+			this._onRendererDestroyed(renderer);
 			
 			var ir = renderer.renderer;
 			
