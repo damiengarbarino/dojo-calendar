@@ -10,6 +10,7 @@ define([
 "dojo/dom", 
 "dojo/dom-style",
 "dojo/dom-construct", 
+"dojo/dom-geometry",
 "dojo/on", 
 "dojo/date", 
 "dojo/date/locale", 
@@ -30,7 +31,8 @@ function(
 	query, 
 	dom, 
 	domStyle,
-	domConstruct, 
+	domConstruct,
+	domGeometry,
 	on, 
 	date, 
 	locale, 
@@ -639,9 +641,9 @@ function(
 				// reset
 				if(this._domScroll !== undefined){
 					if(this._domScroll){
-						domStyle.set(this.sheetContainer, this._cssPrefix+"transform", "translateY(-"+pos+"px)");
+						domStyle.set(this.sheetContainer, this._cssPrefix+"transform", "translateY(0px)");
 					}else{
-						this.scrollContainer.scrollTop = 0
+						this.scrollContainer.scrollTop = 0;
 					}
 				}
 				
@@ -730,8 +732,18 @@ function(
 				}
 			}
 			
+			var containerSize = domGeometry.getMarginBox(this.scrollContainer);
+			var sheetSize = domGeometry.getMarginBox(this.sheetContainer);
+			var max = sheetSize.h - containerSize.h;
+			
+			if(pos < 0){
+				pos = 0;
+			}else if(pos > max){
+				pos = max;
+			}
+			
 			this._scrollPos = pos;
-							
+												
 			if(this._domScroll){				
 				this.scrollContainer.scrollTop = pos;				
 			}else{			
