@@ -592,7 +592,7 @@ function(
 				tbody = domConstruct.create("tbody", null, rowHeaderTable);
 			}				
 						
-			var count = renderData.rowCount - (oldRenderData ? oldRenderData.rowCount : 0);
+			var count = renderData.rowCount - query("tr", rowHeaderTable).length;
 			
 			// Build HTML structure
 			if(count>0){ // creation
@@ -692,11 +692,13 @@ function(
 			if(!table){
 				return;
 			}
+			
+			var currentTR = query("tr", table);
 
-			var rowDiff = renderData.rowCount - (oldRenderData ? oldRenderData.rowCount : 0);
+			var rowDiff = renderData.rowCount - currentTR.length;
 			var addRows = rowDiff > 0;
 			
-			var colDiff  = renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0);
+			var colDiff  = renderData.columnCount - (currentTR ? query("td", currentTR[0]).length : 0);
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
