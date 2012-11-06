@@ -1103,7 +1103,7 @@ function(
 		_defaultItemToRendererKindFunc:function(item){
 			// tags:
 			//		private
-			return null
+			return null;
 		},
 
 		_createRenderer: function(item, kind, rendererClass, cssClass){			
