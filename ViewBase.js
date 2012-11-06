@@ -850,7 +850,6 @@ function(
 				};
 			}
 			
-			var numLanesPerInt;
 			var lanes = [];
 
 			for(var i=0; i<layoutItems.length; i++){
@@ -858,7 +857,7 @@ function(
 				this._layoutPass1(layoutItem, lanes);
 			}
 
-			var addedPassRes;
+			var addedPassRes = null;
 			if(func){
 				addedPassRes = lang.hitch(this, func)(lanes);
 			}
@@ -1091,7 +1090,7 @@ function(
 		_defaultItemToRendererKindFunc:function(item){
 			// tags:
 			//		private
-			return null
+			return null;
 		},
 
 		_createRenderer: function(item, kind, rendererClass, cssClass){			
