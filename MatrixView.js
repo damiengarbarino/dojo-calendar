@@ -1867,7 +1867,7 @@ function(
 			var selected = this.isItemSelected(item);
 			var hovered = this.isItemHovered(item);
 			var focused = this.isItemFocused(item);
-
+			
 			var renderer = ir.renderer;
 
 			renderer.set("hovered", hovered);
@@ -1875,6 +1875,8 @@ function(
 			renderer.set("edited", edited);
 			renderer.set("focused", this.showFocus ? focused : false);
 			renderer.set("moveEnabled", this.isItemMoveEnabled(item, kind));
+			renderer.set("storeState", this.getItemStoreState(item));
+			
 			if(kind != "label"){
 				renderer.set("resizeEnabled", this.isItemResizeEnabled(item, kind));
 			}

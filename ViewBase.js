@@ -143,9 +143,8 @@ function(
 		_getFormatItemTimeFuncAttr: function(){
 			if(this.owner != null){
 				return this.owner.get("formatItemTimeFunc");
-			}else{
-				return this.formatItemTimeFunc;
 			}
+			return this.formatItemTimeFunc;			
 		},
 		
 		// The listeners added by the view itself.
@@ -1399,7 +1398,7 @@ function(
 				var selected = this.isItemSelected(item);
 				var hovered = this.isItemHovered(item);
 				var edited = this.isItemBeingEdited(item);
-				var focused = this.showFocus ? this.isItemFocused(item) : false;
+				var focused = this.showFocus ? this.isItemFocused(item) : false;				
 				
 				for(var j = 0; j < list.length; j++){
 					
@@ -1408,6 +1407,7 @@ function(
 					renderer.set("selected", selected);
 					renderer.set("edited", edited);
 					renderer.set("focused", focused);
+					renderer.set("storeState", this.getItemStoreState(item));
 					
 					this.applyRendererZIndex(item, list[j], hovered, selected, edited, focused);
 					
@@ -1496,11 +1496,11 @@ function(
 			// returns: Boolean
 			if (this._isEditing && this._edProps){
 				return item.id == this._edProps.editedItem.id;
-			}else{
-				return this.owner ?  
-					this.owner.isItemHovered(item) : 
-					this.hoveredItem != null && this.hoveredItem.id == item.id;
 			}
+			return this.owner ?  
+				this.owner.isItemHovered(item) : 
+				this.hoveredItem != null && this.hoveredItem.id == item.id;
+			
 		},
 		
 		isItemFocused: function(item){
@@ -1529,9 +1529,8 @@ function(
 		_getSelectionModeAttr: function(value){			
 			if(this.owner){
 				return this.owner.get("selectionMode");
-			}else{
-				return this.inherited(arguments);
 			}
+			return this.inherited(arguments);			
 		},
 		
 		_setSelectedItemAttr: function(value){			
@@ -1545,9 +1544,8 @@ function(
 		_getSelectedItemAttr: function(value){			
 			if(this.owner){
 				return this.owner.get("selectedItem");
-			}else{
-				return this.selectedItem; // no getter on super class (dojox.widget.Selection)
 			}
+			return this.selectedItem; // no getter on super class (dojox.widget.Selection)			
 		},
 		
 		_setSelectedItemsAttr: function(value){			
@@ -1561,17 +1559,15 @@ function(
 		_getSelectedItemsAttr: function(){			
 			if(this.owner){
 				return this.owner.get("selectedItems");
-			}else{
-				return this.inherited(arguments);
 			}
+			return this.inherited(arguments);
 		},
 		
 		isItemSelected: function(item){			
 			if(this.owner){
 				return this.owner.isItemSelected(item);
-			}else{
-				return this.inherited(arguments);
 			}
+			return this.inherited(arguments);
 		},
 		
 		selectFromEvent: function(e, item, renderer, dispatch){			
@@ -1614,9 +1610,8 @@ function(
 		_getCreateItemFuncAttr: function(){			
 			if(this.owner){
 				return this.owner.get("createItemFunc");
-			}else{
-				return this.createItemFunc;
 			}
+			return this.createItemFunc;
 		},
 		
 		// createOnGridClick: Boolean
@@ -1627,9 +1622,8 @@ function(
 		_getCreateOnGridClickAttr: function(){
 			if(this.owner){
 				return this.owner.get("createOnGridClick");
-			}else{
-				return this.createOnGridClick;
 			}
+			return this.createOnGridClick;			
 		},
 		
 		////////////////////////////////////////////////////////////////////
@@ -1639,6 +1633,70 @@ function(
 		///////////////////////////////////////////////////////////////////	
 		
 		_gridMouseDown: false,
+		
+		_getItemStoreStateObj: function(item){
+			if(this.owner){
+				return this.owner._getItemStoreStateObj(item);
+			}
+			
+			return this._itemCreationState;			
+		},
+		
+		getItemStoreState: function(item){
+			//	summary:
+			//		Returns the creation state of an item. 
+			//		This state is changing during the interactive creation or editing of an item.
+			//		Valid values are:
+			//		- "unstored": The event is being interactively created. It is not in the store yet.
+			//		- "storing": The creation gesture has ended, the event is being added to the store.
+			//		- "stored": The event is not in the two previous states, and is assumed to be in the store 
+			//		(not checking because of performance reasons, use store API for testing existence in store).
+			// item: Object
+			//		The item.
+			// returns: String
+
+			if(this.owner){
+				return this.owner.getItemStoreState(item);
+			}
+			
+			var s = this._itemCreationState;
+			var store = this.get("store");
+			if(store){
+				var id = item.id == undefined ? store.getIdentity(item) : item.id;
+				if(s != undefined && s.id == id){
+					return s;
+				}					
+			}
+			return "stored";
+
+		},
+		
+		_setItemStoreState: function(item, state){
+			// tags
+			//		private
+			if(this.owner){
+				this.owner._setItemStoreState(item, state);
+			}else{
+				var s = this._itemCreationState;
+				var store = this.get("store");
+				var id = item.id == undefined ? store.getIdentity(item) : item.id;
+				if(state == "stored" || state == null){
+					if(s != undefined && s.id == id){
+						delete this._itemCreationState;					
+					}
+					return;	
+				}
+								
+				if(store){ // overwrite, one item created at a time.
+					this._itemCreationState = {
+							id: id,
+							item: item,
+							state: state									
+					};
+				}
+				
+			}
+		},
 				
 		_onGridMouseDown: function(e){
 			// tags:
@@ -1668,15 +1726,21 @@ function(
 					return;
 				}
 				
-				var newItem = f(this, this.getTime(e), e);
+				var newItem = this._createdEvent = f(this, this.getTime(e), e);
 								
 				var store = this.get("store");
 											
 				if(!newItem || store == null){
 					return;
 				}
+								
+				var newRenderItem = this.itemToRenderItem(newItem, store);
+				this._setItemStoreState(newItem, "unstored");
 				
-				store.put(newItem);
+				// add the new temporary item to the displayed list and force view refresh
+				this.items = this.items ? this.items.concat([newRenderItem]) : [newRenderItem];
+				this._displayedItemsInvalidated = true;
+				this._refreshItemsRendering();
 				
 				// renderer created when item put in store
 				var renderers = this.getRenderers(newItem);				
@@ -1963,8 +2027,8 @@ function(
 			//		The item represented by the renderer.
 			// rendererKind: String
 			//		The kind of renderer.
-			// returns: Boolean
-			return this.editable && (this.owner ? this.owner.isItemEditable() : true);
+			// returns: Boolean			
+			return this.getItemStoreState(item) != "storing" && this.editable && (this.owner ? this.owner.isItemEditable(item, rendererKind) : true);
 		},
 
 		isItemMoveEnabled: function(item, rendererKind){
@@ -2140,12 +2204,41 @@ function(
 			this._dispatchCalendarEvt(e, "onItemEditEnd");
 			
 			if(!e.isDefaultPrevented()){
-				if(e.completed){
+				
+				var store = this.get("store");	
+				
+				var s = this._getItemStoreStateObj(e.item);
+				
+				if(s != null && s.state == "unstored"){
+					
+					// remove item from internal item list.					
+					var items = arr.filter(this.items, function(item){
+						return item.id != s.id ; // this.items contains render items.
+					});																
+											
+					this.items = items;
+					
+					if(e.completed){					
+						// get the originally created event and get the updated properties
+						lang.mixin(s.item, e.item);
+						
+						this._setItemStoreState(s.item, "storing");
+						
+						// add to the store.
+						store.add(s.item);
+						
+					}else{ // creation canceled
+						displayedItemsInvalidated = true;
+						this._refreshItemsRendering();
+						this._setItemStoreState(s.item, null);
+					}									
+					
+				} else if(e.completed){
 					// Inject new properties in data store item				
-					// and apply data changes
-					var store = this.get("store");
-					store.put(e.item, store);
-				}else{			
+					// and apply data changes		
+					this._setItemStoreState(e.item, "storing");
+					store.put(e.item);								
+				}else{
 					e.item.startTime = this._editStartTimeSave; 
 					e.item.endTime = this._editEndTimeSave;
 				}

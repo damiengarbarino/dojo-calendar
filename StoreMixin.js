@@ -149,6 +149,8 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			var layoutCanChange = true;
 			var oldItem = null;
 			var newItem = this.itemToRenderItem(object, this.store);
+			// set the item as in the store
+			this._setItemStoreState(newItem, "stored");
 			if(previousIndex!=-1){
 				if(newIndex!=previousIndex){
 					// this is a remove or a move
@@ -169,10 +171,12 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 					lang.mixin(oldItem, newItem); 
 				}
 			}else if(newIndex!=-1){
-				// this is a add 
-				this.items.splice(newIndex, 0, newItem);				
-			}
-			if(layoutCanChange){
+				// this is a add
+				this.items.splice(newIndex, 0, newItem);
+				this.set("items", this.items);				
+			}					
+			
+			if(layoutCanChange){				
 				this._refreshItemsRendering();			
 			}else{
 				// just update the item

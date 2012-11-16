@@ -1221,7 +1221,60 @@ _nls){
 			// returns: Boolean
 			
 			return this.isItemEditable() && this.resizeEnabled;
-		},			
+		},
+		
+		_getItemStoreStateObj: function(){
+			// tags
+			//		private
+			return this._itemCreationState;
+		},
+		
+		getItemStoreState: function(item){
+			//	summary:
+			//		Returns the creation state of an item. 
+			//		This state is changing during the interactive creation of an item.
+			//		Valid values are:
+			//		- "unstored": The event is being interactively created. It is not in the store yet.
+			//		- "storing": The creation gesture has ended, the event is being added to the store.
+			//		- "stored": The event is not in the two previous states, and is assumed to be in the store 
+			//		(not checking because of performance reasons, use store API for testing existence in store).
+			// item: Object
+			//		The item.
+			// returns: String
+
+			var s = this._itemCreationState;
+			var store = this.get("store");
+			if(store){
+				var id = item.id == undefined ? store.getIdentity(item) : item.id;
+				if(s != undefined && s.id == id){
+					return s.state;
+				}					
+			}
+			return "stored";		
+		},
+		
+		_setItemStoreState: function(item, state){
+			// tags
+			//		private			
+			var s = this._itemCreationState;
+			var store = this.get("store");
+			
+			var id = item.id == undefined ? store.getIdentity(item) : item.id;
+			if(state == "stored" || state == null){
+				if(s != undefined && s.id == id){
+					delete this._itemCreationState;					
+				}
+				return;	
+			}
+			
+			if(store){ // overwrite, one item created at a time.
+				this._itemCreationState = {
+						id: id,
+						item: item,
+						state: state									
+				};
+			}						
+		},
 
 		////////////////////////////////////////////////////////////////////////
 		//

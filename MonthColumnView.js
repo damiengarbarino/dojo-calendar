@@ -1139,16 +1139,19 @@ function(
 				var selected = this.isItemSelected(item);
 				var hovered = this.isItemHovered(item);
 				var focused = this.isItemFocused(item);
-
+				
 				var renderer = ir.renderer;
 
 				renderer.set("hovered", hovered);
 				renderer.set("selected", selected);
 				renderer.set("edited", edited);
 				renderer.set("focused", this.showFocus ? focused : false);
+				
+				renderer.set("storeState", this.getItemStoreState(item));
+				
 				renderer.set("moveEnabled", this.isItemMoveEnabled(item, "vertical"));
 				renderer.set("resizeEnabled", this.isItemResizeEnabled(item, "vertical"));
-
+				
 				this.applyRendererZIndex(item, ir, hovered, selected, edited, focused);
 
 				if(renderer.updateRendering){

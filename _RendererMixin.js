@@ -31,6 +31,10 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 		//		Indicates that the item displayed by this renderer is selected.
 		selected: false,
 		
+		// storeState: Boolean
+		//		Indicates that the item displayed by this renderer is not in the store, being saved to the store or in the store.
+		storeState: false,
+		
 		// moveEnabled: Boolean
 		//		Whether the event displayed by this renderer can be moved.
 		moveEnabled: true,
@@ -52,7 +56,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 			endTimeLabel: 50
 		},		
 		
-		_setSelectedAttr: function(value){
+		_setSelectedAttr: function(value){			
 			this._setState("selected", value, "Selected");
 		},
 		
@@ -68,10 +72,33 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 			this._setState("hovered", value, "Hovered");
 		},
 		
+		_setStoreStateAttr: function(value){
+			var cssClass = null;
+			switch(value){
+				case "storing":
+					cssClass = "Storing";
+					break;
+				case "unstored":
+					cssClass = "Unstored";
+					break;
+				default:
+					cssClass = null;
+			}
+			var tn = this.stateNode || this.domNode;				
+			domClass.remove(tn, "Storing");
+			domClass.remove(tn, "Unstored");
+			
+			this._set("storeState", value);
+			
+			if(cssClass != null){		
+				domClass.add(tn, cssClass);
+			}
+		},
+		
 		_setState: function(prop, value, cssClass){
 			if(this[prop] != value){
-				var tn = this.stateNode || this.domNode;
-				domClass[value ? "add" : "remove"](tn, cssClass);
+				var tn = this.stateNode || this.domNode;				
+				domClass[value ? "add" : "remove"](tn, cssClass);			
 				this._set(prop, value);
 			}	
 		},
