@@ -255,8 +255,8 @@ _nls){
 			this._calendar = args.datePackage ? args.datePackage.substr(args.datePackage.lastIndexOf(".")+1) : this._calendar;
 			this.dateModule = args.datePackage ? lang.getObject(args.datePackage, false) : date; 
 			this.dateClassObj = this.dateModule.Date || Date; 
-			this.dateLocaleModule = args.datePackage ? lang.getObject(args.datePackage+".locale", false) : locale; 
-						
+			this.dateLocaleModule = args.datePackage ? lang.getObject(args.datePackage+".locale", false) : locale;
+								
 			this.invalidateRendering();
 		},
 		
@@ -504,28 +504,27 @@ _nls){
 			
 			if(d == null){
 				return [ this.floorToDay(this.get("startDate")), cal.add(this.get("endDate"), "day", 1) ];
-			}else{
+			}
 				
-				var s = this.floorToDay(d);
-				var di = this.get("dateInterval");
-				var dis = this.get("dateIntervalSteps");
-				var e;
-				
-				switch(di){
-					case "day":						
-						e = cal.add(s, "day", dis);
-						break;
-					case "week":
-						s = this.floorToWeek(s);
-						e = cal.add(s, "week", dis);
-						break;
-					case "month":
-						s.setDate(1);
-						e = cal.add(s, "month", dis);						
-						break;
-				}				
-				return [s, e];
-			}			
+			var s = this.floorToDay(d);
+			var di = this.get("dateInterval");
+			var dis = this.get("dateIntervalSteps");
+			var e;
+			
+			switch(di){
+				case "day":						
+					e = cal.add(s, "day", dis);
+					break;
+				case "week":
+					s = this.floorToWeek(s);
+					e = cal.add(s, "week", dis);
+					break;
+				case "month":
+					s.setDate(1);
+					e = cal.add(s, "month", dis);						
+					break;
+			}				
+			return [s, e];						
 		},
 		
 		onTimeIntervalChange: function(e){
@@ -1223,58 +1222,6 @@ _nls){
 			return this.isItemEditable() && this.resizeEnabled;
 		},
 		
-		_getItemStoreStateObj: function(){
-			// tags
-			//		private
-			return this._itemCreationState;
-		},
-		
-		getItemStoreState: function(item){
-			//	summary:
-			//		Returns the creation state of an item. 
-			//		This state is changing during the interactive creation of an item.
-			//		Valid values are:
-			//		- "unstored": The event is being interactively created. It is not in the store yet.
-			//		- "storing": The creation gesture has ended, the event is being added to the store.
-			//		- "stored": The event is not in the two previous states, and is assumed to be in the store 
-			//		(not checking because of performance reasons, use store API for testing existence in store).
-			// item: Object
-			//		The item.
-			// returns: String
-
-			var s = this._itemCreationState;
-			var store = this.get("store");
-			if(store){
-				var id = item.id == undefined ? store.getIdentity(item) : item.id;
-				if(s != undefined && s.id == id){
-					return s.state;
-				}					
-			}
-			return "stored";		
-		},
-		
-		_setItemStoreState: function(item, state){
-			// tags
-			//		private			
-			var s = this._itemCreationState;
-			var store = this.get("store");
-			
-			var id = item.id == undefined ? store.getIdentity(item) : item.id;
-			if(state == "stored" || state == null){
-				if(s != undefined && s.id == id){
-					delete this._itemCreationState;					
-				}
-				return;	
-			}
-			
-			if(store){ // overwrite, one item created at a time.
-				this._itemCreationState = {
-						id: id,
-						item: item,
-						state: state									
-				};
-			}						
-		},
 
 		////////////////////////////////////////////////////////////////////////
 		//

@@ -53,7 +53,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		// tags:
 		//		protected
 		displayedItemsInvalidated: false,
-				
+									
 		itemToRenderItem: function(item, store){
 			// summary:
 			//		Creates the render item based on the dojo.store item. It must be of the form:
@@ -150,7 +150,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			var oldItem = null;
 			var newItem = this.itemToRenderItem(object, this.store);
 			// set the item as in the store
-			this._setItemStoreState(newItem, "stored");
+			
 			if(previousIndex!=-1){
 				if(newIndex!=previousIndex){
 					// this is a remove or a move
@@ -172,9 +172,29 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 				}
 			}else if(newIndex!=-1){
 				// this is a add
-				this.items.splice(newIndex, 0, newItem);
-				this.set("items", this.items);				
-			}					
+				var s = this._getItemStoreStateObj(newItem);
+				if(s){
+					// if the item is at the correct index (creation)
+					// we must fix it. Should not occur but ensure integrity.
+					if(this.items[newIndex].id != newItem.id){						
+						var l = this.items.length; 
+						for(var i=l-1; i>=0; i--){
+							if(this.items[i].id == newItem.id){
+								this.items.splice(i, 1);
+								break;
+							}
+						}						
+						this.items.splice(newIndex, 0, newItem);						
+					}
+					// update with the latest values from the store.
+					lang.mixin(s.renderItem, newItem);
+				}else{
+					this.items.splice(newIndex, 0, newItem);					
+				}
+				this.set("items", this.items);
+			}	
+			
+			this._setItemStoreState(newItem, "stored");
 			
 			if(layoutCanChange){				
 				this._refreshItemsRendering();			
@@ -203,7 +223,89 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			}
 			this._set("store", value);
 			return r;
-		}
+		},
+		
+		_getItemStoreStateObj: function(/*Object*/item){
+			// tags
+			//		private
+			
+			if(this.owner){
+				return this.owner._getItemStoreStateObj(item);
+			}
+			
+			var store = this.get("store");
+			if(store != null && this._itemStoreState != null){
+				var id = item.id == undefined ? store.getIdentity(item) : item.id;
+				return this._itemStoreState[id];
+			}
+			return null;
+		},
+		
+		getItemStoreState: function(item){
+			//	summary:
+			//		Returns the creation state of an item. 
+			//		This state is changing during the interactive creation of an item.
+			//		Valid values are:
+			//		- "unstored": The event is being interactively created. It is not in the store yet.
+			//		- "storing": The creation gesture has ended, the event is being added to the store.
+			//		- "stored": The event is not in the two previous states, and is assumed to be in the store 
+			//		(not checking because of performance reasons, use store API for testing existence in store).
+			// item: Object
+			//		The item.
+			// returns: String
+			
+			if(this.owner){
+				return this.owner.getItemStoreState(item);
+			}
+
+			if(this._itemStoreState == null){
+				return "stored";
+			}
+			
+			var store = this.get("store");
+			var id = item.id == undefined ? store.getIdentity(item) : item.id;
+			var s = this._itemStoreState[id];
+			
+			if(store != null && s != undefined){				
+				return s.state;								
+			}
+			return "stored";		
+		},
+		
+		_setItemStoreState: function(/*Object*/item, /*String*/state){
+			// tags
+			//		private
+			
+			if(this.owner){
+				this.owner._setItemStoreState(item, state);
+				return;
+			}
+			
+			if(this._itemStoreState == undefined){
+				this._itemStoreState = {};
+			}
+			
+			var store = this.get("store");
+			var id = item.id == undefined ? store.getIdentity(item) : item.id;
+			var s = this._itemStoreState[id];
+			
+						
+			if(state == "stored" || state == null){
+				if(s != undefined){
+					delete this._itemStoreState[id];					
+				}
+				return;	
+			}
+
+			if(store){				
+				this._itemStoreState[id] = s = {
+						id: id,
+						item: item,
+						renderItem: this.itemToRenderItem(item, store),
+						state: state
+				};						
+			}
+		},
 				
 	});
 

@@ -189,6 +189,16 @@ function(
 			this.inherited(arguments);
 		},
 		
+		_getTopOwner: function(){
+			// summary:
+			//		Returns the top owner: the calendar or the parent view.
+			var p = this;
+			while(p.owner != undefined){
+				p = p.owner;
+			}
+			return p;
+		},
+		
 		_createRenderData: function(){
 			// summary:
 			//		Creates the object that contains all the data needed to render this widget.
@@ -1632,71 +1642,7 @@ function(
 		//
 		///////////////////////////////////////////////////////////////////	
 		
-		_gridMouseDown: false,
-		
-		_getItemStoreStateObj: function(item){
-			if(this.owner){
-				return this.owner._getItemStoreStateObj(item);
-			}
-			
-			return this._itemCreationState;			
-		},
-		
-		getItemStoreState: function(item){
-			//	summary:
-			//		Returns the creation state of an item. 
-			//		This state is changing during the interactive creation or editing of an item.
-			//		Valid values are:
-			//		- "unstored": The event is being interactively created. It is not in the store yet.
-			//		- "storing": The creation gesture has ended, the event is being added to the store.
-			//		- "stored": The event is not in the two previous states, and is assumed to be in the store 
-			//		(not checking because of performance reasons, use store API for testing existence in store).
-			// item: Object
-			//		The item.
-			// returns: String
-
-			if(this.owner){
-				return this.owner.getItemStoreState(item);
-			}
-			
-			var s = this._itemCreationState;
-			var store = this.get("store");
-			if(store){
-				var id = item.id == undefined ? store.getIdentity(item) : item.id;
-				if(s != undefined && s.id == id){
-					return s;
-				}					
-			}
-			return "stored";
-
-		},
-		
-		_setItemStoreState: function(item, state){
-			// tags
-			//		private
-			if(this.owner){
-				this.owner._setItemStoreState(item, state);
-			}else{
-				var s = this._itemCreationState;
-				var store = this.get("store");
-				var id = item.id == undefined ? store.getIdentity(item) : item.id;
-				if(state == "stored" || state == null){
-					if(s != undefined && s.id == id){
-						delete this._itemCreationState;					
-					}
-					return;	
-				}
-								
-				if(store){ // overwrite, one item created at a time.
-					this._itemCreationState = {
-							id: id,
-							item: item,
-							state: state									
-					};
-				}
-				
-			}
-		},
+		_gridMouseDown: false,		
 				
 		_onGridMouseDown: function(e){
 			// tags:
@@ -1738,11 +1684,15 @@ function(
 				this._setItemStoreState(newItem, "unstored");
 				
 				// add the new temporary item to the displayed list and force view refresh
-				this.items = this.items ? this.items.concat([newRenderItem]) : [newRenderItem];
+				var owner = this._getTopOwner();
+				var items = owner.get("items");
+				
+				owner.set("items", items ? items.concat([newRenderItem]) : [newRenderItem]);
+				
 				this._displayedItemsInvalidated = true;
 				this._refreshItemsRendering();
 				
-				// renderer created when item put in store
+				// renderer created in _refreshItemsRenderering()
 				var renderers = this.getRenderers(newItem);				
 				if(renderers && renderers.length>0){
 					var renderer = renderers[0];					
@@ -2210,15 +2160,8 @@ function(
 				var s = this._getItemStoreStateObj(e.item);
 				
 				if(s != null && s.state == "unstored"){
-					
-					// remove item from internal item list.					
-					var items = arr.filter(this.items, function(item){
-						return item.id != s.id ; // this.items contains render items.
-					});																
-											
-					this.items = items;
-					
-					if(e.completed){					
+														
+					if(e.completed){
 						// get the originally created event and get the updated properties
 						lang.mixin(s.item, e.item);
 						
