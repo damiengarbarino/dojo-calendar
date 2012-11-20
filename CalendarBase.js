@@ -140,6 +140,21 @@ _nls){
 		//		The item that will be displayed by the renderer for the "rendererCreated" and "rendererReused" events.
 	};
 	=====*/
+	
+	/*=====
+	var __ExpandRendererClickEventArgs = {
+		// summary:
+		//		A expand renderer click event.
+		// columnIndex: Integer
+		//		The column index of the cell. 
+		// rowIndex: Integer
+		//		The row index of the cell.
+		// date: Date
+		//		The date displayed by the cell.
+		// triggerEvent: Event
+		//		The origin event.
+	};
+	=====*/
 
 	return declare("dojox.calendar.CalendarBase", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, StoreMixin, _Invalidating, Selection], {
 		
@@ -1363,7 +1378,16 @@ _nls){
 			//		Header click event.
 			// tags:
 			//		callback
-		},		
+		},
+		
+		onExpandRendererClick: function(e){
+			// summary:
+			//		Event dispatched when an expand renderer is clicked.
+			// e: __ExpandRendererClickEventArgs
+			//		Expand renderer click event.
+			// tags:
+			//		callback
+		},
 		
 		_onRendererCreated: function(e){
 			this.onRendererCreated(e);
