@@ -53,6 +53,21 @@ function(
 	};
 	=====*/
 	
+	/*=====
+	var __ExpandRendererClickEventArgs = {
+		// summary:
+		//		A expand renderer click event.
+		// columnIndex: Integer
+		//		The column index of the cell. 
+		// rowIndex: Integer
+		//		The row index of the cell.
+		// date: Date
+		//		The date displayed by the cell.
+		// triggerEvent: Event
+		//		The origin event.
+	};
+	=====*/
+	
 	return declare("dojox.calendar.MatrixView", [ViewBase, _TemplatedMixin], {
 		
 		// summary:
@@ -2220,10 +2235,38 @@ function(
 			
 			event.stop(e);
 			
-			if(this.getExpandedRowIndex() != -1){
-				this.collapseRow();
-			}else{
-				this.expandRow(renderer.rowIndex, renderer.columnIndex);
+			var ri = renderer.get("rowIndex");
+			var ci = renderer.get("columnIndex");
+			
+			this._onExpandRendererClick(lang.mixin(this._createItemEditEvent(), {
+				rowIndex: ri,
+				columnIndex: ci,
+				renderer: renderer,
+				triggerEvent: e,
+				date: this.renderData.dates[ri][ci]
+			}));
+		},
+		
+		onExpandRendererClick: function(e){
+			// summary:
+			//		Event dispatched when an expand renderer is clicked.
+			// e: __ExpandRendererClickEventArgs
+			//		Expand renderer click event.
+			// tags:
+			//		callback
+		},
+		
+		_onExpandRendererClick: function(e){
+			
+			this._dispatchCalendarEvt(e, "onExpandRendererClick");
+			
+			if(!e.isDefaultPrevented()){
+			
+				if(this.getExpandedRowIndex() != -1){
+					this.collapseRow();
+				}else{
+					this.expandRow(e.rowIndex, e.columnIndex);
+				}
 			}
 		},
 		
