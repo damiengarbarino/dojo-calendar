@@ -838,7 +838,9 @@ _nls){
 			this._set("items", value);
 			if(this.currentView){
 				this.currentView.set("items", value);
-				this.currentView.invalidateRendering();
+				if(!this._isEditing){
+					this.currentView.invalidateRendering();
+				}
 			}
 		},
 		

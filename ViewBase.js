@@ -2041,7 +2041,8 @@ function(
 			// tags:
 			//		protected
 
-			this._isEditing = true;			
+			this._isEditing = true;
+			this._getTopOwner()._isEditing = true;
 			var p = this._edProps;
 			
 			p.editedItem = item;
@@ -2120,7 +2121,8 @@ function(
 			// tags:
 			//		protected
 
-			this._isEditing = false;					
+			this._isEditing = false;
+			this._getTopOwner()._isEditing = false;
 			
 			var p = this._edProps;
 			

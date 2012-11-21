@@ -196,11 +196,13 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			
 			this._setItemStoreState(newItem, "stored");
 			
-			if(layoutCanChange){				
-				this._refreshItemsRendering();			
-			}else{
-				// just update the item
-				this.updateRenderers(oldItem);
+			if(!this._isEditing){
+				if(layoutCanChange){				
+					this._refreshItemsRendering();			
+				}else{
+					// just update the item
+					this.updateRenderers(oldItem);
+				}
 			}
 		},
 		
