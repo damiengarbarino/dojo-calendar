@@ -101,6 +101,22 @@ function(
 		// timeSlotDuration: Integer
 		//		Duration of the time slot in minutes. Must be a divisor of 60.
 		timeSlotDuration: 15,
+
+		// rowHeaderGridSlotDuration: Integer
+		//		Duration of the time slot in minutes in the row header. Must be a divisor of 60 and a multiple/divisor of timeSlotDuration.
+		rowHeaderGridSlotDuration: 60,
+		
+		// rowHeaderLabelSlotDuration: Integer
+		//		Duration of the time slot in minutes in the row header labels. Must be a divisor of 60 and a multiple/divisor of timeSlotDuration.
+		rowHeaderLabelSlotDuration: 60,
+		
+		// rowHeaderLabelOffset: Integer
+		//		Offset of the row label from the top of the row header cell in pixels.
+		rowHeaderLabelOffset: 2,
+		
+		// rowHeaderFirstLabelOffset: Integer
+		//		Offset of the first row label from the top of the first row header cell in pixels.
+		rowHeaderFirstLabelOffset: 2,
 		
 		// verticalRenderer: Class
 		//		The class use to create vertical renderers.
@@ -119,8 +135,9 @@ function(
 		
 		constructor: function(){
 			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer",
-				"rowHeaderTimePattern", "columnHeaderDatePattern", "timeSlotDuration", "percentOverlap", "horizontalGap", 
-				"scrollBarRTLPosition","itemToRendererKindFunc", "layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items"];
+				"rowHeaderTimePattern", "columnHeaderDatePattern", "timeSlotDuration", "rowHeaderGridSlotDuration", "rowHeaderLabelSlotDuration", 
+				"rowHeaderLabelOffset", "rowHeaderFirstLabelOffset","percentOverlap", "horizontalGap", "scrollBarRTLPosition","itemToRendererKindFunc", 
+				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items"];
 			this._columnHeaderHandlers = [];
 		},
 		
@@ -172,8 +189,9 @@ function(
 			renderData.hourSize = this.get("hourSize");
 			renderData.hourCount = renderData.maxHours - renderData.minHours;		
 			renderData.slotDuration = this.get("timeSlotDuration"); // must be consistent with previous statement
+			renderData.rowHeaderGridSlotDuration = this.get("rowHeaderGridSlotDuration");
 			renderData.slotSize = Math.ceil(renderData.hourSize / (60 / renderData.slotDuration));
-			renderData.hourSize = renderData.slotSize * (60 / renderData.slotDuration);
+			renderData.hourSize = renderData.slotSize * (60 / renderData.slotDuration);			
 			renderData.sheetHeight = renderData.hourSize * renderData.hourCount;		
 			renderData.scrollbarWidth = metrics.getScrollbar().w + 1;
 			
@@ -363,7 +381,7 @@ function(
 		},
 		
 		_setStartTimeOfDayAttr: function(value){
-			this._setStartTimeOfDay(value.hours, value.minutes, value.duration, value.easing)
+			this._setStartTimeOfDay(value.hours, value.minutes, value.duration, value.easing);
 		},
 		
 		_getStartTimeOfDayAttr: function(){
@@ -791,6 +809,11 @@ function(
 			if (!rowHeaderTable){
 				return;
 			}
+			
+			if(this._rowHeaderLabelContainer == null){
+				this._rowHeaderLabelContainer = domConstruct.create("div", {"class": "dojoxCalendarRowHeaderLabelContainer"}, this.rowHeader);				 
+			}
+			
 						
 			domStyle.set(rowHeaderTable, "height", renderData.sheetHeight + "px");
 			
@@ -802,8 +825,13 @@ function(
 			}else{ 
 				tbody = domConstruct.create("tbody", null, rowHeaderTable);
 			}
+						
+			var nbRows = Math.floor(60 / renderData.rowHeaderGridSlotDuration) * renderData.hourCount;
+			
+			var count = nbRows - 
+				(oldRenderData ? Math.floor(60 / oldRenderData.rowHeaderGridSlotDuration) * oldRenderData.hourCount : 0);
 									
-			var count = renderData.hourCount - (oldRenderData ? oldRenderData.hourCount : 0);
+			//var count = renderData.hourCount - (oldRenderData ? oldRenderData.hourCount : 0);
 		
 			// Build HTML structure
 			if(count>0){ // creation
@@ -820,29 +848,97 @@ function(
 			}		
 								
 			// fill labels
+			
+						
+			var rd = this.renderData;
+			var size = Math.ceil(renderData.hourSize / (60 / renderData.rowHeaderGridSlotDuration));
 			var d = new Date(2000, 0, 1, 0, 0, 0);
 			
 			query("tr", rowHeaderTable).forEach(function(tr, i){
 				var td = query("td", tr)[0];				
 				td.className = "";				
+								
+				domStyle.set(tr, "height", (has("ie") == 7)?size-2*(60 / renderData.rowHeaderGridSlotDuration):size + "px");
 				
-				var size = renderData.hourSize;
-				if (has("ie") == 7) {
-					// ie7 workaournd: do not take border into account.
-					size -= 2;					
-				}
+				this.styleRowHeaderCell(td, d.getHours(), d.getMinutes(), rd);
+				
+				var m = (i * this.renderData.rowHeaderGridSlotDuration) % 60;
 
-				domStyle.set(tr, "height", size + "px");
-				
-				d.setHours(this.renderData.minHours + (i));
-				this.styleRowHeaderCell(td, d.getHours(), renderData);					
-				this._setText(td, this._formatRowHeaderLabel(d));
+				switch(m){
+				case 0:
+					domClass.add(td, "hour");
+					break;
+				case 30:
+					domClass.add(td, "halfhour");
+					break;
+				case 15:
+				case 45:
+					domClass.add(td, "quarterhour");
+					break;
+			}
 
 			}, this);
-						
-		},		
+			
+			var lc = this._rowHeaderLabelContainer;			
+			count = (Math.floor(60 / this.rowHeaderLabelSlotDuration) * renderData.hourCount) - lc.childNodes.length;
+			
+			var span;
+			if(count>0){ // creation
+				for(var i=0; i < count; i++){
+					span = domConstruct.create("span", null, lc);
+					domClass.add(span, "dojoxCalendarRowHeaderLabel");
+				}					 
+			}else{
+				count = -count;
+				// deletion of existing nodes
+				for(var i=0; i < count; i++){
+					lc.removeChild(lc.lastChild);
+				}
+			}
+			
+			size = Math.ceil(renderData.hourSize / (60 / this.rowHeaderLabelSlotDuration));
+								
+			query(">span", lc).forEach(function(span, i){
+				d.setHours(0);
+				d.setMinutes(renderData.minHours * 60 + (i*this.rowHeaderLabelSlotDuration));
+				this._configureRowHeaderLabel(span, d, i, size*i, rd);
+			}, this);
+			
+		},
 		
-		styleRowHeaderCell: function(node, h, renderData){
+		_configureRowHeaderLabel: function(node, d, index, pos, renderData){
+			// summary:
+			//		Configures the label of a row header cell.
+			// node: DOMNode
+			//		The DOM node that is the parent of the label.
+			// d:Date
+			//		A date object that contains the hours and minutes displayed by this row header cell.
+			// index: Integer
+			//		The index of this row header cell
+			// pos: Integer
+			//		The computed position of the row header cell
+			// renderData: Object
+			//		The render data.
+			
+			this._setText(node, this._formatRowHeaderLabel(d));
+			domStyle.set(node, "top", (pos + (index==0?this.rowHeaderFirstLabelOffset:this.rowHeaderLabelOffset))+"px");
+			var m = (index * this.rowHeaderLabelSlotDuration) % 60;
+			domClass.remove(node, ["hour", "halfhour", "quarterhour"]);
+			switch(m){
+				case 0:
+					domClass.add(node, "hour");
+					break;
+				case 30:
+					domClass.add(node, "halfhour");
+					break;
+				case 15:
+				case 45:
+					domClass.add(node, "quarterhour");
+					break;
+			}
+		},
+		
+		styleRowHeaderCell: function(node, h, m, renderData){
 			// summary:
 			//		Styles the CSS classes to the node that displays a row header cell.
 			//		By default this method is doing nothing.

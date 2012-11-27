@@ -46,17 +46,26 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.claro .dojoxCalendarColumnView .dojoxCalendarGridTable .hour {
-  border-top: 1px solid #c7bebe;
-}
 .claro .dojoxCalendarColumnView .dojoxCalendarGridTable tr:first-child td {
   border-top: 1px solid transparent;
 }
-.claro .dojoxCalendarColumnView .dojoxCalendarGridTable .halfhour {
+.claro .dojoxCalendarColumnView td.hour {
+  border-top: 1px solid #c7bebe;
+}
+.claro .dojoxCalendarColumnView td.halfhour {
   border-top: dotted 1px #c7bebe;
 }
-.claro .dojoxCalendarColumnView .dojoxCalendarGridTable .quarterhour {
+.claro .dojoxCalendarColumnView td.quarterhour {
   border-top: dotted 1px #c7bebe;
+}
+.claro .dojoxCalendarColumnView span.hour {
+  color: #000000;
+  background-color: #efefef;
+}
+.claro .dojoxCalendarColumnView span.halfhour,
+.claro .dojoxCalendarColumnView span.quarterhour {
+  color: #555555;
+  background-color: #efefef;
 }
 /* 
  * The dojoxCalendarToday & dojoxCalendarWeekend classes is added by the 
@@ -213,6 +222,15 @@
   khtml-user-select: none;
   user-select: none;
 }
+.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderLabelContainer {
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderLabel {
+  right: 4px;
+  position: absolute;
+}
 .claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable {
   border-collapse: collapse;
   table-layout: fixed;
@@ -229,9 +247,6 @@
  * The ColumnView.styleRowHeaderCell method that can be subclassed to add/remove css classes per hour.
  */
 .claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td {
-  vertical-align: top;
-  text-align: right;
-  border-top: 1px solid #b5bcc7;
   background-color: #efefef;
   color: #000000;
   -webkit-box-sizing: border-box;
@@ -240,9 +255,6 @@
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable tr:first-child td {
   border-top: 1px solid #efefef;
-}
-.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td span {
-  padding-right: 4px;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent {
   position: absolute;

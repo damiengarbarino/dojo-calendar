@@ -502,15 +502,40 @@
 							<td>Timeslot (minutes):</td>
 							<td>
 								<select data-dojo-id="timeSlotEditor" data-dojo-type="dijit.form.ComboBox" style="width:80px;" onChange="colView.set('timeSlotDuration', this.value);">
-									<option value="5">5</option>
-									<option value="10">10</option>
-									<option value="15" selected>15</option>
-									<option value="20">20</option>
+									<option value="15" selected>15</option>									
 									<option value="30">30</option>
 									<option value="60">60</option>
 								</select>
 							</td>
 						</tr>
+						
+						<tr>
+							<td>Row Grid Timeslot:</td>
+							<td>
+								<select data-dojo-id="rhgtimeSlotEditor" data-dojo-type="dijit.form.ComboBox" style="width:80px;" onChange="colView.set('rowHeaderGridSlotDuration', this.value);">																	
+									<option value="15">15</option>									
+									<option value="30">30</option>
+									<option value="60" selected>60</option>
+								</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td>Row Label Timeslot:</td>
+							<td>
+								<select data-dojo-id="rhltimeSlotEditor" data-dojo-type="dijit.form.ComboBox" style="width:80px;" onChange="colView.set('rowHeaderLabelSlotDuration', this.value);">
+									<option value="15">15</option>
+									<option value="30">30</option>
+									<option value="60" selected>60</option>
+								</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td>Row Label offset:</td>
+							<td><div data-dojo-id="rhoEditor" data-dojo-type="dijit.form.NumberSpinner" style="width:80px" value="2" data-dojo-props="constraints:{min:-20, max:20}, intermediateChanges:true" onChange="colView.set('rowHeaderLabelOffset', this.value);"></div></td>
+						</tr>
+						
 						
 						<tr>
 							<td>Overlap (%):</td>

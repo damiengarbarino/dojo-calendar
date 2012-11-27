@@ -48,21 +48,33 @@
 	.border-box;
 }
 
-.claro .dojoxCalendarColumnView .dojoxCalendarGridTable .hour	{
-	border-top: @hour-stroke;
-}
-
 .claro .dojoxCalendarColumnView .dojoxCalendarGridTable tr:first-child td	{
 	border-top: 1px solid transparent;
 }
 
-.claro .dojoxCalendarColumnView .dojoxCalendarGridTable .halfhour	{
-	border-top: @half-hour-stroke;
+.claro .dojoxCalendarColumnView td.hour {
+	border-top: @hour-stroke;
 }
 
-.claro .dojoxCalendarColumnView .dojoxCalendarGridTable .quarterhour	{
+.claro .dojoxCalendarColumnView td.halfhour{
+	border-top: @half-hour-stroke;	
+}
+
+.claro .dojoxCalendarColumnView  td.quarterhour{
 	border-top: @quarter-hour-stroke;
 }
+
+.claro .dojoxCalendarColumnView span.hour {
+	color: @label-color;
+	background-color: @row-color;
+}
+
+.claro .dojoxCalendarColumnView span.halfhour,
+.claro .dojoxCalendarColumnView span.quarterhour{
+	color: @secondary-label-color;
+	background-color: @row-color;
+}
+
 
 /* 
  * The dojoxCalendarToday & dojoxCalendarWeekend classes is added by the 
@@ -217,6 +229,17 @@
 	.select-none;
 }
 
+.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderLabelContainer{
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+}
+
+.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderLabel{	
+	right: 4px;		
+	position: absolute;	
+}
+
 .claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable {
 	border-collapse: collapse;
 	table-layout: fixed;
@@ -234,10 +257,7 @@
 /* 
  * The ColumnView.styleRowHeaderCell method that can be subclassed to add/remove css classes per hour.
  */
-.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td {	
-	vertical-align: top;			
-	text-align: right;	
-	border-top: @outer-border; 	
+.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td {
 	background-color: @row-color;
 	color: @label-color;
 	.border-box;
@@ -245,10 +265,6 @@
 
 .claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable tr:first-child td	{
 	border-top: 1px solid @row-color;
-}
-
-.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderTable td span {
-	padding-right: 4px;
 }
  
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent {

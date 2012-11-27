@@ -46,17 +46,21 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.claro .dojoxCalendarSimpleColumnView .dojoxCalendarGridTable .hour {
-  border-top: 1px solid #c7bebe;
-}
 .claro .dojoxCalendarSimpleColumnView .dojoxCalendarGridTable tr:first-child td {
   border-top: 1px solid transparent;
 }
-.claro .dojoxCalendarSimpleColumnView .dojoxCalendarGridTable .halfhour {
+.claro .dojoxCalendarColumnView td.hour {
+  border-top: 1px solid #c7bebe;
+}
+.claro .dojoxCalendarColumnView td.halfhour {
   border-top: dotted 1px #c7bebe;
 }
-.claro .dojoxCalendarSimpleColumnView .dojoxCalendarGridTable .quarterhour {
+.claro .dojoxCalendarColumnView td.quarterhour {
   border-top: dotted 1px #c7bebe;
+}
+.claro .dojoxCalendarColumnView span.hour {
+  color: #000000;
+  background-color: #efefef;
 }
 /* 
  * The dojoxCalendarToday & dojoxCalendarWeekend classes is added by the 
@@ -213,6 +217,15 @@
   khtml-user-select: none;
   user-select: none;
 }
+.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderLabelContainer {
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarRowHeaderLabel {
+  right: 4px;
+  position: absolute;
+}
 .claro .dojoxCalendarSimpleColumnView .dojoxCalendarRowHeaderTable {
   border-collapse: collapse;
   table-layout: fixed;
@@ -240,9 +253,6 @@
 }
 .claro .dojoxCalendarSimpleColumnView .dojoxCalendarRowHeaderTable tr:first-child td {
   border-top: 1px solid #efefef;
-}
-.claro .dojoxCalendarSimpleColumnView .dojoxCalendarRowHeaderTable td span {
-  padding-right: 4px;
 }
 .claro .dojoxCalendarSimpleColumnView .dojoxCalendarEvent {
   position: absolute;
