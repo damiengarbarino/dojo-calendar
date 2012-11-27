@@ -29,6 +29,7 @@ define({ root: {
 "ja": true,
 "it": true,
 "hu": true,
+"he": true,
 "fr": true,
 "fi": true,
 "es": true,
