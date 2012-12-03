@@ -6,10 +6,7 @@ html, body {
 }
 
 #calendarNode {
-    position: absolute;
-    left: 5px;
-    right: 5px;
-    top: 5px;
-    bottom: 5px;
+    width:640px;
+    height:640px;
 }
 
