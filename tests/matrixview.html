@@ -144,6 +144,11 @@
 								return this.isItemEditable(item, kind) && win.doc.appState.resizeDisabledMap[item.id] !== true;
 							}
 						}, "calendarNode");
+						
+						// matrix view is *not* in a dijit container, must register resize handler
+						window.onresize = function(e){
+							matrixView.resize(e);
+						}
 
 						// Events management
 						

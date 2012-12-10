@@ -359,6 +359,12 @@ _nls){
 				this.currentView._refreshItemsRendering();
 			}
 		},
+		
+		resize: function(){
+			if(this.currentView){
+				this.currentView.resize();
+			}
+		},
 				
 		_validateProperties: function(){
 			// tags:

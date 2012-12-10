@@ -107,7 +107,7 @@
 							labelRendererHeight: 15,
 							expandRenderer: ExpandRenderer,
 							expandRendererHeight: 20,
-							verticalGap:2							
+							verticalGap:2
 						}, "calendarNode");
 						
 						setRowWidth = function(value){
@@ -119,6 +119,7 @@
 						}
 						
 						window.onresize = window.onorientationchange = function(e){
+							matrixView.resize();
 							var n = matrixView.domNode;
 							if(n.offsetWidth > n.offsetHeight){
 								matrixView.columnHeaderLabelLength = "wide";
@@ -127,8 +128,7 @@
 							}else{
 								matrixView.columnHeaderLabelLength = "abbr";
 								matrixView.set("rowCount", 4);
-								setRowWidth(20);
-								
+								setRowWidth(20);								
 							}
 						};
 						

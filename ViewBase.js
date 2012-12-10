@@ -189,6 +189,14 @@ function(
 			this.inherited(arguments);
 		},
 		
+		
+		resize: function(){
+			// summary:
+			//		Function to call when the view is resized. 
+			//		If the view is in a Dijit container or in a Dojo mobile container, it will be automatically called.
+			//		On other use cases, this method must called when the window is resized and/or when the orientation has changed.
+		},
+		
 		_getTopOwner: function(){
 			// summary:
 			//		Returns the top owner: the calendar or the parent view.

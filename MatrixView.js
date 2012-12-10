@@ -184,15 +184,7 @@ function(
 			
 			this._ddRendererList = [];
 			this._ddRendererPool = [];
-			this._rowHeaderHandles = [];
-			
-			// For Dojo 1.8
-			//	this._viewHandles.push(
-			//		ViewPort.on("resize", lang.hitch(this, this._resizeHandler)));
-			
-			// pre 1.8 compat code
-			this._viewHandles.push(on(window, "resize", lang.hitch(this, this._resizeHandler)));
-			
+			this._rowHeaderHandles = [];			
 		},
 		
 		destroy: function(preserveDom){
@@ -914,6 +906,10 @@ function(
 			}, this); 
 
 			renderData.cells = rows;
+		},
+		
+		resize: function(e){
+			this._resizeHandler(e);
 		},
 
 		_resizeHandler: function(e, apply){
