@@ -14,6 +14,11 @@
 	background: #166B81;
 }
 
+.claro .dojoxCalendarEvent.Edited.Invalid .bg.bg {
+	background: #FFF;
+}
+
+
 .claro .dojoxCalendarColumnView .dojoxCalendarEvent.Calendar2 .startTime {
   font-weight: bold;
   border-top-left-radius: 5px;

@@ -104,7 +104,9 @@ _nls){
 		// summary:
 		//		An item editing event.
 		// item: Object
-		//		The date item that is being edited.
+		//		The render item that is being edited. Set/get the startTime and/or endTime properties to customize editing behavior.
+		// storeItem: Object
+		//		The real data from the store. DO NOT change properties, but you may use properties of this item in the editing behavior logic.
 		// editKind: String
 		//		Kind of edit: "resizeBoth", "resizeStart", "resizeEnd" or "move".
 		// dates: Date[]
@@ -114,7 +116,7 @@ _nls){
 		// endTime: Date?
 		//		The end time of data item.
 		// sheet: String
-		//		For views with several sheets (columns view for example), the sheet when the event occured.
+		//		For views with several sheets (columns view for example), the sheet when the event occurred.
 		// source: dojox/calendar/ViewBase
 		//		The view where the event occurred.
 		// eventSource: String
