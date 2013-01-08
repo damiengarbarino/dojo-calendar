@@ -1698,8 +1698,7 @@ function(
 				var items = owner.get("items");
 				
 				owner.set("items", items ? items.concat([newRenderItem]) : [newRenderItem]);
-				
-				this._displayedItemsInvalidated = true;
+								
 				this._refreshItemsRendering();
 				
 				// renderer created in _refreshItemsRenderering()
@@ -1707,6 +1706,7 @@ function(
 				if(renderers && renderers.length>0){
 					var renderer = renderers[0];					
 					if(renderer){
+						// trigger editing
 						this._onRendererHandleMouseDown(e, renderer.renderer, "resizeEnd");
 					}					
 				}
@@ -2170,32 +2170,41 @@ function(
 			
 			if(!e.isDefaultPrevented()){
 				
-				var store = this.get("store");	
+				var store = this.get("store");
+				
+				// updated store item
+				var storeItem = this.renderItemToItem(e.item, store);
 				
 				var s = this._getItemStoreStateObj(e.item);
 				
 				if(s != null && s.state == "unstored"){
 														
 					if(e.completed){
-						// get the originally created event and get the updated properties
-						lang.mixin(s.item, e.item);
-						
-						this._setItemStoreState(s.item, "storing");
+						this._setItemStoreState(storeItem, "storing");
 						
 						// add to the store.
-						store.add(s.item);
+						store.add(storeItem);
 						
 					}else{ // creation canceled
-						displayedItemsInvalidated = true;
-						this._refreshItemsRendering();
-						this._setItemStoreState(s.item, null);
+						// cleanup items list
+						var owner = this._getTopOwner();
+						var items = owner.get("items");
+						var l = items.length; 
+						for(var i=l-1; i>=0; i--){
+							if(items[i].id == s.id){
+								items.splice(i, 1);
+								break;
+							}
+						}
+						this._setItemStoreState(storeItem, null);
+						owner.set("items", items);						
 					}									
 					
 				} else if(e.completed){
 					// Inject new properties in data store item				
 					// and apply data changes		
-					this._setItemStoreState(e.item, "storing");
-					store.put(e.item);								
+					this._setItemStoreState(storeItem, "storing");
+					store.put(storeItem);								
 				}else{
 					e.item.startTime = this._editStartTimeSave; 
 					e.item.endTime = this._editEndTimeSave;
