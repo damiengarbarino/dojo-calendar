@@ -84,20 +84,23 @@
 						
 						var ss, se;
 						calendar.on("itemEditBegin", function(e){
+							// save initial values
 							ss = calendar.newDate(e.item.startTime);
 							se = calendar.newDate(e.item.endTime);
 						});
 						
 						calendar.on("itemEditEnd", function(e){
-							
-							if(e.storeItem.calendar == "cal2" && e.item.startTime.getHours()>=13){
+							// a condition using properties of the store item and the render item
+							if(e.storeItem.calendar == "cal2" && e.item.startTime.getHours() >= 13){
+								// cancel default behavior (i.e. applying changes to store)
 								e.preventDefault();
+								
+								// set the previously values to revert changes on the render item
 								e.item.startTime = ss;
 								e.item.endTime = se;
-							}
-							
+							} // default behavior for other use cases
 						});																					
-						
+												
 						
 						// Hide loading panel when application is ready
 						fx.fadeOut({
