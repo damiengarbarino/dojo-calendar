@@ -1,46 +1,46 @@
 define([
-"dojo/_base/declare", 
-"dojo/_base/lang", 
-"dojo/_base/array", 
-"dojo/_base/window", 
-"dojo/_base/event",
-"dojo/_base/html", 
-"dojo/_base/sniff", 
-"dojo/query", 
-"dojo/dom", 
-"dojo/dom-style",
-"dojo/dom-construct",
-"dojo/dom-geometry",
-"dojo/on", 
-"dojo/date", 
-"dojo/date/locale", 
-"dijit/_WidgetBase",  
-"dojox/widget/_Invalidating", 
-"dojox/widget/Selection", 
-"dojox/calendar/time",
-"./StoreMixin"],
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/window",
+	"dojo/_base/event",
+	"dojo/_base/html",
+	"dojo/sniff",
+	"dojo/query",
+	"dojo/dom",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/dom-geometry",
+	"dojo/on",
+	"dojo/date",
+	"dojo/date/locale",
+	"dijit/_WidgetBase",
+	"dojox/widget/_Invalidating",
+	"dojox/widget/Selection",
+	"dojox/calendar/time",
+	"./StoreMixin"],
 
-function(
-	declare, 
-	lang, 
-	arr, 
-	win, 
-	event, 
-	html, 
-	has, 
-	query, 
-	dom, 
-	domStyle,
-	domConstruct,
-	domGeometry,
-	on, 
-	date, 
-	locale, 
-	_WidgetBase, 
-	_Invalidating, 
-	Selection, 
-	timeUtil, 
-	StoreMixin){
+	function(
+		declare,
+		lang,
+		arr,
+		win,
+		event,
+		html,
+		has,
+		query,
+		dom,
+		domStyle,
+		domConstruct,
+		domGeometry,
+		on,
+		date,
+		locale,
+		_WidgetBase,
+		_Invalidating,
+		Selection,
+		timeUtil,
+		StoreMixin){
 	
 	/*=====
 	var __GridClickEventArgs = {
@@ -241,7 +241,9 @@ function(
 					}				
 			
 					var tNode = win.doc.createElement("span");
-					this.applyTextDir(tNode, text);					
+					if(has("dojo-bidi")){
+						this.applyTextDir(tNode, text);
+					}
 					
 					if(allowHTML){
 						tNode.innerHTML = text;
