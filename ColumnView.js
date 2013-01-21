@@ -90,6 +90,14 @@ function(
 			}
 		},
 		
+		
+		resize: function(e){
+			this.inherited(arguments);
+			if(this.secondarySheet){
+				this.secondarySheet.resize(e);
+			}
+		},
+
 		invalidateLayout: function(){
 			// tags:
 			//		private
