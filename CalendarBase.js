@@ -255,6 +255,11 @@ _nls){
 		//		- view: the current view,
 		//		- d: the date at the clicked location.
 		createItemFunc: null,
+		
+		// currentView: ViewBase
+		//		The current view displayed by the Calendar object.
+		//		The currentViewChange event can be used to react on a view change.
+		currentView: null,
 				
 		_currentViewIndex: -1,
 		
