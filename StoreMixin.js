@@ -14,7 +14,11 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		// query: Object
 		//		A query that can be passed to when querying the store.
 		query: {},
-		
+
+		// queryOptions: dojo/store/api/Store.QueryOptions?
+		//		Options to be applied when querying the store.
+		queryOptions: null,
+
 		// startTimeAttr: String
 		//		The attribute of the store item that contains the start time of 
 		//		the events represented by this item.	Default is "startTime". 
@@ -209,11 +213,12 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		_setStoreAttr: function(value){
 			this.displayedItemsInvalidated = true;
 			var r;
+
 			if(this._observeHandler){
 				this._observeHandler.remove();
 			}
 			if(value){				
-				var results = value.query(this.query);
+				var results = value.query(this.query, this.queryOptions);
 				if(results.observe){
 					// user asked us to observe the store
 					this._observeHandler = results.observe(lang.hitch(this, this._updateItems), true);
