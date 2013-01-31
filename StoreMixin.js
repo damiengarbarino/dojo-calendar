@@ -216,6 +216,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 
 			if(this._observeHandler){
 				this._observeHandler.remove();
+				this._observeHandler = null;
 			}
 			if(value){				
 				var results = value.query(this.query, this.queryOptions);
