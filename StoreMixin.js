@@ -183,11 +183,15 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		_setStoreAttr: function(value){
 			this.displayedItemsInvalidated = true;
 			var r;
-			if(value){
+			if(this._observeHandler){
+				this._observeHandler.remove();
+				this._observeHandler = null;
+			}
+			if(value){				
 				var results = value.query(this.query);
 				if(results.observe){
 					// user asked us to observe the store
-					results.observe(lang.hitch(this, this._updateItems), true);
+					this._observeHandler = results.observe(lang.hitch(this, this._updateItems), true);
 				}				
 				results = results.map(lang.hitch(this, function(item){
 					return this.itemToRenderItem(item, value);
@@ -199,7 +203,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			}
 			this._set("store", value);
 			return r;
-		}
+		},
 				
 	});
 
