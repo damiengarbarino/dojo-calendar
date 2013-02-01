@@ -283,7 +283,7 @@
 						
 						// configure item properties panel
 						calendar.on("timeIntervalChange", function(e){
-							dateChooser.set("value", e.startTime);
+							dateChooser.set("value", e.startTime, false);
 						});
 						
 						allDayCB.on("change", function(value){

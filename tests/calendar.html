@@ -91,7 +91,8 @@
 							someData.push(newObj);
 						}
 						
-						calendar.set("store", new Observable(new Memory({data: someData})));
+						var store = new Observable(new Memory({data: someData}))
+						calendar.set("store", store);
 						calendar.set("date", startOfWeek);
 						
 						// Enable creation of event interactively by ctrl clicking grid.
@@ -209,7 +210,7 @@
 						
 						// configure item properties panel
 						calendar.on("timeIntervalChange", function(e){
-							dateChooser.set("value", e.startTime);
+							dateChooser.set("value", e.startTime, false);
 						});
 						
 						allDayCB.on("change", function(value){
