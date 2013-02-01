@@ -2182,6 +2182,10 @@ define([
 				if(s != null && s.state == "unstored"){
 														
 					if(e.completed){
+						// renderItemToItem cannot find the original data item
+						// (as it does not exist in the store yet) to mixin with.
+						// so we must do it here.
+						storeItem = lang.mixin(s.item, storeItem);
 						this._setItemStoreState(storeItem, "storing");
 						
 						// add to the store.
