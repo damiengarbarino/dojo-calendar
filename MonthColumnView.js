@@ -810,8 +810,6 @@ function(
 
 			query("tr", table).forEach(function (tr, row){
 				
-				//domStyle.set(tr, "height", this._getRowHeight(row) + "px");
-				
 				tr.className = "";
 				// compatibility layer for IE7 & 8 that does not support :first-child and :last-child pseudo selectors
 				if(row == 0){
@@ -848,21 +846,30 @@ function(
 
 		},
 		
-		styleGridCell: function(node, date, col, row, renderData){
+		// styleGridCellFunc: Function
+		//		Custom function to customize the appearance of a grid cell by installing custom CSS class on the node.
+		//		The signature of the function must be the same then the styleGridCell one.
+		//		By default the defaultStyleGridCell function is used.
+		styleGridCellFunc: null,
+		
+		defaultStyleGridCell: function(node, date, col, row, renderData){
 			// summary:
 			//		Styles the CSS classes to the node that displays a column.
 			//		By default this method is setting the "dojoxCalendarToday" class name if the 
 			//		date displayed is the current date or "dojoxCalendarWeekend" if the date represents a weekend.
 			// node: Node
-			//		The DOM node that displays the column in the grid.
+			//		The DOM node that displays the cell in the grid.
 			// date: Date
-			//		The date displayed by this column
+			//		The date displayed by this cell.
+			// col: Integer
+			//		The column index of this cell.
+			// row: Integer
+			//		The row index of this cell.
 			// renderData: Object
 			//		The render data.
 			// tags:
 			//		protected
-
-			var cal = renderData.dateModule;
+			
 			if(date == null){
 				return;
 			}
@@ -871,6 +878,30 @@ function(
 			}else if(this.isWeekEnd(date)){
 				domClass.add(node, "dojoxCalendarWeekend");
 			}					
+		},
+		
+		styleGridCell: function(node, date, col, row, renderData){
+			// summary:
+			//		Styles the CSS classes to the node that displays a column.
+			//		Delegates to styleGridCellFunc if defined or defaultStyleGridCell otherwise.
+			// node: Node
+			//		The DOM node that displays the cell in the grid.
+			// date: Date
+			//		The date displayed by this cell.
+			// col: Integer
+			//		The column index of this cell.
+			// row: Integer
+			//		The row index of this cell.
+			// renderData: Object
+			//		The render data.
+			// tags:
+			//		protected
+
+			if(this.styleGridCellFunc){
+				this.styleGridCellFunc(node, date, col, row, renderData);
+			}else{
+				this.defaultStyleGridCell(node, date, col, row, renderData);
+			}				
 		},
 							
 		_buildItemContainer: function(renderData, oldRenderData){

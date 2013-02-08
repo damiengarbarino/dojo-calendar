@@ -805,23 +805,29 @@ function(
 
 		},
 		
-		styleGridCell: function(node, date, renderData){
+		// styleGridCellFunc: Function
+		//		Custom function to customize the appearance of a grid cell by installing custom CSS class on the node.
+		//		The signature of the function must be the same then the styleGridCell one.
+		//		By default the defaultStyleGridCell function is used.
+		styleGridCellFunc: null,
+		
+		defaultStyleGridCell: function(node, date, renderData){
 			// summary:
-			//		Styles the CSS classes to the node that displays a column.
+			//		Styles the CSS classes to the node that displays a cell.
 			//		By default this method is setting the following CSS classes:
 			//		- "dojoxCalendarToday" class name if the date displayed is the current date, 
 			//		- "dojoxCalendarWeekend" if the date represents a weekend or
 			//		- "dojoxCalendarDayDisabled" if the date is out of the [refStartTime, refEndTime] interval.
 			// node: Node
-			//		The DOM node that displays the column in the grid.
+			//		The DOM node that displays the cell in the grid.
 			// date: Date
-			//		The date displayed by this column
+			//		The date displayed by this cell.
 			// renderData: Object
 			//		The render data.
 			// tags:
 			//		protected
 
-			var cal = renderData.dateModule;
+			var cal = this.dateModule;
 			if(this.isToday(date)){				
 				domClass.add(node, "dojoxCalendarToday");
 			}else if(this.refStartTime != null && this.refEndTime != null && 
@@ -831,6 +837,25 @@ function(
 			}else if(this.isWeekEnd(date)){
 				domClass.add(node, "dojoxCalendarWeekend");
 			}	
+		},
+		
+		styleGridCell: function(node, date, renderData){
+			// summary:
+			//		Styles the CSS classes to the node that displays a cell.
+			//		Delegates to styleGridCellFunc if defined or defaultStyleGridCell otherwise.
+			// node: Node
+			//		The DOM node that displays the cell in the grid.
+			// date: Date
+			//		The date displayed by this cell.
+			// renderData: Object
+			//		The render data.
+			// tags:
+			//		protected
+			if(this.styleGridCellFunc){
+				this.styleGridCellFunc(node, date, renderData);
+			}else{
+				this.defaultStyleGridCell(node, date, renderData);
+			}
 		},
 
 		_buildItemContainer: function(renderData, oldRenderData){

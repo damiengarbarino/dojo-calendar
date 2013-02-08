@@ -1055,7 +1055,7 @@ function(
 				
 				// the minutes part of the time of day displayed by the current tr
 				var m = (i * this.renderData.slotDuration) % 60;
-				
+				var h = this.minHours + Math.floor((i * this.renderData.slotDuration) / 60);
 				query("td", tr).forEach(function (td, col){
 					
 					td.className = "";
@@ -1068,7 +1068,7 @@ function(
 					
 					var d = renderData.dates[col];
 					
-					this.styleGridColumn(td, d, renderData);
+					this.styleGridCell(td, d, h, m, renderData);
 					
 					switch(m){
 						case 0:
@@ -1086,16 +1086,26 @@ function(
 			}, this); 
 												 
 		},
+		
+		// styleGridCellFunc: Function
+		//		Custom function to customize the appearance of a grid cell by installing custom CSS class on the node.
+		//		The signature of the function must be the same then the styleGridCell one.
+		//		By default the defaultStyleGridCell function is used.
+		styleGridCellFunc: null,
 				
-		styleGridColumn: function(node, date, renderData){
+		defaultStyleGridCell: function(node, date, hours, minutes, renderData){
 			// summary:
-			//		Styles the CSS classes to the node that displays a column.
+			//		Styles the CSS classes to the node that displays a cell.
 			//		By default this method is setting the "dojoxCalendarToday" class name if the 
 			//		date displayed is the current date or "dojoxCalendarWeekend" if the date represents a weekend.
 			// node: Node
-			//		The DOM node that displays the column in the grid.
+			//		The DOM node that displays the cell in the grid.
 			// date: Date
-			//		The date displayed by this column
+			//		The date displayed by this cell.
+			// hours: Integer
+			//		The hours part of time of day displayed by the start of this cell.
+			// minutes: Integer
+			//		The minutes part of time of day displayed by the start of this cell.
 			// renderData: Object
 			//		The render data object.
 			// tags:
@@ -1105,7 +1115,27 @@ function(
 				return domClass.add(node, "dojoxCalendarToday");
 			} else if(this.isWeekEnd(date)){
 				return domClass.add(node, "dojoxCalendarWeekend");
-			}	
+			}
+		},
+		
+		styleGridCell: function(node, date, hours, minutes, renderData){
+			// summary:
+			//		Styles the CSS classes to the node that displays a cell.
+			//		Delegates to styleGridCellFunc if defined or defaultStyleGridCell otherwise.
+			// node: Node
+			//		The DOM node that displays the cell in the grid.
+			// date: Date
+			//		The date displayed by this column
+			// renderData: Object
+			//		The render data object.
+			// tags:
+			//		protected
+
+			if(this.styleGridCellFunc){
+				this.styleGridCellFunc(node, date, hours, minutes, renderData);
+			}else{
+				this.defaultStyleGridCell(node, date, hours, minutes, renderData);
+			}
 		},
 							
 		_buildItemContainer: function(renderData, oldRenderData){

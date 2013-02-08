@@ -60,8 +60,8 @@ function(
 		secondarySheetProps: null,
 		
 		// headerPadding: Integer
-		//	Padding between the header (composed of the secondary sheet and the column header) 
-		//	and the primary sheet.
+		//		Padding between the header (composed of the secondary sheet and the column header) 
+		//		and the primary sheet.
 		headerPadding: 3,
 		
 		buildRendering: function(){
