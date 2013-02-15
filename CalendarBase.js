@@ -281,13 +281,6 @@ _nls){
 								
 			this.invalidateRendering();
 		},
-		
-		destroy: function(preserveDom){
-			arr.forEach(this._buttonHandles, function(h){
-				h.remove();
-			});
-			this.inherited(arguments);
-		},
 				
 		buildRendering: function(){
 			this.inherited(arguments);
@@ -1061,20 +1054,18 @@ _nls){
 			// tags:
 			//		protected
 
-			
-			var h = [];
 			var rtl = !this.isLeftToRight();
 			
 			if(this.previousButton){
 				this.previousButton.set("label", _nls[rtl?"nextButton":"previousButton"]);
-				h.push(
+				this.own(
 					on(this.previousButton, "click", lang.hitch(this, rtl?this.nextRange:this.previousRange))
 				);	
 			}
 			
 			if(this.nextButton){
 				this.nextButton.set("label", _nls[rtl?"previousButton":"nextButton"]);
-				h.push(
+				this.own(
 					on(this.nextButton, "click", lang.hitch(this, rtl?this.previousRange:this.nextRange))
 				);	
 			}
@@ -1087,40 +1078,38 @@ _nls){
 			
 			if(this.todayButton){
 				this.todayButton.set("label", _nls.todayButton);
-				h.push(
+				this.own(
 					on(this.todayButton, "click", lang.hitch(this, this.todayButtonClick))
 				);	
 			}
 			
 			if(this.dayButton){
 				this.dayButton.set("label", _nls.dayButton);
-				h.push(
+				this.own(
 					on(this.dayButton, "click", lang.hitch(this, this.dayButtonClick))
 				);
 			}		
 			
 			if(this.weekButton){
 				this.weekButton.set("label", _nls.weekButton);
-				h.push(
+				this.own(
 					on(this.weekButton, "click", lang.hitch(this, this.weekButtonClick))
 				);	
 			}		
 
 			if(this.fourDaysButton){
 				this.fourDaysButton.set("label", _nls.fourDaysButton);
-				h.push(
+				this.own(
 					on(this.fourDaysButton, "click", lang.hitch(this, this.fourDaysButtonClick))
 				);
 			}
 			
 			if(this.monthButton){
 				this.monthButton.set("label", _nls.monthButton);
-				h.push(
+				this.own(
 					on(this.monthButton, "click", lang.hitch(this, this.monthButtonClick))
 				);	
 			}	
-			
-			this._buttonHandles = h;
 		},
 		
 		todayButtonClick: function(e){

@@ -58,7 +58,7 @@ function(
 			// show only from January to June or from July to December
 			if(view.viewKind == "monthColumns"){
 				var m = timeInterval[0].getMonth();
-				var d = this.newDate(timeInterval[0])
+				var d = this.newDate(timeInterval[0]);
 				d.setMonth(m<6?0:6);
 				view.set("startDate", d);
 				view.set("columnCount", 6);
@@ -72,7 +72,7 @@ function(
 			this.inherited(arguments);
 			if(this.sixMonthButton){
 				// should set label from resource bundle here!
-				this._buttonHandles.push(
+				this.own(
 					on(this.sixMonthButton, "click", lang.hitch(this, function(){						
 						this.set("dateIntervalSteps", 6);
 						this.set("dateInterval", "month");

@@ -49,68 +49,58 @@ function(
 			this.on("rendererCreated", lang.hitch(this, function(irEvent){
 				
 				var renderer = irEvent.renderer.renderer;
-				
-				var h;
-				if(!renderer.__handles){
-					renderer.__handles = [];
-				}
-															
-				h = on(renderer.domNode, "click", lang.hitch(this, function(e){
+
+				this.own(on(renderer.domNode, "click", lang.hitch(this, function(e){
 					event.stop(e);
 					this._onItemClick({
 						triggerEvent: e,
 						renderer: renderer,
 						item: this.renderItemToItem(renderer.item, this.get("store"))
 					});
-				}));
-				renderer.__handles.push(h);
+				})));
 				
-				h = on(renderer.domNode, "dblclick", lang.hitch(this, function(e){
+				this.own(on(renderer.domNode, "dblclick", lang.hitch(this, function(e){
 					event.stop(e);
 					this._onItemDoubleClick({
 						triggerEvent: e,
 						renderer: renderer,
 						item: this.renderItemToItem(renderer.item, this.get("store"))
 					});
-				}));
-				renderer.__handles.push(h);
+				})));
 				
-				h = on(renderer.domNode, "contextmenu", lang.hitch(this, function(e){
+				this.own(on(renderer.domNode, "contextmenu", lang.hitch(this, function(e){
 					this._onItemContextMenu({
 						triggerEvent: e,
 						renderer: renderer,
 						item: this.renderItemToItem(renderer.item, this.get("store"))
 					});
-				}));
-				renderer.__handles.push(h);
+				})));
 				
 				if(renderer.resizeStartHandle){
-					h = on(renderer.resizeStartHandle, "mousedown", lang.hitch(this, function(e){
+					this.own(on(renderer.resizeStartHandle, "mousedown", lang.hitch(this, function(e){
 						this._onRendererHandleMouseDown(e, renderer, "resizeStart");
-					}));
-					renderer.__handles.push(h);
+					})));
 				}
 				
 				if(renderer.moveHandle){
-					h = on(renderer.moveHandle, "mousedown", lang.hitch(this, function(e){
+					this.own(on(renderer.moveHandle, "mousedown", lang.hitch(this, function(e){
 						this._onRendererHandleMouseDown(e, renderer, "move");
-					}));
-					renderer.__handles.push(h);
+					})));
+					
 				}
 				
 				if(renderer.resizeEndHandle){
-					h = on(renderer.resizeEndHandle, "mousedown", lang.hitch(this, function(e){
+					this.own(on(renderer.resizeEndHandle, "mousedown", lang.hitch(this, function(e){
 						this._onRendererHandleMouseDown(e, renderer, "resizeEnd");
-					}));
-					renderer.__handles.push(h);
+					})));
 				}				
 				
-				h = on(renderer.domNode, "mousedown", lang.hitch(this, function(e){
+				this.own(on(renderer.domNode, "mousedown", lang.hitch(this, function(e){
 					this._rendererMouseDownHandler(e, renderer);
-				}));
-				renderer.__handles.push(h);
+				})));
 				
-				h = on(irEvent.renderer.container, mouse.enter, lang.hitch(this, function(e){
+				
+				this.own(on(irEvent.renderer.container, mouse.enter, lang.hitch(this, function(e){
 					if(!renderer.item) return;
 					
 					if(!this._editingGesture){
@@ -121,10 +111,9 @@ function(
 							triggerEvent: e
 						}));
 					}					
-				}));
-				renderer.__handles.push(h);
+				})));
 				
-				h = on(renderer.domNode, mouse.leave, lang.hitch(this, function(e){
+				this.own(on(renderer.domNode, mouse.leave, lang.hitch(this, function(e){
 					if(!renderer.item) return;
 					if(!this._editingGesture){						
 						this._setHoveredItem(null);
@@ -135,9 +124,7 @@ function(
 							triggerEvent: e
 						}));
 					}
-				}));
-				
-				renderer.__handles.push(h);
+				})));
 				
 			}));			
 		},

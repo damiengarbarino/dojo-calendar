@@ -1320,11 +1320,7 @@ define([
 			//		protected
 			this._onRendererDestroyed({renderer:renderer, source:this});
 			
-			var ir = renderer.renderer;
-			
-			arr.forEach(ir.__handles, function(handle){
-				handle.remove();
-			});				
+			var ir = renderer.renderer;		
 			
 			if(ir["destroy"]){
 				ir.destroy();

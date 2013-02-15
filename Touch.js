@@ -20,18 +20,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 			this.on("rendererCreated", lang.hitch(this, function(irEvent){
 				
 				var renderer = irEvent.renderer.renderer;
-				
-				
-				var h;
-				if(!renderer.__handles){
-					renderer.__handles = [];
-				}
-											
-				h = on(renderer.domNode, "touchstart", lang.hitch(this, function(e){
+						
+				this.own(on(renderer.domNode, "touchstart", lang.hitch(this, function(e){
 					this._onRendererTouchStart(e, renderer);
-				}));
+				})));
 				
-				renderer.__handles.push(h);
 			}));
 		},
 		

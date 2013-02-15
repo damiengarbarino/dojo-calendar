@@ -1291,10 +1291,6 @@ function(
 			// tags:
 			//		protected
 			
-			arr.forEach(renderer.__handles, function(handle){
-				handle.remove();
-			});				
-			
 			if(renderer["destroy"]){
 				renderer.destroy();
 			}
