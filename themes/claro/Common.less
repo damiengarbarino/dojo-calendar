@@ -18,7 +18,15 @@
 @secondary-label-color: #555;
 
 @event-border: 1px solid #260000;
-@event-border-focused: dashed 1px #FFFFFF;	
+@event-border-focused: dashed 1px #FFFFFF;
+
+@event-bg: #9F0000;
+@event-selected-bg: #660000;
+@event-hovered-bg: #CC0000;
+
+@event-header-bg: @event-bg - #330000;
+@event-header-selected-bg: @event-selected-bg - #330000;
+@event-header-hovered-bg: @event-hovered-bg  - #330000;
 
 .border-box(){
 	-webkit-box-sizing: border-box;
@@ -91,4 +99,13 @@
 	border-top: @style;
 	border-left: @style;
 	border-right: @style;
+}
+
+.event-header{
+	font-weight: bold;	
+	.top-rounded-corners;
+	background-color: @event-header-bg;
+	white-space: nowrap;
+	padding: 1px 2px 2px 1px;	
+	.top-left-right-border(@event-border);
 }
