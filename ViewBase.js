@@ -141,6 +141,8 @@ define([
 		//		Optional function to format the time of day of the item renderers.
 		//		The function takes the date and render data object as arguments and returns a String.
 		formatItemTimeFunc: null,
+		
+		_cssDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 				
 		_getFormatItemTimeFuncAttr: function(){
 			if(this.owner != null){

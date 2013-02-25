@@ -12,8 +12,11 @@
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/dijit.css";
 			@import "../../../dijit/themes/claro/claro.css";
-			.greyCell{
-				background-color: #F8F8F8 !important;				
+
+			.dojoxCalendar .dojoxCalendarGrid .Wed, 
+			.dojoxCalendar .dojoxCalendarGrid .H12,
+			.dojoxCalendar .dojoxCalendarGrid .H13	{
+				background-color: #F8F8F8 !important;
 			}
 		</style>			
 	</head>
@@ -36,27 +39,7 @@
 			
 						var startOfWeek = calendar.floorToWeek(new calendar.dateClassObj());
 						
-						calendar.set("date", startOfWeek);
-						
-						calendar.columnView.set("styleGridCellFunc", function(node, date, hours, minutes){
-							// grey out Wednesday & time range between 12pm and 2pm
-							if(hours >= 12 && hours < 14 || date.getDay() == 3){
-								domClass.add(node, "greyCell");
-							}
-							this.defaultStyleGridCell(node, date, hours, minutes);
-						});
-						
-						var func = function(node, date){
-							// grey out Wednesday
-							if(date != null && date.getDay() == 3){
-								domClass.add(node, "greyCell");
-							}
-							this.defaultStyleGridCell(node, date);
-						};
-						
-						calendar.columnView.secondarySheet.set("styleGridCellFunc", func);				
-						calendar.matrixView.set("styleGridCellFunc", func);						
-						calendar.monthColumnView.set("styleGridCellFunc", func);											
+						calendar.set("date", startOfWeek);																	
 						
 						// Hide loading panel when application is ready
 						fx.fadeOut({

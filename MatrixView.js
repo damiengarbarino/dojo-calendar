@@ -538,6 +538,8 @@ function(
 			//		The render data.
 			// tags:
 			//		protected
+			
+			domClass.add(node, this._cssDays[date.getDay()]);
 
 			if(this.isWeekEnd(date)){
 				return domClass.add(node, "dojoxCalendarWeekend");
@@ -818,6 +820,7 @@ function(
 			//		- "dojoxCalendarToday" class name if the date displayed is the current date, 
 			//		- "dojoxCalendarWeekend" if the date represents a weekend or
 			//		- "dojoxCalendarDayDisabled" if the date is out of the [refStartTime, refEndTime] interval.
+			//		- the CSS class corresponding of the displayed day of week ("Sun", "Mon" and so on).			
 			// node: Node
 			//		The DOM node that displays the cell in the grid.
 			// date: Date
@@ -826,7 +829,9 @@ function(
 			//		The render data.
 			// tags:
 			//		protected
-
+			
+			domClass.add(node, this._cssDays[date.getDay()]);
+			
 			var cal = this.dateModule;
 			if(this.isToday(date)){				
 				domClass.add(node, "dojoxCalendarToday");
@@ -1291,8 +1296,8 @@ function(
 			// tags:
 			//		protected
 			
-			if(renderer["destroy"]){
-				renderer.destroy();
+			if(renderer["destroyRecursive"]){
+				renderer.destroyRecursive();
 			}
 			
 			html.destroy(renderer.domNode);	

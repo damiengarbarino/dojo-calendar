@@ -855,8 +855,10 @@ function(
 		defaultStyleGridCell: function(node, date, col, row, renderData){
 			// summary:
 			//		Styles the CSS classes to the node that displays a column.
-			//		By default this method is setting the "dojoxCalendarToday" class name if the 
-			//		date displayed is the current date or "dojoxCalendarWeekend" if the date represents a weekend.
+			//		By default this method is setting the following CSS classes:
+			//		- "dojoxCalendarToday" class name if the date displayed is the current date,
+			//		- "dojoxCalendarWeekend" if the date represents a weekend,
+			//		- the CSS class corresponding of the displayed day of week ("Sun", "Mon" and so on),
 			// node: Node
 			//		The DOM node that displays the cell in the grid.
 			// date: Date
@@ -873,6 +875,7 @@ function(
 			if(date == null){
 				return;
 			}
+			domClass.add(node, this._cssDays[date.getDay()]);
 			if(this.isToday(date)){				
 				domClass.add(node, "dojoxCalendarToday");
 			}else if(this.isWeekEnd(date)){

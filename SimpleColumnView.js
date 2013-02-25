@@ -772,8 +772,10 @@ function(
 		styleColumnHeaderCell: function(node, date, renderData){
 			// summary:
 			//		Styles the CSS classes to the node that displays a column header cell.
-			//		By default this method is setting the "dojoxCalendarToday" class name if the 
-			//		date displayed is the current date or "dojoxCalendarWeekend" if the date represents a weekend.
+			//		By default this method is setting:
+			//		- "dojoxCalendarToday" class name if the date displayed is the current date,
+			//		- "dojoxCalendarWeekend" if the date represents a weekend,
+			//		- the CSS class corresponding of the displayed day of week ("Sun", "Mon" and so on).
 			// node: Node
 			//		The DOM node that displays the column in the grid.
 			// date: Date
@@ -782,6 +784,8 @@ function(
 			//		The render data.
 			// tags:
 			//		protected
+			
+			domClass.add(node, this._cssDays[date.getDay()]);
 
 			if(this.isToday(date)){				
 				return domClass.add(node, "dojoxCalendarToday");
@@ -830,8 +834,6 @@ function(
 			
 			var count = nbRows - 
 				(oldRenderData ? Math.floor(60 / oldRenderData.rowHeaderGridSlotDuration) * oldRenderData.hourCount : 0);
-									
-			//var count = renderData.hourCount - (oldRenderData ? oldRenderData.hourCount : 0);
 		
 			// Build HTML structure
 			if(count>0){ // creation
@@ -1096,8 +1098,11 @@ function(
 		defaultStyleGridCell: function(node, date, hours, minutes, renderData){
 			// summary:
 			//		Styles the CSS classes to the node that displays a cell.
-			//		By default this method is setting the "dojoxCalendarToday" class name if the 
-			//		date displayed is the current date or "dojoxCalendarWeekend" if the date represents a weekend.
+			//		By default this method is setting:
+			//		- "dojoxCalendarToday" class name if the date displayed is the current date,
+			//		- "dojoxCalendarWeekend" if the date represents a weekend,
+			//		- the CSS class corresponding of the displayed day of week ("Sun", "Mon" and so on),
+			//		- the CSS classes corresponfing to the time of day (e.g. "H14" and "M30" for for 2:30pm).   
 			// node: Node
 			//		The DOM node that displays the cell in the grid.
 			// date: Date
@@ -1110,6 +1115,8 @@ function(
 			//		The render data object.
 			// tags:
 			//		protected
+			
+			domClass.add(node, [this._cssDays[date.getDay()], "H"+hours, "M"+minutes]);
 
 			if(this.isToday(date)){				
 				return domClass.add(node, "dojoxCalendarToday");
