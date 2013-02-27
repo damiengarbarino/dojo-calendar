@@ -1361,7 +1361,7 @@ define([
 			// summary:
 			//		Update the moveEnabled and resizeEnabled properties of a renderer according to its event current editing state.
 			// item: Object
-			//		The event data item.
+			//		The store data item.
 			// renderer: dojox/calendar/_RendererMixin
 			//		The item renderer.
 			// tags:
@@ -1499,7 +1499,7 @@ define([
 				this.updateRenderers([old, this.hoveredItem], true);
 				
 				if(item && renderer){
-					this._updateEditingCapabilities(item, renderer);
+					this._updateEditingCapabilities(item._item ? item._item : item, renderer);
 				}
 			}
 		},

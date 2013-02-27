@@ -1181,8 +1181,8 @@ _nls){
 				
 				this.updateRenderers([old, this.hoveredItem], true);
 				
-				if(item && renderer){
-					this.currentView._updateEditingCapabilities(item, renderer);
+				if(item && renderer){					
+					this.currentView._updateEditingCapabilities(item._item ? item._item : item, renderer);
 				}
 			}
 		},
@@ -1204,41 +1204,41 @@ _nls){
 		//
 		////////////////////////////////////////////////////////////////////////
 
-		isItemEditable: function(renderItem, rendererKind){
+		isItemEditable: function(item, rendererKind){
 			// summary:
 			//		Computes whether particular item renderer can be edited.
 			//		By default it is using the editable property value.
-			// renderItem: Object
-			//		The render item represented by the renderer.
+			// item: Object
+			//		The data item represented by the renderer.
 			// rendererKind: String
 			//		The kind of renderer.
 			// returns: Boolean
 			return this.editable;
 		},
 		
-		isItemMoveEnabled: function(renderItem, rendererKind){
+		isItemMoveEnabled: function(item, rendererKind){
 			// summary:
 			//		Computes whether particular item renderer can be moved.
 			//		By default it is using the moveEnabled property value.
-			// renderItem: Object
-			//		The render item represented by the renderer.
+			// item: Object
+			//		The data item represented by the renderer.
 			// rendererKind: String
 			//		The kind of renderer.
 			// returns: Boolean
-			return this.isItemEditable(renderItem, rendererKind) && this.moveEnabled;
+			return this.isItemEditable(item, rendererKind) && this.moveEnabled;
 		},
 		
-		isItemResizeEnabled: function(renderItem, rendererKind){
+		isItemResizeEnabled: function(item, rendererKind){
 			// summary:
 			//		Computes whether particular item renderer can be resized.
 			//		By default it is using the resizedEnabled property value.
-			// renderItem: Object
-			//		The render item represented by the renderer.
+			// item: Object
+			//		The data item represented by the renderer.
 			// rendererKind: String
 			//		The kind of renderer.
 			// returns: Boolean
 			
-			return this.isItemEditable(renderItem, rendererKind) && this.resizeEnabled;
+			return this.isItemEditable(item, rendererKind) && this.resizeEnabled;
 		},
 		
 

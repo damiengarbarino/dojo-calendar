@@ -153,6 +153,9 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			var layoutCanChange = true;
 			var oldItem = null;
 			var newItem = this.itemToRenderItem(object, this.store);
+			// keep a reference on the store data item. 
+			newItem._item = object;
+			
 			// set the item as in the store
 			
 			if(previousIndex!=-1){
@@ -225,7 +228,10 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 					this._observeHandler = results.observe(lang.hitch(this, this._updateItems), true);
 				}				
 				results = results.map(lang.hitch(this, function(item){
-					return this.itemToRenderItem(item, value);
+					var renderItem = this.itemToRenderItem(item, value);
+					// keep a reference on the store data item.
+					renderItem._item = item;
+					return renderItem;
 				}));
 				r = when(results, lang.hitch(this, this._initItems));
 			}else{

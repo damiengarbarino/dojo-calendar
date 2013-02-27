@@ -1387,8 +1387,8 @@ function(
 				renderer.set("focused", this.showFocus ? focused : false);
 				renderer.set("storeState", this.getItemStoreState(item));
 				
-				renderer.set("moveEnabled", this.isItemMoveEnabled(item, "vertical"));
-				renderer.set("resizeEnabled", this.isItemResizeEnabled(item, "vertical"));
+				renderer.set("moveEnabled", this.isItemMoveEnabled(item._item, "vertical"));
+				renderer.set("resizeEnabled", this.isItemResizeEnabled(item._item, "vertical"));
 
 				this.applyRendererZIndex(item, ir, hovered, selected, edited, focused);
 

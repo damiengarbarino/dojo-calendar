@@ -1905,13 +1905,13 @@ function(
 			var hovered = this.isItemHovered(item);
 			var focused = this.isItemFocused(item);
 			
-			var renderer = ir.renderer;
+			var renderer = ir.renderer;			
 
 			renderer.set("hovered", hovered);
 			renderer.set("selected", selected);
 			renderer.set("edited", edited);
 			renderer.set("focused", this.showFocus ? focused : false);
-			renderer.set("moveEnabled", this.isItemMoveEnabled(item, kind));
+			renderer.set("moveEnabled", this.isItemMoveEnabled(item._item, kind));
 			renderer.set("storeState", this.getItemStoreState(item));
 			
 			if(kind != "label"){
