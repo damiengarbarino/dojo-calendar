@@ -1204,41 +1204,41 @@ _nls){
 		//
 		////////////////////////////////////////////////////////////////////////
 
-		isItemEditable: function(item, rendererKind){
+		isItemEditable: function(renderItem, rendererKind){
 			// summary:
 			//		Computes whether particular item renderer can be edited.
 			//		By default it is using the editable property value.
-			// item: Object
-			//		The item represented by the renderer.
+			// renderItem: Object
+			//		The render item represented by the renderer.
 			// rendererKind: String
 			//		The kind of renderer.
 			// returns: Boolean
 			return this.editable;
 		},
 		
-		isItemMoveEnabled: function(item, rendererKind){
+		isItemMoveEnabled: function(renderItem, rendererKind){
 			// summary:
 			//		Computes whether particular item renderer can be moved.
 			//		By default it is using the moveEnabled property value.
-			// item: Object
-			//		The item represented by the renderer.
+			// renderItem: Object
+			//		The render item represented by the renderer.
 			// rendererKind: String
 			//		The kind of renderer.
 			// returns: Boolean
-			return this.isItemEditable() && this.moveEnabled;
+			return this.isItemEditable(renderItem, rendererKind) && this.moveEnabled;
 		},
 		
-		isItemResizeEnabled: function(item, rendererKind){
+		isItemResizeEnabled: function(renderItem, rendererKind){
 			// summary:
 			//		Computes whether particular item renderer can be resized.
 			//		By default it is using the resizedEnabled property value.
-			// item: Object
-			//		The item represented by the renderer.
+			// renderItem: Object
+			//		The render item represented by the renderer.
 			// rendererKind: String
 			//		The kind of renderer.
 			// returns: Boolean
 			
-			return this.isItemEditable() && this.resizeEnabled;
+			return this.isItemEditable(renderItem, rendererKind) && this.resizeEnabled;
 		},
 		
 
