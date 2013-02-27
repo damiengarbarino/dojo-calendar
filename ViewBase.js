@@ -2517,6 +2517,7 @@ define([
 
 			var evt = lang.mixin(this._createItemEditEvent(), {
 				item: item,
+				storeItem: p.storeItem,
 				startTime: item.startTime,
 				endTime: item.endTime,
 				editKind: editKind,
@@ -2726,7 +2727,7 @@ define([
 			
 			this._onItemEditEndGesture(lang.mixin(this._createItemEditEvent(), {
 				item: item,
-				storeItem: item,
+				storeItem: p.storeItem,
 				startTime: item.startTime,
 				endTime: item.endTime,
 				editKind: p.editKind,

@@ -102,7 +102,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 					
 					this._saveSelectedItems = this.get("selectedItems");
 							
-					var changed = this.selectFromEvent(e, this.renderItemToItem(theItem, this.get("store")), renderer, false);
+					var changed = this.selectFromEvent(e, theItem._item, renderer, false);
 					
 					if(changed){					
 						this._pendingSelectedItem = theItem;
@@ -129,7 +129,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 							delete this._saveSelectedItems;
 							delete this._pendingSelectedItem;
 						}else{							
-							this.selectFromEvent(e, this.renderItemToItem(theItem, this.get("store")), renderer);
+							this.selectFromEvent(e, theItem._item, renderer);
 						}
 																					
 						this._startItemEditing(p.item, "touch", e);
@@ -275,7 +275,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 				if(this._touchSelectionTimer){					
 					// selection timer was not reached to a proper selection.
 					clearTimeout(this._touchSelectionTimer);
-					this.selectFromEvent(e, this.renderItemToItem(p.item, this.get("store")), p.renderer, true);
+					this.selectFromEvent(e, p.item._item, p.renderer, true);
 					
 				}else if(this._pendingSelectedItem){
 					// selection timer was reached, dispatch change event
@@ -289,7 +289,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 					this._onItemDoubleClick({
 						triggerEvent: e,
 						renderer: p.renderer,
-						item: this.renderItemToItem(p.item, this.get("store"))
+						item: p.item._item
 					});
 					
 					clearTimeout(this._pendingDoubleTap.timer);
@@ -308,7 +308,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 					this._onItemClick({
 						triggerEvent: e,
 						renderer: p.renderer,
-						item: this.renderItemToItem(p.item, this.get("store"))
+						item: p.item._item
 					});
 				}
 								

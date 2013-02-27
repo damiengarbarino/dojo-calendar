@@ -55,7 +55,7 @@ function(
 					this._onItemClick({
 						triggerEvent: e,
 						renderer: renderer,
-						item: this.renderItemToItem(renderer.item, this.get("store"))
+						item: renderer.item._item
 					});
 				})));
 				
@@ -64,7 +64,7 @@ function(
 					this._onItemDoubleClick({
 						triggerEvent: e,
 						renderer: renderer,
-						item: this.renderItemToItem(renderer.item, this.get("store"))
+						item: renderer.item._item
 					});
 				})));
 				
@@ -72,7 +72,7 @@ function(
 					this._onItemContextMenu({
 						triggerEvent: e,
 						renderer: renderer,
-						item: this.renderItemToItem(renderer.item, this.get("store"))
+						item:renderer.item._item
 					});
 				})));
 				
@@ -106,7 +106,7 @@ function(
 					if(!this._editingGesture){
 						this._setHoveredItem(renderer.item.item, renderer);
 						this._onItemRollOver(this.__fixEvt({
-							item: this.renderItemToItem(renderer.item, this.get("store")),
+							item: renderer.item._item,
 							renderer: renderer,
 							triggerEvent: e
 						}));
@@ -119,7 +119,7 @@ function(
 						this._setHoveredItem(null);
 						
 						this._onItemRollOut(this.__fixEvt({
-							item: this.renderItemToItem(renderer.item, this.get("store")),
+							item: renderer.item._item,
 							renderer: renderer,
 							triggerEvent: e
 						}));
@@ -173,7 +173,7 @@ function(
 
 			event.stop(e);				
 			
-			var item = this.renderItemToItem(renderer.item, this.get("store"));
+			var item = renderer.item._item;
 			
 			this.selectFromEvent(e, item, renderer, true);
 			
@@ -206,7 +206,7 @@ function(
 					this._endItemEditing("mouse", false);								
 				}
 				
-				this.selectFromEvent(e, this.renderItemToItem(renderer.item, this.get("store")), renderer, true);
+				this.selectFromEvent(e, renderer.item._item, renderer, true);
 				
 				if(this._setTabIndexAttr){
 					this[this._setTabIndexAttr].focus();
