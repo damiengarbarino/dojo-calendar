@@ -203,7 +203,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			}
 			this._set("store", value);
 			return r;
-		},
+		}
 				
 	});
 
