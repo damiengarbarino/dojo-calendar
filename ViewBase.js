@@ -177,7 +177,7 @@ define([
 			while(this.rendererList.length > 0){
 				this._destroyRenderer(this.rendererList.pop());
 			}			
-			for(kind in this._rendererPool){				
+			for(var kind in this._rendererPool){
 				var pool = this._rendererPool[kind];
 				if(pool){
 					while(pool.length > 0){
@@ -596,11 +596,7 @@ define([
 				return false;
 			} 			
 			
-			if(cal.compare(item.endTime, rd.endTime) == 1){
-				return false;
-			}
-			
-			return true;
+			return cal.compare(item.endTime, rd.endTime) != 1;
 		},
 		
 		_ensureItemInView: function(item){
@@ -743,7 +739,8 @@ define([
 			}
 			if(has("opera")){
 				return "-o-";
-			}			
+			}
+            return "";
 		},				
 		
 		_setScrollPosition: function(pos){
@@ -1691,6 +1688,7 @@ define([
 				}
 								
 				var newRenderItem = this.itemToRenderItem(newItem, store);
+				newRenderItem._item = newItem;
 				this._setItemStoreState(newItem, "unstored");
 				
 				// add the new temporary item to the displayed list and force view refresh
@@ -1763,7 +1761,7 @@ define([
 			//		private
 
 			if(obj && obj._isEditing){
-				p = obj._edProps;
+				var p = obj._edProps;
 				if(p && p.endEditingTimer){
 					clearTimeout(p.endEditingTimer);
 					p.endEditingTimer = null;
@@ -1925,7 +1923,7 @@ define([
 			var list = this.itemToRenderer[item.id];
 
 			if(list == null){
-				return;
+				return null;
 			}
 
 			// trivial and most common use case.
@@ -2536,7 +2534,7 @@ define([
 			// prevent invalid range
 			if(cal.compare(item.startTime, item.endTime) == 1){
 				var tmp = item.startTime;
-				item.startTime = item.startTime;
+				item.startTime = item.endTime;
 				item.endTime = tmp;
 			}
 			

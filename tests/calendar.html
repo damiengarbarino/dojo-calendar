@@ -7,10 +7,12 @@
 		<title>Calendar Sample: Desktop</title>				
 		<style type="text/css">
 			@import "../themes/claro/Calendar.css";
+			@import "../themes/nihilo/Calendar.css";
 			@import "calendar.css";
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/dijit.css";
 			@import "../../../dijit/themes/claro/claro.css";
+			@import "../../../dijit/themes/nihilo/nihilo.css";
 		</style>			
 	</head>
 	
@@ -21,14 +23,14 @@
 		
 			<script type="text/javascript">
 
-			require(["dojo/ready", "dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/array", "dojo/_base/fx", "dojo/on", 
+			require(["dojo/ready", "dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/array", "dojo/_base/fx", "dojo/dom-class", "dojo/on", 
 			         "dojo/date/locale", "dojo/parser",	"dojo/dom", "dojo/dom-construct",	"dojo/store/Memory", 
 			         "dojo/store/Observable",	"dojox/calendar/Calendar", "dijit/Calendar",  "dijit/TitlePane", 
 			         "dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dijit/form/CheckBox", 
 			         "dijit/form/TextBox", "dijit/form/DateTextBox", "dijit/form/TimeTextBox", 
 			         "dijit/form/Button", "dijit/form/ComboBox", "dijit/Menu", "dijit/MenuItem"	],
 
-				function(ready, lang, has, arr, fx, on, locale, parser, dom, domConstruct,
+				function(ready, lang, has, arr, fx, domClass, on, locale, parser, dom, domConstruct,
 					Memory, Observable, Calendar){
 
 					ready(function(){
@@ -40,7 +42,7 @@
 							"Hint: Resize an event by clicking on one of its ends and dragging it"
 						];
 						
-						hintIdx = 0;
+						var hintIdx = 0;
 						dom.byId("hint").innerHTML = hints[0];
 												
 						setInterval(function(){
@@ -61,7 +63,7 @@
 						
 						// Calendar model creation						
 						var modelBase = [
-							{day: 1, start: [10,00], duration: 1400},
+							{day: 1, start: [10,0], duration: 1400},
 							{day: 2, start: [10,30], duration: 120},
 							{day: 2, start: [12,0], duration: 240},
 							{day: 3, start: [6,0], duration: 180},
@@ -80,7 +82,7 @@
 								endTime: new calendar.dateClassObj(startOfWeek.getTime()),
 								calendar: id%2 == 0 ? "cal1" : "cal2",
 								allDay: modelBase[id].allDay
-							}
+							};
 
 							newObj.startTime = calendar.dateModule.add(newObj.startTime, "day", modelBase[id].day);
 							newObj.startTime.setHours(modelBase[id].start[0]);
@@ -91,7 +93,7 @@
 							someData.push(newObj);
 						}
 						
-						var store = new Observable(new Memory({data: someData}))
+						var store = new Observable(new Memory({data: someData}));
 						calendar.set("store", store);
 						calendar.set("date", startOfWeek);
 						
@@ -131,7 +133,7 @@
 							id++;	
 							
 							return item;							
-						}
+						};
 						
 						calendar.set("createOnGridClick", true);
 						calendar.set("createItemFunc", createItem);						
@@ -145,7 +147,7 @@
 									return this._defaultItemToRendererKindFunc(item);
 								}
 							return null
-						}
+						};
 						
 						calendar.columnView.set("itemToRendererKindFunc", itemToRendererKindFunc);
 						calendar.columnView.secondarySheet.set("itemToRendererKindFunc", itemToRendererKindFunc);
@@ -169,11 +171,11 @@
 						// refresh item panel on event selection.
 						var editedItem;
 						
-						selectionChanged = function(item){
+						var selectionChanged = function(item){
 							
 							var itemNull = item == null;
 							
-							widgets = [itemSummaryEditor, itemStartDateEditor, itemStartTimeEditor, itemEndDateEditor, 
+							var widgets = [itemSummaryEditor, itemStartDateEditor, itemStartTimeEditor, itemEndDateEditor,
 								itemEndTimeEditor, calendarEditor, allDayCB, deleteItemButton, updateItemButton];
 							
 							arr.forEach(widgets, function(w){
@@ -198,7 +200,7 @@
 								calendarEditor.set("value", item.calendar == "cal1" ? "Calendar 1" : "Calendar 2");																					
 								allDayCB.set("checked", allDay, false);
 							}																						
-						}
+						};
 						
 						calendar.on("change", function(e){							
 							selectionChanged(e.newValue);							

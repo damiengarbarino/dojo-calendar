@@ -315,7 +315,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			}
 
 			if(store){				
-				this._itemStoreState[id] = s = {
+				this._itemStoreState[id] = {
 						id: id,
 						item: item,
 						renderItem: this.itemToRenderItem(item, store),

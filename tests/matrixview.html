@@ -52,7 +52,7 @@
 							return date;
 						};
 						
-						addLogEntry = function(name, content){
+						var addLogEntry = function(name, content){
 							var tr = domConstruct.create("tr", null, dom.byId("logBody"), "first");
 							var td = domConstruct.create("td", null, tr);
 							td.appendChild(win.doc.createTextNode(locale.format(new Date(), {selector:"time", timePattern:"h:mm:ss"})));
@@ -60,7 +60,7 @@
 							td.appendChild(win.doc.createTextNode(name));
 							td = domConstruct.create("td", null, tr);
 							td.appendChild(win.doc.createTextNode(content));
-						}
+						};
 
 						// Calendar model creation
 						
@@ -80,14 +80,14 @@
 						];
 						
 						// TODO manage first day of week
-						floorToWeek= function(d){
+						var floorToWeek= function(d){
 							d.setHours(0);
 							d.setMinutes(0);
 							d.setSeconds(0);
 							d.setMilliseconds(0);
 							d = date.add(d, "day", -d.getDay());
 							return d;
-						}
+						};
 						
 						var someData = [];
 						
@@ -106,7 +106,7 @@
 									startTime: new dateClassObj(startOfWeek.getTime()),
 									endTime: new dateClassObj(startOfWeek.getTime()),
 									calendar: i%2 == 0 ? "cal1" : "cal2"
-								}
+								};
 	
 								newObj.startTime = date.add(newObj.startTime, "day", Math.floor(Math.random()*7));
 								newObj.startTime.setHours(modelBase[i].start[0]);
@@ -148,7 +148,7 @@
 						// matrix view is *not* in a dijit container, must register resize handler
 						window.onresize = function(e){
 							matrixView.resize(e);
-						}
+						};
 
 						// Events management
 						
@@ -189,7 +189,7 @@
 						
 						var editedItem;
 						
-						onMatrixViewChange = function(item){
+						var onMatrixViewChange = function(item){
 
 							if (item == null){
 								editedItem = null;
@@ -258,7 +258,7 @@
 								moveEnabledCB.set("checked", win.doc.appState.moveDisabledMap[item.id] !== true);
 							}
 
-							res = "";
+							var res = "";
 							if(item == null){
 								res = null;
 							}else{
@@ -376,7 +376,7 @@
 							addLogEntry("onItemRollOut", e.item.summary);
 						});
 
-						getDataTipLabel = function(item){
+						var getDataTipLabel = function(item){
 							return "<b>" + item.summary + "</b><br/><table><tr><td style='text-align:right'>" + 
 								"Start:</td><td>" + matrixView.renderData.dateLocaleModule.format(item.startTime, {formatLength: "short"}) + "</td></tr><tr><td style='text-align:right'>" + 
 								"End:</td><td>" + matrixView.renderData.dateLocaleModule.format(item.endTime, {formatLength: "short"}) + "</td></tr></table>";
@@ -397,7 +397,8 @@
 						matrixView.on("itemEditBeginGesture", function(e){
 							addLogEntry("onItemEditBeginGesture", e.editKind + ", " + e.item.summary);							
 						});
-						
+
+                        var showDataTipAfterLayout = false;
 						matrixView.on("itemEditMoveGesture", function(e){
 							showDataTipAfterLayout = true;
 						});
@@ -665,7 +666,7 @@
 						</tr>
 						
 						<tr>
-							<td style="text-align:right;W">
+							<td style="text-align:right;">
 								<div data-dojo-id="itemEndDateEditor" data-dojo-type="dijit.form.DateTextBox" style="width:100px;" disabled="true" ></div>
 							</td>
 							<td>

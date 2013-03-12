@@ -39,7 +39,7 @@ time.newDate = function(obj, dateClassObj){
 		}
 		return d;
 	}
-	
+
 };
 
 time.floorToDay = function(d, reuse, dateClassObj){

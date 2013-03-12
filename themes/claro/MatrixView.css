@@ -249,7 +249,7 @@
 .claro .dojoxCalendarMatrixView .dojoxCalendarEvent {
   position: absolute;
   text-align: left;
-  color: #000000;
+  color: #000;
   cursor: default;
   white-space: nowrap;
 }
@@ -264,7 +264,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  color: #000000;
+  color: #000;
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -277,7 +277,7 @@
   background-color: #660000;
 }
 .claro .dojoxCalendarMatrixView .dojoxCalendarEvent.Edited {
-  color: #fff;
+  color: #FFF;
   font-weight: bold;
   text-decoration: none;
 }
@@ -303,7 +303,7 @@
   color: #FFF;
 }
 .claro .dojoxCalendarMatrixView .dojoxCalendarEvent.dojoxCalendarLabel.Focused {
-  border: dashed 1px #000000;
+  border: dashed 1px #000;
 }
 .claro .dojoxCalendarMatrixView .dojoxCalendarEvent.dojoxCalendarHorizontal .labels {
   position: absolute;
@@ -347,7 +347,7 @@
   text-align: center;
 }
 .claro .dojoxCalendarMatrixView .dojoxCalendarExpand span {
-  position: inline-block;
+  display: inline-block;
   vertical-align: middle;
 }
 .claro .dojoxCalendarMatrixView .dojoxCalendarExpand .bg {

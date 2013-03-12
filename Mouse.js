@@ -296,7 +296,7 @@ function(
 			
 			if (p < 0 || p > max) {
 				
-				step = Math.floor((p < 0	? p : p - max)/2)/3;
+				var step = Math.floor((p < 0	? p : p - max)/2)/3;
 				
 				this._startAutoScroll(step);
 						

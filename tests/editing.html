@@ -42,7 +42,7 @@
 						
 						// Calendar model creation						
 						var modelBase = [
-							{day: 1, start: [10,00], duration: 1400},
+							{day: 1, start: [10,0], duration: 1400},
 							{day: 2, start: [10,30], duration: 120},
 							{day: 2, start: [12,0], duration: 240},
 							{day: 3, start: [6,0], duration: 180},
@@ -61,7 +61,7 @@
 								endTime: new calendar.dateClassObj(startOfWeek.getTime()),
 								calendar: id%2 == 0 ? "cal1" : "cal2",
 								allDay: modelBase[id].allDay
-							}
+							};
 
 							newObj.startTime = calendar.dateModule.add(newObj.startTime, "day", modelBase[id].day);
 							newObj.startTime.setHours(modelBase[id].start[0]);

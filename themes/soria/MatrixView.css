@@ -335,7 +335,7 @@
   text-align: center;
 }
 .soria .dojoxCalendarMatrixView .dojoxCalendarExpand span {
-  position: inline-block;
+  display: inline-block;
   vertical-align: middle;
 }
 .soria .dojoxCalendarMatrixView .dojoxCalendarExpand .bg {

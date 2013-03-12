@@ -360,21 +360,15 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 					this.getTime(e, -1, -1, p.resizeEndTouchIndex)], 
 					p.editKind, "touch", e);
 
-				return;
-
 			}else if(fromResizeStart && p.touchesLen == 1 && !this._editingGesture){
 
 				this._startItemEditingGesture([this.getTime(e, -1, -1, p.resizeStartTouchIndex)], 
 					"resizeStart", "touch", e);
 
-				return;
-
 			}else if(fromResizeEnd && p.touchesLen == 1 && !this._editingGesture){
 
 				this._startItemEditingGesture([this.getTime(e, -1, -1, p.resizeEndTouchIndex)], 
 					"resizeEnd", "touch", e);
-
-				return;
 
 			} else {
 				// A move gesture is initiated even if we don't move 

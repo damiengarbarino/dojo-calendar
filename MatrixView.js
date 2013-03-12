@@ -542,7 +542,7 @@ function(
 			domClass.add(node, this._cssDays[date.getDay()]);
 
 			if(this.isWeekEnd(date)){
-				return domClass.add(node, "dojoxCalendarWeekend");
+				domClass.add(node, "dojoxCalendarWeekend");
 			}	
 		},		
 		
@@ -1528,7 +1528,7 @@ function(
 			
 			var hiddenItems = [];
 			
-			var hItems;
+			var hItems = null;
 			var hOffsets = [];
 			if(horizontalItems.length > 0 && this.horizontalRenderer){
 				var hItems = this._createHorizontalLayoutItems(index, start, end, horizontalItems);
@@ -1655,7 +1655,7 @@ function(
 			var overlapLayoutRes = this.computeOverlapping(layoutItems, this._overlapLayoutPass3);
 			var vOverlap = this.percentOverlap / 100;
 		
-			for(i=0; i<rd.columnCount; i++){
+			for(var i=0; i<rd.columnCount; i++){
 				var numLanes = overlapLayoutRes.addedPassRes[i];
 				var index = rd.rtl ? rd.columnCount - i - 1 : i;				
 				if(vOverlap == 0){
@@ -1804,7 +1804,7 @@ function(
 					var w = item.end - item.start;
 					if (has("ie") >= 9 && item.start + w < this.itemContainer.offsetWidth) {
 						w++;
-					};
+					}
 
 					domStyle.set(ir.container, {
 						"top": (fullHeight ? this.cellPaddingTop : posY) + "px",

@@ -271,7 +271,7 @@
 			z-index: -1;
 			border: @event-border;
 			.rounded-corners;
-			background-color: @event-bg;
+			background-color: @event-bg-color;
 			.opacity(90);
 		}
 				
@@ -334,11 +334,11 @@
 	}
 
 	.dojoxCalendarEvent.Hovered .bg {
-		background-color: @event-hovered-bg;	
+		background-color: @event-hovered-bg-color;	
 	}
 
 	.dojoxCalendarEvent.Selected .bg {
-		background-color: @event-selected-bg;
+		background-color: @event-selected-bg-color;
 	}
 
 	.dojoxCalendarEvent.Edited .bg {
@@ -359,15 +359,15 @@
 	}
 
 	.dojoxCalendarEvent.Hovered .startTime {
-		background-color: @event-header-hovered-bg;
+		background-color: @event-header-hovered-bg-color;
 	}
 
 	.dojoxCalendarEvent.Selected .startTime {
-		background-color: @event-header-selected-bg;
+		background-color: @event-header-selected-bg-color;
 	}
 
 	.dojoxCalendarEvent.Edited .startTime {
-		background-color: @event-header-bg;
+		background-color: @event-header-bg-color;
 		.top-left-right-border(@event-border-focused);
 	}
 
@@ -506,17 +506,17 @@
 		
 		.dojoxCalendarExpand.Up .bg {
 			background-color: @expand-up-color;
-			border: 1px solid @expand-up-color - #555555;
+			border: 1px solid @expand-up-color - #555;
 		}
 		
 		.dojoxCalendarExpand.Down .bg {
 			background-color: @expand-down-color;
-			border: 1px solid @expand-down-color - #555555;
+			border: 1px solid @expand-down-color - #555;
 		}
 		
 		.dojoxCalendarEvent div {
 			white-space:nowrap;
 		}
 	}
-
+	
 }

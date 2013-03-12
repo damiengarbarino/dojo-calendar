@@ -54,14 +54,14 @@
 						];
 																
 						// TODO manage first day of week
-						floorToWeek= function(d){
+						var floorToWeek= function(d){
 							d.setHours(0);
 							d.setMinutes(0);
 							d.setSeconds(0);
 							d.setMilliseconds(0);
 							d = date.add(d, "day", -d.getDay());
 							return d;
-						}
+						};
 						
 						var someData = [];
 						
@@ -77,7 +77,7 @@
 									summary: "New Event " + id,
 									startTime: new dateClassObj(startOfWeek.getTime()),
 									endTime: new dateClassObj(startOfWeek.getTime())
-								}
+								};
 	
 								newObj.startTime = date.add(newObj.startTime, "day", Math.floor(Math.random()*7));
 								newObj.startTime.setHours(modelBase[i].start[0]);
@@ -110,13 +110,13 @@
 							verticalGap:2
 						}, "calendarNode");
 						
-						setRowWidth = function(value){
+						var setRowWidth = function(value){
 							matrixView.grid.style.left = value + "px";
 							matrixView.yearColumnHeader.style.width = value + "px";
 							matrixView.columnHeader.style.left = value + "px";
 							matrixView.rowHeader.style.width = value + "px";
 							matrixView.itemContainer.style.left = value + "px";							
-						}
+						};
 						
 						window.onresize = window.onorientationchange = function(e){
 							matrixView.resize();

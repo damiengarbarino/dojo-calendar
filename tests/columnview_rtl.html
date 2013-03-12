@@ -56,7 +56,7 @@
 							return date;
 						};
 						
-						addLogEntry = function(name, content){
+						var addLogEntry = function(name, content){
 							var tr = domConstruct.create("tr", null, dom.byId("logBody"), "first");
 							var td = domConstruct.create("td", null, tr);
 							td.appendChild(win.doc.createTextNode(locale.format(new Date(), {selector:"time", timePattern:"h:mm:ss"})));
@@ -64,28 +64,28 @@
 							td.appendChild(win.doc.createTextNode(name));
 							td = domConstruct.create("td", null, tr);
 							td.appendChild(win.doc.createTextNode(content));						
-						}
+						};
 
 						// Calendar model creation
 						
 						var dateClassObj = Date;
 						
 						var modelBase = [
-							{day: 1, start: [10,00], duration: 1400},
+							{day: 1, start: [10,0], duration: 1400},
 							{day: 2, start: [10,30], duration: 120},
 							{day: 2, start: [12,0], duration: 240},
 							{day: 3, start: [6,0], duration: 180}
 						];
 						
 						// TODO manage first day of week
-						floorToWeek= function(d){
+						var floorToWeek= function(d){
 							d.setHours(0);
 							d.setMinutes(0);
 							d.setSeconds(0);
 							d.setMilliseconds(0);
 							d = date.add(d, "day", -d.getDay());
 							return d;
-						}
+						};
 						
 						var someData = [];
 						
@@ -101,7 +101,7 @@
 								startTime: new dateClassObj(startOfWeek.getTime()),
 								endTime: new dateClassObj(startOfWeek.getTime()),
 								calendar: i%2 == 0 ? "cal1" : "cal2"
-							}
+							};
 
 							newObj.startTime = date.add(newObj.startTime, "day", modelBase[i].day);
 							newObj.startTime.setHours(modelBase[i].start[0]);
@@ -167,7 +167,7 @@
 							onColViewChange(item);							
 						});
 									
-						onColViewChange = function(item){
+						var onColViewChange = function(item){
 							if (item == null){
 								
 								editedItem = null;
@@ -237,7 +237,7 @@
 								moveEnabledCB.set("checked", win.doc.appState.moveDisabledMap[item.id] !== true);
 							}
 							
-							res = "";
+							var res = "";
 							if(item == null){
 								res = null;
 							}else{
@@ -338,7 +338,7 @@
 							addLogEntry("onGridDoubleClick", locale.format(e.date, {datePattern:"yyyy/MM/dd", timePattern:"h:mm"}));
 						});
 												
-						dataTip = new Tooltip({position:["above"], showDelay: 0});
+						var dataTip = new Tooltip({position:["above"], showDelay: 0});
 						var timer;																
 						
 						colView.on("itemRollOut", function(e){
@@ -349,7 +349,7 @@
 							}
 						});											
 						
-						getDataTipLabel = function(item){
+						var getDataTipLabel = function(item){
 							return "<b>" + item.summary + "</b><br/><table><tr><td style='text-align:right'>" + 
 								"Start:</td><td>" + colView.renderData.dateLocaleModule.format(item.startTime, {formatLength: "medium"}) + "</td></tr><tr><td style='text-align:right'>" + 
 								"End:</td><td>" + colView.renderData.dateLocaleModule.format(item.endTime, {formatLength: "medium"}) + "</td></tr></table>";
@@ -603,7 +603,8 @@
 								<div data-dojo-id="itemSummaryEditor" data-dojo-type="dijit.form.TextBox" style="width:140px; margin-left: 10px" placeHolder="Summary..."></div>
 							</td>
 						</tr>
-						<td colspan="2" class="smallText" >
+                        <tr>
+                            <td colspan="2" class="smallText" >
 								<input type="checkbox" data-dojo-id="allDayCB" data-dojo-type="dijit.form.CheckBox" checked="false" disabled="true" />
 								<label for="allDayCB">All day</label>
 							</td>
@@ -636,7 +637,7 @@
 						</tr>
 						
 						<tr>
-							<td style="text-align:right;W">
+							<td style="text-align:right;">
 								<div data-dojo-id="itemEndDateEditor" data-dojo-type="dijit.form.DateTextBox" style="width:100px;" ></div>
 							</td>
 							<td>

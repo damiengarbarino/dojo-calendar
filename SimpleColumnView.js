@@ -266,16 +266,16 @@ function(
 			}
 			
 			v = this.percentOverlap;
-			if(this.percentOverlap<0 ||this.percentOverlap>100 || isNaN(this.percentOverlap)){
+			if(v < 0 ||v > 100 || isNaN(v)){
 				this.percentOverlap = 70;
 			}
 			if(this.hourSize<5 || isNaN(this.hourSize)){
 				this.hourSize = 10;
 			}
 			v = this.timeSlotDuration;
-			if(v<1 || v>60 || isNaN(v)){
-				v = 15;
-			}
+            if (v < 1 || v > 60 || isNaN(v)) {
+                this.timeSlotDuration = 15;
+            }
 		},
 		
 		_setStartDateAttr: function(value){
@@ -788,11 +788,26 @@ function(
 			domClass.add(node, this._cssDays[date.getDay()]);
 
 			if(this.isToday(date)){				
-				return domClass.add(node, "dojoxCalendarToday");
+				domClass.add(node, "dojoxCalendarToday");
 			} else if(this.isWeekEnd(date)){
-				return domClass.add(node, "dojoxCalendarWeekend");
+				domClass.add(node, "dojoxCalendarWeekend");
 			}	
 		},
+
+        _addMinutesClasses: function(node, minutes){
+            switch(minutes){
+                case 0:
+                    domClass.add(node, "hour");
+                    break;
+                case 30:
+                    domClass.add(node, "halfhour");
+                    break;
+                case 15:
+                case 45:
+                    domClass.add(node, "quarterhour");
+                    break;
+            }
+        },
 		
 		_buildRowHeader: function(renderData, oldRenderData){
 
@@ -866,18 +881,7 @@ function(
 				
 				var m = (i * this.renderData.rowHeaderGridSlotDuration) % 60;
 
-				switch(m){
-				case 0:
-					domClass.add(td, "hour");
-					break;
-				case 30:
-					domClass.add(td, "halfhour");
-					break;
-				case 15:
-				case 45:
-					domClass.add(td, "quarterhour");
-					break;
-			}
+                this._addMinutesClasses(td, m);
 
 			}, this);
 			
@@ -926,18 +930,7 @@ function(
 			domStyle.set(node, "top", (pos + (index==0?this.rowHeaderFirstLabelOffset:this.rowHeaderLabelOffset))+"px");
 			var m = (index * this.rowHeaderLabelSlotDuration) % 60;
 			domClass.remove(node, ["hour", "halfhour", "quarterhour"]);
-			switch(m){
-				case 0:
-					domClass.add(node, "hour");
-					break;
-				case 30:
-					domClass.add(node, "halfhour");
-					break;
-				case 15:
-				case 45:
-					domClass.add(node, "quarterhour");
-					break;
-			}
+            this._addMinutesClasses(node, m);
 		},
 		
 		styleRowHeaderCell: function(node, h, m, renderData){
@@ -1071,19 +1064,9 @@ function(
 					var d = renderData.dates[col];
 					
 					this.styleGridCell(td, d, h, m, renderData);
-					
-					switch(m){
-						case 0:
-							domClass.add(td, "hour");
-							break;
-						case 30:
-							domClass.add(td, "halfhour");
-							break;
-						case 15:
-						case 45:
-							domClass.add(td, "quarterhour");
-							break;
-					}
+
+                    this._addMinutesClasses(td, m);
+
 				}, this);				
 			}, this); 
 												 
@@ -1638,11 +1621,10 @@ function(
 			var minH = rd.minHours*60;
 			var maxH = rd.maxHours*60;
 			var minutes = minH + (pos * (maxH - minH) / rd.sheetHeight);
-			var d = {
+			return {
 				hours: Math.floor(minutes / 60),
 				minutes: Math.floor(minutes % 60)
 			};
-			return d;
 		},
 		
 		///////////////////////////////////////////////////////////////

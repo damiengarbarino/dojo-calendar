@@ -168,10 +168,11 @@ function(
 			}
 		},
 		
-		_getHorizontalRendererAttr: function(value){
+		_getHorizontalRendererAttr: function(){
 			if(this.secondarySheet){
 				return this.secondarySheet.get("horizontalRenderer");
 			}
+            return null;
 		},
 		
 		_setExpandRendererAttr: function(value){
@@ -180,10 +181,11 @@ function(
 			}
 		},
 		
-		_getExpandRendererAttr: function(value){
+		_getExpandRendererAttr: function(){
 			if(this.secondarySheet){
 				return this.secondarySheet.get("expandRenderer");
 			}
+            return null;
 		},
 					
 		_setTextDirAttr: function(value){

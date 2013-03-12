@@ -39,7 +39,7 @@
 							"Hint: Resize an event by clicking on one of its ends and dragging it"
 						];
 						
-						hintIdx = 0;
+						var hintIdx = 0;
 						dom.byId("hint").innerHTML = hints[0];
 												
 						setInterval(function(){
@@ -54,7 +54,7 @@
 																					
 						// Calendar model creation						
 						var modelBase = [
-							{day: 1, start: [10,00], duration: 1400},
+							{day: 1, start: [10,0], duration: 1400},
 							{day: 2, start: [10,30], duration: 120},
 							{day: 2, start: [12,0], duration: 240},
 							{day: 3, start: [6,0], duration: 180},
@@ -72,7 +72,7 @@
 								startTime: new calendar.dateClassObj(startOfWeek.getTime()),
 								endTime: new calendar.dateClassObj(startOfWeek.getTime()),
 								allDay: modelBase[id].allDay
-							}
+							};
 
 							newObj.startTime = calendar.dateModule.add(newObj.startTime, "day", modelBase[id].day);
 							newObj.startTime.setHours(modelBase[id].start[0]);
@@ -94,7 +94,7 @@
 								oldPut.call(this, value, options);																		
 							}), 3000);							
 							return new Deferred();
-						}				
+						};
 						// END HACK
 						
 						calendar.set("store", store);
@@ -133,7 +133,7 @@
 							id++;	
 							
 							return item;							
-						}
+						};
 						
 						calendar.set("createOnGridClick", true);
 						calendar.set("createItemFunc", createItem);						

@@ -280,7 +280,7 @@
 			z-index: -1;
 			border: @event-border;
 			.rounded-corners;
-			background-color: @event-header-bg;
+			background-color: @event-header-bg-color;
 			.opacity(90);
 		}
 				
@@ -343,11 +343,11 @@
 	}
 
 	.dojoxCalendarEvent.Hovered .bg {
-		background-color: @event-hovered-bg;	
+		background-color: @event-hovered-bg-color;	
 	}
 
 	.dojoxCalendarEvent.Selected .bg {
-		background-color: @event-selected-bg;
+		background-color: @event-selected-bg-color;
 	}
 
 	.dojoxCalendarEvent.Edited .bg {
@@ -368,15 +368,15 @@
 	}
 
 	.dojoxCalendarEvent.Hovered .startTime {
-		background-color: @event-header-hovered-bg;
+		background-color: @event-header-hovered-bg-color;
 	}
 
 	.dojoxCalendarEvent.Selected .startTime {
-		background-color: @event-header-selected-bg;
+		background-color: @event-header-selected-bg-color;
 	}
 
 	.dojoxCalendarEvent.Edited .startTime {
-		background-color: @event-header-bg;
+		background-color: @event-header-bg-color;
 		.top-left-right-border(@event-border-focused);
 	}
 	
