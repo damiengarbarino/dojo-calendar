@@ -86,11 +86,11 @@ function(
 		columnCount: 7,
 	
 		// minHours: Integer
-		//		The minimum hour to be displayed. It must be in the [0,24] interval.
+		//		The minimum hour to be displayed. It must be in the [0,23] interval and must be lower than the maxHours.
 		minHours: 8,
 		
 		// maxHours: Integer
-		//		The maximum hour to be displayed. It must be in the [0,24] interval.	
+		//		The maximum hour to be displayed. It must be in the [1,24] interval and must be greater than the minHours.	
 		maxHours: 18,
 		
 		// hourSize: Integer
@@ -244,20 +244,20 @@ function(
 			this.inherited(arguments);
 			
 			var v = this.minHours;
-			if(v < 0 || v>24 || isNaN(v)){
+			if(v < 0 || v>23 || isNaN(v)){
 				this.minHours = 0;
 			}
 			v = this.maxHours;
-			if (v < 0 || v>24 || isNaN(v)){
+			if (v < 1 || v>24 || isNaN(v)){
 				this.minHours = 24;
 			}
 			
 			if(this.minHours > this.maxHours){
 				var t = this.maxHours;
 				this.maxHours = this.minHours;
-				this.maxHours = t;
+				this.minHours = t;
 			}
-			if (v-this.minHours < 1){
+			if (this.maxHours - this.minHours < 1){
 				this.minHours = 0;
 				this.maxHours = 24;				
 			}
