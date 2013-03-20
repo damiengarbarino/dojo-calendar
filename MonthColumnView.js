@@ -308,7 +308,7 @@ function(
 			var len = "wide";
 			
 			if(this.columnHeaderFormatLength){
-				len = this.columnHeaderFormatLength
+				len = this.columnHeaderFormatLength;
 			}
 			
 			var months = this.renderData.dateLocaleModule.getNames("months", len, "standAlone");
@@ -382,7 +382,7 @@ function(
 			//		private
 			
 			if(date < 1){
-				date = 1
+				date = 1;
 			}else if(date>31){
 				date = 31;
 			}
@@ -527,6 +527,13 @@ function(
 		},
 		
 		_configureScrollBar: function(renderData){
+			// summary:
+			//		Sets the scroll bar size and position.
+			// renderData: Object
+			//		The render data.
+			// tags:
+			//		protected
+			
 			if(has("ie") && this.scrollBar){
 				domStyle.set(this.scrollBar.domNode, "width", (renderData.scrollbarWidth + 1) + "px");
 			}
