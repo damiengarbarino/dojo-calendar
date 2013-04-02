@@ -92,6 +92,9 @@ function(
 		
 		
 		resize: function(e){
+			// tags:
+			//		private
+			
 			this.inherited(arguments);
 			if(this.secondarySheet){
 				this.secondarySheet.resize(e);

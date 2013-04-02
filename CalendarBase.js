@@ -188,7 +188,7 @@ _nls){
 		//		Valid values are "day", "week" (default value) and "month".
 		dateInterval: "week",
 		
-		// dateInterval:Integer
+		// dateIntervalSteps:Integer
 		//		The number of date intervals used to compute along with the <code>date</code> and 
 		//		<code>dateInterval</code> the time interval to display.
 		//		Default value is 1.		
@@ -1187,6 +1187,8 @@ _nls){
 			}
 		},
 		
+		// hoveredItem: Object
+		//		Current render item which is under the mouse cursor.
 		hoveredItem: null,
 		
 		isItemHovered: function(item){
