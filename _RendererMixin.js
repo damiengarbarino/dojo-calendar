@@ -251,7 +251,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 			var startHidden = rd.dateModule.compare(this.item.range[0], this.item.startTime) != 0;
 			var endHidden =  rd.dateModule.compare(this.item.range[1], this.item.endTime) != 0;
 			
-			var visible, limit;
+			var visible;
 			
 			if(this.beforeIcon != null) {
 				visible = this._orientation != "horizontal" || this.isLeftToRight() ? startHidden : endHidden;

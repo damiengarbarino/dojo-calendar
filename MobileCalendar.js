@@ -54,5 +54,5 @@ define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView
 			this.columnView.on("columnHeaderClick", lang.hitch(this, this.columnViewColumnHeaderClick));			
 		}
 		
-	}) 
+	});
 });

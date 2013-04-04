@@ -882,7 +882,6 @@ define([
 				};
 			}
 			
-			var numLanesPerInt;
 			var lanes = [];
 
 			for(var i=0; i<layoutItems.length; i++){
@@ -890,7 +889,7 @@ define([
 				this._layoutPass1(layoutItem, lanes);
 			}
 
-			var addedPassRes;
+			var addedPassRes = null;
 			if(func){
 				addedPassRes = lang.hitch(this, func)(lanes);
 			}
@@ -2145,9 +2144,7 @@ define([
 				this.rendererList = p.editRendererList.concat(this.rendererList);
 				lang.mixin(this.itemToRenderer, p.editItemToRenderer);
 			}
-			
-			var store = this.get("store");
-						
+
 			this._onItemEditEnd(lang.mixin(this._createItemEditEvent(), {
 				item: p.editedItem,
 				storeItem: p.storeItem,

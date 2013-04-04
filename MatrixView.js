@@ -1146,7 +1146,7 @@ function(
 					});
 					this._expandAnimation.play();
 				}else{
-					this._expandRowImpl(size)
+					this._expandRowImpl(size);
 				}
 			}			
 		},
@@ -1266,7 +1266,6 @@ function(
 		_resizeRowsImpl: function(tableNode, query){
 			// tags:
 			//		private
-			var rd = this.renderData;
 			dojo.query(query, tableNode).forEach(function(tr, i){
 				domStyle.set(tr, "height", this._getRowHeight(i)+"px");
 			}, this);
@@ -1567,10 +1566,6 @@ function(
 
 			var rd = this.renderData;
 			var cal = rd.dateModule;
-			var cell = rd.cells[index];
-			var irHeight = this.horizontalRendererHeight;
-			var vOverlap = this.percentOverlap / 100;
-			var maxW = domGeometry.getMarginBox(this.itemContainer).w;
 			var sign = rd.rtl ? -1 : 1;
 			var layoutItems = [];
 
@@ -1762,7 +1757,6 @@ function(
 			//		private
 			
 			var rd = this.renderData;
-			var cal = rd.dateModule;
 			var cell = rd.cells[index];
 			var cellH = this._getRowHeight(index);
 			var irHeight = this.horizontalRendererHeight;
@@ -1831,9 +1825,8 @@ function(
 		_layoutLabelItemsImpl: function(index, layoutItems, hasHiddenItems, hiddenItems, hOffsets){
 			// tags:
 			//		private
-			var d, list, posY;
+			var list, posY;
 			var rd = this.renderData;
-			var cal = rd.dateModule;
 			var cell = rd.cells[index];
 			var cellH = this._getRowHeight(index);
 			var irHeight = this.labelRendererHeight;
@@ -1847,7 +1840,6 @@ function(
 					var maxH = this.expandRenderer ? (hasHiddenItems[i] ? cellH - this.expandRendererHeight: cellH) : cellH;
 					posY = hOffsets == null || hOffsets[i] == null ? this.cellPaddingTop : hOffsets[i] + this.verticalGap;
 					var celPos = domGeometry.position(this._getCellAt(index, i));
-					var dayStart = rd.dates[index][i];
 					var left = celPos.x - rd.gridTablePosX;
 					
 					for(var j=0; j<list.length; j++){
@@ -1965,14 +1957,12 @@ function(
 			// tags:
 			//		private
 			
-			var d, ir;		
 			var rd = this.renderData;
-			var cal = rd.dateModule;
+			var d = lang.clone(rd.dates[rowIndex][colIndex]);
+			var ir = null;
 			var cell = rd.cells[rowIndex];					
 			
-			ir = this._getExpandRenderer(
-				lang.clone(rd.dates[rowIndex][colIndex]),
-				items, rowIndex, colIndex, expanded);
+			ir = this._getExpandRenderer(d,	items, rowIndex, colIndex, expanded);
 				
 			var dim = domGeometry.position(this._getCellAt(rowIndex, colIndex));
 			dim.x -= rd.gridTablePosX;
