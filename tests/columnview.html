@@ -115,6 +115,10 @@
 						
 						colView = declare([ColumnView, CalendarKeyboard, CalendarMouse])({
 							store: new Observable(new Memory({data: someData})),
+							subColumns: [
+								{label: "Calendar 1", value:"cal1"},
+								{label: "Calendar 2", value:"cal2"},
+							],
 							secondarySheetClass: secondarySheetClass,
 							secondarySheetArgs: {
 								horizontalRendererHeight: 18

@@ -84,7 +84,14 @@ function(
 		// columnCount: Integer
 		//		The number of column to display (from the startDate).
 		columnCount: 7,
-	
+		
+		// subcolumns: Object[]
+		//		Array of sub columns definitions.
+		//		A definition is an object with at least two properties:
+		//		- label: Name of the sub column,
+		//		- value: Value of the calendar property of the data item in this sub column.
+		subColumns: null,
+			
 		// minHours: Integer
 		//		The minimum hour to be displayed. It must be in the [0,23] interval and must be lower than the maxHours.
 		minHours: 8,
@@ -202,6 +209,8 @@ function(
 			renderData.dates = [];
 						
 			renderData.columnCount = this.get("columnCount");
+			renderData.subColumns = this.get("subColumns");
+			renderData.subColumnCount =  renderData.subColumns ? renderData.subColumns.length : 1;
 
 			var d = this.get("startDate");
 		
@@ -975,7 +984,7 @@ function(
 				
 			var addRows = rowDiff > 0;
 			
-			var colDiff  = renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0);
+			var colDiff  = (renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0));
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -1148,7 +1157,7 @@ function(
 	
 			domStyle.set(table, "height", renderData.sheetHeight + "px");			
 			
-			var count = renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0);
+			var count = renderData.subColumnCount * (renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0));
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -1284,11 +1293,29 @@ function(
 			}
 			
 			if(verticalItems.length > 0){
-				this._layoutVerticalItems(renderData, index, start, end, verticalItems);
+				if(renderData.subColumnCount > 1){
+					var subColumnItems = {};
+					arr.forEach(this.subColumns, function(def){
+						subColumnItems[def.value] = [];
+					});
+					arr.forEach(verticalItems, function(item){
+						subColumnItems[item.subColumn].push(item);
+					});
+					var subColIndex = 0;
+					arr.forEach(this.subColumns, function(subCol){
+						this._layoutVerticalItems(renderData, index, subColIndex++, start, end, subColumnItems[subCol.value]);
+					}, this);
+				}else{
+					this._layoutVerticalItems(renderData, index, 0, start, end, verticalItems);
+				}							
 			}
 		},
+		
+		_getColumn: function(renderData, index, subIndex){
+			return renderData.cells[index * renderData.subColumnCount + subIndex];
+		},
 
-		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Integer*/subIndex, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
 			// tags:
 			//		private
 
@@ -1296,7 +1323,8 @@ function(
 				return;
 			}
 			
-			var cell = renderData.cells[index];
+			var cell = this._getColumn(renderData, index, subIndex);
+			
 			var layoutItems = [];			
 			
 			// step 1 compute projected position and size
