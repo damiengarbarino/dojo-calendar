@@ -33,7 +33,7 @@ time.newDate = function(obj, dateClassObj){
 	}else if(typeof obj == "string"){
 		d = stamp.fromISOString(obj);
 		if(d === null){
-			throw new Error("Cannot parse date string ("+obj+"), please specify a decodeDate function"); // cannot build date
+			throw new Error("Cannot parse date string ("+obj+"), specify a \"decodeDate\" function that translates this string into a Date object"); // cannot build date
 		}else if(dateClassObj !== Date){ // from Date to dateClassObj
 			d = new dateClassObj(d.getTime());
 		}
