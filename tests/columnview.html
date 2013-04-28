@@ -107,6 +107,12 @@
 
 							someData.push(newObj);
 						}
+						
+						var subColumns = 
+							[
+								{label: "Calendar 1", value:"cal1"},
+								{label: "Calendar 2", value:"cal2"}
+							];
 
 						
 						// Calendar creation & configuration
@@ -115,10 +121,7 @@
 						
 						colView = declare([ColumnView, CalendarKeyboard, CalendarMouse])({
 							store: new Observable(new Memory({data: someData})),
-							subColumns: [
-								{label: "Calendar 1", value:"cal1"},
-								{label: "Calendar 2", value:"cal2"},
-							],
+							subColumns: subColumns,
 							secondarySheetClass: secondarySheetClass,
 							secondarySheetArgs: {
 								horizontalRendererHeight: 18
@@ -455,6 +458,11 @@
 							colView.set("allowSubColumnMove", value);
 						});
 						
+						
+						subColumnsCB.on("change", function(value){
+							colView.set("subColumns", value ? subColumns : null);
+						});
+						
 						overlapEditor.on("change", function(value){
 							colView.set('percentOverlap', this.value);
 							hGapEditor.set("disabled", value!=0)
@@ -572,6 +580,13 @@
 								</select>
 							</td>
 						</tr>
+						<tr>
+							<td><label for="subColumnsCB">Sub columns:</label></td>
+							<td>
+								<input type="checkbox" data-dojo-id="subColumnsCB" id="subColumnsCB" data-dojo-type="dijit.form.CheckBox" checked="true" />							
+							</td>						
+						</tr>
+						
 					</table>
 				</div>
 
@@ -660,7 +675,7 @@
 						</tr>
 						<tr>
 							<td colspan="2" class="smallText" >
-								<input type="checkbox" data-dojo-id="allowReassignCB" id="allowReassignCB" data-dojo-type="dijit.form.CheckBox" checked="false" />
+								<input type="checkbox" data-dojo-id="allowReassignCB" id="allowReassignCB" data-dojo-type="dijit.form.CheckBox" checked="true" />
 								<label for="allowReassignCB">Allow sub column change</label>
 							</td>
 						</tr>
