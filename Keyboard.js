@@ -199,6 +199,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 				this.ensureVisibility(focusedItem.startTime, focusedItem.endTime, "both", undefined, this.maxScrollAnimationDuration);
 			}
 		},
+		
+		_checkDir: function(dir, value){			
+			return this.isLeftToRight() && dir == value || !this.isLeftToRight() && dir == (value=="left"?"right":"left");
+		},
 
 		_keyboardItemEditing: function(e, dir){
 			// tags:
@@ -218,8 +222,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 				steps = dir == "up" || dir == "down" ? this.keyboardUpDownSteps : this.keyboardLeftRightSteps;
 			}			
 						
-			if(dir == "up" || !this.isLeftToRight() && dir == "right" || 
-				 this.isLeftToRight() && dir == "left"){
+			if(dir == "up" || this._checkDir(dir, "left")){
 				steps = -steps;
 			}
 						
@@ -227,10 +230,38 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 			
 			var d = editKind == "resizeEnd" ? p.editedItem.endTime : p.editedItem.startTime;
 			
-			var newTime = this.renderData.dateModule.add(d, unit, steps);
+			var newTime = d;
+			var subColumn = p.editedItem.subColumn;
+			
+			if(this.subColumns && this.subColumns.length > 1){		
+				var idx = this.getSubColumnIndex(subColumn);
+				var updateTime = true;
+				if(idx != -1){
+					if(this._checkDir(dir, "left")){
+						if(idx == 0){
+							subColumn = this.subColumns[this.subColumns.length-1];							
+						}else{
+							updateTime = false;
+							subColumn = this.subColumns[idx-1];
+						}
+					}else if(this._checkDir(dir, "right")){
+						if(idx == this.subColumns.length-1){
+							subColumn = this.subColumns[0];							
+						}else{
+							updateTime = false;
+							subColumn = this.subColumns[idx+1];
+						}
+					}
+					if(updateTime){
+						newTime = this.renderData.dateModule.add(d, unit, steps);
+					}
+				}
+			}else{
+				newTime = this.renderData.dateModule.add(d, unit, steps);
+			}			
 			
 			this._startItemEditingGesture([d], editKind, "keyboard", e);
-			this._moveOrResizeItemGesture([newTime], "keyboard", e);
+			this._moveOrResizeItemGesture([newTime], "keyboard", e, subColumn);
 			this._endItemEditingGesture(editKind, "keyboard", e, false);
 			
 			if(editKind == "move"){

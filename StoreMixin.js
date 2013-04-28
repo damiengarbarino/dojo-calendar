@@ -39,7 +39,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		//		the events represented by this item.	Default is "allDay".
 		allDayAttr: "allDay",
 		
-		// allDayAttr: String
+		// subColumnAttr: String
 		//		The attribute of the store item that contains the sub column name of 
 		//		the events represented by this item.	Default is "calendar".
 		subColumnAttr: "calendar",

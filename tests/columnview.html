@@ -140,34 +140,37 @@
 						// Events management
 						
 						
-						colView.on("gridDoubleClick", function(e){
-
-							// create a event when double-clicking on grid.
-							var start, end;
-							if(e.sheet == "primary"){
-								start = colView.floorDate(e.date, "minute", colView.timeSlotDuration);
-								end = date.add(start, "hour", 1);
-							}else{
-								start = colView.floorToDay(e.date, false, colView.renderData);
-								end = date.add(start, "day", 1);
+						// Enable creation of event interactively by ctrl clicking grid.
+						var createItem = function(view, d, e, subColumn){
+													
+							// create item by maintaining control key
+							if(!e.ctrlKey || e.shiftKey || e.altKey){
+								return null;
 							}
-
+						
+							// create a new event
+							var start, end;
+							var cal = colView.dateModule;
+							
+							start = colView.floorDate(d, "minute", colView.timeSlotDuration);
+							end = cal.add(start, "minute", colView.timeSlotDuration); 
+							
 							var item = {
 								id: id,
 								summary: "New event " + id,
 								startTime: start,
 								endTime: end,
-								calendar: id % 2 == 0 ? "cal1" : "cal2",
-								allDay: e.sheet == "secondary"
+								calendar: subColumn.value,
+								allDay: view.viewKind == "matrix"
 							};
 							
-							id++;		
-							colView.store.add(item);
+							id++;	
 							
-							colView.set("selectedItem", item);
-							colView.set("focusedItem", item);
-							onColViewChange(item);							
-						});
+							return item;							
+						};
+						
+						colView.set("createOnGridClick", true);
+						colView.set("createItemFunc", createItem);		
 
 						var startDateSave;
 						var columnCountSave;
@@ -448,6 +451,10 @@
 							}
 						});
 						
+						allowReassignCB.on("change", function(value){
+							colView.set("allowSubColumnMove", value);
+						});
+						
 						overlapEditor.on("change", function(value){
 							colView.set('percentOverlap', this.value);
 							hGapEditor.set("disabled", value!=0)
@@ -649,6 +656,12 @@
 							<td colspan="2" class="smallText" >
 								<input type="checkbox" data-dojo-id="liveEditCB" data-dojo-type="dijit.form.CheckBox" checked="false" />
 								<label for="liveEditCB">Live layout</label>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" class="smallText" >
+								<input type="checkbox" data-dojo-id="allowReassignCB" id="allowReassignCB" data-dojo-type="dijit.form.CheckBox" checked="false" />
+								<label for="allowReassignCB">Allow sub column change</label>
 							</td>
 						</tr>
 						<tr>

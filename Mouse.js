@@ -244,7 +244,7 @@ function(
 			if(this._editingGesture){
 				
 				if(!this._autoScroll(e.pageX, e.pageY, true)){
-					this._moveOrResizeItemGesture([this.getTime(e)], "mouse", e);	
+					this._moveOrResizeItemGesture([this.getTime(e)], "mouse", e, this.getSubColumn(e));	
 				}
 											
 			}else if(Math.abs(this._startPoint.x - e.screenX) >= this.triggerExtent || // moved enough to trigger editing

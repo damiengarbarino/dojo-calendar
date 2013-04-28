@@ -180,11 +180,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 					
 					var times = [];
 					var d = p.editKind == "resizeEnd" ? p.editedItem.endTime : p.editedItem.startTime;
+					var subColumn = p.editedItem.subColumn;
 					
 					switch(p.editKind){
 						case "move":
 						  var touchIndex = p.moveTouchIndex == null || p.moveTouchIndex < 0 ? 0 : p.moveTouchIndex;
-							times[0] = this.getTime(e, -1, -1, touchIndex);							
+							times[0] = this.getTime(e, -1, -1, touchIndex);
+							subColumn = this.getSubColumn(e, -1, -1, touchIndex);
 							break;
 						case "resizeStart":
 							times[0] = this.getTime(e, -1, -1, p.resizeStartTouchIndex);							
@@ -198,7 +200,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 							break;							
 					}
 														
-					this._moveOrResizeItemGesture(times, "touch", e);
+					this._moveOrResizeItemGesture(times, "touch", e, subColumn);
 					
 					if(p.editKind == "move"){
 						if(this.renderData.dateModule.compare(p.editedItem.startTime, d) == -1){

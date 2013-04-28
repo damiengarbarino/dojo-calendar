@@ -1429,19 +1429,7 @@ function(
 		//
 		///////////////////////////////////////////////////////////////
 		
-		getTime: function(e, x, y, touchIndex){
-			// summary:
-			//		Returns the time displayed at the specified point by this component.
-			// e: Event
-			//		Optional mouse event.
-			// x: Number
-			//		Position along the x-axis with respect to the sheet container used if event is not defined.
-			// y: Number
-			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
-			// touchIndex: Integer
-			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
-			// returns: Date
-			
+		_getNormalizedCoords: function(e, x, y, touchIndex){
 			if (e != null){				
 				var refPos = domGeometry.position(this.itemContainer, true);
 				
@@ -1476,9 +1464,27 @@ function(
 			}else if(y > r.h){
 				y = r.h-1;
 			}
+						
+			return {x: x, y: y};			
+		},
+		
+		getTime: function(e, x, y, touchIndex){
+			// summary:
+			//		Returns the time displayed at the specified point by this component.
+			// e: Event
+			//		Optional mouse event.
+			// x: Number
+			//		Position along the x-axis with respect to the sheet container used if event is not defined.
+			// y: Number
+			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
+			// touchIndex: Integer
+			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
+			// returns: Date
 			
-			var col = Math.floor(x / (domGeometry.getMarginBox(this.itemContainer).w / this.renderData.columnCount));
-			var t = this.getTimeOfDay(y, this.renderData);
+			var o = this._getNormalizedCoords(e, x, y, touchIndex);					
+			var t = this.getTimeOfDay(o.y, this.renderData);
+			var colW = domGeometry.getMarginBox(this.itemContainer).w / this.renderData.columnCount;
+			var col = Math.floor(o.x / colW);
 			
 			var date = null;
 			if(col < this.renderData.dates.length){			
@@ -1489,6 +1495,30 @@ function(
 			}
 	
 			return date;
+		},
+		
+		getSubColumn: function(e, x, y, touchIndex){
+			// summary:
+			//		Returns the sub column at the specified point by this component.
+			// e: Event
+			//		Optional mouse event.
+			// x: Number
+			//		Position along the x-axis with respect to the sheet container used if event is not defined.
+			// y: Number
+			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
+			// touchIndex: Integer
+			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
+			// returns: Object
+						
+			if(this.subColumns == null || this.subColumns.length == 1){
+				return null;
+			}
+			var o = this._getNormalizedCoords(e, x, y, touchIndex);
+			var rd = this.renderData;
+			var colW = domGeometry.getMarginBox(this.itemContainer).w / this.renderData.columnCount;
+			var col = Math.floor(o.x / colW);
+			var idx = Math.floor((o.x - col*colW) / (colW / rd.subColumnCount));			
+			return this.subColumns[idx]; 						
 		},
 		
 		///////////////////////////////////////////////////////////////
