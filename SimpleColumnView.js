@@ -144,7 +144,7 @@ function(
 			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer",
 				"rowHeaderTimePattern", "columnHeaderDatePattern", "timeSlotDuration", "rowHeaderGridSlotDuration", "rowHeaderLabelSlotDuration", 
 				"rowHeaderLabelOffset", "rowHeaderFirstLabelOffset","percentOverlap", "horizontalGap", "scrollBarRTLPosition","itemToRendererKindFunc", 
-				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items", "subColumns"];
+				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items"];
 			this._columnHeaderHandlers = [];
 		},
 		
@@ -984,8 +984,7 @@ function(
 				
 			var addRows = rowDiff > 0;
 			
-			var oldColDiff = oldRenderData ? oldRenderData.columnCount * oldRenderData.subColumnCount : 0;		
-			var colDiff  = renderData.columnCount * renderData.subColumnCount - oldColDiff;
+			var colDiff  = (renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0));
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -1035,7 +1034,7 @@ function(
 			query("tr", table).forEach(function(tr, i){
 				
 				if(addCols){ // creation				
-					var len = i >= rowIndex ? renderData.columnCount * renderData.subColumnCount : colDiff;							
+					var len = i >= rowIndex ? renderData.columnCount : colDiff;							
 					for(var i=0; i<len; i++){
 						domConstruct.create("td", null, tr);
 					}
@@ -1045,8 +1044,6 @@ function(
 					}
 				}
 			});
-			
-			var subCount = renderData.subColumnCount;
 			
 			// Set the CSS classes
 			
@@ -1063,22 +1060,19 @@ function(
 				// the minutes part of the time of day displayed by the current tr
 				var m = (i * this.renderData.slotDuration) % 60;
 				var h = this.minHours + Math.floor((i * this.renderData.slotDuration) / 60);
-				query("td", tr).forEach(function (td, abscol){
+				query("td", tr).forEach(function (td, col){
 					
 					td.className = "";
 					
-					if(abscol == 0){
+					if(col == 0){
 						domClass.add(td, "first-child");
-					}else if(abscol == this.renderData.columnCount-1){
+					}else if(col == this.renderData.columnCount-1){
 						domClass.add(td, "last-child");
 					}
 					
-					var col = subCount == 1 ? abscol : Math.floor(abscol / subCount);
-					var subColIdx = subCount == 1 ? 0 : abscol - col * renderData.subColumnCount;
-					var subCol = this.subColumns != null && this.subColumns.length > 0 ? this.subColumns[subColIdx] : null;
 					var d = renderData.dates[col];
 					
-					this.styleGridCell(td, d, h, m, subColIdx, subCol, renderData);
+					this.styleGridCell(td, d, h, m, renderData);
 
                     this._addMinutesClasses(td, m);
 
@@ -1093,7 +1087,7 @@ function(
 		//		By default the defaultStyleGridCell function is used.
 		styleGridCellFunc: null,
 				
-		defaultStyleGridCell: function(node, date, hours, minutes, subColumnIndex, subColumn, renderData){
+		defaultStyleGridCell: function(node, date, hours, minutes, renderData){
 			// summary:
 			//		Styles the CSS classes to the node that displays a cell.
 			//		By default this method is setting:
@@ -1109,10 +1103,6 @@ function(
 			//		The hours part of time of day displayed by the start of this cell.
 			// minutes: Integer
 			//		The minutes part of time of day displayed by the start of this cell.
-			// subColumnIndex: Integer
-			//		The sub column index.
-			// subColumn: Object
-			//		The sub column, if any, null otherwise.
 			// renderData: Object
 			//		The render data object.
 			// tags:
@@ -1121,41 +1111,29 @@ function(
 			domClass.add(node, [this._cssDays[date.getDay()], "H"+hours, "M"+minutes]);
 
 			if(this.isToday(date)){				
-				domClass.add(node, "dojoxCalendarToday");
+				return domClass.add(node, "dojoxCalendarToday");
 			} else if(this.isWeekEnd(date)){
-				domClass.add(node, "dojoxCalendarWeekend");
-			}
-			
-			if(subColumnIndex < renderData.subColumnCount-1) {
-				domClass.add(node, "dojoxCalendarSubColumn");
+				return domClass.add(node, "dojoxCalendarWeekend");
 			}
 		},
 		
-		styleGridCell: function(node, date, hours, minutes, subColumnIndex, subColumn, renderData){
+		styleGridCell: function(node, date, hours, minutes, renderData){
 			// summary:
 			//		Styles the CSS classes to the node that displays a cell.
 			//		Delegates to styleGridCellFunc if defined or defaultStyleGridCell otherwise.
 			// node: Node
 			//		The DOM node that displays the cell in the grid.
 			// date: Date
-			//		The date displayed by this cell.
-			// hours: Integer
-			//		The hours part of time of day displayed by the start of this cell.
-			// minutes: Integer
-			//		The minutes part of time of day displayed by the start of this cell.
-			// subColumnIndex: Integer
-			//		The sub column index.
-			// subColumn: Object
-			//		The sub column, if any, null otherwise.
+			//		The date displayed by this column
 			// renderData: Object
 			//		The render data object.
 			// tags:
 			//		protected
 
 			if(this.styleGridCellFunc){
-				this.styleGridCellFunc(node, date, hours, minutes, subColumnIndex, subColumn, renderData);
+				this.styleGridCellFunc(node, date, hours, minutes, renderData);
 			}else{
-				this.defaultStyleGridCell(node, date, hours, minutes, subColumnIndex, subColumn, renderData);
+				this.defaultStyleGridCell(node, date, hours, minutes, renderData);
 			}
 		},
 							
@@ -1177,10 +1155,9 @@ function(
 			
 			var bgCols = [];
 	
-			domStyle.set(table, "height", renderData.sheetHeight + "px");
-			var oldCount = oldRenderData ? oldRenderData.columnCount * oldRenderData.subColumnCount : 0;
+			domStyle.set(table, "height", renderData.sheetHeight + "px");			
 			
-			var count = (renderData.subColumnCount * renderData.columnCount) - oldCount;
+			var count = renderData.subColumnCount * (renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0));
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
