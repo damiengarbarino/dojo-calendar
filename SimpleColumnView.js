@@ -85,11 +85,8 @@ function(
 		//		The number of column to display (from the startDate).
 		columnCount: 7,
 		
-		// subcolumns: Object[]
-		//		Array of sub columns definitions.
-		//		A definition is an object with at least two properties:
-		//		- label: Name of the sub column,
-		//		- value: Value of the calendar property of the data item in this sub column.
+		// subcolumns: String[]
+		//		Array of sub columns values.
 		subColumns: null,
 			
 		// minHours: Integer
@@ -911,8 +908,16 @@ function(
 			query(".subColumnLabel", table).forEach(function(span, i){
 				var col = subCount == 1 ? i : Math.floor(i / subCount);
 				var subColIdx = subCount == 1 ? 0 : i - col *subCount;
-				this._setText(span, this.subColumns[subColIdx].label);
+				this._setText(span, this.subColumnLabelFunc(this.subColumns[subColIdx]));
 			}, this);					
+		},
+		
+		
+		subColumnLabelFunc: function(value){
+			// summary:
+			//	Computes the label for a sub column from the subColumns property.
+			//	By default, return the value.
+			return value;
 		},
 		
 		styleSubColumnHeaderCell: function(node, date, renderData){
@@ -1442,15 +1447,15 @@ function(
 			if(verticalItems.length > 0){
 				if(renderData.subColumnCount > 1){
 					var subColumnItems = {};
-					arr.forEach(this.subColumns, function(def){
-						subColumnItems[def.value] = [];
+					arr.forEach(this.subColumns, function(subCol){
+						subColumnItems[subCol] = [];
 					});
 					arr.forEach(verticalItems, function(item){
 						subColumnItems[item.subColumn].push(item);
 					});
 					var subColIndex = 0;
 					arr.forEach(this.subColumns, function(subCol){
-						this._layoutVerticalItems(renderData, index, subColIndex++, start, end, subColumnItems[subCol.value]);
+						this._layoutVerticalItems(renderData, index, subColIndex++, start, end, subColumnItems[subCol]);
 					}, this);
 				}else{
 					this._layoutVerticalItems(renderData, index, 0, start, end, verticalItems);

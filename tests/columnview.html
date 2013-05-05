@@ -108,11 +108,10 @@
 							someData.push(newObj);
 						}
 						
-						var subColumns = 
-							[
-								{label: "Calendar 1", value:"cal1"},
-								{label: "Calendar 2", value:"cal2"}
-							];
+						var subColumnsLabels = {
+								"cal1": "Calendar 1",
+								"cal2": "Calendar 2"
+						};
 
 						
 						// Calendar creation & configuration
@@ -121,7 +120,10 @@
 						
 						colView = declare([ColumnView, CalendarKeyboard, CalendarMouse])({
 							store: new Observable(new Memory({data: someData})),
-							subColumns: subColumns,
+							subColumns: ["cal1", "cal2"],
+							subColumnLabelFunc: function(v){
+								return subColumnsLabels[v];
+							},
 							secondarySheetClass: secondarySheetClass,
 							secondarySheetArgs: {
 								horizontalRendererHeight: 18
@@ -460,7 +462,7 @@
 						
 						
 						subColumnsCB.on("change", function(value){
-							colView.set("subColumns", value ? subColumns : null);
+							colView.set("subColumns", value ? ["cal1", "cal2"] : null);
 						});
 						
 						overlapEditor.on("change", function(value){
