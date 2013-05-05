@@ -60,7 +60,7 @@ function(
 		// summary:
 		//		The simple column view is displaying a day per column. Each cell of a column is a time slot.
 
-		baseClass: "dojoxCalendarSimpleColumnView",
+		baseClass: "dojoxCalendarColumnView",
 		
 		templateString: template,
 		
@@ -584,13 +584,20 @@ function(
 			//		private
 			domStyle.set(this.sheetContainer, "height", renderData.sheetHeight + "px");
 			// padding for the scroll bar.
+			this._configureVisibleParts(renderData);
 			this._configureScrollBar(renderData);
 			this._buildColumnHeader(renderData, oldRenderData);
+			this._buildSubColumnHeader(renderData, oldRenderData);
 			this._buildRowHeader(renderData, oldRenderData);
 			this._buildGrid(renderData, oldRenderData);
 			this._buildItemContainer(renderData, oldRenderData);
 		},
 		
+		_configureVisibleParts: function(renderData){
+			domClass[this.subColumns == null?"remove":"add"](this.domNode, "subColumns");
+			domClass[this.secondarySheetClass && this.secondarySheetNode?"add":"remove"](this.domNode, "secondarySheet");			
+		},
+				
 		_configureScrollBar: function(renderData){
 			// summary:
 			//		Sets the scroll bar size and position.
@@ -616,6 +623,8 @@ function(
 			domStyle.set(this.scrollContainer, lPos, "0");
 			domStyle.set(this.header, rPos, renderData.scrollbarWidth + "px");
 			domStyle.set(this.header, lPos, "0");
+			domStyle.set(this.subHeader, rPos, renderData.scrollbarWidth + "px");
+			domStyle.set(this.subHeader, lPos, "0");
 			if(this.buttonContainer && this.owner != null && this.owner.currentView == this){
 				domStyle.set(this.buttonContainer, rPos, renderData.scrollbarWidth + "px");
 				domStyle.set(this.buttonContainer, lPos, "0");
@@ -794,6 +803,130 @@ function(
 			// tags:
 			//		protected
 			
+			domClass.add(node, this._cssDays[date.getDay()]);
+
+			if(this.isToday(date)){				
+				domClass.add(node, "dojoxCalendarToday");
+			} else if(this.isWeekEnd(date)){
+				domClass.add(node, "dojoxCalendarWeekend");
+			}	
+		},
+		
+		_buildSubColumnHeader: function(renderData, oldRenderData){				
+			// summary:
+			//		Creates incrementally the HTML structure of the column header and configures its content.
+			//
+			// renderData:
+			//		The render data to display.
+			//
+			// oldRenderData:
+			//		The previously render data displayed, if any.
+			// tags:
+			//		private
+
+			var table = this.subColumnHeaderTable;
+			
+			if (!table || this.subColumns == null){
+				return;
+			}
+					
+			var count = renderData.columnCount - query(".subHeaderCell", table).length;
+			
+			if(has("ie") == 8){
+				// workaround Internet Explorer 8 bug.
+				// if on the table, width: 100% and table-layout: fixed are set
+				// and columns are removed, width of remaining columns is not 
+				// recomputed: must rebuild all. 
+				if(this._colSubTableSave == null){
+					this._colSubTableSave = lang.clone(table);
+				}else if(count < 0){
+					this.subColumnHeader.removeChild(table);
+					domConstruct.destroy(table);
+					table = lang.clone(this._colSubTableSave);
+					this.subColumnHeaderTable = table;
+					this.subColumnHeader.appendChild(table);
+					count = renderData.columnCount;
+				}
+				
+			} // else incremental dom add/remove for real browsers.
+						 				
+			var tbodies = query(">tbody", table);
+
+			var tbody, tr, td;
+			
+			if (tbodies.length == 1){
+				tbody = tbodies[0];
+			}else{ 
+				tbody = html.create("tbody", null, table);
+			}
+			
+			var trs = query(">tr", tbody);
+			if (trs.length == 1){
+				tr = trs[0];
+			}else{ 
+				tr = domConstruct.create("tr", null, tbody);
+			}
+			
+			var subCount = renderData.subColumnCount;
+						 
+			// Build HTML structure (incremental)
+			if(count > 0){ // creation				
+				for(var i=0; i < count; i++){
+					td = domConstruct.create("td", null, tr);
+					domClass.add(td, "subHeaderCell");
+					var sTable = domConstruct.create("table", {
+						cellpadding:"0", cellspacing:"0"
+					}, td);
+					domClass.add(sTable, "subColumn");
+					var sBody = html.create("tbody", null, sTable);
+					var sTr = domConstruct.create("tr", null, sBody);
+					
+					for(var j=0; j < subCount; j++){
+						var sTd = domConstruct.create("td", null, sTr);
+						var sSpan = domConstruct.create("span", null, sTd);						
+						domClass.add(sSpan, "subColumnLabel");
+					}
+				}
+			}else{ // deletion
+				count = -count;
+				for(var i=0; i < count; i++){
+					td = tr.lastChild;
+					tr.removeChild(td);
+					domConstruct.destroy(td);
+				}
+			}
+			
+			// fill & configure		
+			query(".subHeaderCell", table).forEach(function(td, i){
+				td.className = "subHeaderCell";											
+				if(i == 0){
+					domClass.add(td, "first-child");
+				}else if(i == this.renderData.columnCount-1){
+					domClass.add(td, "last-child");
+				}
+				var d = renderData.dates[i];
+				this.styleSubColumnHeaderCell(td, d, renderData);						
+			}, this);
+			
+			query(".subColumnLabel", table).forEach(function(span, i){
+				var col = subCount == 1 ? i : Math.floor(i / subCount);
+				var subColIdx = subCount == 1 ? 0 : i - col *subCount;
+				this._setText(span, this.subColumns[subColIdx].label);
+			}, this);					
+		},
+		
+		styleSubColumnHeaderCell: function(node, date, renderData){
+			// summary:
+			//		Styles the CSS classes to the node that displays a sub column header cell.
+			//		By default this method is not setting anythin:
+			// node: Node
+			//		The DOM node that displays the column in the grid.
+			// subColumnIndex: Integer
+			//		The cub column index.
+			// renderData: Object			
+			//		The render data.
+			// tags:
+			//		protected
 			domClass.add(node, this._cssDays[date.getDay()]);
 
 			if(this.isToday(date)){				

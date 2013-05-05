@@ -468,6 +468,10 @@
 							hGapEditor.set("disabled", value!=0)
 						});
 						
+						window.onresize = function(){							
+							colView.resize();
+						}
+						
 						fx.fadeOut({
 							node:"loadingPanel", 
 							onEnd: function(node){
