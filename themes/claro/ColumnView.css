@@ -122,6 +122,27 @@
   margin-left: 2px;
   margin-right: 9px;
 }
+
+.claro .dojoxCalendarColumnView .dojoxCalendarContainerColumn {
+  position: relative;
+  margin-left: 2px;
+  margin-right: 7px;
+}
+
+.claro .dojoxCalendarColumnView .dojoxCalendarSubColumnBorder {
+  position: absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom: 0;
+  display: none;
+}
+
+.claro .dojoxCalendarColumnView .dojoxCalendarSubColumnBorder.subColumn {
+	border-right: 1px solid #DDD;
+	display: block;
+}
+
 .claro .dojoxCalendarColumnView .dojoxCalendarEventContainer {
   position: absolute;
   overflow: hidden;

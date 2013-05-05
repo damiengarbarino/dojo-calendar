@@ -144,7 +144,7 @@ function(
 			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer",
 				"rowHeaderTimePattern", "columnHeaderDatePattern", "timeSlotDuration", "rowHeaderGridSlotDuration", "rowHeaderLabelSlotDuration", 
 				"rowHeaderLabelOffset", "rowHeaderFirstLabelOffset","percentOverlap", "horizontalGap", "scrollBarRTLPosition","itemToRendererKindFunc", 
-				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items"];
+				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items", "subColumns"];
 			this._columnHeaderHandlers = [];
 		},
 		
@@ -1156,8 +1156,8 @@ function(
 			var bgCols = [];
 	
 			domStyle.set(table, "height", renderData.sheetHeight + "px");			
-			
-			var count = renderData.subColumnCount * (renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0));
+			var oldCount = oldRenderData ? oldRenderData.columnCount * oldRenderData.subColumnCount : 0;
+			var count = (renderData.subColumnCount * renderData.columnCount) - oldCount;
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -1197,8 +1197,10 @@ function(
 			// Build HTML structure (incremental)
 			if(count>0){ // creation
 				for(var i=0; i < count; i++){
-					td = domConstruct.create("td", null, tr);	
+					td = domConstruct.create("td", null, tr);
+					domStyle.set(td, "position", "relative");
 					domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);
+					domConstruct.create("div", {"className": "dojoxCalendarSubColumnBorder"}, td);
 				}
 			}else{ // deletion		 
 				count = -count;
@@ -1207,12 +1209,24 @@ function(
 				}
 			}	
 			
-			query("td>div", table).forEach(function(div, i){
+			query("td>.dojoxCalendarContainerColumn", table).forEach(function(div, i){
 
 				domStyle.set(div, {
 					"height": renderData.sheetHeight + "px"
-				});
+				});				
 				bgCols.push(div);		
+			}, this);
+			
+			var subCount = renderData.subColumnCount;
+			
+			query("td>.dojoxCalendarSubColumnBorder", table).forEach(function(div, i){
+				if(subCount == 1){
+					domClass.remove(div, "subColumn");
+				}else{
+					var col = subCount == 1 ? i : Math.floor(i / subCount);
+					var subColIdx = subCount == 1 ? 0 : i - col *subCount;								
+					domClass[subColIdx<subCount-1?"add":"remove"](div, "subColumn");
+				}
 			}, this);
 			
 			renderData.cells = bgCols;

@@ -119,9 +119,23 @@
 	}
 
 	.dojoxCalendarContainerColumn {
-		position:	relative;
+		position: relative;
 		margin-left: 2px;
-		margin-right: 9px;
+		margin-right: 7px;
+	}
+	
+	.dojoxCalendarSubColumnBorder {
+		position: absolute;
+		left:0;
+		right:0;
+		top:0;
+		bottom: 0;
+		display: none;
+	}
+
+	.dojoxCalendarSubColumnBorder.subColumn {
+		border-right: 1px solid #DDD;
+		display: block;
 	}
 
 	.dojoxCalendarEventContainer {
