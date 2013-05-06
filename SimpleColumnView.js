@@ -1344,8 +1344,8 @@ function(
 				for(var i=0; i < count; i++){
 					td = domConstruct.create("td", null, tr);
 					domStyle.set(td, "position", "relative");
-					domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);
 					domConstruct.create("div", {"className": "dojoxCalendarSubColumnBorder"}, td);
+					domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);
 				}
 			}else{ // deletion		 
 				count = -count;
