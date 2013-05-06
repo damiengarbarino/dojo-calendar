@@ -1343,28 +1343,46 @@ function(
 			if(count>0){ // creation
 				for(var i=0; i < count; i++){
 					td = domConstruct.create("td", null, tr);
-					domStyle.set(td, "position", "relative");
-					domConstruct.create("div", {"className": "dojoxCalendarSubColumnBorder"}, td);
-					domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);
+					var div = domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);									
+					domConstruct.create("div", {"className": "dojoxCalendarSubColumnBorder"}, div);
+					domConstruct.create("div", {"className": "dojoxCalendarEventContainerColumn"}, div);
 				}
 			}else{ // deletion		 
 				count = -count;
 				for(var i=0; i < count; i++){
 					tr.removeChild(tr.lastChild);
 				}
-			}	
-			
-			query("td>.dojoxCalendarContainerColumn", table).forEach(function(div, i){
-
-				domStyle.set(div, {
-					"height": renderData.sheetHeight + "px"
-				});				
-				bgCols.push(div);		
-			}, this);
-			
+			}
 			var subCount = renderData.subColumnCount;
 			
-			query("td>.dojoxCalendarSubColumnBorder", table).forEach(function(div, i){
+			query("td", table).forEach(function(td, i){
+				
+				if(subCount == 1){
+					domStyle.set(td, "border-right", "1px solid transparent");
+				}else{
+					var col = subCount == 1 ? i : Math.floor(i / subCount);
+					var subColIdx = subCount == 1 ? 0 : i - col *subCount;
+					console.log(subColIdx, subCount-1);
+					if(subColIdx == subCount-1){
+						domStyle.set(td, "border-right", "1px solid transparent");
+					}else{
+						domStyle.set(td, "border-right", "none");
+					}
+					
+				}
+			}, this);
+			
+			query("td>.dojoxCalendarContainerColumn", table).forEach(function(div, i){
+				domStyle.set(div, "height", renderData.sheetHeight + "px");
+			}, this);
+			
+			query(".dojoxCalendarEventContainerColumn", table).forEach(function(div, i){						
+				bgCols.push(div);		
+			}, this);
+										
+			
+			
+			query(".dojoxCalendarSubColumnBorder", table).forEach(function(div, i){
 				if(subCount == 1){
 					domClass.remove(div, "subColumn");
 				}else{

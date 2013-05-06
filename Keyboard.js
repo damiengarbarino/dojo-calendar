@@ -233,7 +233,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 			var newTime = d;
 			var subColumn = p.editedItem.subColumn;
 			
-			if(this.subColumns && this.subColumns.length > 1){		
+			if(editKind == "move" && this.subColumns && this.subColumns.length > 1){		
 				var idx = this.getSubColumnIndex(subColumn);
 				var updateTime = true;
 				if(idx != -1){
