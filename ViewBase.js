@@ -2459,7 +2459,7 @@ define([
 
 			// Update the Calendar with the edited value.
 			if(editKind == "move"){				
-				if(subColumn != null && item.subColumn != subColumn.value && this.allowSubColumnMove){
+				if(subColumn != null && item.subColumn != subColumn && this.allowSubColumnMove){
 					// TODO abstract change?
 					item.subColumn = subColumn;
 					// refresh the other properties that depends on this one (especially cssClass)
