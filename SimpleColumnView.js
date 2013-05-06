@@ -60,7 +60,7 @@ function(
 		// summary:
 		//		The simple column view is displaying a day per column. Each cell of a column is a time slot.
 
-		baseClass: "dojoxCalendarSimpleColumnView",
+		baseClass: "dojoxCalendarColumnView",
 		
 		templateString: template,
 		
@@ -84,7 +84,11 @@ function(
 		// columnCount: Integer
 		//		The number of column to display (from the startDate).
 		columnCount: 7,
-	
+		
+		// subcolumns: String[]
+		//		Array of sub columns values.
+		subColumns: null,
+			
 		// minHours: Integer
 		//		The minimum hour to be displayed. It must be in the [0,23] interval and must be lower than the maxHours.
 		minHours: 8,
@@ -137,7 +141,7 @@ function(
 			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer",
 				"rowHeaderTimePattern", "columnHeaderDatePattern", "timeSlotDuration", "rowHeaderGridSlotDuration", "rowHeaderLabelSlotDuration", 
 				"rowHeaderLabelOffset", "rowHeaderFirstLabelOffset","percentOverlap", "horizontalGap", "scrollBarRTLPosition","itemToRendererKindFunc", 
-				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items"];
+				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items", "subColumns"];
 			this._columnHeaderHandlers = [];
 		},
 		
@@ -202,6 +206,8 @@ function(
 			renderData.dates = [];
 						
 			renderData.columnCount = this.get("columnCount");
+			renderData.subColumns = this.get("subColumns");
+			renderData.subColumnCount =  renderData.subColumns ? renderData.subColumns.length : 1;
 
 			var d = this.get("startDate");
 		
@@ -575,13 +581,20 @@ function(
 			//		private
 			domStyle.set(this.sheetContainer, "height", renderData.sheetHeight + "px");
 			// padding for the scroll bar.
+			this._configureVisibleParts(renderData);
 			this._configureScrollBar(renderData);
 			this._buildColumnHeader(renderData, oldRenderData);
+			this._buildSubColumnHeader(renderData, oldRenderData);
 			this._buildRowHeader(renderData, oldRenderData);
 			this._buildGrid(renderData, oldRenderData);
 			this._buildItemContainer(renderData, oldRenderData);
 		},
 		
+		_configureVisibleParts: function(renderData){
+			domClass[this.subColumns == null?"remove":"add"](this.domNode, "subColumns");
+			domClass[this.secondarySheetClass && this.secondarySheetNode?"add":"remove"](this.domNode, "secondarySheet");			
+		},
+				
 		_configureScrollBar: function(renderData){
 			// summary:
 			//		Sets the scroll bar size and position.
@@ -607,6 +620,8 @@ function(
 			domStyle.set(this.scrollContainer, lPos, "0");
 			domStyle.set(this.header, rPos, renderData.scrollbarWidth + "px");
 			domStyle.set(this.header, lPos, "0");
+			domStyle.set(this.subHeader, rPos, renderData.scrollbarWidth + "px");
+			domStyle.set(this.subHeader, lPos, "0");
 			if(this.buttonContainer && this.owner != null && this.owner.currentView == this){
 				domStyle.set(this.buttonContainer, rPos, renderData.scrollbarWidth + "px");
 				domStyle.set(this.buttonContainer, lPos, "0");
@@ -785,6 +800,138 @@ function(
 			// tags:
 			//		protected
 			
+			domClass.add(node, this._cssDays[date.getDay()]);
+
+			if(this.isToday(date)){				
+				domClass.add(node, "dojoxCalendarToday");
+			} else if(this.isWeekEnd(date)){
+				domClass.add(node, "dojoxCalendarWeekend");
+			}	
+		},
+		
+		_buildSubColumnHeader: function(renderData, oldRenderData){				
+			// summary:
+			//		Creates incrementally the HTML structure of the column header and configures its content.
+			//
+			// renderData:
+			//		The render data to display.
+			//
+			// oldRenderData:
+			//		The previously render data displayed, if any.
+			// tags:
+			//		private
+
+			var table = this.subColumnHeaderTable;
+			
+			if (!table || this.subColumns == null){
+				return;
+			}
+					
+			var count = renderData.columnCount - query(".subHeaderCell", table).length;
+			
+			if(has("ie") == 8){
+				// workaround Internet Explorer 8 bug.
+				// if on the table, width: 100% and table-layout: fixed are set
+				// and columns are removed, width of remaining columns is not 
+				// recomputed: must rebuild all. 
+				if(this._colSubTableSave == null){
+					this._colSubTableSave = lang.clone(table);
+				}else if(count < 0){
+					this.subColumnHeader.removeChild(table);
+					domConstruct.destroy(table);
+					table = lang.clone(this._colSubTableSave);
+					this.subColumnHeaderTable = table;
+					this.subColumnHeader.appendChild(table);
+					count = renderData.columnCount;
+				}
+				
+			} // else incremental dom add/remove for real browsers.
+						 				
+			var tbodies = query(">tbody", table);
+
+			var tbody, tr, td;
+			
+			if (tbodies.length == 1){
+				tbody = tbodies[0];
+			}else{ 
+				tbody = html.create("tbody", null, table);
+			}
+			
+			var trs = query(">tr", tbody);
+			if (trs.length == 1){
+				tr = trs[0];
+			}else{ 
+				tr = domConstruct.create("tr", null, tbody);
+			}
+			
+			var subCount = renderData.subColumnCount;
+						 
+			// Build HTML structure (incremental)
+			if(count > 0){ // creation				
+				for(var i=0; i < count; i++){
+					td = domConstruct.create("td", null, tr);
+					domClass.add(td, "subHeaderCell");
+					var sTable = domConstruct.create("table", {
+						cellpadding:"0", cellspacing:"0"
+					}, td);
+					domClass.add(sTable, "subColumn");
+					var sBody = html.create("tbody", null, sTable);
+					var sTr = domConstruct.create("tr", null, sBody);
+					
+					for(var j=0; j < subCount; j++){
+						var sTd = domConstruct.create("td", null, sTr);
+						var sSpan = domConstruct.create("span", null, sTd);						
+						domClass.add(sSpan, "subColumnLabel");
+					}
+				}
+			}else{ // deletion
+				count = -count;
+				for(var i=0; i < count; i++){
+					td = tr.lastChild;
+					tr.removeChild(td);
+					domConstruct.destroy(td);
+				}
+			}
+			
+			// fill & configure		
+			query(".subHeaderCell", table).forEach(function(td, i){
+				td.className = "subHeaderCell";											
+				if(i == 0){
+					domClass.add(td, "first-child");
+				}else if(i == this.renderData.columnCount-1){
+					domClass.add(td, "last-child");
+				}
+				var d = renderData.dates[i];
+				this.styleSubColumnHeaderCell(td, d, renderData);						
+			}, this);
+			
+			query(".subColumnLabel", table).forEach(function(span, i){
+				var col = subCount == 1 ? i : Math.floor(i / subCount);
+				var subColIdx = subCount == 1 ? 0 : i - col *subCount;
+				this._setText(span, this.subColumnLabelFunc(this.subColumns[subColIdx]));
+			}, this);					
+		},
+		
+		
+		subColumnLabelFunc: function(value){
+			// summary:
+			//	Computes the label for a sub column from the subColumns property.
+			//	By default, return the value.
+			return value;
+		},
+		
+		styleSubColumnHeaderCell: function(node, date, renderData){
+			// summary:
+			//		Styles the CSS classes to the node that displays a sub column header cell.
+			//		By default this method is not setting anythin:
+			// node: Node
+			//		The DOM node that displays the column in the grid.
+			// subColumnIndex: Integer
+			//		The cub column index.
+			// renderData: Object			
+			//		The render data.
+			// tags:
+			//		protected
 			domClass.add(node, this._cssDays[date.getDay()]);
 
 			if(this.isToday(date)){				
@@ -975,7 +1122,7 @@ function(
 				
 			var addRows = rowDiff > 0;
 			
-			var colDiff  = renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0);
+			var colDiff  = (renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0));
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -1147,8 +1294,8 @@ function(
 			var bgCols = [];
 	
 			domStyle.set(table, "height", renderData.sheetHeight + "px");			
-			
-			var count = renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0);
+			var oldCount = oldRenderData ? oldRenderData.columnCount * oldRenderData.subColumnCount : 0;
+			var count = (renderData.subColumnCount * renderData.columnCount) - oldCount;
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -1188,8 +1335,10 @@ function(
 			// Build HTML structure (incremental)
 			if(count>0){ // creation
 				for(var i=0; i < count; i++){
-					td = domConstruct.create("td", null, tr);	
+					td = domConstruct.create("td", null, tr);
+					domStyle.set(td, "position", "relative");
 					domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);
+					domConstruct.create("div", {"className": "dojoxCalendarSubColumnBorder"}, td);
 				}
 			}else{ // deletion		 
 				count = -count;
@@ -1198,12 +1347,24 @@ function(
 				}
 			}	
 			
-			query("td>div", table).forEach(function(div, i){
+			query("td>.dojoxCalendarContainerColumn", table).forEach(function(div, i){
 
 				domStyle.set(div, {
 					"height": renderData.sheetHeight + "px"
-				});
+				});				
 				bgCols.push(div);		
+			}, this);
+			
+			var subCount = renderData.subColumnCount;
+			
+			query("td>.dojoxCalendarSubColumnBorder", table).forEach(function(div, i){
+				if(subCount == 1){
+					domClass.remove(div, "subColumn");
+				}else{
+					var col = subCount == 1 ? i : Math.floor(i / subCount);
+					var subColIdx = subCount == 1 ? 0 : i - col *subCount;								
+					domClass[subColIdx<subCount-1?"add":"remove"](div, "subColumn");
+				}
 			}, this);
 			
 			renderData.cells = bgCols;
@@ -1284,11 +1445,29 @@ function(
 			}
 			
 			if(verticalItems.length > 0){
-				this._layoutVerticalItems(renderData, index, start, end, verticalItems);
+				if(renderData.subColumnCount > 1){
+					var subColumnItems = {};
+					arr.forEach(this.subColumns, function(subCol){
+						subColumnItems[subCol] = [];
+					});
+					arr.forEach(verticalItems, function(item){
+						subColumnItems[item.subColumn].push(item);
+					});
+					var subColIndex = 0;
+					arr.forEach(this.subColumns, function(subCol){
+						this._layoutVerticalItems(renderData, index, subColIndex++, start, end, subColumnItems[subCol]);
+					}, this);
+				}else{
+					this._layoutVerticalItems(renderData, index, 0, start, end, verticalItems);
+				}							
 			}
 		},
+		
+		_getColumn: function(renderData, index, subIndex){
+			return renderData.cells[index * renderData.subColumnCount + subIndex];
+		},
 
-		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Integer*/subIndex, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
 			// tags:
 			//		private
 
@@ -1296,7 +1475,8 @@ function(
 				return;
 			}
 			
-			var cell = renderData.cells[index];
+			var cell = this._getColumn(renderData, index, subIndex);
+			
 			var layoutItems = [];			
 			
 			// step 1 compute projected position and size
@@ -1401,19 +1581,7 @@ function(
 		//
 		///////////////////////////////////////////////////////////////
 		
-		getTime: function(e, x, y, touchIndex){
-			// summary:
-			//		Returns the time displayed at the specified point by this component.
-			// e: Event
-			//		Optional mouse event.
-			// x: Number
-			//		Position along the x-axis with respect to the sheet container used if event is not defined.
-			// y: Number
-			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
-			// touchIndex: Integer
-			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
-			// returns: Date
-			
+		_getNormalizedCoords: function(e, x, y, touchIndex){
 			if (e != null){				
 				var refPos = domGeometry.position(this.itemContainer, true);
 				
@@ -1448,9 +1616,27 @@ function(
 			}else if(y > r.h){
 				y = r.h-1;
 			}
+						
+			return {x: x, y: y};			
+		},
+		
+		getTime: function(e, x, y, touchIndex){
+			// summary:
+			//		Returns the time displayed at the specified point by this component.
+			// e: Event
+			//		Optional mouse event.
+			// x: Number
+			//		Position along the x-axis with respect to the sheet container used if event is not defined.
+			// y: Number
+			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
+			// touchIndex: Integer
+			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
+			// returns: Date
 			
-			var col = Math.floor(x / (domGeometry.getMarginBox(this.itemContainer).w / this.renderData.columnCount));
-			var t = this.getTimeOfDay(y, this.renderData);
+			var o = this._getNormalizedCoords(e, x, y, touchIndex);					
+			var t = this.getTimeOfDay(o.y, this.renderData);
+			var colW = domGeometry.getMarginBox(this.itemContainer).w / this.renderData.columnCount;
+			var col = Math.floor(o.x / colW);
 			
 			var date = null;
 			if(col < this.renderData.dates.length){			
@@ -1461,6 +1647,30 @@ function(
 			}
 	
 			return date;
+		},
+		
+		getSubColumn: function(e, x, y, touchIndex){
+			// summary:
+			//		Returns the sub column at the specified point by this component.
+			// e: Event
+			//		Optional mouse event.
+			// x: Number
+			//		Position along the x-axis with respect to the sheet container used if event is not defined.
+			// y: Number
+			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
+			// touchIndex: Integer
+			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
+			// returns: Object
+						
+			if(this.subColumns == null || this.subColumns.length == 1){
+				return null;
+			}
+			var o = this._getNormalizedCoords(e, x, y, touchIndex);
+			var rd = this.renderData;
+			var colW = domGeometry.getMarginBox(this.itemContainer).w / this.renderData.columnCount;
+			var col = Math.floor(o.x / colW);
+			var idx = Math.floor((o.x - col*colW) / (colW / rd.subColumnCount));			
+			return this.subColumns[idx]; 						
 		},
 		
 		///////////////////////////////////////////////////////////////

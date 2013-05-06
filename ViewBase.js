@@ -571,6 +571,37 @@ define([
 			return null;
 		},
 		
+		getSubColumn: function(e, x, y, touchIndex){
+			// summary:
+			//		Returns the sub column at the specified point by this component.
+			// e: Event
+			//		Optional mouse event.
+			// x: Number
+			//		Position along the x-axis with respect to the sheet container used if event is not defined.
+			// y: Number
+			//		Position along the y-axis with respect to the sheet container (scroll included) used if event is not defined.
+			// touchIndex: Integer
+			//		If parameter 'e' is not null and a touch event, the index of the touch to use.
+			// returns: Object
+			
+			return null;
+		},
+		
+		getSubColumnIndex: function(value){
+			// summary:
+			//		Returns the sub column index that has the specified value, if any. -1 otherwise. 
+			// value: String
+			//		The sub column index.
+			if(this.subColumns){
+				for(var i=0; i<this.subColumns.length; i++){
+					if(this.subColumns[i].value == value){
+						return i;
+					}
+				}
+			}
+			return -1;
+		},
+		
 		newDate: function(obj){
 			// summary:
 			//		Creates a new Date object.
@@ -1613,12 +1644,14 @@ define([
 		createItemFunc: function(view, d, e){
 		 	// summary:
 			//		A user supplied function that creates a new event.
-			// view:
+			// view: ViewBase
 			//		the current view,
-			// d:
+			// d: Date
 			//		the date at the clicked location.
-			// e:
+			// e: MouseEvemt
 			//		the mouse event (can be used to return null for example)
+			// subColumn: Object
+			//		the subcolumn at clicked location (can return null)
 		},
 		=====*/
 
@@ -1678,7 +1711,7 @@ define([
 					return;
 				}
 				
-				var newItem = this._createdEvent = f(this, this.getTime(e), e);
+				var newItem = this._createdEvent = f(this, this.getTime(e), e, this.getSubColumn(e));
 								
 				var store = this.get("store");
 											
@@ -2379,7 +2412,7 @@ define([
 			return times;
 		},
 		
-		_moveOrResizeItemGesture: function(dates, eventSource, e){
+		_moveOrResizeItemGesture: function(dates, eventSource, e, subColumn){
 			// summary:
 			//		Moves or resizes an item.
 			// dates: Date[]
@@ -2390,6 +2423,8 @@ define([
 			//		"mouse", "keyboard", "touch"
 			// e: Event
 			//		The event at the origin of the editing gesture.
+			// subColumn: String
+			//		The sub column value, if any, or null.
 			// tags:
 			//		private
 
@@ -2417,13 +2452,22 @@ define([
 			
 			var oldStart = lang.clone(item.startTime);
 			var oldEnd = lang.clone(item.endTime);
+			var oldSubColumn = item.subColumn;
 			
 			// swap cannot used using keyboard as a gesture is made of one single change (loss of start/end context).
 			var allowSwap = p.eventSource == "keyboard" ? false : this.allowStartEndSwap;
 
 			// Update the Calendar with the edited value.
-			if(editKind == "move"){
-					
+			if(editKind == "move"){				
+				if(subColumn != null && item.subColumn != subColumn.value && this.allowSubColumnMove){
+					// TODO abstract change?
+					item.subColumn = subColumn.value;
+					// refresh the other properties that depends on this one (especially cssClass)
+					var store = this.get("store");
+					var storeItem = this.renderItemToItem(item, store);
+					lang.mixin(item, this.itemToRenderItem(storeItem, store));					
+					moveOrResizeDone = true;
+				}
 				if(cal.compare(item.startTime, newTime) != 0){
 					var duration = cal.difference(item.startTime, item.endTime, "millisecond");
 					item.startTime = this.newDate(newTime);
@@ -2536,6 +2580,7 @@ define([
 			}
 			
 			moveOrResizeDone = 
+				oldSubColumn != item.subColumn ||
 				cal.compare(oldStart, item.startTime) != 0 || 
 				cal.compare(oldEnd, item.endTime) != 0;
 			
@@ -2837,7 +2882,11 @@ define([
 		// allowResizeLessThan24H: Boolean
 		//		If an event has a duration greater than 24 hours, indicates if using a resize gesture, it can be resized to last less than 24 hours.
 		//		This flag is usually used when two different kind of renderers are used (MatrixView) to prevent changing the kind of renderer during an editing gesture.
-		allowResizeLessThan24H: false
+		allowResizeLessThan24H: false,
+
+		// allowSubColumnMove: Boolean
+		//		If several sub columns are displayed, indicated if the data item can be reassigned to another sub column by an editing gesture.
+		allowSubColumnMove: true
 		
 	});
 });

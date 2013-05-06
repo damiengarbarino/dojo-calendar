@@ -38,6 +38,11 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		//		The attribute of the store item that contains the all day state of 
 		//		the events represented by this item.	Default is "allDay".
 		allDayAttr: "allDay",
+		
+		// subColumnAttr: String
+		//		The attribute of the store item that contains the sub column name of 
+		//		the events represented by this item.	Default is "calendar".
+		subColumnAttr: "calendar",
 	
 		// cssClassFunc: Function
 		//		Optional function that returns a css class name to apply to item renderers that are displaying the specified item in parameter. 
@@ -84,6 +89,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 				startTime: (this.decodeDate && this.decodeDate(item[this.startTimeAttr])) || this.newDate(item[this.startTimeAttr], this.dateClassObj),
 				endTime: (this.decodeDate && this.decodeDate(item[this.endTimeAttr])) || this.newDate(item[this.endTimeAttr], this.dateClassObj),
 				allDay: item[this.allDayAttr] != null ? item[this.allDayAttr] : false,
+				subColumn: item[this.subColumnAttr],   
 				cssClass: this.cssClassFunc ? this.cssClassFunc(item) : null 
 			};
 		},
@@ -114,6 +120,9 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			item[this.summaryAttr] = renderItem.summary;
 			item[this.startTimeAttr] = (this.encodeDate && this.encodeDate(renderItem.startTime)) || renderItem.startTime;
 			item[this.endTimeAttr] = (this.encodeDate && this.encodeDate(renderItem.endTime)) || renderItem.endTime;
+			if(renderItem.subColumn){
+				item[this.subColumnAttr] = renderItem.subColumn;
+			}
 			return lang.mixin(store.get(renderItem.id), item);
 		},			
 		
