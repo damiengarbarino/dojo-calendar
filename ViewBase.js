@@ -2461,7 +2461,7 @@ define([
 			if(editKind == "move"){				
 				if(subColumn != null && item.subColumn != subColumn.value && this.allowSubColumnMove){
 					// TODO abstract change?
-					item.subColumn = subColumn.value;
+					item.subColumn = subColumn;
 					// refresh the other properties that depends on this one (especially cssClass)
 					var store = this.get("store");
 					var storeItem = this.renderItemToItem(item, store);

@@ -94,7 +94,7 @@ function(
 		minHours: 8,
 		
 		// maxHours: Integer
-		//		The maximum hour to be displayed. It must be in the [1,24] interval and must be greater than the minHours.	
+		//		The maximum hour to be displayed. It must be in the [1,36] interval and must be greater than the minHours.	
 		maxHours: 18,
 		
 		// hourSize: Integer
@@ -256,8 +256,8 @@ function(
 				this.minHours = 0;
 			}
 			v = this.maxHours;
-			if (v < 1 || v>24 || isNaN(v)){
-				this.minHours = 24;
+			if (v < 1 || v>36 || isNaN(v)){
+				this.minHours = 36;
 			}
 			
 			if(this.minHours > this.maxHours){
@@ -422,8 +422,8 @@ function(
 			
 			if (hour < 0){
 				hour = 0;
-			}else if (hour > 24){
-				hour = 24;
+			}else if (hour > rd.maxHours){
+				hour = rd.maxHours;
 			}
 			
 			var timeInMinutes = hour * 60 + minutes;
