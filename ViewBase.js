@@ -594,7 +594,7 @@ define([
 			//		The sub column index.
 			if(this.subColumns){
 				for(var i=0; i<this.subColumns.length; i++){
-					if(this.subColumns[i].value == value){
+					if(this.subColumns[i] == value){
 						return i;
 					}
 				}
