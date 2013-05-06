@@ -2,7 +2,7 @@ define([
 "./ViewBase", 
 "dijit/_TemplatedMixin", 
 "./_VerticalScrollBarBase", 
-"dojo/text!./templates/SimpleColumnView.html",
+"dojo/text!./templates/ColumnView.html",
 "dojo/_base/declare", 
 "dojo/_base/event", 
 "dojo/_base/lang", 
@@ -134,6 +134,8 @@ function(
 		// horizontalGap: Integer
 		//		The number of pixels between two item renderers that are overlapping each other if the percentOverlap property is 0.
 		horizontalGap: 4,
+		
+		_showSecondarySheet: false,
 		
 		_columnHeaderHandlers: null,
 		
@@ -591,8 +593,13 @@ function(
 		},
 		
 		_configureVisibleParts: function(renderData){
+			
+			if(this.secondarySheetNode){
+				domStyle.set(this.secondarySheetNode, "display", this._showSecondarySheet ? "block" : "none");
+			}
+			
 			domClass[this.subColumns == null?"remove":"add"](this.domNode, "subColumns");
-			domClass[this.secondarySheetClass && this.secondarySheetNode?"add":"remove"](this.domNode, "secondarySheet");			
+			domClass[this._showSecondarySheet?"add":"remove"](this.domNode, "secondarySheet");			
 		},
 				
 		_configureScrollBar: function(renderData){

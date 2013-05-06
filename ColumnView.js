@@ -64,6 +64,8 @@ function(
 		//		and the primary sheet.
 		headerPadding: 3,
 		
+		_showSecondarySheet: true,
+		
 		buildRendering: function(){
 			this.inherited(arguments);
 			if(this.secondarySheetNode){
