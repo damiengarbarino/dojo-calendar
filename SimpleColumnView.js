@@ -1357,41 +1357,33 @@ function(
 			
 			query("td", table).forEach(function(td, i){
 				
+				var subColIdx = 0;
 				if(subCount == 1){
 					domStyle.set(td, "border-right", "1px solid transparent");
 				}else{
 					var col = subCount == 1 ? i : Math.floor(i / subCount);
-					var subColIdx = subCount == 1 ? 0 : i - col *subCount;
-					console.log(subColIdx, subCount-1);
+					subColIdx = subCount == 1 ? 0 : i - col *subCount;					
 					if(subColIdx == subCount-1){
 						domStyle.set(td, "border-right", "1px solid transparent");
 					}else{
 						domStyle.set(td, "border-right", "none");
-					}
-					
+					}					
 				}
+				
+				query(".dojoxCalendarContainerColumn", td).forEach(function(div, i){
+					domStyle.set(div, "height", renderData.sheetHeight + "px");
+				}, this);
+				
+				query(".dojoxCalendarEventContainerColumn", td).forEach(function(div, i){						
+					bgCols.push(div);		
+				}, this);
+				
+				query(".dojoxCalendarSubColumnBorder", td).forEach(function(div, i){																		
+					domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");					
+				}, this);
+				
 			}, this);
-			
-			query("td>.dojoxCalendarContainerColumn", table).forEach(function(div, i){
-				domStyle.set(div, "height", renderData.sheetHeight + "px");
-			}, this);
-			
-			query(".dojoxCalendarEventContainerColumn", table).forEach(function(div, i){						
-				bgCols.push(div);		
-			}, this);
-										
-			
-			
-			query(".dojoxCalendarSubColumnBorder", table).forEach(function(div, i){
-				if(subCount == 1){
-					domClass.remove(div, "subColumn");
-				}else{
-					var col = subCount == 1 ? i : Math.floor(i / subCount);
-					var subColIdx = subCount == 1 ? 0 : i - col *subCount;								
-					domClass[subColIdx<subCount-1?"add":"remove"](div, "subColumn");
-				}
-			}, this);
-			
+																											
 			renderData.cells = bgCols;
 		},			
 		
