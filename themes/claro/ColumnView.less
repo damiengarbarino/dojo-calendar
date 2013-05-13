@@ -264,8 +264,8 @@
 			white-space: nowrap;
 			vertical-align: middle;
 			text-align: center;  
-			border-right: 1px solid #cccccc;  
-			border-top: 1px solid #b5bcc7;
+			border-right: @inner-border; 
+			border-top: @outer-border;
 			-moz-user-select: none;
 			-webkit-user-select: none;
 			khtml-user-select: none;
@@ -273,13 +273,13 @@
 			color: #000000;  
 		}
 		td.last-child {
-			border-right: 1px solid #b5bcc7;
+			border-right: @outer-border;
 		}
 		td.dojoxCalendarToday { 
-		  background-color: #fff0b4;
+			background-color: @today-color;
 		}
 		td.dojoxCalendarWeekend {
-		  background-color: #e5f2fe;
+			background-color: @week-end-color;
 		}
 		
 		table.subColumn {
@@ -306,17 +306,16 @@
 			user-select: none;
 			color: #777;  
 		}
-				
 	}
 
 	.dojoxCalendarSubRowHeader {
 		position: absolute;
-		height: 20px;
+		height: @sub-column-header-height;
 		left: 0;
-		width: 68px;
+		width: @row-header-width - 2px;
 		top: 0;
-		border-left: 1px solid #b5bcc7;
-		border-right: 1px solid #b5bcc7;
+		border-left: @outer-border;
+		border-right: @outer-border;
 
 		table {
 			position: relative;
@@ -324,7 +323,7 @@
 			height: 100%;
 			
 			td {
-				border-top: 1px solid #b5bcc7;
+				border-top: @outer-border;
 				background-color: #efefef;  
 			}			
 		}

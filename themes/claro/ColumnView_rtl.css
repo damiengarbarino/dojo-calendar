@@ -13,105 +13,137 @@
   border-left: 1px solid #260000;
   border-right: 1px solid #260000;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarScrollContainer {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarScrollContainer {
   border-left: none;
   border-right: none;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarGrid {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarGrid {
   left: 0;
   right: 70px;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarGridTable td {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarGridTable td {
   border-left: 1px solid #b5bcc7;
   border-right: none;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarContainer {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarContainer {
   left: 0;
   right: 70px;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarContainerColumn {
-  margin-right: 1px;
-  margin-left: 9px;
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarEventContainerColumn {
+  margin-right: 2px;
+  margin-left: 7px;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarYearColumnHeader {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubColumnBorder.subColumn {
+  border-right: none;
+  border-left: 1px solid #dddddd;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarYearColumnHeader {
   right: 0;
   width: 68px;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarColumnHeader {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarColumnHeader {
   left: 0;
   right: 70px;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarColumnHeaderTable td {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarColumnHeaderTable td {
+  border-right: none;
+  border-left: 1px solid #cccccc;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarColumnHeaderTable td.last-child {
+  border-right: none;
+  border-left: 1px solid #b5bcc7;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubColumnHeader {
+  right: 70px;
+  left: 0;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubRowHeader {
+  left: auto;
+  right: 0;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubColumnHeaderTable {
   border-left: 1px solid #b5bcc7;
   border-right: none;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarRowHeaderLabel {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubColumnHeaderTable table.subColumn td {
+  border-left: none;
+  border-right: none;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubColumnHeaderTable td {
+  border-left: 1px solid #cccccc;
+  border-right: none;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubColumnHeaderTable td.last-child {
+  border-left: 1px solid #b5bcc7;
+  border-right: none;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarRowHeaderLabel {
   right: auto;
   left: 4px;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarEvent .summary {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarEvent .summary {
   text-align: right;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarEvent .startTime {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarEvent .startTime {
   text-align: right;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarEvent .endTime {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarEvent .endTime {
   text-align: right;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarVScrollBar {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarVScrollBar {
   margin-left: -1px;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarGrid {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarGrid {
   right: 70px;
   left: 0;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarGridTable td {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarGridTable td {
   text-align: left;
   border-bottom: 1px solid #cccccc;
   border-left: 1px solid #cccccc;
   border-right: none;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarGridTable td span {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarGridTable td span {
   padding-left: 2px;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarGridTable td.last-child {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarGridTable td.last-child {
   border-left: 1px solid #b5bcc7;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarContainer {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarContainer {
   right: 70px;
   left: 0;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarContainerTable td {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarContainerTable td {
   border-bottom: solid 1px transparent;
   border-right: solid 1px transparent;
   text-align: right;
   vertical-align: top;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarYearColumnHeader {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarYearColumnHeader {
   position: absolute;
   right: 0;
   left: auto;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarColumnHeader {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarColumnHeader {
   right: 70px;
   left: 0;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarMatrixView .dojoxCalendarColumnHeaderTable td {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarMatrixView .dojoxCalendarColumnHeaderTable td {
   border-left: 1px solid #b5bcc7;
   border-right: none;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarRowHeader {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarRowHeader {
   right: 0;
   left: auto;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarEvent .resizeStartHandle {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarEvent .resizeStartHandle {
   right: 0;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarEvent .resizeEndHandle {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarEvent .resizeEndHandle {
   left: 0;
   right: auto;
 }
-.claro .dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarEvent.dojoxCalendarHorizontal .labels {
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarMatrixViewRtl .dojoxCalendarEvent.dojoxCalendarHorizontal .labels {
   text-align: right;
   right: 2px;
 }
