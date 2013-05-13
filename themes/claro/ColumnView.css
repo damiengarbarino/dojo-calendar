@@ -136,7 +136,7 @@
   display: none;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarSubColumnBorder.subColumn {
-  border-right: 1px solid #DDD;
+  border-right: 1px solid #dddddd;
   display: block;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEventContainer {
