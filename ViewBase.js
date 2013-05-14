@@ -193,7 +193,6 @@ define([
 			this.inherited(arguments);
 		},
 		
-		
 		resize: function(){
 			// summary:
 			//		Function to call when the view is resized. 
@@ -468,11 +467,18 @@ define([
 			//		protected
 			// returns: Number
 
+			
 			var cal = renderData.dateModule;
+			var minH = renderData.minHours;
+			var maxH = renderData.maxHours;
 			
 			if(max <= 0 || cal.compare(date, refDate) == -1){
 				return 0;
 			}
+			
+			var gt = function(d){
+				return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();			
+			};
 			
 			var referenceDate = this.floorToDay(refDate, false, renderData);
 
@@ -480,7 +486,7 @@ define([
 				if(date.getMonth() == referenceDate.getMonth()){
 					if(date.getDate() < referenceDate.getDate()){
 						return 0;
-					} else if(date.getDate() > referenceDate.getDate()){
+					} else if(date.getDate() > referenceDate.getDate() && maxH < 24){
 						return max;
 					}
 				}else{
@@ -501,37 +507,49 @@ define([
 			}
 
 			var res;
+			var ONE_DAY = 86400; // 24h x 60m x 60s
 
-			if(this.isSameDay(refDate, date)){
+			if(this.isSameDay(refDate, date) || maxH > 24){
 				
 				var d = lang.clone(refDate);
 				var minTime = 0;
 				
-				if(renderData.minHours != null && renderData.minHours != 0){
-					d.setHours(renderData.minHours);
-					minTime = d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
+				if(minH != null && minH != 0){
+					d.setHours(minH);
+					minTime = gt(d);
 				}
 				
 				d = lang.clone(refDate);
+				d.setHours(maxH);
 				
 				var maxTime;
-				if(renderData.maxHours == null || renderData.maxHours == 24){
-					maxTime = 86400; // 24h x 60m x 60s
-				}else{
-					d.setHours(renderData.maxHours);
-					maxTime = d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
+				if(maxH == null || maxH == 24){
+					maxTime = ONE_DAY; 
+				}else if(maxH > 24){
+					maxTime = ONE_DAY + gt(d);
+				}else{					
+					maxTime = gt(d);
 				}
 				
 				//precision is the second
 				//use this API for daylight time issues.
-				var delta = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds() - minTime;
 				
-				if(delta < 0){
+				var delta = 0;
+				
+				if(maxH > 24 && refDate.getDate() != date.getDate()){
+					delta = ONE_DAY + gt(date);
+				}else{
+					delta = gt(date);
+				}
+
+				if(delta < minTime){
 					return 0;
 				}
 				if(delta > maxTime){
 					return max;
 				}
+				
+				delta -= minTime;
 
 				res = (max * delta)/(maxTime - minTime);
 				
@@ -1028,6 +1046,7 @@ define([
 			var items = renderData.items.concat();
 
 			var itemsTemp = [], events;
+			var processing = {};
 			
 			var index = 0;
 			
@@ -1042,22 +1061,26 @@ define([
 					startTime.setHours(renderData.minHours);
 				}
 				
-				if(renderData.maxHours && renderData.maxHours != 24){
-					endTime = cal.add(endDate, "day", -1);
+				if(renderData.maxHours != undefined && renderData.maxHours != 24){					
+					if(renderData.maxHours < 24){				
+						endTime = cal.add(endDate, "day", -1);
+					} // else > 24
 					endTime = this.floorToDay(endTime, true, renderData);
-					endTime.setHours(renderData.maxHours);
+					endTime.setHours(renderData.maxHours - (renderData.maxHours < 24 ? 0 : 24));
 				}
 				
 				// look for events that overlap the current sub interval
 				events = arr.filter(items, function(item){
 					var r = this.isOverlapping(renderData, item.startTime, item.endTime, startTime, endTime);
 					if(r){
-						// item was not fully processed as it overlaps another sub interval
-						if(cal.compare(item.endTime, endTime) == 1){
-							itemsTemp.push(item);
-						}	
+						processing[item.id] = true;						
+						itemsTemp.push(item);							
 					}else{
-						itemsTemp.push(item);
+						if(processing[item.id]){
+							delete processing[item.id];
+						}else{
+							itemsTemp.push(item);
+						}
 					}
 					return r;
 				}, this);
