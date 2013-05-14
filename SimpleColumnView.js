@@ -1031,10 +1031,11 @@ function(
 								
 				domStyle.set(tr, "height", (has("ie") == 7)?size-2*(60 / renderData.rowHeaderGridSlotDuration):size + "px");
 				
-				this.styleRowHeaderCell(td, d.getHours(), d.getMinutes(), rd);
-				
+				var h = renderData.minHours + (i * this.renderData.rowHeaderGridSlotDuration) / 60;
 				var m = (i * this.renderData.rowHeaderGridSlotDuration) % 60;
-
+			
+				this.styleRowHeaderCell(td, h, m, rd);
+							
                 this._addMinutesClasses(td, m);
 
 			}, this);
@@ -1046,7 +1047,7 @@ function(
 			if(count>0){ // creation
 				for(var i=0; i < count; i++){
 					span = domConstruct.create("span", null, lc);
-					domClass.add(span, "dojoxCalendarRowHeaderLabel");
+					domClass.add(span, "dojoxCalendarRowHeaderLabel");					
 				}					 
 			}else{
 				count = -count;
@@ -1082,9 +1083,11 @@ function(
 			
 			this._setText(node, this._formatRowHeaderLabel(d));
 			domStyle.set(node, "top", (pos + (index==0?this.rowHeaderFirstLabelOffset:this.rowHeaderLabelOffset))+"px");
-			var m = (index * this.rowHeaderLabelSlotDuration) % 60;
+			var h = renderData.minHours + (index * this.rowHeaderLabelSlotDuration) / 60;
+			var m = (index * this.rowHeaderLabelSlotDuration) % 60;			
 			domClass.remove(node, ["hour", "halfhour", "quarterhour"]);
             this._addMinutesClasses(node, m);
+            this.styleRowHeaderCell(node, h, m, renderData);            
 		},
 		
 		styleRowHeaderCell: function(node, h, m, renderData){
