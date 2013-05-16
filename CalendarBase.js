@@ -177,10 +177,22 @@ _nls){
 		//		The end date of the displayed time interval (included).		
 		endDate: null,
 		
-		// date:Date
+		// date: Date
 		//		The reference date used to determine along with the <code>dateInterval</code> 
 		//		and <code>dateIntervalSteps</code> properties the time interval to display.
 		date: null,
+		
+		// minDate: Date
+		//		The minimum date. 
+		//		If date is set and this property is set, the displayed time interval the most in the past 
+		//		will the time interval containing this date.
+		minDate: null,
+
+		// maxDate: Date
+		//		The maximum date. 
+		//		If date is set and this property is set, the displayed time interval the most in the future
+		//		will the time interval containing this date.
+		maxDate: null,
 	
 		// dateInterval:String
 		//		The date interval used to compute along with the <code>date</code> and 
@@ -271,7 +283,7 @@ _nls){
 			this.views = [];
 			
 			this.invalidatingProperties = ["store", "items", "startDate", "endDate", "views", 
-				"date", "dateInterval", "dateIntervalSteps", "firstDayOfWeek"];
+				"date", "minDate", "maxDate", "dateInterval", "dateIntervalSteps", "firstDayOfWeek"];
 			
 			args = args || {};
 			this._calendar = args.datePackage ? args.datePackage.substr(args.datePackage.lastIndexOf(".")+1) : this._calendar;
@@ -303,7 +315,7 @@ _nls){
 				
 		_setStartDateAttr: function(value){
 			this._set("startDate", value);
-			this._timeRangeInvalidated = true;
+			this._timeRangeInvalidated = true;			
 		},
 		
 		_setEndDateAttr: function(value){
@@ -311,9 +323,10 @@ _nls){
 			this._timeRangeInvalidated = true;
 		},
 		
-		_setDateAttr: function(value){
+		_setDateAttr: function(value){				
 			this._set("date", value);
 			this._timeRangeInvalidated = true;
+			this._dateChanged = true;
 		},
 		
 		_setDateIntervalAttr: function(value){
@@ -338,6 +351,7 @@ _nls){
 				view.set("textDir", value);
 			});
 		},
+		
 		
 		///////////////////////////////////////////////////
 		//
@@ -425,17 +439,34 @@ _nls){
 			
 			if(this._timeRangeInvalidated){
 				this._timeRangeInvalidated = false;
+				
 				var timeInterval = this.computeTimeInterval();
 				
 				if(this._timeInterval == null || 
-					 cal.compare(this._timeInterval[0], timeInterval[0] != 0) || 
-					 cal.compare(this._timeInterval[1], timeInterval[1] != 0)){
+					 cal.compare(this._timeInterval[0], timeInterval[0]) != 0 || 
+					 cal.compare(this._timeInterval[1], timeInterval[1]) != 0){
+					
+					var d = this.get("date");
+					if(d != null){
+						this.lastValidDate = d;
+					}
+					this._dateChanged = false;
+					
 					this.onTimeIntervalChange({
 						oldStartTime: this._timeInterval == null ? null : this._timeInterval[0],
 						oldEndTime: this._timeInterval == null ? null : this._timeInterval[1],
 						startTime: timeInterval[0],
 						endTime: timeInterval[1]
 					});
+				}else{		
+					
+					if(this._dateChanged){
+						this._dateChanged = false;
+						if(this.lastValidDate != null){
+							this._set("date", this.lastValidDate);
+						}
+					}					
+					return;
 				}
 				
 				this._timeInterval = timeInterval;
@@ -514,19 +545,45 @@ _nls){
 		_timeInterval: null,
 		
 		computeTimeInterval: function(){
+			
+			var d = this.get("date");
+			
+			if(d == null){
+				return [ this.floorToDay(this.get("startDate")), cal.add(this.get("endDate"), "day", 1) ];
+			}else{
+				
+				var minDate = this.get("minDate");
+				var maxDate = this.get("maxDate");
+				var interval = this._computeTimeIntervalImpl(d);				
+				var cal = this.dateModule;
+				
+				if(minDate != null){					
+					var minInterval = this._computeTimeIntervalImpl(minDate);					
+					if(cal.compare(minInterval[0], interval[0]) > 0){
+						interval = minInterval;
+					}
+				}
+				
+				if(maxDate != null){					
+					var maxInterval = this._computeTimeIntervalImpl(maxDate);					
+					if(cal.compare(maxInterval[1], interval[1]) < 0){
+						interval = maxInterval;
+					}
+				}
+				
+				return interval;				
+			}
+		},
+		
+		_computeTimeIntervalImpl: function(d){
 			// summary:
 			//		Computes the displayed time interval according to the date, dateInterval and 
 			//		dateIntervalSteps if date is not null or startDate and endDate properties otherwise.
 			// tags:
 			//		protected
 					
-			var cal = this.dateModule;
-			var d = this.get("date");
+			var cal = this.dateModule;			
 			
-			if(d == null){
-				return [ this.floorToDay(this.get("startDate")), cal.add(this.get("endDate"), "day", 1) ];
-			}
-				
 			var s = this.floorToDay(d);
 			var di = this.get("dateInterval");
 			var dis = this.get("dateIntervalSteps");
@@ -544,6 +601,8 @@ _nls){
 					s.setDate(1);
 					e = cal.add(s, "month", dis);						
 					break;
+				default:
+					e = cal.add(s, "day", 1);
 			}				
 			return [s, e];						
 		},
