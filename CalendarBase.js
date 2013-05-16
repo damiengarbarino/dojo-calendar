@@ -184,14 +184,16 @@ _nls){
 		
 		// minDate: Date
 		//		The minimum date. 
-		//		If date is set and this property is set, the displayed time interval the most in the past 
+		//		If date property is set, the displayed time interval the most in the past 
 		//		will the time interval containing this date.
+		//		If startDate property is set, this mininum value of startDate. 
 		minDate: null,
 
 		// maxDate: Date
 		//		The maximum date. 
-		//		If date is set and this property is set, the displayed time interval the most in the future
+		//		If date is set, the displayed time interval the most in the future
 		//		will the time interval containing this date.
+		//		If endDate property is set, this mininum value of endDate.
 		maxDate: null,
 	
 		// dateInterval:String
@@ -315,12 +317,14 @@ _nls){
 				
 		_setStartDateAttr: function(value){
 			this._set("startDate", value);
-			this._timeRangeInvalidated = true;			
+			this._timeRangeInvalidated = true;
+			this._startDateChanged = true;
 		},
 		
 		_setEndDateAttr: function(value){
 			this._set("endDate", value);
 			this._timeRangeInvalidated = true;
+			this._endDateChanged = true;
 		},
 		
 		_setDateAttr: function(value){				
@@ -446,11 +450,15 @@ _nls){
 					 cal.compare(this._timeInterval[0], timeInterval[0]) != 0 || 
 					 cal.compare(this._timeInterval[1], timeInterval[1]) != 0){
 					
-					var d = this.get("date");
-					if(d != null){
-						this.lastValidDate = d;
-					}
-					this._dateChanged = false;
+					if(this._dateChanged){
+						this._lastValidDate = this.get("date");;						
+						this._dateChanged = false;
+					}else if(this._startDateChanged || this._endDateChanged){
+						this._lastValidStartDate = this.get("startDate");
+						this._lastValidEndDate = this.get("endDate");						 
+						this._startDateChanged = false;
+						this._endDateChanged = false;
+					}					
 					
 					this.onTimeIntervalChange({
 						oldStartTime: this._timeInterval == null ? null : this._timeInterval[0],
@@ -465,6 +473,11 @@ _nls){
 						if(this.lastValidDate != null){
 							this._set("date", this.lastValidDate);
 						}
+					}else if(this._startDateChanged || this._endDateChanged){
+						this._startDateChanged = false;
+						this._endDateChanged = false;
+						this._set("startDate", this._lastValidStartDate);
+						this._set("endDate", this._lastValidEndDate);					 						
 					}					
 					return;
 				}
@@ -547,16 +560,35 @@ _nls){
 		computeTimeInterval: function(){
 			
 			var d = this.get("date");
-			
+			var minDate = this.get("minDate");
+			var maxDate = this.get("maxDate");
+			var cal = this.dateModule;
+						
 			if(d == null){
-				return [ this.floorToDay(this.get("startDate")), cal.add(this.get("endDate"), "day", 1) ];
+				var startDate = this.get("startDate");
+				var endDate = cal.add(this.get("endDate"), "day", 1);
+				
+				if(minDate != null || maxDate != null){
+					var dur = this.dateModule.difference(startDate, endDate, "day");
+					if(cal.compare(minDate, startDate) > 0){
+						startDate = minDate;
+						endDate = cal.add(startDate, "day", dur);
+					}
+					if(cal.compare(maxDate, endDate) < 0){
+						endDate = maxDate;
+						startDate = cal.add(endDate, "day", -dur);
+					}					
+					if(cal.compare(minDate, startDate) > 0){
+						startDate = minDate;
+						endDate = maxDate;
+					}					
+				}
+				return [ this.floorToDay(startDate), this.floorToDay(endDate) ];
+				
 			}else{
-				
-				var minDate = this.get("minDate");
-				var maxDate = this.get("maxDate");
+								
 				var interval = this._computeTimeIntervalImpl(d);				
-				var cal = this.dateModule;
-				
+								
 				if(minDate != null){					
 					var minInterval = this._computeTimeIntervalImpl(minDate);					
 					if(cal.compare(minInterval[0], interval[0]) > 0){
