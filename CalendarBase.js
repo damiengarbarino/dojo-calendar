@@ -428,8 +428,8 @@ _nls){
 				var timeInterval = this.computeTimeInterval();
 				
 				if(this._timeInterval == null || 
-					 cal.compare(this._timeInterval[0], timeInterval[0] != 0) || 
-					 cal.compare(this._timeInterval[1], timeInterval[1] != 0)){
+					 cal.compare(this._timeInterval[0], timeInterval[0]) != 0 || 
+					 cal.compare(this._timeInterval[1], timeInterval[1]) != 0){
 					this.onTimeIntervalChange({
 						oldStartTime: this._timeInterval == null ? null : this._timeInterval[0],
 						oldEndTime: this._timeInterval == null ? null : this._timeInterval[1],
