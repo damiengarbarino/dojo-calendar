@@ -397,6 +397,17 @@ _nls){
 				this._set("firstDayOfWeek", 0);
 			}
 			
+			var minDate = this.get("minDate");
+			var maxDate = this.get("maxDate");
+			
+			if(minDate && maxDate){
+				if(cal.compare(minDate, maxDate) > 0){
+					var t = minDate;
+					this._set("minDate", maxDate);
+					this._set("maxDate", t);					
+				}
+			}
+			
 			if(date == null && (startDate != null || endDate != null)){
 				
 				if(startDate == null){
@@ -411,7 +422,7 @@ _nls){
 					this._timeRangeInvalidated = true;
 				}
 				
-				if(cal.compare(startDate, endDate) >= 0){
+				if(cal.compare(startDate, endDate) > 0){
 					endDate = cal.add(startDate, "day", 1);
 					this._set("endDate", endDate);
 					this._timeRangeInvalidated = true;
