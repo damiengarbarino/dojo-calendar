@@ -177,10 +177,10 @@ function(
 		resizeCursor: "e-resize",
 		
 		constructor: function(){
-			this.invalidatingProperties = ["columnCount", "rowCount", "startDate", "horizontalRenderer", "labelRenderer", "expandRenderer",
+			this.addInvalidatingProperties(["columnCount", "rowCount", "startDate", "horizontalRenderer", "labelRenderer", "expandRenderer",
 			"rowHeaderDatePattern", "columnHeaderLabelLength", "cellHeaderShortPattern", "cellHeaderLongPattern", "percentOverlap", 
 			"verticalGap", "horizontalRendererHeight", "labelRendererHeight", "expandRendererHeight", "cellPaddingTop", 
-			"roundToDay", "itemToRendererKindFunc", "layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items"];
+			"roundToDay", "itemToRendererKindFunc", "layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items"]);
 			
 			this._ddRendererList = [];
 			this._ddRendererPool = [];

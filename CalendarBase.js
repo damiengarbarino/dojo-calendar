@@ -276,6 +276,7 @@ _nls){
 		currentView: null,
 				
 		_currentViewIndex: -1,
+		_itemLayoutInvalidated: false,
 		
 		views: null,
 		
@@ -284,8 +285,8 @@ _nls){
 		constructor: function(/*Object*/args){
 			this.views = [];
 			
-			this.invalidatingProperties = ["store", "items", "startDate", "endDate", "views", 
-				"date", "minDate", "maxDate", "dateInterval", "dateIntervalSteps", "firstDayOfWeek"];
+			this.addInvalidatingProperties(["items", "startDate", "endDate", "views", 
+				"date", "minDate", "maxDate", "dateInterval", "dateIntervalSteps", "firstDayOfWeek"]);
 			
 			args = args || {};
 			this._calendar = args.datePackage ? args.datePackage.substr(args.datePackage.lastIndexOf(".")+1) : this._calendar;
@@ -363,6 +364,19 @@ _nls){
 		//
 		///////////////////////////////////////////////////
 		
+		
+		invalidateLayout: function(noDefer){
+			// summary:
+			//		Triggers a re-layout of the renderers.
+			this._itemLayoutInvalidated = true;
+			if(noDefer){
+				this._refreshItemsRendering();
+			}else{
+				this.invalidateRendering();
+			}
+			
+		},
+		
 		refreshRendering: function(){
 			// summary:
 			//		Refreshes all the visual rendering of the calendar. 
@@ -370,11 +384,16 @@ _nls){
 			//		protected
 			this.inherited(arguments);
 			this._validateProperties();
+			
+			if(this._itemLayoutInvalidated){
+				this._itemLayoutInvalidated = false;
+				this._refreshItemsRendering();
+			}
 		},
 		
 		_refreshItemsRendering: function(){
 			if(this.currentView){
-				this.currentView._refreshItemsRendering();
+				this.currentView.i();
 			}
 		},
 		
@@ -943,7 +962,7 @@ _nls){
 		////////////////////////////////////////////////////
 		
 		_setItemsAttr: function(value){
-			this._set("items", value);
+			this._set("items", value);			
 			if(this.currentView){
 				this.currentView.set("items", value);
 				if(!this._isEditing){
