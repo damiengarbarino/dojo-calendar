@@ -641,10 +641,16 @@
   top: 72px;
   display: none;
 }
+.claro .dojoxCalendarColumnView.secondarySheet .dojoxCalendarVScrollBar {
+  top: 72px;
+}
 .claro .dojoxCalendarColumnView.subColumns.secondarySheet .dojoxCalendarScrollContainer {
   top: 92px;
 }
 .claro .dojoxCalendarColumnView.subColumns.secondarySheet .dojoxCalendarSubHeader {
   top: 72px;
   display: block;
+}
+.claro .dojoxCalendarColumnView.subColumns.secondarySheet .dojoxCalendarVScrollBar {
+  top: 92px;
 }
