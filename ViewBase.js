@@ -15,7 +15,7 @@ define([
 	"dojo/date",
 	"dojo/date/locale",
 	"dijit/_WidgetBase",
-	"dojox/widget/_Invalidating",
+	"dojox/calendar/_Invalidating",
 	"dojox/widget/Selection",
 	"dojox/calendar/time",
 	"./StoreMixin"],

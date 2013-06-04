@@ -1,4 +1,4 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/when", "dojox/widget/_Invalidating"],
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/when", "dojox/calendar/_Invalidating"],
 	function(declare, lang, when, _Invalidating){
 
 	return declare(_Invalidating, {

@@ -18,7 +18,7 @@ define([
 "dijit/_TemplatedMixin", 
 "dijit/_WidgetsInTemplateMixin", 
 "./StoreMixin", 
-"dojox/widget/_Invalidating", 
+"dojox/calendar/_Invalidating", 
 "dojox/widget/Selection", 
 "dojox/calendar/time", 
 "dojo/i18n!./nls/buttons"],	
