@@ -14,6 +14,7 @@ define([
 	"dojo/on",
 	"dojo/date",
 	"dojo/date/locale",
+	"dojo/when",
 	"dijit/_WidgetBase",
 	"dojox/widget/_Invalidating",
 	"dojox/widget/Selection",
@@ -36,6 +37,7 @@ define([
 		on,
 		date,
 		locale,
+		when,
 		_WidgetBase,
 		_Invalidating,
 		Selection,
@@ -1704,7 +1706,9 @@ define([
 		//
 		///////////////////////////////////////////////////////////////////	
 		
-		_gridMouseDown: false,		
+		_gridMouseDown: false,
+		
+		_tempIdCount: 0,
 				
 		_onGridMouseDown: function(e){
 			// tags:
@@ -1741,8 +1745,13 @@ define([
 				if(!newItem || store == null){
 					return;
 				}
+				
+				// calendar needs an ID to work with
+				if(store.getIdentity(newItem) == undefined){
+					newItem[store.idProperty] = "_tempId_" + (this._tempIdCount++);
+				}
 								
-				var newRenderItem = this.itemToRenderItem(newItem, store);
+				var newRenderItem = this.itemToRenderItem(newItem, store);				
 				newRenderItem._item = newItem;
 				this._setItemStoreState(newItem, "unstored");
 				
@@ -2236,23 +2245,26 @@ define([
 						// so we must do it here.
 						storeItem = lang.mixin(s.item, storeItem);
 						this._setItemStoreState(storeItem, "storing");
+						var oldID =  store.getIdentity(storeItem);
 						
 						// add to the store.
-						store.add(storeItem);
+						when(store.add(storeItem), lang.hitch(this, function(res){
+							var id;
+							if(lang.isObject(res)){
+								id = store.getIdentity(res);
+							}else{
+								id = res;
+							}
+							
+							if(id != oldID){							
+								this._removeRenderItem(oldID);
+							}
+						}));
 						
 					}else{ // creation canceled
 						// cleanup items list
-						var owner = this._getTopOwner();
-						var items = owner.get("items");
-						var l = items.length; 
-						for(var i=l-1; i>=0; i--){
-							if(items[i].id == s.id){
-								items.splice(i, 1);
-								break;
-							}
-						}
-						this._setItemStoreState(storeItem, null);
-						owner.set("items", items);						
+						
+						this.removeRenderItem(s.id);					
 					}									
 					
 				} else if(e.completed){
@@ -2265,6 +2277,21 @@ define([
 					e.item.endTime = this._editEndTimeSave;
 				}
 			}
+		},
+		
+		_removeRenderItem: function(id){
+			var owner = this._getTopOwner();
+			var items = owner.get("items");
+			var l = items.length; 
+			for(var i=l-1; i>=0; i--){
+				if(items[i].id == id){
+					items.splice(i, 1);
+					break;
+				}
+			}
+			this._cleanItemStoreState(id);
+			owner.set("items", items); //force a complete relayout	
+			this.invalidateLayout();
 		},
 		
 		onItemEditEnd: function(e){

@@ -87,15 +87,26 @@
 						// BEGIN HACK
 						// Hack to simulate some latency when adding / updating an event.
 						// Observable is breaking completely the inheritance chain
-						var store = new Observable(Memory({data: someData}));
-						var oldPut = store.put;
-						store.put = function(value, options){													
-							setTimeout(lang.hitch(this, function(){
-								oldPut.call(this, value, options);																		
-							}), 3000);							
-							return new Deferred();
-						};
-						// END HACK
+						
+						var DelayedMemory = declare(Memory, {
+							put: function(value, options){
+								var def = new Deferred();
+								var res = this.inherited(arguments);
+								setTimeout(lang.hitch(this, function(){									
+									def.resolve(res);
+								}), 1000);							
+								return def;
+							},
+							
+							newIdCount: 100,
+							
+							add: function(value, options){
+								value.id = this.newIdCount++;
+								return this.inherited(arguments, [value, options]);
+							}
+						});
+						
+						var store = new Observable(DelayedMemory({data: []}));
 						
 						calendar.set("store", store);
 						calendar.set("date", startOfWeek);
@@ -121,10 +132,9 @@
 								end = cal.add(start, "day", 1);
 							}
 							
-							var item = {
-								id: id,
+							var item = {								
 								created: true,
-								summary: "New event " + id,
+								summary: "New event",
 								startTime: start,
 								endTime: end,
 								allDay: view.viewKind == "matrix"

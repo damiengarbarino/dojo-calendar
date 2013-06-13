@@ -298,6 +298,20 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			return "stored";		
 		},
 		
+		_cleanItemStoreState: function(id){	
+			
+			if(this.owner){
+				return this.owner._cleanItemStoreState(id);				
+			}
+			
+			var s = this._itemStoreState[id];
+			if(s){
+				delete this._itemStoreState[id];
+				return true;
+			}
+			return false;
+		},
+		
 		_setItemStoreState: function(/*Object*/item, /*String*/state){
 			// tags
 			//		private
