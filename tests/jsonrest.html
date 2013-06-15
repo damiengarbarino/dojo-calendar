@@ -35,6 +35,9 @@
 																					
 						calendar.set("date", startOfWeek);
 						
+						// Subclass to handle the ID problem
+						// If the server is generating an ID, the calendar needs the temporary ID
+						// to synchronize its internal state.
 						var ExtJsonStore = declare(JsonRest, {
 							add: function(object, options){
 								var tempId = options && options.temporaryId;
@@ -46,6 +49,10 @@
 								return def;
 							}
 						});
+						
+						// WARNING
+						// This sample needs a service that hosts REST service that can answer to the Jsonrest store !! 
+						// WARNING
 						
 						calendar.set("store", new Observable(new ExtJsonStore({target: "/cal/calendar/"})));
 						
