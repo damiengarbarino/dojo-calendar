@@ -1709,6 +1709,7 @@ define([
 		_gridMouseDown: false,
 		
 		_tempIdCount: 0,
+		_tempItemsMap: null,
 				
 		_onGridMouseDown: function(e){
 			// tags:
@@ -1748,7 +1749,12 @@ define([
 				
 				// calendar needs an ID to work with
 				if(store.getIdentity(newItem) == undefined){
-					newItem[store.idProperty] = "_tempId_" + (this._tempIdCount++);
+					var id = "_tempId_" + (this._tempIdCount++);
+					newItem[store.idProperty] = id;
+					if(this._tempItemsMap == null){
+						this._tempItemsMap = {};
+					}
+					this._tempItemsMap[id] = true;
 				}
 								
 				var newRenderItem = this.itemToRenderItem(newItem, store);				
@@ -2118,7 +2124,7 @@ define([
 			var p = this._edProps;
 			
 			p.editedItem = item;
-			p.storeItem = this.renderItemToItem(item, this.get("store"));
+			p.storeItem = item._item;
 			p.eventSource = eventSource;
 			
 			p.secItem = this._secondarySheet ? this._findRenderItem(item.id, this._secondarySheet.renderData.items) : null;
@@ -2245,7 +2251,12 @@ define([
 						// so we must do it here.
 						storeItem = lang.mixin(s.item, storeItem);
 						this._setItemStoreState(storeItem, "storing");
-						var oldID =  store.getIdentity(storeItem);
+						var oldID = store.getIdentity(storeItem);
+						
+						if(this._tempItemsMap[oldID]){
+							delete this._tempItemsMap[oldID];
+							delete storeItem[store.idProperty];
+						}
 						
 						// add to the store.
 						when(store.add(storeItem), lang.hitch(this, function(res){

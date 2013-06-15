@@ -123,7 +123,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			if(renderItem.subColumn){
 				item[this.subColumnAttr] = renderItem.subColumn;
 			}
-			return this.getItemStoreState(renderItem) == "unstored" ? item : lang.mixin(store.get(renderItem.id), item);
+			return this.getItemStoreState(renderItem) == "unstored" ? item : lang.mixin(renderItem._item, item);
 		},			
 		
 		_computeVisibleItems: function(renderData){
