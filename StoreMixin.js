@@ -188,6 +188,21 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 				}
 			}else if(newIndex!=-1){
 				// this is a add
+				
+				var tempId = object.temporaryId;
+				if(tempId){
+					// this item had a temporary id that was changed
+					var l = this.items.length; 
+					for(var i=l-1; i>=0; i--){
+						if(this.items[i].id == tempId){
+							this.items[i] = newItem;
+							break;
+						}
+					}
+					this._cleanItemStoreState(tempId);
+					this._setItemStoreState(newItem, "storing");
+				}
+				
 				var s = this._getItemStoreStateObj(newItem);
 				if(s){
 					// if the item is at the correct index (creation)

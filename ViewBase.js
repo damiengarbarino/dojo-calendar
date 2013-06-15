@@ -2252,14 +2252,16 @@ define([
 						storeItem = lang.mixin(s.item, storeItem);
 						this._setItemStoreState(storeItem, "storing");
 						var oldID = store.getIdentity(storeItem);
+						var options = null;
 						
 						if(this._tempItemsMap[oldID]){
+							options = {temporaryId: oldID}; 
 							delete this._tempItemsMap[oldID];
-							delete storeItem[store.idProperty];
+							delete storeItem[store.idProperty];							
 						}
 						
 						// add to the store.
-						when(store.add(storeItem), lang.hitch(this, function(res){
+						when(store.add(storeItem, options), lang.hitch(this, function(res){
 							var id;
 							if(lang.isObject(res)){
 								id = store.getIdentity(res);
@@ -2291,18 +2293,23 @@ define([
 		},
 		
 		_removeRenderItem: function(id){
+			
 			var owner = this._getTopOwner();
 			var items = owner.get("items");
 			var l = items.length; 
+			var found = false;
 			for(var i=l-1; i>=0; i--){
 				if(items[i].id == id){
 					items.splice(i, 1);
+					found = true;
 					break;
 				}
 			}
 			this._cleanItemStoreState(id);
-			owner.set("items", items); //force a complete relayout	
-			this.invalidateLayout();
+			if(found){
+				owner.set("items", items); //force a complete relayout	
+				this.invalidateLayout();
+			}
 		},
 		
 		onItemEditEnd: function(e){
