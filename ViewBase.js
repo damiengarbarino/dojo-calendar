@@ -14,6 +14,7 @@ define([
 	"dojo/on",
 	"dojo/date",
 	"dojo/date/locale",
+	"dojo/when",
 	"dijit/_WidgetBase",
 	"dojox/widget/_Invalidating",
 	"dojox/widget/Selection",
@@ -36,6 +37,7 @@ define([
 		on,
 		date,
 		locale,
+		when,
 		_WidgetBase,
 		_Invalidating,
 		Selection,
@@ -1613,12 +1615,13 @@ define([
 		createItemFunc: function(view, d, e){
 		 	// summary:
 			//		A user supplied function that creates a new event.
-			// view:
+			// view: ViewBase
 			//		the current view,
-			// d:
+			// d: Date
 			//		the date at the clicked location.
-			// e:
+			// e: MouseEvemt
 			//		the mouse event (can be used to return null for example)
+
 		},
 		=====*/
 
@@ -1649,6 +1652,8 @@ define([
 		///////////////////////////////////////////////////////////////////	
 		
 		_gridMouseDown: false,		
+		_tempIdCount: 0,
+		_tempItemsMap: null,
 				
 		_onGridMouseDown: function(e){
 			// tags:
@@ -1686,7 +1691,17 @@ define([
 					return;
 				}
 								
-				var newRenderItem = this.itemToRenderItem(newItem, store);
+				// calendar needs an ID to work with
+				if(store.getIdentity(newItem) == undefined){
+					var id = "_tempId_" + (this._tempIdCount++);
+					newItem[store.idProperty] = id;
+					if(this._tempItemsMap == null){
+						this._tempItemsMap = {};
+					}
+					this._tempItemsMap[id] = true;
+				}
+								
+				var newRenderItem = this.itemToRenderItem(newItem, store);				
 				newRenderItem._item = newItem;
 				this._setItemStoreState(newItem, "unstored");
 				
@@ -2053,7 +2068,7 @@ define([
 			var p = this._edProps;
 			
 			p.editedItem = item;
-			p.storeItem = this.renderItemToItem(item, this.get("store"));
+			p.storeItem = item._item;
 			p.eventSource = eventSource;
 			
 			p.secItem = this._secondarySheet ? this._findRenderItem(item.id, this._secondarySheet.renderData.items) : null;
@@ -2180,23 +2195,33 @@ define([
 						// so we must do it here.
 						storeItem = lang.mixin(s.item, storeItem);
 						this._setItemStoreState(storeItem, "storing");
+						var oldID = store.getIdentity(storeItem);
+						var options = null;
+						
+						if(this._tempItemsMap[oldID]){
+							options = {temporaryId: oldID}; 
+							delete this._tempItemsMap[oldID];
+							delete storeItem[store.idProperty];							
+						}
 						
 						// add to the store.
-						store.add(storeItem);
+						when(store.add(storeItem, options), lang.hitch(this, function(res){
+							var id;
+							if(lang.isObject(res)){
+								id = store.getIdentity(res);
+							}else{
+								id = res;
+							}
+							
+							if(id != oldID){							
+								this._removeRenderItem(oldID);
+							}
+						}));
 						
 					}else{ // creation canceled
 						// cleanup items list
-						var owner = this._getTopOwner();
-						var items = owner.get("items");
-						var l = items.length; 
-						for(var i=l-1; i>=0; i--){
-							if(items[i].id == s.id){
-								items.splice(i, 1);
-								break;
-							}
-						}
-						this._setItemStoreState(storeItem, null);
-						owner.set("items", items);						
+						
+						this.removeRenderItem(s.id);											
 					}									
 					
 				} else if(e.completed){
@@ -2208,6 +2233,26 @@ define([
 					e.item.startTime = this._editStartTimeSave; 
 					e.item.endTime = this._editEndTimeSave;
 				}
+			}
+		},
+		
+		_removeRenderItem: function(id){
+			
+			var owner = this._getTopOwner();
+			var items = owner.get("items");
+			var l = items.length; 
+			var found = false;
+			for(var i=l-1; i>=0; i--){
+				if(items[i].id == id){
+					items.splice(i, 1);
+					found = true;
+					break;
+				}
+			}
+			this._cleanItemStoreState(id);
+			if(found){
+				owner.set("items", items); //force a complete relayout	
+				this.invalidateLayout();
 			}
 		},
 		
