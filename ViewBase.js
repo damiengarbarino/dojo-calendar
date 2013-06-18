@@ -1153,16 +1153,7 @@ define([
 				if (res == null){
 
 					renderer = new rendererClass;
-
-					// the container allow to lay out the renderer
-					// this is important for styling (in box model 
-					// content size does take into account border)
-					var container = domConstruct.create("div");
-
-					// The DOM object that will contain the event renderer
-					container.className = "dojoxCalendarEventContainer "+ cssClass ;
-					container.appendChild(renderer.domNode);
-					
+									
 					res = {
 						renderer: renderer,
 						container: renderer.domNode,
@@ -1743,7 +1734,7 @@ define([
 
 			this._gridProps = {
 				event: e,				
-				fromItem: this.isAscendantHasClass(e.target, this.eventContainer, "dojoxCalendarEventContainer")
+				fromItem: this.isAscendantHasClass(e.target, this.eventContainer, "dojoxCalendarEvent")
 			};			
 	
 			if(this._isEditing){
