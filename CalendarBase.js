@@ -527,6 +527,17 @@ _nls){
 			}
 		},
 		
+		onViewConfigurationChange: function(view){
+			// summary:
+			//		Event dispatched when the view has been configured after the queried 
+			//		time range and before the current view is changed (if needed).
+			//		
+			// view: ViewBase
+			//		The view that has been configured. 
+			// tags:
+			//		callback
+		},
+		
 		_applyViewChange: function(view, index, timeInterval, duration){			
 			// summary:
 			//		Applies the changes of a view time and changes the currently visible view if needed.
@@ -542,6 +553,7 @@ _nls){
 			//		protected
 			
 			this._configureView(view, index, timeInterval, duration);
+			this.onViewConfigurationChange(view);
 			
 			if(index != this._currentViewIndex){
 				if(this.currentView == null){
