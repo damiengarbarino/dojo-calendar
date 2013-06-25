@@ -2245,7 +2245,7 @@ define([
 						var oldID = store.getIdentity(storeItem);
 						var options = null;
 						
-						if(this._tempItemsMap[oldID]){
+						if(this._tempItemsMap && this._tempItemsMap[oldID]){
 							options = {temporaryId: oldID}; 
 							delete this._tempItemsMap[oldID];
 							delete storeItem[store.idProperty];							
