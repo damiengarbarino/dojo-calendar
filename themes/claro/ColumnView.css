@@ -45,6 +45,10 @@
   position: absolute;
   left: 70px;
   right: 0;
+  overflow: hidden;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarGrid.dojoxCalendarHorizontalScroll {
+  border-right: 1px solid #b5bcc7;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarGridTable {
   border-collapse: collapse;
@@ -103,6 +107,10 @@
   left: 70px;
   right: 0;
   cursor: default;
+  overflow: hidden;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarContainer.dojoxCalendarHorizontalScroll {
+  border-right: 1px solid #b5bcc7;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarContainerTable {
   border-collapse: collapse;
@@ -178,6 +186,10 @@
   right: 0;
   top: 0;
   cursor: default;
+  overflow: hidden;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarColumnHeader.dojoxCalendarHorizontalScroll {
+  border-right: 1px solid #b5bcc7;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarColumnHeaderTable {
   border-collapse: collapse;
@@ -252,6 +264,10 @@
   right: 0;
   top: 0px;
   cursor: default;
+  overflow: hidden;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarSubColumnHeader.dojoxCalendarHorizontalScroll {
+  border-right: 1px solid #b5bcc7;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarSubColumnHeaderTable {
   border-collapse: collapse;
@@ -497,6 +513,13 @@
   bottom: 0;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarHScrollBar {
+  position: absolute;
+  bottom: 0;
+  left: 70px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarMatrixView {
   position: absolute;

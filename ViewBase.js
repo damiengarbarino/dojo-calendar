@@ -774,6 +774,7 @@ define([
 		},
 		
 		_scrollPos: 0,
+		_hscrollPos: 0,
 		
 		getCSSPrefix: function(){
 			// summary:
@@ -792,15 +793,16 @@ define([
 				return "-o-";
 			}
             return "";
-		},				
+		},		
 		
-		_setScrollPosition: function(pos){
+		_setScrollPositionBase: function(pos, vertical){
 			// summary:
 			//		Sets the scroll position (if the view is scrollable), using the scroll method defined.
 			// tags:
 			//		protected
 
-			if(this._scrollPos == pos){
+			if(vertical && this._scrollPos == pos || 
+			   !vertical && this._hScrollPos == pos){
 				return;
 			}
 			
@@ -815,9 +817,16 @@ define([
 				}
 			}
 			
-			var containerSize = domGeometry.getMarginBox(this.scrollContainer);
-			var sheetSize = domGeometry.getMarginBox(this.sheetContainer);
-			var max = sheetSize.h - containerSize.h;
+			var max = 0;
+			if(vertical){
+				var containerSize = domGeometry.getMarginBox(this.scrollContainer);
+				var sheetSize = domGeometry.getMarginBox(this.sheetContainer);
+				max = sheetSize.h - containerSize.h;
+			}else{
+				var gridSize = domGeometry.getMarginBox(this.grid);
+				var gridTableSize = domGeometry.getMarginBox(this.gridTable);
+				max = gridTableSize.w - gridSize.w;
+			}
 			
 			if(pos < 0){
 				pos = 0;
@@ -825,30 +834,73 @@ define([
 				pos = max;
 			}
 			
-			this._scrollPos = pos;
+			if(vertical){
+				this._scrollPos = pos;
+			}else{
+				this._hScrollPos = pos;
+			}
 												
-			if(this._domScroll){				
-				this.scrollContainer.scrollTop = pos;				
+			if(this._domScroll){
+				if(vertical){
+					this.scrollContainer.scrollTop = pos;
+				}else{
+					this._hScrollSubElements(pos, true);
+				}
+								
 			}else{			
 				if(!this._cssPrefix){
 					this._cssPrefix =  this.getCSSPrefix();
 				}
-				domStyle.set(this.sheetContainer, this._cssPrefix+"transform", "translateY(-"+pos+"px)");
+				if(vertical){
+					domStyle.set(this.sheetContainer, this._cssPrefix+"transform", "translateY(-"+pos+"px)");
+				}else{
+					this._hScrollSubElements(pos, false, this._cssPrefix+"transform");
+				}
 			}
+		},
+		
+		_setScrollPosition: function(pos){
+			// summary:
+			//		Sets the verical scroll position (if the view is scrollable), using the scroll method defined.
+			// tags:
+			//		protected			
+			this._setScrollPositionBase(pos, true);						
 		},
 		
 		_getScrollPosition: function(){
 			// summary:
-			//		Returns the scroll position (if the view is scrollable), using the scroll method defined.
+			//		Returns the vertical scroll position (if the view is scrollable), using the scroll method defined.
 			// tags:
 			//		protected
 
 			return this._scrollPos; 
 		},
 		
+		
+		_setHScrollPosition: function(pos){
+			// summary:
+			//		Sets the horizontal scroll position (if the view is scrollable), using the scroll method defined.
+			// tags:
+			//		protected
+			if(this.renderData.hScrollBarEnabled){
+				this._setScrollPositionBase(pos, false);
+			}
+		},
+		
+		_hScrollPos: 0,
+		
+		_getHScrollPosition: function(){
+			// summary:
+			//		Returns the horizontal scroll position (if the view is scrollable), using the scroll method defined.
+			// tags:
+			//		protected
+
+			return this._hScrollPos; 
+		},
+		
 		scrollView: function(dir){
 			// summary:
-			//		If the view is scrollable, scrolls it to the specified direction.
+			//		If the view is scrollable, scrolls it vertically to the specified direction.
 			// dir: Integer
 			//		Direction of the scroll. Valid values are -1 and 1.
 			// tags:

@@ -1,7 +1,7 @@
 define(["dojo/_base/declare", "dojo/_base/event", "dojo/_base/lang", "dojo/on", "dojo/dom-style", "dijit/_WidgetBase"],
 function(declare, event, lang, on, domStyle, _WidgetBase){
 	
-		return declare('dojox.calendar._VerticalScrollBarBase', _WidgetBase, {
+		return declare('dojox.calendar._ScrollBarBase', _WidgetBase, {
 		
 		// value: Number 
 		//		The value of the scroll bar in pixel offset.
@@ -15,6 +15,12 @@ function(declare, event, lang, on, domStyle, _WidgetBase){
 		//		The maximum value of the scroll bar.
 		maximum: 100,
 		
+		// direction: String
+		//		Direction of the scroll bar. Valid values are "vertical" or "horizontal".
+		direction: "vertical",
+		
+		_vertical: true,
+		
 		_scrollHandle: null,
 		
 		buildRendering: function(){
@@ -27,11 +33,11 @@ function(declare, event, lang, on, domStyle, _WidgetBase){
 		},
 
 		_getDomScrollerValue : function() {
-			return this.domNode.scrollTop;
+			return this._vertical ? this.domNode.scrollTop : this.domNode.scrollLeft;
 		},
 		
-		_setDomScrollerValue : function(value) {
-			this.domNode.scrollTop = value;	
+		_setDomScrollerValue : function(value) {			
+			this.domNode[this._vertical?"scrollTop":"scrollLeft"] = value;	
 		},
 			
 		_setValueAttr: function(value){
@@ -48,7 +54,7 @@ function(declare, event, lang, on, domStyle, _WidgetBase){
 			// summary:
 			//		 An extension point invoked when the value has changed.
 			// value: Integer
-			//		The postiion of the scroll bar in pixels.
+			//		The position of the scroll bar in pixels.
 			// tags:
 			//		callback
 		},
@@ -69,9 +75,19 @@ function(declare, event, lang, on, domStyle, _WidgetBase){
 		
 		_setMaximumAttr: function(value){
 			value = Math.max(value, this.minimum);
-			this.maximum = value;
-			
-			domStyle.set(this.content, "height", value + "px");
+			this.maximum = value;		
+			domStyle.set(this.content, this._vertical?"height":"width", value + "px");
+		},
+					
+		_setDirectionAttr: function(value){
+			if(value == "vertical"){
+				value = "vertical";
+				this._vertical = true;
+			}else{
+				value = "horizontal";
+				this._vertical = false;
+			}
+			this._set("direction", value);
 		}
 
 	});

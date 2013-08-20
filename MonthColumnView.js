@@ -1,7 +1,7 @@
 define([
 "./ViewBase", 
 "dijit/_TemplatedMixin", 
-"./_VerticalScrollBarBase", 
+"./_ScrollBarBase", 
 "dojo/text!./templates/MonthColumnView.html",
 "dojo/_base/declare", 
 "dojo/_base/event", 
@@ -24,7 +24,7 @@ define([
 function(
 	ViewBase, 
 	_TemplatedMixin, 
-	_VerticalScrollBarBase, 
+	_ScrollBarBase, 
 	template, 
 	declare, 
 	event, 
@@ -170,7 +170,7 @@ function(
 			//		private
 			this.inherited(arguments);
 			if(this.vScrollBar){
-				this.scrollBar = new _VerticalScrollBarBase(
+				this.scrollBar = new _ScrollBarBase(
 					{content: this.vScrollBarContent}, 
 					this.vScrollBar);
 					
