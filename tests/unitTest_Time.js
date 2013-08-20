@@ -32,13 +32,13 @@ define(["doh", "../time", "dojo/date", "dojo/date/locale", "dojox/date/hebrew/Da
 			
 			var fd = new Date(2013, 5, 2);
 			
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[0], null, null, 0)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[1], null, null, 0)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[2], null, null, 0)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[3], null, null, 0)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[4], null, null, 0)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[5], null, null, 0)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[6], null, null, 0)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[0], null, null, 0)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[1], null, null, 0)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[2], null, null, 0)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[3], null, null, 0)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[4], null, null, 0)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[5], null, null, 0)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[6], null, null, 0)), 0);
 			
 		},
 		
@@ -55,13 +55,13 @@ define(["doh", "../time", "dojo/date", "dojo/date/locale", "dojox/date/hebrew/Da
 			
 			var fd = new Date(2013, 5, 3);
 			
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[0], null, null, 1)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[1], null, null, 1)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[2], null, null, 1)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[3], null, null, 1)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[4], null, null, 1)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[5], null, null, 1)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[6], null, null, 1)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[0], null, null, 1)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[1], null, null, 1)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[2], null, null, 1)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[3], null, null, 1)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[4], null, null, 1)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[5], null, null, 1)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[6], null, null, 1)), 0);
 			
 		},
 		
@@ -78,13 +78,13 @@ define(["doh", "../time", "dojo/date", "dojo/date/locale", "dojox/date/hebrew/Da
 			
 			var fd = new Date(2013, 5, 1);
 			
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[0], null, null, 6)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[1], null, null, 6)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[2], null, null, 6)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[3], null, null, 6)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[4], null, null, 6)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[5], null, null, 6)), 0);
-			doh.is(h.compare(fd, time.floorToWeek(weekdays[6], null, null, 6)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[0], null, null, 6)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[1], null, null, 6)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[2], null, null, 6)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[3], null, null, 6)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[4], null, null, 6)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[5], null, null, 6)), 0);
+			doh.is(date.compare(fd, time.floorToWeek(weekdays[6], null, null, 6)), 0);
 			
 		}
 
