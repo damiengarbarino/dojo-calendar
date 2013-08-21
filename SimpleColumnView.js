@@ -718,14 +718,16 @@ function(
 				domStyle.set(this.hScrollBar, {
 					"display": renderData.hScrollBarEnabled ? "block" : "none",
 					"height": renderData.scrollbarHeight + "px",
-					"left": renderData.rowHeaderWidth + (atRight ? "0" : renderData.scrollbarWidth),				
-					"right": atRight ? renderData.scrollbarWidth + "px" : "0"
+					"left": (atRight ? renderData.rowHeaderWidth : renderData.scrollbarWidth) + "px",				
+					"right": (atRight ? renderData.scrollbarWidth : renderData.rowHeaderWidth) + "px"
 				});
 				
 				domStyle.set(this.scrollContainer, "bottom", renderData.hScrollBarEnabled ? (renderData.scrollbarHeight + 1) + "px" : "0");
 				this._configureHScrollDomNodes(renderData.hScrollBarEnabled ? renderData.minSheetWidth + "px" : "100%");				
 												
-				this.hScrollBarW.set("maximum", renderData.minSheetWidth);			
+				this.hScrollBarW.set("maximum", renderData.minSheetWidth);
+				this.hScrollBarW.set("containerSize", renderData.hScrollPaneWidth);
+				
 			}						
 		},
 		

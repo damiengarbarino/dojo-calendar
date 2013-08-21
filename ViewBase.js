@@ -845,13 +845,15 @@ define([
 			}else{
 				this._hScrollPos = pos;
 			}
+			
+			var rtl = !this.isLeftToRight();
 												
 			if(this._domScroll){
 				if(vertical){
 					this.scrollContainer.scrollTop = pos;
 				}else{
 					arr.forEach(this._hScrollNodes, function(elt){											
-						domStyle.set(elt, "left", (-pos) + "px");						
+						domStyle.set(elt, "left", ((rtl?1:-1) * pos) + "px");						
 					}, this);
 				}
 								
@@ -859,14 +861,13 @@ define([
 				if(!this._cssPrefix){
 					this._cssPrefix =  this.getCSSPrefix();
 				}
-				
-				
+								
 				var cssProp = this._cssPrefix+"transform";
 				
 				if(vertical){
 					domStyle.set(this.sheetContainer, cssProp, "translateY(-"+pos+"px)");
-				}else{
-					var css = "translateX(-"+pos+"px)";
+				}else{					
+					var css = "translateX("+(rtl?"":"-")+pos+"px)";
 					arr.forEach(this._hScrollNodes, function(elt){						
 						domStyle.set(elt, cssProp, css);						
 					}, this);

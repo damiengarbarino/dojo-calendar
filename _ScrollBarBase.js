@@ -1,5 +1,22 @@
-define(["dojo/_base/declare", "dojo/_base/event", "dojo/_base/lang", "dojo/on", "dojo/dom-style", "dijit/_WidgetBase"],
-function(declare, event, lang, on, domStyle, _WidgetBase){
+define([
+"dojo/_base/declare", 
+"dojo/_base/event", 
+"dojo/_base/lang", 
+"dojo/on", 
+"dojo/dom-style", 
+"dojo/sniff",
+"dijit/_WidgetBase",
+"dojox/html/metrics"],
+
+function(
+	declare, 
+	event, 
+	lang, 
+	on, 
+	domStyle, 
+	has, 
+	_WidgetBase,
+	metrics){
 	
 		return declare('dojox.calendar._ScrollBarBase', _WidgetBase, {
 		
@@ -23,6 +40,8 @@ function(declare, event, lang, on, domStyle, _WidgetBase){
 		
 		_scrollHandle: null,
 		
+		containerSize: 0,
+		
 		buildRendering: function(){
 			this.inherited(arguments);
 			this.own(on(this.domNode, "scroll", lang.hitch(this, function(param) {
@@ -33,7 +52,24 @@ function(declare, event, lang, on, domStyle, _WidgetBase){
 		},
 
 		_getDomScrollerValue : function() {
-			return this._vertical ? this.domNode.scrollTop : this.domNode.scrollLeft;
+			if(this._vertical){
+				return this.domNode.scrollTop;
+			}
+					
+			var rtl = !this.isLeftToRight();
+			if(rtl){
+				if(has("webkit") || has("ie") == 7){
+					if(this._scW == undefined){
+						this._scW = metrics.getScrollbar().w;
+					}
+					return this.maximum - this.domNode.scrollLeft - this.containerSize + this._scW;
+				}
+				if(has("mozilla")){
+					return -this.domNode.scrollLeft;
+				}
+				// ie>7 and others...						
+			}
+			return this.domNode.scrollLeft;						
 		},
 		
 		_setDomScrollerValue : function(value) {			
