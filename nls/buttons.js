@@ -25,6 +25,7 @@ define({ root: {
 "pl": true,
 "nl": true,
 "nb": true,
+"lt": true,
 "ko": true,
 "kk": true,
 "ja": true,
