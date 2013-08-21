@@ -793,7 +793,13 @@ define([
 				return "-o-";
 			}
             return "";
-		},		
+		},
+		
+		//	_hScrollNodes: DOMNodes[]
+		//		Array of nodes that will be scrolled horizontally.
+		//		Must be set by sub class on buildRendering.
+		
+		_hScrollNodes: null,
 		
 		_setScrollPositionBase: function(pos, vertical){
 			// summary:
@@ -822,7 +828,7 @@ define([
 				var containerSize = domGeometry.getMarginBox(this.scrollContainer);
 				var sheetSize = domGeometry.getMarginBox(this.sheetContainer);
 				max = sheetSize.h - containerSize.h;
-			}else{
+			}else{				
 				var gridSize = domGeometry.getMarginBox(this.grid);
 				var gridTableSize = domGeometry.getMarginBox(this.gridTable);
 				max = gridTableSize.w - gridSize.w;
@@ -844,17 +850,26 @@ define([
 				if(vertical){
 					this.scrollContainer.scrollTop = pos;
 				}else{
-					this._hScrollSubElements(pos, true);
+					arr.forEach(this._hScrollNodes, function(elt){											
+						domStyle.set(elt, "left", (-pos) + "px");						
+					}, this);
 				}
 								
 			}else{			
 				if(!this._cssPrefix){
 					this._cssPrefix =  this.getCSSPrefix();
 				}
+				
+				
+				var cssProp = this._cssPrefix+"transform";
+				
 				if(vertical){
-					domStyle.set(this.sheetContainer, this._cssPrefix+"transform", "translateY(-"+pos+"px)");
+					domStyle.set(this.sheetContainer, cssProp, "translateY(-"+pos+"px)");
 				}else{
-					this._hScrollSubElements(pos, false, this._cssPrefix+"transform");
+					var css = "translateX(-"+pos+"px)";
+					arr.forEach(this._hScrollNodes, function(elt){						
+						domStyle.set(elt, cssProp, css);						
+					}, this);
 				}
 			}
 		},
@@ -875,16 +890,32 @@ define([
 
 			return this._scrollPos; 
 		},
-		
-		
+				
 		_setHScrollPosition: function(pos){
 			// summary:
 			//		Sets the horizontal scroll position (if the view is scrollable), using the scroll method defined.
 			// tags:
 			//		protected
-			if(this.renderData.hScrollBarEnabled){
-				this._setScrollPositionBase(pos, false);
-			}
+			
+			this._setScrollPositionBase(pos, false);			
+		},
+		
+		_setHScrollPositionImpl: function(pos, useDom, cssProperty){
+			// summary:
+			//		Sets the horizontal scroll position on sub elements (if the view is scrollable), using the scroll method defined.
+			//		Important: must be implemented by sub classes and not called directly. Use _setHScrollPosition() method instead.
+			// tags:
+			//		private
+			
+			var css = useDom ? null : "translateX(-"+pos+"px)";
+			arr.forEach(this._hScrollNodes, function(elt){
+				if(useDom){
+					elt.scrollLeft = pos;
+					domStyle.set(elt, "left", (-pos) + "px");
+				}else{
+					domStyle.set(elt, cssProp, css);
+				}
+			}, this);
 		},
 		
 		_hScrollPos: 0,

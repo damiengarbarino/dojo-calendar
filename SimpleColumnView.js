@@ -184,7 +184,9 @@ function(
 					{content: this.hScrollBarContent, direction: "horizontal", value: 0}, 
 					this.hScrollBar);
 					
-				this.hScrollBarW.on("scroll", lang.hitch(this, this._hscrollBar_onScroll));				
+				this.hScrollBarW.on("scroll", lang.hitch(this, this._hscrollBar_onScroll));
+				
+				this._hScrollNodes = [this.columnHeaderTable, this.subColumnHeaderTable, this.gridTable, this.itemContainerTable];
 			}
 			
 			this._viewHandles.push(
@@ -220,10 +222,10 @@ function(
 			renderData.slotSize = Math.ceil(renderData.hourSize / (60 / renderData.slotDuration));
 			renderData.hourSize = renderData.slotSize * (60 / renderData.slotDuration);			
 			renderData.sheetHeight = renderData.hourSize * renderData.hourCount;
+			
 			if(!this._rowHeaderWidth){
 				this._rowHeaderWidth = domGeometry.getMarginBox(this.rowHeader).w;
-			}
-			
+			}			
 			renderData.rowHeaderWidth = this._rowHeaderWidth;
 			
 			var sbMetrics = metrics.getScrollbar();
@@ -239,9 +241,10 @@ function(
 			renderData.columnCount = this.get("columnCount");
 			renderData.subColumns = this.get("subColumns");
 			renderData.subColumnCount =  renderData.subColumns ? renderData.subColumns.length : 1;
-						
+			
+			renderData.hScrollPaneWidth = domGeometry.getMarginBox(this.grid).w;
 			renderData.minSheetWidth = this.minColumnWidth < 0 ? -1 : this.minColumnWidth * renderData.subColumnCount * renderData.columnCount;
-			renderData.hScrollBarEnabled = this.minColumnWidth > 0 && domGeometry.getMarginBox(this.grid).w < renderData.minSheetWidth;
+			renderData.hScrollBarEnabled = this.minColumnWidth > 0 && renderData.hScrollPaneWidth < renderData.minSheetWidth;
 
 			var d = this.get("startDate");
 		
@@ -594,7 +597,9 @@ function(
 			}
 		},
 		
-		_hScrollSubElements: function(pos, useDom, cssProp){
+		_hScrollNodes: null,
+				
+		_setHScrollPositionImpl: function(pos, useDom, cssProp){
 			var elts = [this.columnHeaderTable, this.subColumnHeaderTable, this.gridTable, this.itemContainerTable];
 			var css = useDom ? null : "translateX(-"+pos+"px)";
 			arr.forEach(elts, function(elt){
@@ -605,7 +610,6 @@ function(
 					domStyle.set(elt, cssProp, css);
 				}
 			}, this);
-			// todo secondary sheet in dedicated class 
 		},
 		
 		_mouseWheelScrollHander: function(e){
@@ -699,13 +703,11 @@ function(
 				domStyle.set(this.buttonContainer, rPos, renderData.scrollbarWidth + "px");
 				domStyle.set(this.buttonContainer, lPos, "0");
 			}
-			
-			
+						
 			if(this.hScrollBar){
 				
-				var elts = [this.columnHeader, this.subColumnHeader, this.grid, this.itemContainer];
-				arr.forEach(elts, function(elt){
-					domClass[renderData.hScrollBarEnabled ? "add" : "remove"](elt, "dojoxCalendarHorizontalScroll");
+				arr.forEach(this._hScrollNodes, function(elt){
+					domClass[renderData.hScrollBarEnabled ? "add" : "remove"](elt.parentNode, "dojoxCalendarHorizontalScroll");
 				}, this);
 				
 				if(!renderData.hScrollBarEnabled){
@@ -721,15 +723,61 @@ function(
 				});
 				
 				domStyle.set(this.scrollContainer, "bottom", renderData.hScrollBarEnabled ? (renderData.scrollbarHeight + 1) + "px" : "0");
-				
-				elts = [this.columnHeaderTable, this.subColumnHeaderTable, this.gridTable, this.itemContainerTable];
-				
-				arr.forEach(elts, function(elt){
-					domStyle.set(elt, "width", renderData.hScrollBarEnabled ? renderData.minSheetWidth + "px" : "100%");
-				}, this);
-								
+				this._configureHScrollDomNodes(renderData.hScrollBarEnabled ? renderData.minSheetWidth + "px" : "100%");				
+												
 				this.hScrollBarW.set("maximum", renderData.minSheetWidth);			
 			}						
+		},
+		
+		_configureHScrollDomNodes: function(styleWidth){
+			arr.forEach(this._hScrollNodes, function(elt){
+				domStyle.set(elt, "width", styleWidth);
+			}, this);
+		},
+		
+		resize: function(e){
+			this._resizeHandler(e);
+		},
+
+		_resizeHandler: function(e, apply){
+			// summary:
+			//		Refreshes the scroll bars after a resize of the widget.
+			// e: Event
+			//		The resize event (optional)
+			// apply: Boolean
+			//		Whether apply the changes or wait for 100 ms
+			// tags:
+			//		private
+
+			var rd = this.renderData;
+			
+			if(rd == null){				
+				return;
+			}
+			
+					
+			if(apply){
+				
+				var hScrollPaneWidth = domGeometry.getMarginBox(this.grid).w;
+
+				if(rd.hScrollPaneWidth != hScrollPaneWidth){
+					// refresh values
+					rd.hScrollPaneWidth = hScrollPaneWidth;
+					rd.minSheetWidth = this.minColumnWidth < 0 ? -1 : this.minColumnWidth * rd.subColumnCount * rd.columnCount;
+					rd.hScrollBarEnabled = this.minColumnWidth > 0 && domGeometry.getMarginBox(this.grid).w < rd.minSheetWidth;
+				}
+
+				this._configureScrollBar(rd);
+												
+			}else{
+				if(this._resizeTimer != undefined){
+					clearTimeout(this._resizeTimer);
+				}
+				this._resizeTimer = setTimeout(lang.hitch(this, function(){
+					this._resizeHandler(e, true);				
+				}), 100);
+			}
+
 		},
 		
 		_columnHeaderClick: function(e){

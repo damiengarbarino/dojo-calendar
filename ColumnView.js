@@ -1,4 +1,5 @@
 define([    
+"dojo/_base/array",
 "dojo/_base/declare", 
 "dojo/_base/event", 
 "dojo/_base/lang", 
@@ -19,6 +20,7 @@ define([
 "./ColumnViewSecondarySheet"],
 
 function(
+	arr,
 	declare, 
 	event, 
 	lang, 
@@ -221,12 +223,29 @@ function(
 		
 		_configureScrollBar: function(renderData){
 
-
 			this.inherited(arguments);
 			if(this.secondarySheetNode){
 				var atRight = this.isLeftToRight() ? true : this.scrollBarRTLPosition == "right";
 				domStyle.set(this.secondarySheetNode, atRight ? "right" : "left", renderData.scrollbarWidth + "px");
 				domStyle.set(this.secondarySheetNode, atRight ? "left" : "right", "0");
+				
+				arr.forEach(this.secondarySheet._hScrollNodes, function(elt){
+					domClass[renderData.hScrollBarEnabled ? "add" : "remove"](elt.parentNode, "dojoxCalendarHorizontalScroll");
+				}, this);
+			}					
+		},
+		
+		_configureHScrollDomNodes: function(styleWidth){
+			this.inherited(arguments);
+			if(this.secondarySheet && this.secondarySheet._configureHScrollDomNodes){
+				this.secondarySheet._configureHScrollDomNodes(styleWidth);
+			}
+		},
+		
+		_setHScrollPosition: function(pos){
+			this.inherited(arguments);
+			if(this.secondarySheet){
+				this.secondarySheet._setHScrollPosition(pos);
 			}
 		},
 		

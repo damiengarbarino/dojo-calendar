@@ -1,11 +1,21 @@
-define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
-	"dojo/_base/html", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/lang", 
-	"dojo/_base/sniff", "dojo/dom", "dojo/dom-class", "dojo/dom-geometry", "dojo/dom-construct", 
-	"dojo/date", "dojo/date/locale", "dojo/query", "dojox/html/metrics", "dojo/_base/fx", "dojo/on", 
-	"dojo/window"],
+define([         	
+"dojo/_base/array",
+"dojo/_base/declare", 
+"dojo/_base/event", 
+"dojo/_base/lang", 	
+"dojo/dom-geometry",
+"dojo/dom-style",
+"dojox/calendar/MatrixView",
+"dojo/text!./templates/ColumnViewSecondarySheet.html"],
 	
-	function(MatrixView, template, html, declare, event, lang, has, dom, domClass, domGeometry, domConstruct, 
-		date, locale, query, metrics, fx, on, win){
+function(arr,
+		declare,
+		event,
+		lang,
+		domGeometry,
+		domStyle,
+		MatrixView, 
+		template){
 	
 	return declare("dojox.calendar.ColumnViewSecondarySheet", MatrixView, {
 		
@@ -24,6 +34,17 @@ define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
 		_defaultHeight: -1,
 		
 		layoutDuringResize: true,
+		
+		buildRendering: function(){
+			this.inherited(arguments);
+			this._hScrollNodes = [this.gridTable, this.itemContainerTable];
+		},
+		
+		_configureHScrollDomNodes: function(styleWidth){
+			arr.forEach(this._hScrollNodes, function(elt){
+				domStyle.set(elt, "width", styleWidth);
+			}, this);
+		},
 		
 		_defaultItemToRendererKindFunc: function(item){
 			// tags:
