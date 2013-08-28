@@ -14,7 +14,8 @@ define([
 "dojo/date/locale", 
 "dojo/query",	
 "dojox/html/metrics",
-"./SimpleColumnView", 
+"./SimpleColumnView",
+"./_GridHighlightMixin",
 "dojo/text!./templates/ColumnView.html", 
 "./ColumnViewSecondarySheet"],
 
@@ -34,11 +35,12 @@ function(
 	locale, 
 	query, 
 	metrics,
-	SimpleColumnView, 
+	SimpleColumnView,
+	_GridHighlightMixin,
 	template, 
 	ColumnViewSecondarySheet){
 
-	return declare("dojox.calendar.ColumnView", SimpleColumnView, {
+	return declare("dojox.calendar.ColumnView", [SimpleColumnView, _GridHighlightMixin], {
 
 		// summary:		
 		//		This class defines a simple column view that also uses a secondary 
