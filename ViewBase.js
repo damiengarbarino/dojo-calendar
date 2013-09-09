@@ -202,6 +202,35 @@ define([
 			//		On other use cases, this method must called when the window is resized and/or when the orientation has changed.
 		},
 		
+		// view lifecycle methods
+		beforeActivate: function(){
+			// summary:
+			//		Function invoked just before the view is displayed by the calendar.
+			// tags:
+			//		protected		
+		},
+		
+		afterActivate: function(){
+			// summary:
+			//		Function invoked just after the view is displayed by the calendar.
+			// tags:
+			//		protected
+		},
+		
+		beforeDeactivate: function(){
+			// summary:
+			//		Function invoked just before the view is hidden or removed by the calendar.
+			// tags:
+			//		protected
+		},
+		
+		afterDeactivate: function(){
+			// summary:
+			//		Function invoked just after the view is the view is hidden or removed by the calendar.
+			// tags:
+			//		protected
+		},
+		
 		_getTopOwner: function(){
 			// summary:
 			//		Returns the top owner: the calendar or the parent view.

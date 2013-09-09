@@ -115,6 +115,7 @@
 			height: 100%;
 			padding: 0;
 			vertical-align: top;
+			border-right: 1px solid transparent;
 		}
 	}
 	.dojoxCalendarContainerColumn {
@@ -122,25 +123,22 @@
 		width:100%;		
 	}
 	
-	.dojoxCalendarEventContainerColumn {
-		position: relative;
-		height:100%;
-		margin-left: 2px;
-		margin-right: 7px;		
+	.dojoxCalendarSubContainerColumn {
+		position: absolute;		
+		top: 0;
+		box-sizing: border-box;
+		height:100%;	
 	}
 	
-	.dojoxCalendarSubColumnBorder {
-		position: absolute;
-		left:0;
-		right:0;
-		top:0;
-		bottom: 0;
-		display: none;
+	.dojoxCalendarEventContainerColumn {
+		position: relative;		
+		height:100%;
+		margin-left: 1px;
+		margin-right: 5px;		
 	}
 
-	.dojoxCalendarSubColumnBorder.subColumn {
-		border-right: @sub-column-border;
-		display: block;
+	.dojoxCalendarSubContainerColumn.subColumn {
+		border-right: @sub-column-border;		
 	}
 
 	.dojoxCalendarEventContainer {
@@ -635,7 +633,15 @@
 		.dojoxCalendarEvent div {
 			white-space:nowrap;
 		}
-	}	
+	}
+	
+	.dojoxCalendarTimeIndicator {
+		position: absolute;
+		left:0;
+		height: 2px;
+		width:100%;
+		background-color: red;			
+	}					
 }
 
 .claro .dojoxCalendarColumnView.subColumns {

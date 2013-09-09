@@ -590,6 +590,7 @@ function(
 			this._buildRowHeader(renderData, oldRenderData);
 			this._buildGrid(renderData, oldRenderData);
 			this._buildItemContainer(renderData, oldRenderData);
+			this._layoutTimeIndicator(renderData);
 		},
 		
 		_configureVisibleParts: function(renderData){
@@ -1304,8 +1305,8 @@ function(
 			var bgCols = [];
 	
 			domStyle.set(table, "height", renderData.sheetHeight + "px");			
-			var oldCount = oldRenderData ? oldRenderData.columnCount * oldRenderData.subColumnCount : 0;
-			var count = (renderData.subColumnCount * renderData.columnCount) - oldCount;
+			var oldCount = oldRenderData ? oldRenderData.columnCount : 0;
+			var count = renderData.columnCount - oldCount;					
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -1340,55 +1341,137 @@ function(
 				tr = trs[0];
 			}else{ 
 				tr = domConstruct.create("tr", null, tbody);
-			}					
+			}		
+			
+			var subCount = renderData.subColumnCount;
 								
 			// Build HTML structure (incremental)
 			if(count>0){ // creation
 				for(var i=0; i < count; i++){
 					td = domConstruct.create("td", null, tr);
-					var div = domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);									
-					domConstruct.create("div", {"className": "dojoxCalendarSubColumnBorder"}, div);
-					domConstruct.create("div", {"className": "dojoxCalendarEventContainerColumn"}, div);
+					domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);					
 				}
 			}else{ // deletion		 
 				count = -count;
 				for(var i=0; i < count; i++){
 					tr.removeChild(tr.lastChild);
 				}
-			}
-			var subCount = renderData.subColumnCount;
+			}					
+			
 			
 			query("td", table).forEach(function(td, i){
 				
-				var subColIdx = 0;
-				if(subCount == 1){
-					domStyle.set(td, "border-right", "1px solid transparent");
-				}else{
-					var col = subCount == 1 ? i : Math.floor(i / subCount);
-					subColIdx = subCount == 1 ? 0 : i - col *subCount;					
-					if(subColIdx == subCount-1){
-						domStyle.set(td, "border-right", "1px solid transparent");
-					}else{
-						domStyle.set(td, "border-right", "none");
-					}					
-				}
-				
 				query(".dojoxCalendarContainerColumn", td).forEach(function(div, i){
 					domStyle.set(div, "height", renderData.sheetHeight + "px");
+					var count = query(".dojoxCalendarSubContainerColumn", td).length - subCount;
+					if(count != 0){
+						var len = div.childNodes.length;
+						for(var i=0; i<len; i++){
+							div.removeChild(div.lastChild);
+						}						
+						for(var j=0; j<subCount; j++){
+							var subdiv = domConstruct.create("div", {"className": "dojoxCalendarSubContainerColumn"}, div);
+							domConstruct.create("div", {"className": "dojoxCalendarEventContainerColumn"}, subdiv);
+						}
+					}
+				}, this);
+				
+				var colW = (100/subCount) + "%";
+				query(".dojoxCalendarSubContainerColumn", td).forEach(function(div, i){						
+					var col = subCount == 1 ? i : Math.floor(i / subCount);
+					subColIdx = subCount == 1 ? 0 : i - col * subCount;					
+					domStyle.set(div, {width: colW, left: ((subColIdx * 100)/subCount)+"%"});
+					domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");			
 				}, this);
 				
 				query(".dojoxCalendarEventContainerColumn", td).forEach(function(div, i){						
-					bgCols.push(div);		
-				}, this);
-				
-				query(".dojoxCalendarSubColumnBorder", td).forEach(function(div, i){																		
-					domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");					
-				}, this);
+					bgCols.push(div);
+				}, this);				
 				
 			}, this);
 																											
 			renderData.cells = bgCols;
-		},			
+		},
+		
+		// showTimeIndicator: Boolean
+		//		Whether show or not an indicator (default a red line) at the current time.
+		showTimeIndicator: true,
+
+		// timeIndicatorRefreshInterval: Integer
+		//		Maximal interval between two refreshes of time indicator.
+		timeIndicatorRefreshInterval: 60000,
+		
+		_setShowTimeIndicatorAttr: function(value){
+			this._layoutTimeIndicator(this.renderData);
+		},
+		
+		_layoutTimeIndicator: function(renderData){
+			if(!renderData){
+				return;
+			}
+			
+			if(this.showTimeIndicator){
+				
+				var now = new Date();
+				
+				var visible = this.isOverlapping(renderData, renderData.startTime, renderData.endTime, now, now);
+															
+				if(visible){
+					
+					if(!this._timeIndicator){
+						this._timeIndicator = domConstruct.create("div", 
+								{"className": "dojoxCalendarTimeIndicator"});
+					}	
+					
+					var node = this._timeIndicator;
+					
+					var offset = this.dateModule.difference(renderData.startTime, now, "day");
+													
+					var top = this.computeProjectionOnDate(renderData, this.floorToDay(now), now, renderData.sheetHeight);
+					
+					if(top != renderData.sheetHeight){
+						
+						domStyle.set(node, {top: top+"px", display: "block"});
+						var parentNode = renderData.cells[offset*renderData.subColumnCount].parentNode.parentNode;
+						if(parentNode != node.parentNode){
+							if(node.parentNode != null){
+								node.parentNode.removeChild(node);
+							}
+							parentNode.appendChild(node);	
+						}						
+																				
+						if(this._timeIndicatorTimer == null){
+							this._timeIndicatorTimer = setInterval(lang.hitch(this, function(){
+								this._layoutTimeIndicator(this.renderData);
+							}), this.timeIndicatorRefreshInterval);
+						}
+						return;
+					}													
+				}
+											
+			}
+			
+			// not visible or specifically not shown fallback
+				
+			if(this._timeIndicatorTimer){
+				clearInterval(this._timeIndicatorTimer);
+				this._timeIndicatorTimer = null;
+			}
+			if(this._timeIndicator){
+				domStyle.set(this._timeIndicator);
+			}							
+			
+		},
+		
+		beforeDeactivate: function(){
+			if(this._timeIndicatorTimer){
+				console.log("clear timer");
+				clearInterval(this._timeIndicatorTimer);
+				this._timeIndicatorTimer = null;
+			}
+		},
+		
+		
 		
 		///////////////////////////////////////////////////////////////
 		//

@@ -409,9 +409,11 @@
   border-right: 1px solid #cccccc;
 }
 .nihilo .dojoxCalendarColumnView .dojoxCalendarMatrixView .dojoxCalendarRowHeaderTable td {
-    border: 1px solid #cccccc;
-    border-top-color: #e5e5e5;
-    background-color: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+  background-color: #ffffff;
 }
 .nihilo .dojoxCalendarColumnView .dojoxCalendarMatrixView .dojoxCalendarEvent .handle {
   z-index: 2;
