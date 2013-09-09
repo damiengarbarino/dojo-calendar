@@ -1,3 +1,14 @@
+.event-header {
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-top-right-radius: 5px;
+  -moz-border-top-left-radius: 5px;
+  white-space: nowrap;
+  padding: 1px 2px 2px 1px;
+}
 .nihilo .dojoxCalendarMatrixViewRtl .dojoxCalendarGrid {
   right: 50px;
   left: 0;
@@ -33,7 +44,7 @@
   right: 50px;
   left: 0;
 }
-.nihilo .dojoxCalendarMatrixView .dojoxCalendarColumnHeaderTable td {
+.nihilo .dojoxCalendarMatrixViewRtl .dojoxCalendarColumnHeaderTable td {
   border-left: 1px solid #cccccc;
   border-right: none;
 }

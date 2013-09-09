@@ -6,12 +6,8 @@
   -webkit-border-top-right-radius: 5px;
   -moz-border-top-right-radius: 5px;
   -moz-border-top-left-radius: 5px;
-  background-color: #6c0000;
   white-space: nowrap;
   padding: 1px 2px 2px 1px;
-  border-top: 1px solid #260000;
-  border-left: 1px solid #260000;
-  border-right: 1px solid #260000;
 }
 .claro .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable td {
   border-right: none;
