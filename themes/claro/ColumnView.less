@@ -279,31 +279,51 @@
 		}
 		td.dojoxCalendarWeekend {
 			background-color: @week-end-color;
-		}
-		
-		table.subColumn {
-			border-collapse: collapse;
-			table-layout: fixed;
+		}					
+	}
+	
+	.dojoxCalendarSubHeaderContainer {			
+		position: relative;
+		width:100%;		
+		height: @sub-column-header-height - 2px;
+	}	
+	
+	.dojoxCalendarSubHeaderCell {
+		position: absolute;		
+		top: 0;
+		.border-box;
+		height:100%;	
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}	
+	
+	.dojoxCalendarSubHeaderCell.subColumn {
+		border-right: @sub-column-border;		
+	}	
+	
+	.dojoxCalendarSubHeaderLabel {
+		font-size: 0.9em;
+		color: #555;
+	}
+	
+	.dojoxCalendarSubRowHeader {
+		position: absolute;
+		height: @sub-column-header-height;
+		left: 0;
+		width: @row-header-width - 2px;
+		top: 0;
+		border-left: @outer-border;
+		border-right: @outer-border;
+
+		table {
 			position: relative;
-			margin: 0;
-			padding: 0;
 			width: 100%;
 			height: 100%;
-		}
-		
-		.subColumn td {
-			overflow: hidden;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			vertical-align: middle;
-			text-align: center;   
-			border-top: none;
-			border: none;
-			-moz-user-select: none;
-			-webkit-user-select: none;
-			khtml-user-select: none;
-			user-select: none;
-			color: @subcolumn-text-color;  
+			
+			td {
+				border-top: @outer-border;
+				background-color: #efefef;  
+			}			
 		}
 	}
 

@@ -277,28 +277,45 @@
 .soria .dojoxCalendarColumnView .dojoxCalendarSubColumnHeaderTable td.dojoxCalendarWeekend {
   background-color: #fdfdfd;
 }
-.soria .dojoxCalendarColumnView .dojoxCalendarSubColumnHeaderTable table.subColumn {
-  border-collapse: collapse;
-  table-layout: fixed;
+.soria .dojoxCalendarColumnView .dojoxCalendarSubHeaderContainer {
   position: relative;
-  margin: 0;
-  padding: 0;
+  width: 100%;
+  height: 19px;
+}
+.soria .dojoxCalendarColumnView .dojoxCalendarSubHeaderCell {
+  position: absolute;
+  top: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.soria .dojoxCalendarColumnView .dojoxCalendarSubHeaderCell.subColumn {
+  border-right: 1px solid #dddddd;
+}
+.soria .dojoxCalendarColumnView .dojoxCalendarSubHeaderLabel {
+  font-size: 0.9em;
+  color: #555;
+}
+.soria .dojoxCalendarColumnView .dojoxCalendarSubRowHeader {
+  position: absolute;
+  height: 20px;
+  left: 0;
+  width: 68px;
+  top: 0;
+  border-left: 1px solid #b1badf;
+  border-right: 1px solid #b1badf;
+}
+.soria .dojoxCalendarColumnView .dojoxCalendarSubRowHeader table {
+  position: relative;
   width: 100%;
   height: 100%;
 }
-.soria .dojoxCalendarColumnView .dojoxCalendarSubColumnHeaderTable .subColumn td {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-  text-align: center;
-  border-top: none;
-  border: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  khtml-user-select: none;
-  user-select: none;
-  color: #777777;
+.soria .dojoxCalendarColumnView .dojoxCalendarSubRowHeader table td {
+  border-top: 1px solid #b1badf;
+  background-color: #efefef;
 }
 .soria .dojoxCalendarColumnView .dojoxCalendarRowHeader {
   position: absolute;
@@ -609,10 +626,10 @@
   width: 100%;
   background-color: red;
 }
-.claro .dojoxCalendarColumnView.subColumns .dojoxCalendarScrollContainer {
+.soria .dojoxCalendarColumnView.subColumns .dojoxCalendarScrollContainer {
   top: 53px;
 }
-.claro .dojoxCalendarColumnView.subColumns .dojoxCalendarSubHeader {
+.soria .dojoxCalendarColumnView.subColumns .dojoxCalendarSubHeader {
   top: 33px;
   display: block;
 }

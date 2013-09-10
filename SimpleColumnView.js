@@ -835,7 +835,7 @@ function(
 				return;
 			}
 					
-			var count = renderData.columnCount - query(".subHeaderCell", table).length;
+			var count = renderData.columnCount - query("td", table).length;
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -877,20 +877,8 @@ function(
 			// Build HTML structure (incremental)
 			if(count > 0){ // creation				
 				for(var i=0; i < count; i++){
-					td = domConstruct.create("td", null, tr);
-					domClass.add(td, "subHeaderCell");
-					var sTable = domConstruct.create("table", {
-						cellpadding:"0", cellspacing:"0"
-					}, td);
-					domClass.add(sTable, "subColumn");
-					var sBody = html.create("tbody", null, sTable);
-					var sTr = domConstruct.create("tr", null, sBody);
-					
-					for(var j=0; j < subCount; j++){
-						var sTd = domConstruct.create("td", null, sTr);
-						var sSpan = domConstruct.create("span", null, sTd);						
-						domClass.add(sSpan, "subColumnLabel");
-					}
+					td = domConstruct.create("td", null, tr);									
+					domConstruct.create("div", {"className": "dojoxCalendarSubHeaderContainer"}, td);
 				}
 			}else{ // deletion
 				count = -count;
@@ -902,22 +890,45 @@ function(
 			}
 			
 			// fill & configure		
-			query(".subHeaderCell", table).forEach(function(td, i){
-				td.className = "subHeaderCell";											
+			query("td", table).forEach(function(td, i){
+				//td.className = "subHeaderCell";											
 				if(i == 0){
 					domClass.add(td, "first-child");
 				}else if(i == this.renderData.columnCount-1){
 					domClass.add(td, "last-child");
 				}
+				
+				query(".dojoxCalendarSubHeaderContainer", td).forEach(function(div, i){
+								
+					var count = query(".dojoxCalendarSubHeaderContainer", div).length - subCount;
+					if(count != 0){
+						var len = div.childNodes.length;
+						for(var i=0; i<len; i++){
+							div.removeChild(div.lastChild);
+						}						
+						for(var j=0; j<subCount; j++){
+							domConstruct.create("div", {"className": "dojoxCalendarSubHeaderCell dojoxCalendarSubHeaderLabel"}, div);
+						}
+					}
+					
+					var colW = (100/subCount) + "%";
+					query(".dojoxCalendarSubHeaderCell", div).forEach(function(div, i){						
+						var col = subCount == 1 ? i : Math.floor(i / subCount);
+						subColIdx = subCount == 1 ? 0 : i - col * subCount;					
+						domStyle.set(div, {width: colW, left: ((subColIdx * 100)/subCount)+"%"});
+						domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");
+						this._setText(div, this.subColumnLabelFunc(this.subColumns[subColIdx]));
+					}, this);
+													
+				}, this);
+				
 				var d = renderData.dates[i];
-				this.styleSubColumnHeaderCell(td, d, renderData);						
+				console.log(d);
+				td.classname = "";
+				this.styleSubColumnHeaderCell(td, d, renderData);
+				
 			}, this);
 			
-			query(".subColumnLabel", table).forEach(function(span, i){
-				var col = subCount == 1 ? i : Math.floor(i / subCount);
-				var subColIdx = subCount == 1 ? 0 : i - col *subCount;
-				this._setText(span, this.subColumnLabelFunc(this.subColumns[subColIdx]));
-			}, this);					
 		},
 		
 		

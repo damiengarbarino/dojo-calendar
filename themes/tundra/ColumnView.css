@@ -603,10 +603,10 @@
   width: 100%;
   background-color: red;
 }
-.claro .dojoxCalendarColumnView.subColumns .dojoxCalendarScrollContainer {
+.tundra .dojoxCalendarColumnView.subColumns .dojoxCalendarScrollContainer {
   top: 53px;
 }
-.claro .dojoxCalendarColumnView.subColumns .dojoxCalendarSubHeader {
+.tundra .dojoxCalendarColumnView.subColumns .dojoxCalendarSubHeader {
   top: 33px;
   display: block;
 }
