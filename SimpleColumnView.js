@@ -310,6 +310,11 @@ function(
 		//
 		//////////////////////////////////////////
 		
+		// rowHeaderTimePattern: String
+		//		Custom date/time pattern for the row header labels to override default one coming from the CLDR.
+		//		See dojo/date/locale documentation for format string.
+		rowHeaderTimePattern: null,
+		
 		_formatRowHeaderLabel: function(/*Date*/d){
 			// summary:
 			//		Computes the row header label for the specified time of day.
@@ -324,7 +329,12 @@ function(
 				timePattern: this.rowHeaderTimePattern
 			});
 		},
-	
+		
+		// columnHeaderDatePattern: String
+		//		Custom date/time pattern for column header labels to override default one coming from the CLDR.
+		//		See dojo/date/locale documentation for format string.
+		columnHeaderDatePattern: null,
+
 		_formatColumnHeaderLabel: function(/*Date*/d){			
 			// summary:
 			//		Computes the column header label for the specified date.

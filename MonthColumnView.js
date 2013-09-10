@@ -316,6 +316,11 @@ function(
 			return months[d.getMonth()];
 		},
 		
+		// gridCellDatePattern: String
+		//		Custom date/time pattern for cell labels to override default one coming from the CLDR.
+		//		See dojo/date/locale documentation for format string.
+		gridCellDatePattern: null,
+		
 		_formatGridCellLabel: function(d, row, col){
 			// summary:
 			//		Computes the column header label for the specified date.
