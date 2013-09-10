@@ -6,12 +6,8 @@
   -webkit-border-top-right-radius: 5px;
   -moz-border-top-right-radius: 5px;
   -moz-border-top-left-radius: 5px;
-  background-color: #6c0000;
   white-space: nowrap;
   padding: 1px 2px 2px 1px;
-  border-top: 1px solid #260000;
-  border-left: 1px solid #260000;
-  border-right: 1px solid #260000;
 }
 .claro .dojoxCalendarColumnView {
   cursor: default;
@@ -116,28 +112,28 @@
   height: 100%;
   padding: 0;
   vertical-align: top;
+  border-right: 1px solid transparent;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarContainerColumn {
   position: relative;
   width: 100%;
 }
+.claro .dojoxCalendarColumnView .dojoxCalendarSubContainerColumn {
+  position: absolute;
+  top: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+}
 .claro .dojoxCalendarColumnView .dojoxCalendarEventContainerColumn {
   position: relative;
   height: 100%;
-  margin-left: 2px;
-  margin-right: 7px;
+  margin-left: 1px;
+  margin-right: 5px;
 }
-.claro .dojoxCalendarColumnView .dojoxCalendarSubColumnBorder {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: none;
-}
-.claro .dojoxCalendarColumnView .dojoxCalendarSubColumnBorder.subColumn {
+.claro .dojoxCalendarColumnView .dojoxCalendarSubContainerColumn.subColumn {
   border-right: 1px solid #dddddd;
-  display: block;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarEventContainer {
   position: absolute;
@@ -284,28 +280,27 @@
 .claro .dojoxCalendarColumnView .dojoxCalendarSubColumnHeaderTable td.dojoxCalendarWeekend {
   background-color: #e5f2fe;
 }
-.claro .dojoxCalendarColumnView .dojoxCalendarSubColumnHeaderTable table.subColumn {
-  border-collapse: collapse;
-  table-layout: fixed;
+.claro .dojoxCalendarColumnView .dojoxCalendarSubHeaderContainer {
   position: relative;
-  margin: 0;
-  padding: 0;
   width: 100%;
-  height: 100%;
+  height: 18px;
 }
-.claro .dojoxCalendarColumnView .dojoxCalendarSubColumnHeaderTable .subColumn td {
+.claro .dojoxCalendarColumnView .dojoxCalendarSubHeaderCell {
+  position: absolute;
+  top: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
-  vertical-align: middle;
-  text-align: center;
-  border-top: none;
-  border: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  khtml-user-select: none;
-  user-select: none;
-  color: #777;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarSubHeaderCell.subColumn {
+  border-right: 1px solid #dddddd;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarSubHeaderLabel {
+  font-size: 0.9em;
+  color: #555;
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarSubRowHeader {
   position: absolute;
@@ -467,9 +462,9 @@
   -webkit-border-top-right-radius: 5px;
   -moz-border-top-right-radius: 5px;
   -moz-border-top-left-radius: 5px;
-  background-color: #6c0000;
   white-space: nowrap;
   padding: 1px 2px 2px 1px;
+  background-color: #6c0000;
   border-top: 1px solid #260000;
   border-left: 1px solid #260000;
   border-right: 1px solid #260000;
@@ -626,6 +621,13 @@
 }
 .claro .dojoxCalendarColumnView .dojoxCalendarMatrixView .dojoxCalendarEvent div {
   white-space: nowrap;
+}
+.claro .dojoxCalendarColumnView .dojoxCalendarTimeIndicator {
+  position: absolute;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: red;
 }
 .claro .dojoxCalendarColumnView.subColumns .dojoxCalendarScrollContainer {
   top: 53px;

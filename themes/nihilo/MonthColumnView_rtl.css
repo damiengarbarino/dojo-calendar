@@ -1,14 +1,26 @@
+.event-header {
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-top-right-radius: 5px;
+  -moz-border-top-left-radius: 5px;
+  white-space: nowrap;
+  padding: 1px 2px 2px 1px;
+}
 .nihilo .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable td {
   border-right: none;
   border-left: 1px solid #e5e5e5;
 }
 .nihilo .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable td span {
   padding-right: 3px;
+  paddint-left: 0px;
 }
 .nihilo .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable .dojoxCalendarHiddenEvents {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAICAYAAADTLS5CAAAAFElEQVQImWP4z8Dw/1dU1H8GyhgANcclWWHC27gAAAAASUVORK5CYII=) repeat-y right top;
 }
-.nihilo .dojoxCalendarMonthColumnView .dojoxCalendarGridTable .dojoxCalendarToday.dojoxCalendarHiddenEvents {
+.nihilo .dojoxCalendarMonthColumnViewRtl .claro .dojoxCalendarMonthColumnView .dojoxCalendarGridTable .dojoxCalendarToday.dojoxCalendarHiddenEvents {
   background: #fff2d2 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAICAYAAADTLS5CAAAAFElEQVQImWP4z8Dw/1dU1H8GyhgANcclWWHC27gAAAAASUVORK5CYII=) repeat-y right top;
 }
 .nihilo .dojoxCalendarMonthColumnViewRtl .dojoxCalendarGridTable tr td.last-child {
@@ -21,7 +33,7 @@
   margin-left: 5px;
   margin-right: 35px;
 }
-.nihilo .dojoxCalendarMonthColumnView .dojoxCalendarColumnHeaderTable td {
+.nihilo .dojoxCalendarMonthColumnViewRtl .dojoxCalendarColumnHeaderTable td {
   border-left: 1px solid #e5e5e5;
   border-right: none;
 }

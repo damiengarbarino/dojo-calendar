@@ -504,26 +504,48 @@ _nls){
 					return;
 				}
 				
-				if(this.animateRange && (!has("ie") || has("ie")>8) ){
-					if(this.currentView){ // there's a view to animate
-						var ltr = this.isLeftToRight();
-						var inLeft = this._animRangeInDir=="left" || this._animRangeInDir == null; 
-						var outLeft = this._animRangeOutDir=="left" || this._animRangeOutDir == null;
-						this._animateRange(this.currentView.domNode, outLeft && ltr, false, 0, outLeft ? -100 : 100, 
-							lang.hitch(this, function(){
-								this.animateRangeTimer = setTimeout(lang.hitch(this, function(){
-									this._applyViewChange(view, index, timeInterval, duration);
-									this._animateRange(this.currentView.domNode, inLeft && ltr, true, inLeft ? -100 : 100, 0);
-									this._animRangeInDir = null;
-									this._animRangeOutDir = null;
-								}), 100);	// setTimeout give time for layout of view.							
-							}));
-					}else{
-						this._applyViewChange(view, index, timeInterval, duration);						
-					}
-				}else{					
-					this._applyViewChange(view, index, timeInterval, duration);
+				this._performViewTransition(view, index, timeInterval, duration);							
+			}
+		},
+		
+		_performViewTransition: function(view, index, timeInterval, duration){
+			var oldView = this.currentView;
+			
+			if(this.animateRange && (!has("ie") || has("ie")>8) ){
+				if(oldView){ // there's a view to animate
+					oldView.beforeDeactivate();
+					var ltr = this.isLeftToRight();
+					var inLeft = this._animRangeInDir=="left" || this._animRangeInDir == null; 
+					var outLeft = this._animRangeOutDir=="left" || this._animRangeOutDir == null;						
+					this._animateRange(this.currentView.domNode, outLeft && ltr, false, 0, outLeft ? -100 : 100, 
+						lang.hitch(this, function(){
+							oldView.afterDeactivate();
+							view.beforeActivate();
+							this.animateRangeTimer = setTimeout(lang.hitch(this, function(){
+								this._applyViewChange(view, index, timeInterval, duration);
+								this._animateRange(this.currentView.domNode, inLeft && ltr, true, inLeft ? -100 : 100, 0, function(){
+									view.afterActivate();
+								});
+								this._animRangeInDir = null;
+								this._animRangeOutDir = null;
+							}), 100);	// setTimeout give time for layout of view.							
+						}));
+				}else{
+					view.beforeActivate();
+					this._applyViewChange(view, index, timeInterval, duration);	
+					view.afterActivate();
 				}
+			}else{
+				if(this.currentView){
+					oldView.beforeDeactivate();
+					
+				}
+				view.beforeActivate();
+				this._applyViewChange(view, index, timeInterval, duration);
+				if(this.currentView){
+					oldView.afterDeactivate();
+				}
+				view.afterActivate();
 			}
 		},
 		
