@@ -891,7 +891,7 @@ function(
 			
 			// fill & configure		
 			query("td", table).forEach(function(td, i){
-				//td.className = "subHeaderCell";											
+				td.className = "";											
 				if(i == 0){
 					domClass.add(td, "first-child");
 				}else if(i == this.renderData.columnCount-1){
@@ -923,8 +923,7 @@ function(
 				}, this);
 				
 				var d = renderData.dates[i];
-				console.log(d);
-				td.classname = "";
+
 				this.styleSubColumnHeaderCell(td, d, renderData);
 				
 			}, this);
