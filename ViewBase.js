@@ -9,6 +9,7 @@ define([
 	"dojo/query",
 	"dojo/dom",
 	"dojo/dom-style",
+	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-geometry",
 	"dojo/on",
@@ -32,6 +33,7 @@ define([
 		query,
 		dom,
 		domStyle,
+		domClass,
 		domConstruct,
 		domGeometry,
 		on,
@@ -272,7 +274,7 @@ define([
 			
 			while(node != ancestor && node != document){
 				
-				if(dojo.hasClass(node, className)){
+				if(domClass.contains(node, className)){
 					return true;
 				}
 				
