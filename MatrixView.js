@@ -426,8 +426,9 @@ function(
 			//		private
 			
 			if(renderData.rowHeight <= 0){
-				renderData.columnCount = 0;
-				renderData.rowCount = 0;
+				renderData.columnCount = 1;
+				renderData.rowCount = 1;
+				renderData.invalidRowHeight = true;
 				return;
 			}
 			
@@ -968,6 +969,14 @@ function(
 					this._resizeRows();
 				}else{
 					this.expandRow(rd.expandedRow, rd.expandedRowCol, 0, null, true);
+				}
+				if(rd.invalidRowHeight){
+					// complete recompute 
+					delete rd.invalidRowHeight;
+					this.renderData = null;
+					this.displayedItemsInvalidated = true;
+					this.refreshRendering();
+					return;
 				}
 			}
 			
