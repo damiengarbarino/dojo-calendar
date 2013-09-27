@@ -1478,7 +1478,7 @@ function(
 				this._timeIndicatorTimer = null;
 			}
 			if(this._timeIndicator){
-				domStyle.set(this._timeIndicator);
+				domStyle.set(this._timeIndicator, "display", "none");
 			}							
 			
 		},
