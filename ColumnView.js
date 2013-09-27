@@ -131,10 +131,14 @@ function(
 				var headerH = domGeometry.getMarginBox(this.header).h;
 				domStyle.set(this.secondarySheetNode, "height", height+"px");
 				this.secondarySheet._resizeHandler(null, true);
-				var top = (height + headerH + this.headerPadding)+"px";
-				domStyle.set(this.scrollContainer, "top", top);
+				var top = (height + headerH + this.headerPadding);
+				if(this.subHeader && this.subColumns){
+					domStyle.set(this.subHeader, "top", top+"px");
+					top += domGeometry.getMarginBox(this.subHeader).h;
+				}
+				domStyle.set(this.scrollContainer, "top", top+"px");
 				if(this.vScrollBar){
-					domStyle.set(this.vScrollBar, "top", top);
+					domStyle.set(this.vScrollBar, "top", top+"px");
 				}
 			}
 		},
