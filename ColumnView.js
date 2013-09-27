@@ -121,6 +121,23 @@ function(
 
 		},
 		
+		_setSubColumnsAttr: function(value){
+			var old = this.get("subColumns");
+			if(old != value){
+				this._secondaryHeightInvalidated = true;
+			}
+			this._set("subColumns", value);					
+		},
+		
+		refreshRendering: function(){
+			this.inherited(arguments);
+			if(this._secondaryHeightInvalidated){
+				this._secondaryHeightInvalidated = false;
+				var h = domGeometry.getMarginBox(this.secondarySheetNode).h;
+				this.resizeSecondarySheet(h);
+			}
+		},
+		
 		resizeSecondarySheet: function(height){
 			// summary:
 			//		Resizes the secondary sheet header and relayout the other sub components according this new height.

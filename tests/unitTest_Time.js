@@ -50,7 +50,7 @@ define(["doh", "../time", "dojo/date", "dojo/date/locale", "dojox/date/hebrew/Da
 			  new Date(2013, 5, 6),
 			  new Date(2013, 5, 7),
 			  new Date(2013, 5, 8),
-			  new Date(2013, 5, 9),
+			  new Date(2013, 5, 9)
 			];
 			
 			var fd = new Date(2013, 5, 3);

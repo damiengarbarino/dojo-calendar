@@ -51,7 +51,7 @@ define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
 		},
 		
 		_layoutExpandRenderers: function(index, hasHiddenItems, hiddenItems){
-			if(!this.expandRenderer){
+			if(!this.expandRenderer || this._expandedRowCol == -1){
 				return;
 			}
 			var h = domGeometry.getMarginBox(this.domNode).h;
@@ -76,16 +76,18 @@ define(["./MatrixView", "dojo/text!./templates/ColumnViewSecondarySheet.html",
 			// tags:
 			//		callback
 
-			
 			event.stop(e);
-			var h = domGeometry.getMarginBox(this.domNode).h;			
-			if(this._defaultHeight == h || h < this._getExpandedHeight()){
-				this._expandedRowCol = renderer.columnIndex;
-				this.owner.resizeSecondarySheet(this._getExpandedHeight());
+			
+			var h = domGeometry.getMarginBox(this.domNode).h;
+			var expandedH = this._getExpandedHeight();
+			if(this._defaultHeight == h || h < expandedH){
+				this._expandedRowCol = renderer.columnIndex;				
+				this.owner.resizeSecondarySheet(expandedH);
 			}else{
 				this.owner.resizeSecondarySheet(this._defaultHeight);
 			}
 		},
+		
 		
 		_getExpandedHeight: function(){
 			// tags:
