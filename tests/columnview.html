@@ -523,6 +523,12 @@
 						</tr>
 						
 						<tr>
+							<td>Min column width(px):</td>
+							<td><div data-dojo-id="minColWidthEditor" data-dojo-type="dijit.form.NumberSpinner" style="width:80px" value="0" data-dojo-props="constraints:{min:0, max:200}, intermediateChanges:true" onChange="colView.set('minColumnWidth', this.value);"></div></td>
+						</tr>
+						
+						
+						<tr>
 							<td>Timeslot (minutes):</td>
 							<td>
 								<select data-dojo-id="timeSlotEditor" data-dojo-type="dijit.form.ComboBox" style="width:80px;" onChange="colView.set('timeSlotDuration', this.value);">

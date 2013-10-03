@@ -1,7 +1,7 @@
 define([
 "./ViewBase", 
 "dijit/_TemplatedMixin", 
-"./_VerticalScrollBarBase", 
+"./_ScrollBarBase", 
 "dojo/text!./templates/ColumnView.html",
 "dojo/_base/declare", 
 "dojo/_base/event", 
@@ -23,7 +23,7 @@ define([
 function(
 	ViewBase, 
 	_TemplatedMixin, 
-	_VerticalScrollBarBase, 
+	_ScrollBarBase, 
 	template, 
 	declare, 
 	event, 
@@ -126,6 +126,12 @@ function(
 		//		The class use to create vertical renderers.
 		verticalRenderer: null,
 		
+		// minColumnWidth: Integer
+		//		The minimum column width. If the number of columns and sub columns displayed makes the
+		//		width of a column greater than this property, a horizontal scroll bar is displayed.
+		//		If value <= 0, this constraint is ignored and the columns are using the available space.
+		minColumnWidth: -1,
+		
 		// percentOverlap: Integer
 		//		The percentage of the renderer width used to superimpose one item renderer on another 
 		//		when two events are overlapping.
@@ -143,7 +149,7 @@ function(
 			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer",
 				"rowHeaderTimePattern", "columnHeaderDatePattern", "timeSlotDuration", "rowHeaderGridSlotDuration", "rowHeaderLabelSlotDuration", 
 				"rowHeaderLabelOffset", "rowHeaderFirstLabelOffset","percentOverlap", "horizontalGap", "scrollBarRTLPosition","itemToRendererKindFunc", 
-				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items", "subColumns"];
+				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items", "subColumns", "minColumnWidth"];
 			this._columnHeaderHandlers = [];
 		},
 		
@@ -159,18 +165,35 @@ function(
 			this._setScrollPosition(value);
 		},
 		
+		_hscrollBar_onScroll: function(value){
+			this._setHScrollPosition(value);
+		},
+		
 		buildRendering: function(){
 			this.inherited(arguments);
 			if(this.vScrollBar){
-				this.scrollBar = new _VerticalScrollBarBase(
+				this.scrollBar = new _ScrollBarBase(
 					{content: this.vScrollBarContent}, 
 					this.vScrollBar);
 					
-				this.scrollBar.on("scroll", lang.hitch(this, this._scrollBar_onScroll));
-				this._viewHandles.push(
-						on(this.scrollContainer, mouse.wheel,  
-							dojo.hitch(this, this._mouseWheelScrollHander)));
+				this.scrollBar.on("scroll", lang.hitch(this, this._scrollBar_onScroll));				
 			}
+			
+			if(this.hScrollBar){
+				this.hScrollBarW = new _ScrollBarBase(
+					{content: this.hScrollBarContent, direction: "horizontal", value: 0}, 
+					this.hScrollBar);
+					
+				this.hScrollBarW.on("scroll", lang.hitch(this, this._hscrollBar_onScroll));
+				
+				this._hScrollNodes = [this.columnHeaderTable, this.subColumnHeaderTable, this.gridTable, this.itemContainerTable];
+			}
+			
+			this._viewHandles.push(
+					on(this.scrollContainer, mouse.wheel,  
+						dojo.hitch(this, this._mouseWheelScrollHander)));
+			
+			
 		},
 		
 		postscript: function(){
@@ -198,18 +221,30 @@ function(
 			renderData.rowHeaderGridSlotDuration = this.get("rowHeaderGridSlotDuration");
 			renderData.slotSize = Math.ceil(renderData.hourSize / (60 / renderData.slotDuration));
 			renderData.hourSize = renderData.slotSize * (60 / renderData.slotDuration);			
-			renderData.sheetHeight = renderData.hourSize * renderData.hourCount;		
-			renderData.scrollbarWidth = metrics.getScrollbar().w + 1;
+			renderData.sheetHeight = renderData.hourSize * renderData.hourCount;
+			
+			if(!this._rowHeaderWidth){
+				this._rowHeaderWidth = domGeometry.getMarginBox(this.rowHeader).w;
+			}			
+			renderData.rowHeaderWidth = this._rowHeaderWidth;
+			
+			var sbMetrics = metrics.getScrollbar();
+			renderData.scrollbarWidth = sbMetrics.w + 1;
+			renderData.scrollbarHeight = sbMetrics.h + 1;
 			
 			renderData.dateLocaleModule = this.dateLocaleModule;
 			renderData.dateClassObj = this.dateClassObj;
 			renderData.dateModule = this.dateModule; // arithmetics on Dates
-			
+					
 			renderData.dates = [];
 						
 			renderData.columnCount = this.get("columnCount");
 			renderData.subColumns = this.get("subColumns");
 			renderData.subColumnCount =  renderData.subColumns ? renderData.subColumns.length : 1;
+			
+			renderData.hScrollPaneWidth = domGeometry.getMarginBox(this.grid).w;
+			renderData.minSheetWidth = this.minColumnWidth < 0 ? -1 : this.minColumnWidth * renderData.subColumnCount * renderData.columnCount;
+			renderData.hScrollBarEnabled = this.minColumnWidth > 0 && renderData.hScrollPaneWidth < renderData.minSheetWidth;
 
 			var d = this.get("startDate");
 		
@@ -560,12 +595,44 @@ function(
 			this._setStartTimeOfDay(Math.floor(t/60), t%60);
 		},
 		
+		scrollViewHorizontal: function(dir){
+			// summary:
+			//		Scrolls the view horizontally to the specified direction of one column or sub column (if set).
+			// dir: Integer
+			//		Direction of the scroll. Valid values are -1 and 1.
+			//
+			this._setHScrollPosition(this._getHScrollPosition() + (dir * this.minColumnWidth));
+			if(this.hScrollBarW){
+				this.hScrollBarW.set("value", this._getHScrollPosition());
+			}
+		},
+		
+		_hScrollNodes: null,
+				
+		_setHScrollPositionImpl: function(pos, useDom, cssProp){
+			var elts = [this.columnHeaderTable, this.subColumnHeaderTable, this.gridTable, this.itemContainerTable];
+			var css = useDom ? null : "translateX(-"+pos+"px)";
+			arr.forEach(elts, function(elt){
+				if(useDom){
+					elt.scrollLeft = pos;
+					domStyle.set(elt, "left", (-pos) + "px");
+				}else{
+					domStyle.set(elt, cssProp, css);
+				}
+			}, this);
+		},
+		
 		_mouseWheelScrollHander: function(e){
 			// summary:
 			//		Mouse wheel handler.
 			// tags:
-			//		protected
-			this.scrollView(e.wheelDelta > 0 ? -1 : 1);
+			//		protected			
+			if(this.renderData.hScrollBarEnabled && e.altKey){
+				this.scrollViewHorizontal(e.wheelDelta > 0 ? -1 : 1);
+			}else{
+				this.scrollView(e.wheelDelta > 0 ? -1 : 1);
+			}
+			event.stop(e);
 		},		
 		
 		//////////////////////////////////////////
@@ -594,7 +661,7 @@ function(
 			domStyle.set(this.sheetContainer, "height", renderData.sheetHeight + "px");
 			// padding for the scroll bar.
 			this._configureVisibleParts(renderData);
-			this._configureScrollBar(renderData);
+			this._configureScrollBar(renderData);			
 			this._buildColumnHeader(renderData, oldRenderData);
 			this._buildSubColumnHeader(renderData, oldRenderData);
 			this._buildRowHeader(renderData, oldRenderData);
@@ -610,7 +677,9 @@ function(
 			}
 			
 			domClass[this.subColumns == null?"remove":"add"](this.domNode, "subColumns");
-			domClass[this._showSecondarySheet?"add":"remove"](this.domNode, "secondarySheet");			
+			domClass[this._showSecondarySheet?"add":"remove"](this.domNode, "secondarySheet");					
+			
+			// TODO configure sub elemts position/size
 		},
 				
 		_configureScrollBar: function(renderData){
@@ -622,17 +691,18 @@ function(
 			//		protected
 
 			if(has("ie") && this.scrollBar){
-				domStyle.set(this.scrollBar.domNode, "width", (renderData.scrollbarWidth + 1) + "px");
+				domStyle.set(this.vScrollBar, "width", (renderData.scrollbarWidth + 1) + "px");
 			}
 						
 			var atRight = this.isLeftToRight() ? true : this.scrollBarRTLPosition == "right";
 			var rPos = atRight ? "right" : "left";
-			var lPos = atRight? "left" : "right";
+			var lPos = atRight ? "left" : "right";
 			
 			if(this.scrollBar){
 				this.scrollBar.set("maximum", renderData.sheetHeight);			
-				domStyle.set(this.scrollBar.domNode, rPos, 0);
-				domStyle.set(this.scrollBar.domNode, atRight? "left" : "right", "auto");
+				domStyle.set(this.vScrollBar, rPos, 0);
+				domStyle.set(this.vScrollBar, atRight? "left" : "right", "auto");
+				domStyle.set(this.vScrollBar, "bottom", renderData.hScrollBarEnabled? renderData.scrollbarHeight + "px" : "0");
 			}
 			domStyle.set(this.scrollContainer, rPos, renderData.scrollbarWidth + "px");
 			domStyle.set(this.scrollContainer, lPos, "0");
@@ -644,6 +714,83 @@ function(
 				domStyle.set(this.buttonContainer, rPos, renderData.scrollbarWidth + "px");
 				domStyle.set(this.buttonContainer, lPos, "0");
 			}
+						
+			if(this.hScrollBar){
+				
+				arr.forEach(this._hScrollNodes, function(elt){
+					domClass[renderData.hScrollBarEnabled ? "add" : "remove"](elt.parentNode, "dojoxCalendarHorizontalScroll");
+				}, this);
+				
+				if(!renderData.hScrollBarEnabled){
+					this._setHScrollPosition(0);
+					this.hScrollBarW.set("value", 0);
+				}
+														
+				domStyle.set(this.hScrollBar, {
+					"display": renderData.hScrollBarEnabled ? "block" : "none",
+					"height": renderData.scrollbarHeight + "px",
+					"left": (atRight ? renderData.rowHeaderWidth : renderData.scrollbarWidth) + "px",				
+					"right": (atRight ? renderData.scrollbarWidth : renderData.rowHeaderWidth) + "px"
+				});
+				
+				domStyle.set(this.scrollContainer, "bottom", renderData.hScrollBarEnabled ? (renderData.scrollbarHeight + 1) + "px" : "0");
+				this._configureHScrollDomNodes(renderData.hScrollBarEnabled ? renderData.minSheetWidth + "px" : "100%");				
+												
+				this.hScrollBarW.set("maximum", renderData.minSheetWidth);
+				this.hScrollBarW.set("containerSize", renderData.hScrollPaneWidth);
+				
+			}						
+		},
+		
+		_configureHScrollDomNodes: function(styleWidth){
+			arr.forEach(this._hScrollNodes, function(elt){
+				domStyle.set(elt, "width", styleWidth);
+			}, this);
+		},
+		
+		resize: function(e){
+			this._resizeHandler(e);
+		},
+
+		_resizeHandler: function(e, apply){
+			// summary:
+			//		Refreshes the scroll bars after a resize of the widget.
+			// e: Event
+			//		The resize event (optional)
+			// apply: Boolean
+			//		Whether apply the changes or wait for 100 ms
+			// tags:
+			//		private
+
+			var rd = this.renderData;
+			
+			if(rd == null){				
+				return;
+			}
+			
+					
+			if(apply){
+				
+				var hScrollPaneWidth = domGeometry.getMarginBox(this.grid).w;
+
+				if(rd.hScrollPaneWidth != hScrollPaneWidth){
+					// refresh values
+					rd.hScrollPaneWidth = hScrollPaneWidth;
+					rd.minSheetWidth = this.minColumnWidth < 0 ? -1 : this.minColumnWidth * rd.subColumnCount * rd.columnCount;
+					rd.hScrollBarEnabled = this.minColumnWidth > 0 && domGeometry.getMarginBox(this.grid).w < rd.minSheetWidth;
+				}
+
+				this._configureScrollBar(rd);
+												
+			}else{
+				if(this._resizeTimer != undefined){
+					clearTimeout(this._resizeTimer);
+				}
+				this._resizeTimer = setTimeout(lang.hitch(this, function(){
+					this._resizeHandler(e, true);				
+				}), 100);
+			}
+
 		},
 		
 		_columnHeaderClick: function(e){

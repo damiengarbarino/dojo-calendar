@@ -17,6 +17,10 @@
   left: 0;
   right: 70px;
 }
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarGrid.dojoxCalendarHorizontalScroll {
+  border-right: none;
+  border-left: 1px solid #b5bcc7;
+}
 .claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarGridTable td {
   border-left: 1px solid #b5bcc7;
   border-right: none;
@@ -24,6 +28,10 @@
 .claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarContainer {
   left: 0;
   right: 70px;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarContainer.dojoxCalendarHorizontalScroll {
+  border-right: none;
+  border-left: 1px solid #b5bcc7;
 }
 .claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarEventContainerColumn {
   margin-right: 2px;
@@ -41,6 +49,10 @@
   left: 0;
   right: 70px;
 }
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarColumnHeader.dojoxCalendarHorizontalScroll {
+  border-right: none;
+  border-left: 1px solid #b5bcc7;
+}
 .claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarColumnHeaderTable td {
   border-right: none;
   border-left: 1px solid #cccccc;
@@ -52,6 +64,10 @@
 .claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubColumnHeader {
   right: 70px;
   left: 0;
+}
+.claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubColumnHeader.dojoxCalendarHorizontalScroll {
+  border-right: none;
+  border-left: 1px solid #b5bcc7;
 }
 .claro .dojoxCalendarColumnView.dojoxCalendarColumnViewRtl .dojoxCalendarSubRowHeader {
   left: auto;

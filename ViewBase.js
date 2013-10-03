@@ -805,6 +805,7 @@ define([
 		},
 		
 		_scrollPos: 0,
+		_hscrollPos: 0,
 		
 		getCSSPrefix: function(){
 			// summary:
@@ -823,15 +824,22 @@ define([
 				return "-o-";
 			}
             return "";
-		},				
+		},
 		
-		_setScrollPosition: function(pos){
+		//	_hScrollNodes: DOMNodes[]
+		//		Array of nodes that will be scrolled horizontally.
+		//		Must be set by sub class on buildRendering.
+		
+		_hScrollNodes: null,
+		
+		_setScrollPositionBase: function(pos, vertical){
 			// summary:
 			//		Sets the scroll position (if the view is scrollable), using the scroll method defined.
 			// tags:
 			//		protected
 
-			if(this._scrollPos == pos){
+			if(vertical && this._scrollPos == pos || 
+			   !vertical && this._hScrollPos == pos){
 				return;
 			}
 			
@@ -846,9 +854,16 @@ define([
 				}
 			}
 			
-			var containerSize = domGeometry.getMarginBox(this.scrollContainer);
-			var sheetSize = domGeometry.getMarginBox(this.sheetContainer);
-			var max = sheetSize.h - containerSize.h;
+			var max = 0;
+			if(vertical){
+				var containerSize = domGeometry.getMarginBox(this.scrollContainer);
+				var sheetSize = domGeometry.getMarginBox(this.sheetContainer);
+				max = sheetSize.h - containerSize.h;
+			}else{				
+				var gridSize = domGeometry.getMarginBox(this.grid);
+				var gridTableSize = domGeometry.getMarginBox(this.gridTable);
+				max = gridTableSize.w - gridSize.w;
+			}
 			
 			if(pos < 0){
 				pos = 0;
@@ -856,30 +871,99 @@ define([
 				pos = max;
 			}
 			
-			this._scrollPos = pos;
+			if(vertical){
+				this._scrollPos = pos;
+			}else{
+				this._hScrollPos = pos;
+			}
+			
+			var rtl = !this.isLeftToRight();
 												
-			if(this._domScroll){				
-				this.scrollContainer.scrollTop = pos;				
+			if(this._domScroll){
+				if(vertical){
+					this.scrollContainer.scrollTop = pos;
+				}else{
+					arr.forEach(this._hScrollNodes, function(elt){											
+						domStyle.set(elt, "left", ((rtl?1:-1) * pos) + "px");						
+					}, this);
+				}
+								
 			}else{			
 				if(!this._cssPrefix){
 					this._cssPrefix =  this.getCSSPrefix();
 				}
-				domStyle.set(this.sheetContainer, this._cssPrefix+"transform", "translateY(-"+pos+"px)");
+								
+				var cssProp = this._cssPrefix+"transform";
+				
+				if(vertical){
+					domStyle.set(this.sheetContainer, cssProp, "translateY(-"+pos+"px)");
+				}else{					
+					var css = "translateX("+(rtl?"":"-")+pos+"px)";
+					arr.forEach(this._hScrollNodes, function(elt){						
+						domStyle.set(elt, cssProp, css);						
+					}, this);
+				}
 			}
+		},
+		
+		_setScrollPosition: function(pos){
+			// summary:
+			//		Sets the verical scroll position (if the view is scrollable), using the scroll method defined.
+			// tags:
+			//		protected			
+			this._setScrollPositionBase(pos, true);						
 		},
 		
 		_getScrollPosition: function(){
 			// summary:
-			//		Returns the scroll position (if the view is scrollable), using the scroll method defined.
+			//		Returns the vertical scroll position (if the view is scrollable), using the scroll method defined.
 			// tags:
 			//		protected
 
 			return this._scrollPos; 
 		},
+				
+		_setHScrollPosition: function(pos){
+			// summary:
+			//		Sets the horizontal scroll position (if the view is scrollable), using the scroll method defined.
+			// tags:
+			//		protected
+			
+			this._setScrollPositionBase(pos, false);			
+		},
+		
+		_setHScrollPositionImpl: function(pos, useDom, cssProperty){
+			// summary:
+			//		Sets the horizontal scroll position on sub elements (if the view is scrollable), using the scroll method defined.
+			//		Important: must be implemented by sub classes and not called directly. Use _setHScrollPosition() method instead.
+			// tags:
+			//		private
+			
+			var css = useDom ? null : "translateX(-"+pos+"px)";
+			arr.forEach(this._hScrollNodes, function(elt){
+				if(useDom){
+					elt.scrollLeft = pos;
+					domStyle.set(elt, "left", (-pos) + "px");
+				}else{
+					domStyle.set(elt, cssProp, css);
+				}
+			}, this);
+		},
+		
+		_hScrollPos: 0,
+		
+		_getHScrollPosition: function(){
+			// summary:
+			//		Returns the horizontal scroll position (if the view is scrollable), using the scroll method defined.
+			// tags:
+			//		protected
+
+			return this._hScrollPos; 
+		},
 		
 		scrollView: function(dir){
 			// summary:
-			//		If the view is scrollable, scrolls it to the specified direction.
+			//		If the view is scrollable, scrolls it vertically to the specified direction.
 			// dir: Integer
 			//		Direction of the scroll. Valid values are -1 and 1.
 			// tags:
