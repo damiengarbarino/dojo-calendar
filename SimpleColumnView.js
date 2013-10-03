@@ -1069,11 +1069,13 @@ function(
 					}
 					
 					var colW = (100/subCount) + "%";
-					query(".dojoxCalendarSubHeaderCell", div).forEach(function(div, i){						
+					query(".dojoxCalendarSubHeaderCell", div).forEach(function(div, i){
+						div.className = "dojoxCalendarSubHeaderCell dojoxCalendarSubHeaderLabel";
 						var col = subCount == 1 ? i : Math.floor(i / subCount);
 						subColIdx = subCount == 1 ? 0 : i - col * subCount;					
 						domStyle.set(div, {width: colW, left: ((subColIdx * 100)/subCount)+"%"});
 						domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");
+						domClass.add(div, this.subColumns[subColIdx]);
 						this._setText(div, this.subColumnLabelFunc(this.subColumns[subColIdx]));
 					}, this);
 													
