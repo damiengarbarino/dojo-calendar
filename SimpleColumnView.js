@@ -1633,8 +1633,7 @@ function(
 		},
 		
 		beforeDeactivate: function(){
-			if(this._timeIndicatorTimer){
-				console.log("clear timer");
+			if(this._timeIndicatorTimer){				
 				clearInterval(this._timeIndicatorTimer);
 				this._timeIndicatorTimer = null;
 			}
