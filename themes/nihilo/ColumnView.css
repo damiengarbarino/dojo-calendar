@@ -611,6 +611,9 @@
   top: 33px;
   display: block;
 }
+.nihilo .dojoxCalendarColumnView.subColumns .dojoxCalendarVScrollBar {
+  top: 53px;
+}
 .nihilo .dojoxCalendarColumnView.secondarySheet .dojoxCalendarScrollContainer {
   top: 72px;
 }

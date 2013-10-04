@@ -659,6 +659,9 @@
   top: 33px;
   display: block;
 }
+.claro .dojoxCalendarColumnView.subColumns .dojoxCalendarVScrollBar {
+  top: 53px;
+}
 .claro .dojoxCalendarColumnView.secondarySheet .dojoxCalendarScrollContainer {
   top: 72px;
 }

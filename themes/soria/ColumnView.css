@@ -633,6 +633,9 @@
   top: 33px;
   display: block;
 }
+.soria .dojoxCalendarColumnView.subColumns .dojoxCalendarVScrollBar {
+  top: 53px;
+}
 .soria .dojoxCalendarColumnView.secondarySheet .dojoxCalendarScrollContainer {
   top: 72px;
 }

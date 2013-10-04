@@ -610,6 +610,9 @@
   top: 33px;
   display: block;
 }
+.tundra .dojoxCalendarColumnView.subColumns .dojoxCalendarVScrollBar {
+  top: 53px;
+}
 .tundra .dojoxCalendarColumnView.secondarySheet .dojoxCalendarScrollContainer {
   top: 72px;
 }
