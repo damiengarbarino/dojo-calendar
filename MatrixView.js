@@ -180,7 +180,7 @@ function(
 			this.invalidatingProperties = ["columnCount", "rowCount", "startDate", "horizontalRenderer", "labelRenderer", "expandRenderer",
 			"rowHeaderDatePattern", "columnHeaderLabelLength", "cellHeaderShortPattern", "cellHeaderLongPattern", "percentOverlap", 
 			"verticalGap", "horizontalRendererHeight", "labelRendererHeight", "expandRendererHeight", "cellPaddingTop", 
-			"roundToDay", "itemToRendererKindFunc", "layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items"];
+			"roundToDay", "itemToRendererKindFunc", "layoutPriorityFunction", "formatItemTimeFunc", "textDir"];
 			
 			this._ddRendererList = [];
 			this._ddRendererPool = [];
@@ -418,11 +418,20 @@ function(
 			this._validateProperties();
 
 			var oldRd = this.renderData;
-			this.renderData = this._createRenderData();
+			var rd = this.renderData = this._createRenderData();
 
-			this._createRendering(this.renderData, oldRd);
+			this._createRendering(rd, oldRd);
 			
-			this._layoutRenderers(this.renderData);						
+			if(oldRd == null || 
+				oldRd.columnCount != rd.columnCount || 
+				oldRd.rowCount != rd.rowCount ||
+				oldRd.startTime.getTime() != rd.startTime.getTime()){
+				// query new data
+				this.queryRange(rd.startTime, rd.endTime);
+			}else{
+				// layout using cached data
+				this._layoutRenderers(rd);
+			}										
 		},
 		
 		_createRendering: function(renderData, oldRenderData){

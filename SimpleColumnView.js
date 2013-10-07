@@ -143,7 +143,7 @@ function(
 			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer",
 				"rowHeaderTimePattern", "columnHeaderDatePattern", "timeSlotDuration", "rowHeaderGridSlotDuration", "rowHeaderLabelSlotDuration", 
 				"rowHeaderLabelOffset", "rowHeaderFirstLabelOffset","percentOverlap", "horizontalGap", "scrollBarRTLPosition","itemToRendererKindFunc", 
-				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items", "subColumns"];
+				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "subColumns"];
 			this._columnHeaderHandlers = [];
 		},
 		
@@ -232,7 +232,7 @@ function(
 			renderData.endTime = new renderData.dateClassObj(renderData.dates[renderData.columnCount-1]);
 			renderData.endTime.setHours(renderData.maxHours);
 			
-			if(this.displayedItemsInvalidated){
+			/*if(this.displayedItemsInvalidated){
 				this.displayedItemsInvalidated = false;
 				this._computeVisibleItems(renderData);
 				
@@ -240,7 +240,7 @@ function(
 					this._endItemEditing(null, false);
 				}
 				
-			}else if (this.renderData){
+			}else*/ if (this.renderData){
 				renderData.items = this.renderData.items;
 			}
 			
@@ -284,6 +284,7 @@ function(
             if (v < 1 || v > 60 || isNaN(v)) {
                 this.timeSlotDuration = 15;
             }
+            
 		},
 		
 		_setStartDateAttr: function(value){
@@ -579,14 +580,25 @@ function(
 				return;
 			}
 						
-			this._validateProperties();
+			this._validateProperties();					
 
 			var oldRd = this.renderData;
-			var rd = this._createRenderData();
+			var rd = this._createRenderData();					
+			
 			this.renderData = rd;
 			this._createRendering(rd, oldRd);
-			this._layoutRenderers(rd);
-		},
+		
+			if(oldRd == null || 
+				oldRd.columnCount != rd.columnCount || 
+				oldRd.startTime.getTime() != rd.startTime.getTime()){
+				// query new data
+				this.queryRange(rd.startTime, rd.endTime);
+			}else{
+				// layout using cached data
+				this._layoutRenderers(rd);
+			}
+			
+		},		
 		
 		_createRendering: function(/*Object*/renderData, /*Object*/oldRenderData){
 			// tags:

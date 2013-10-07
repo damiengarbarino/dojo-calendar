@@ -284,7 +284,7 @@ _nls){
 		constructor: function(/*Object*/args){
 			this.views = [];
 			
-			this.invalidatingProperties = ["store", "items", "startDate", "endDate", "views", 
+			this.invalidatingProperties = ["store", "startDate", "endDate", "views", 
 				"date", "minDate", "maxDate", "dateInterval", "dateIntervalSteps", "firstDayOfWeek"];
 			
 			args = args || {};
@@ -579,7 +579,6 @@ _nls){
 			
 			if(index != this._currentViewIndex){
 				if(this.currentView == null){
-					view.set("items", this.items);
 					this.set("currentView", view);			
 				}else{					
 					if(this.items == null || this.items.length == 0){
@@ -587,10 +586,8 @@ _nls){
 						if(this.animateRange && (!has("ie") || has("ie")>8) ){
 							domStyle.set(this.currentView.domNode, "opacity", 0);
 						}
-						view.set("items", this.items);
 					}else{
 						this.currentView = view;
-						view.set("items", this.items);
 						this.set("currentView", view);
 						if(this.animateRange && (!has("ie") || has("ie")>8) ){
 							domStyle.set(this.currentView.domNode, "opacity", 0);
@@ -974,17 +971,14 @@ _nls){
 		//
 		// Store & data
 		//
-		////////////////////////////////////////////////////
+		////////////////////////////////////////////////////		
 		
-		_setItemsAttr: function(value){
-			this._set("items", value);
+		_onDataLoaded: function(items){
 			if(this.currentView){
-				this.currentView.set("items", value);
-				if(!this._isEditing){
-					this.currentView.invalidateRendering();
-				}
+				this.currentView.onDataLoaded(items);
 			}
 		},
+		
 		
 		/////////////////////////////////////////////////////
 		//

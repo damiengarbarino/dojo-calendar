@@ -135,7 +135,7 @@ function(
 		constructor: function(){
 			this.invalidatingProperties = ["columnCount", "startDate", "daySize", "percentOverlap", "verticalRenderer",
 				"columnHeaderDatePattern", "horizontalGap", "scrollBarRTLPosition", "itemToRendererKindFunc", 
-				"layoutPriorityFunction", "textDir", "items", "showCellLabel", "showHiddenItems"];
+				"layoutPriorityFunction", "textDir", "showCellLabel", "showHiddenItems"];
 			this._columnHeaderHandlers = [];
 		},
 		
@@ -517,7 +517,16 @@ function(
 			var rd = this._createRenderData();
 			this.renderData = rd;			
 			this._createRendering(rd, oldRd);
-			this._layoutRenderers(rd);
+			if(oldRd == null || 
+				oldRd.columnCount != rd.columnCount || 
+				oldRd.startTime.getTime() != rd.startTime.getTime()){
+				// query new data
+				this.queryRange(rd.startTime, rd.endTime);
+			}else{
+				// layout using cached data
+				this._layoutRenderers(rd);
+			}
+
 		},
 		
 		_createRendering: function(/*Object*/renderData, /*Object*/oldRenderData){

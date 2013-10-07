@@ -174,6 +174,14 @@ function(
 			}
 		},
 		
+		_onDataLoaded: function(items){
+			//this._set("items", items);
+			this.inherited(arguments);			
+			if(this.secondarySheet){
+				this.secondarySheet.onDataLoaded(items);
+			}
+		},
+		
 		_setStartDateAttr: function(value){
 			this.inherited(arguments);
 			if(this.secondarySheet){

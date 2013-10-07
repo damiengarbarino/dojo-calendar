@@ -237,33 +237,78 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			}
 		},
 		
-		_setStoreAttr: function(value){
-			this.displayedItemsInvalidated = true;
-			var r;
-
-			if(this._observeHandler){
-				this._observeHandler.remove();
-				this._observeHandler = null;
-			}
-			if(value){				
-				var results = value.query(this.query, this.queryOptions);
+		timeInterval: null,
+		
+		queryFunc: function(item){
+			// summary:
+			//		Default query function to filter out the data items 
+			//		that are not in the displayed range.
+			var renderItem = item;
+			if(!renderItem.startTime instanceof Date){ // trivial use case
+				renderItem = this.itemToRenderItem(item, this.store);
+			}			
+			return 
+				renderItem.startTime.getTime() >= timeInterval[0].getTime() &&
+				renderItem.endTime.getTime() <= timeInterval[1].getTime();			
+		},
+		
+		queryRange: function(startTime, endTime){
+			// summary:
+			//		Queries the store on the queried range.
+			//	startTime: Date
+			//		Start of the queried time range.
+			//	endTime: Date
+			//		End of the queried time range.
+			
+			var store = this.get("store");
+			
+			this.timeInterval = [startTime, endTime];
+			
+			if(store){
+											
+				var opts = lang.mixin({}, this.queryOptions);
+				
+				lang.mixin(opts, {
+					startTime: startTime,
+					endTime: endTime
+				});
+				
+				if(this._observeHandler){
+					this._observeHandler.remove();
+					this._observeHandler = null;
+				}
+				
+				var results = store.query(this.query ? this.query : this.queryFunc, opts);
 				if(results.observe){
 					// user asked us to observe the store
 					this._observeHandler = results.observe(lang.hitch(this, this._updateItems), true);
-				}				
+				}
+				
 				results = results.map(lang.hitch(this, function(item){
-					var renderItem = this.itemToRenderItem(item, value);
+					var renderItem = this.itemToRenderItem(item, store);
 					// keep a reference on the store data item.
 					renderItem._item = item;
 					return renderItem;
 				}));
-				r = when(results, lang.hitch(this, this._initItems));
-			}else{
-				// we remove the store
-				r = this._initItems([]);
+				
+				this.onStoreQuery(when(results, lang.hitch(this, this.onDataLoaded)));
 			}
-			this._set("store", value);
-			return r;
+			
+		},
+		
+		onStoreQuery: function(promise){
+			// summary:
+			//		Event dispatched when a query is sent.
+			// promise:
+			//		The promise returned by the store query.
+			//		It can be used to be notified of store errors.
+		},
+		
+		onDataLoaded: function(items){
+			// summary:			
+			//		Event dispatched when the store has loaded the data (result of the query).
+			// items: Object[]
+			//		The data items loaded by the store.
 		},
 		
 		_getItemStoreStateObj: function(/*Object*/item){

@@ -935,6 +935,15 @@ define([
 			this._layoutRenderers(this.renderData);
 		},
 		
+		onDataLoaded: function(items){
+			// summary:			
+			//		Event dispatched when the store has loaded the data.
+			if(this.renderData){
+				this.renderData.items = this.items = items;
+				this._layoutRenderers(this.renderData);
+			}
+		},
+		
 		resize: function(){
 			//this.invalidateRendering();
 		},
