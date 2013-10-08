@@ -174,7 +174,7 @@ function(
 			}
 		},
 		
-		_onDataLoaded: function(items){
+		onDataLoaded: function(items){
 			//this._set("items", items);
 			this.inherited(arguments);			
 			if(this.secondarySheet){
@@ -259,12 +259,10 @@ function(
 			}
 		},
 		
-		_refreshItemsRendering: function(){
+		invalidateLayout: function(){
 			this.inherited(arguments);
-			if(this.secondarySheet){
-				var rd = this.secondarySheet.renderData;
-				this.secondarySheet._computeVisibleItems(rd);
-				this.secondarySheet._layoutRenderers(rd);
+			if(this.secondarySheet){							
+				this.secondarySheet.invalidateLayout();
 			}			
 		},
 		

@@ -150,9 +150,6 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			return items;
 		},
 		
-		_refreshItemsRendering: function(renderData){
-		},
-		
 		_updateItems: function(object, previousIndex, newIndex){
 			// as soon as we add a item or remove one layout might change,
 			// let's make that the default
@@ -160,10 +157,12 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			// tags:
 			//		private
 			var layoutCanChange = true;
+			var store = this.get("store");
 			var oldItem = null;
-			var newItem = this.itemToRenderItem(object, this.store);
+			var newItem = this.itemToRenderItem(object, store);
 			// keep a reference on the store data item. 
 			newItem._item = object;
+			
 			
 			// set the item as in the store
 			
@@ -229,7 +228,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			
 			if(!this._isEditing){
 				if(layoutCanChange){				
-					this._refreshItemsRendering();			
+					this.invalidateLayout();			
 				}else{
 					// just update the item
 					this.updateRenderers(oldItem);

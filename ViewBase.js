@@ -923,12 +923,6 @@ define([
 			this.displayedItemsInvalidated = true;
 		},
 
-		_refreshItemsRendering: function(){
-			var rd = this.renderData;
-			this._computeVisibleItems(rd);
-			this._layoutRenderers(rd);
-		},
-		
 		invalidateLayout: function(){
 			// summary:
 			//		Triggers a re-layout of the renderers.
@@ -1774,7 +1768,7 @@ define([
 								
 				var store = this.get("store");
 											
-				if(!newItem || store == null){
+				if(!newItem || store == null || !this.renderData){
 					return;
 				}
 				
@@ -1793,12 +1787,8 @@ define([
 				this._setItemStoreState(newItem, "unstored");
 				
 				// add the new temporary item to the displayed list and force view refresh
-				var owner = this._getTopOwner();
-				var items = owner.get("items");
-				
-				owner.set("items", items ? items.concat([newRenderItem]) : [newRenderItem]);
-								
-				this._refreshItemsRendering();
+				var items = this.renderData.items;
+				this._getTopOwner().onDataLoaded(items ? items.concat([newRenderItem]) : [newRenderItem]);															
 				
 				// renderer created in _refreshItemsRenderering()
 				var renderers = this.getRenderers(newItem);				

@@ -372,9 +372,9 @@ _nls){
 			this._validateProperties();
 		},
 		
-		_refreshItemsRendering: function(){
+		invalidateLayout: function(){
 			if(this.currentView){
-				this.currentView._refreshItemsRendering();
+				this.currentView.invalidateLayout();
 			}
 		},
 		
@@ -973,7 +973,8 @@ _nls){
 		//
 		////////////////////////////////////////////////////		
 		
-		_onDataLoaded: function(items){
+		onDataLoaded: function(items){
+			this.items = items;
 			if(this.currentView){
 				this.currentView.onDataLoaded(items);
 			}

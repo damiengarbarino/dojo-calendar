@@ -422,10 +422,11 @@ function(
 
 			this._createRendering(rd, oldRd);
 			
-			if(oldRd == null || 
+			if((this.owner == null || this.owner == this._getTopOwner()) && 
+				(oldRd == null || 
 				oldRd.columnCount != rd.columnCount || 
 				oldRd.rowCount != rd.rowCount ||
-				oldRd.startTime.getTime() != rd.startTime.getTime()){
+				oldRd.startTime.getTime() != rd.startTime.getTime())){
 				// query new data
 				this.queryRange(rd.startTime, rd.endTime);
 			}else{
