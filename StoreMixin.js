@@ -259,6 +259,11 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			//	endTime: Date
 			//		End of the queried time range.
 			
+			if(this.owner){
+				this.owner.queryRange(startTime, endTime);
+				return;
+			}					
+			
 			var store = this.get("store");
 			
 			this.timeInterval = [startTime, endTime];
@@ -290,9 +295,11 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 					return renderItem;
 				}));
 				
-				this.onStoreQuery(when(results, lang.hitch(this, this.onDataLoaded)));
-			}
-			
+				this.onStoreQuery(when(results, lang.hitch(this, 
+					function(items){
+						this.onDataLoaded(items);
+					})));
+			}						
 		},
 		
 		onStoreQuery: function(promise){

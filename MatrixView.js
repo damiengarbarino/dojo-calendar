@@ -407,6 +407,8 @@ function(
 		// HTML structure management
 		//
 		///////////////////////////////////////////
+		
+		_dataInvalidateProperties: ["columnCount", "rowCount"],
 	
 		refreshRendering: function(){
 			this.inherited(arguments);
@@ -422,17 +424,7 @@ function(
 
 			this._createRendering(rd, oldRd);
 			
-			if((this.owner == null || this.owner == this._getTopOwner()) && 
-				(oldRd == null || 
-				oldRd.columnCount != rd.columnCount || 
-				oldRd.rowCount != rd.rowCount ||
-				oldRd.startTime.getTime() != rd.startTime.getTime())){
-				// query new data
-				this.queryRange(rd.startTime, rd.endTime);
-			}else{
-				// layout using cached data
-				this._layoutRenderers(rd);
-			}										
+			this._validateData(rd, oldRd);
 		},
 		
 		_createRendering: function(renderData, oldRenderData){

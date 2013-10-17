@@ -929,6 +929,62 @@ define([
 			this._layoutRenderers(this.renderData);
 		},
 		
+		invalidateData: function(refresh){
+			// summary:
+			//		Triggers a store query and optionnaly refresh of the view directly or wait next refresh.
+			//	refresh: Boolean
+			//		Whether refresh directly or wait for an automatic refresh (property change for example).
+			this._dataInvalidated = true;
+			if(refresh){
+				this.refreshRendering();
+			}
+		},
+		
+		_validateData: function(rd, oldRd){
+			
+			// summary:
+			//		Determines if data needs to be queried to the store. 
+			//		If yes, renderers will be laid out when data is loaded.
+			//		Otherwise, the cached data is used to layout the renderer directly.
+			// oldRd: Object
+			//		The previous render data object, if any.
+			//	rd: Object
+			//		The current render data.
+			
+			if(this.owner != null && this.owner != this._getTopOwner()){
+				// dependent views are updated by their super view.
+				return;
+			}
+			
+			var refreshData = oldRd == null || this._dataInvalidated;
+			
+			// test properties that makes the displayed time range change.
+			
+			if(!refreshData){
+				refreshData = oldRd.startTime.getTime() != rd.startTime.getTime();
+			}
+			
+			if(!refreshData){
+				for(var i=0; i<this._dataInvalidateProperties.length; i++){
+					var p = this._dataInvalidateProperties[i];
+					refresh = oldRd[p] != rd[p];
+					if(refresh){
+						break;
+					}
+				}
+			}
+			
+			if(refreshData){
+				// query new data
+				this._dataInvalidated = false;
+				this.queryRange(rd.startTime, rd.endTime);
+			}else{
+				// layout using cached data
+				this._layoutRenderers(rd);
+			}
+			
+		},
+		
 		onDataLoaded: function(items){
 			// summary:			
 			//		Event dispatched when the store has loaded the data.

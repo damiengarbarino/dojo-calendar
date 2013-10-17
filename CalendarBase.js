@@ -574,7 +574,9 @@ _nls){
 			// tags:
 			//		protected
 			
+			view.invalidateData();
 			this._configureView(view, index, timeInterval, duration);
+			
 			this.onViewConfigurationChange(view);
 			
 			if(index != this._currentViewIndex){

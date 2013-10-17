@@ -504,7 +504,9 @@ function(
 		//
 		// HTML structure management
 		//
-		//////////////////////////////////////////		
+		//////////////////////////////////////////	
+		
+		_dataInvalidateProperties: ["columnCount"],
 	
 		refreshRendering: function(){
 			if(!this._initialized){
@@ -517,15 +519,7 @@ function(
 			var rd = this._createRenderData();
 			this.renderData = rd;			
 			this._createRendering(rd, oldRd);
-			if(oldRd == null || 
-				oldRd.columnCount != rd.columnCount || 
-				oldRd.startTime.getTime() != rd.startTime.getTime()){
-				// query new data
-				this.queryRange(rd.startTime, rd.endTime);
-			}else{
-				// layout using cached data
-				this._layoutRenderers(rd);
-			}
+			this._validateData(rd, oldRd);
 
 		},
 		
