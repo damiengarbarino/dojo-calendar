@@ -443,14 +443,11 @@ function(
 			}
 			
 			if(oldRenderData){
-				// make sure to have correct rowCount and columnCount
+				// make sure to have correct rowCount
 				if(this.itemContainerTable){
-					var rows = query(".dojoxCalendarItemContainerRow", this.itemContainerTable);
-					var cols = query(".dojoxCalendarContainerRow", rows[0]);
-					oldRenderData.columnCount = cols.length;
+					var rows = query(".dojoxCalendarItemContainerRow", this.itemContainerTable);									
 					oldRenderData.rowCount = rows.length;										
-				}
-				
+				}				
 			}
 			
 			this._buildColumnHeader(renderData, oldRenderData);
