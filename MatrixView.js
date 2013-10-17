@@ -433,14 +433,11 @@ function(
 			}
 			
 			if(oldRenderData){
-				// make sure to have correct rowCount and columnCount
+				// make sure to have correct rowCount
 				if(this.itemContainerTable){
-					var rows = query(".dojoxCalendarItemContainerRow", this.itemContainerTable);
-					var cols = query(".dojoxCalendarContainerRow", rows[0]);
-					oldRenderData.columnCount = cols.length;
-					oldRenderData.rowCount = rows.length;										
+					var rows = query(".dojoxCalendarItemContainerRow", this.itemContainerTable);					
+					oldRenderData.rowCount = rows.length;
 				}
-				
 			}
 			
 			this._buildColumnHeader(renderData, oldRenderData);
@@ -719,7 +716,7 @@ function(
 			var rowDiff = renderData.rowCount - currentTR.length;
 			var addRows = rowDiff > 0;
 			
-			var colDiff  = renderData.columnCount - (currentTR ? query("td", currentTR[0]).length : 0);
+			var colDiff  = renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0);
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
