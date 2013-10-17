@@ -728,8 +728,8 @@ function(
 
 			var rowDiff = renderData.rowCount - currentTR.length;
 			var addRows = rowDiff > 0;
-			
-			var colDiff  = renderData.columnCount - (oldRenderData ? oldRenderData.columnCount : 0);
+						
+			var colDiff  = renderData.columnCount - (currentTR ? query("td", currentTR[0]).length : 0);
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
