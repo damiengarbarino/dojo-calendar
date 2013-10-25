@@ -957,8 +957,9 @@ function(
 			renderData.cells = rows;
 		},
 		
-		resize: function(e){
-			this._resizeHandler(e);
+		resize: function(changeSize){
+			this.inherited(arguments);
+			this._resizeHandler(null, false);
 		},
 
 		_resizeHandler: function(e, apply){
