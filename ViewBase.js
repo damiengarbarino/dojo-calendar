@@ -198,11 +198,14 @@ define([
 		},
 		
 		
-		resize: function(){
+		resize: function(changeSize){
 			// summary:
 			//		Function to call when the view is resized. 
 			//		If the view is in a Dijit container or in a Dojo mobile container, it will be automatically called.
 			//		On other use cases, this method must called when the window is resized and/or when the orientation has changed.
+			if(changeSize){
+				domGeometry.setMarginBox(this.domNode, changeSize);
+			}
 		},
 		
 		_getTopOwner: function(){
@@ -857,10 +860,6 @@ define([
 			this._layoutRenderers(this.renderData);
 		},
 		
-		resize: function(){
-			//this.invalidateRendering();
-		},
-
 		////////////////////////////////////////////////////////
 		//
 		// Layout

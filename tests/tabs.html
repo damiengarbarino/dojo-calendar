@@ -35,7 +35,7 @@
 
 			require(["dojo/ready", "dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/array", "dojo/_base/fx", "dojo/dom-class", "dojo/on", 
 			         "dojo/date/locale", "dojo/parser",	"dojo/dom", "dojo/dom-construct",	"dojo/store/Memory", 
-			         "dojo/store/Observable",	"dojox/calendar/Calendar", "dijit/TitlePane", 
+			         "dojo/store/Observable",	"dojox/calendar/Calendar", "dojox/calendar/ColumnView", "dijit/TitlePane", 
 			         "dijit/layout/TabContainer", "dijit/layout/ContentPane"],
 
 				function(ready, lang, has, arr, fx, domClass, on, locale, parser, dom, domConstruct,
@@ -104,10 +104,11 @@
 				<div data-dojo-type="dijit/layout/ContentPane" title="My first tab" selected="true">
 					Lorem ipsum and all around...
 				</div>
-			    <div data-dojo-type="dijit.layout.ContentPane"  title="calendar">
-			        <div data-dojo-id="calendar" data-dojo-type="dojox.calendar.Calendar" 
-						style="position:absolute;left:10px;top:10px;bottom:10px;right:10px">
-					</div>					
+			    <div data-dojo-type="dijit.layout.ContentPane"  title="Calendar">
+			        <div data-dojo-id="calendar" data-dojo-type="dojox.calendar.Calendar"></div>					
+			    </div>
+			    <div data-dojo-type="dijit.layout.ContentPane"  title="Columns View">
+			        <div data-dojo-id="colview" data-dojo-type="dojox.calendar.ColumnView"></div>					
 			    </div>
 		    </div>		    
 		</div>																		

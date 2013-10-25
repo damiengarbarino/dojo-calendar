@@ -9,6 +9,7 @@ define([
 "dojo/dom-class", 
 "dojo/dom-style",
 "dojo/dom-construct", 
+"dojo/dom-geometry",
 "dojo/date", 
 "dojo/date/locale", 
 "dojo/_base/fx", 
@@ -33,6 +34,7 @@ dom,
 domClass, 
 domStyle,
 domConstruct, 
+domGeometry,
 date, 
 locale,
 coreFx,
@@ -360,9 +362,13 @@ _nls){
 			}
 		},
 		
-		resize: function(){
+		resize: function(changeSize){
+			if(changeSize){
+				domGeometry.setMarginBox(this.domNode, changeSize);
+			}
 			if(this.currentView){
-				this.currentView.resize();
+				// must not pass the size, children are sized depending on the parent by CSS.
+				this.currentView.resize();  
 			}
 		},
 				
