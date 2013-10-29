@@ -228,8 +228,7 @@ function(
 				
 				while(d.getMonth() == currentMonth){							
 					dates.push(d);
-					d = rd.dateModule.add(d, "day", 1);
-					d = this.floorToDay(d, false, rd);					
+					d = this.addAndFloor(d, "day", 1);									
 				}
 				
 				currentMonth = d.getMonth();

@@ -211,75 +211,74 @@ function(
 				
 		_createRenderData: function(){
 			
-			var renderData = {};
+			var rd = {};
 
-			renderData.minHours = this.get("minHours");		
-			renderData.maxHours = this.get("maxHours");
-			renderData.hourSize = this.get("hourSize");
-			renderData.hourCount = renderData.maxHours - renderData.minHours;		
-			renderData.slotDuration = this.get("timeSlotDuration"); // must be consistent with previous statement
-			renderData.rowHeaderGridSlotDuration = this.get("rowHeaderGridSlotDuration");
-			renderData.slotSize = Math.ceil(renderData.hourSize / (60 / renderData.slotDuration));
-			renderData.hourSize = renderData.slotSize * (60 / renderData.slotDuration);			
-			renderData.sheetHeight = renderData.hourSize * renderData.hourCount;
+			rd.minHours = this.get("minHours");		
+			rd.maxHours = this.get("maxHours");
+			rd.hourSize = this.get("hourSize");
+			rd.hourCount = rd.maxHours - rd.minHours;		
+			rd.slotDuration = this.get("timeSlotDuration"); // must be consistent with previous statement
+			rd.rowHeaderGridSlotDuration = this.get("rowHeaderGridSlotDuration");
+			rd.slotSize = Math.ceil(rd.hourSize / (60 / rd.slotDuration));
+			rd.hourSize = rd.slotSize * (60 / rd.slotDuration);			
+			rd.sheetHeight = rd.hourSize * rd.hourCount;
 			
 			if(!this._rowHeaderWidth){
 				this._rowHeaderWidth = domGeometry.getMarginBox(this.rowHeader).w;
 			}			
-			renderData.rowHeaderWidth = this._rowHeaderWidth;
+			rd.rowHeaderWidth = this._rowHeaderWidth;
 			
 			var sbMetrics = metrics.getScrollbar();
-			renderData.scrollbarWidth = sbMetrics.w + 1;
-			renderData.scrollbarHeight = sbMetrics.h + 1;
+			rd.scrollbarWidth = sbMetrics.w + 1;
+			rd.scrollbarHeight = sbMetrics.h + 1;
 			
-			renderData.dateLocaleModule = this.dateLocaleModule;
-			renderData.dateClassObj = this.dateClassObj;
-			renderData.dateModule = this.dateModule; // arithmetics on Dates
+			rd.dateLocaleModule = this.dateLocaleModule;
+			rd.dateClassObj = this.dateClassObj;
+			rd.dateModule = this.dateModule; // arithmetics on Dates
 					
-			renderData.dates = [];
+			rd.dates = [];
 						
-			renderData.columnCount = this.get("columnCount");
-			renderData.subColumns = this.get("subColumns");
-			renderData.subColumnCount =  renderData.subColumns ? renderData.subColumns.length : 1;
+			rd.columnCount = this.get("columnCount");
+			rd.subColumns = this.get("subColumns");
+			rd.subColumnCount =  rd.subColumns ? rd.subColumns.length : 1;
 			
-			renderData.hScrollPaneWidth = domGeometry.getMarginBox(this.grid).w;
-			renderData.minSheetWidth = this.minColumnWidth < 0 ? -1 : this.minColumnWidth * renderData.subColumnCount * renderData.columnCount;
-			renderData.hScrollBarEnabled = this.minColumnWidth > 0 && renderData.hScrollPaneWidth < renderData.minSheetWidth;
+			rd.hScrollPaneWidth = domGeometry.getMarginBox(this.grid).w;
+			rd.minSheetWidth = this.minColumnWidth < 0 ? -1 : this.minColumnWidth * rd.subColumnCount * rd.columnCount;
+			rd.hScrollBarEnabled = this.minColumnWidth > 0 && rd.hScrollPaneWidth < rd.minSheetWidth;
 
 			var d = this.get("startDate");
 		
 			if (d == null){
-				d = new renderData.dateClassObj();
+				d = new rd.dateClassObj();
 			}
 
-			d = this.floorToDay(d, false, renderData);
+			d = this.floorToDay(d, false, rd);
 			
 			this.startDate = d;
 			
-			for(var col = 0; col < renderData.columnCount ; col++){
-				renderData.dates.push(d);
-				d = renderData.dateModule.add(d, "day", 1);
-				d = this.floorToDay(d, false, renderData);
+			for(var col = 0; col < rd.columnCount ; col++){
+				rd.dates.push(d);
+				d = this.addAndFloor(d, "day", 1);			
 			}
 
-			renderData.startTime = new renderData.dateClassObj(renderData.dates[0]);
-			renderData.startTime.setHours(renderData.minHours);
-			renderData.endTime = new renderData.dateClassObj(renderData.dates[renderData.columnCount-1]);
-			renderData.endTime.setHours(renderData.maxHours);
+			rd.startTime = new rd.dateClassObj(rd.dates[0]);
+			rd.startTime.setHours(rd.minHours);
+			rd.endTime = new rd.dateClassObj(rd.dates[rd.columnCount-1]);
+			rd.endTime.setHours(rd.maxHours);
 			
 			if(this.displayedItemsInvalidated){
 				this.displayedItemsInvalidated = false;
-				this._computeVisibleItems(renderData);
+				this._computeVisibleItems(rd);
 				
 				if(this._isEditing){					
 					this._endItemEditing(null, false);
 				}
 				
-			}else if (this.renderData){
-				renderData.items = this.renderData.items;
+			}else if (this.rd){
+				rd.items = this.rd.items;
 			}
 			
-			return renderData;
+			return rd;
 		},
 		
 		_validateProperties: function() {

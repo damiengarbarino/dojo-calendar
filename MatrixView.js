@@ -231,8 +231,7 @@ function(
 				rd.dates.push([]);
 				for(var col = 0; col < rd.columnCount ; col++){
 					rd.dates[row].push(d);
-					d = rd.dateModule.add(d, "day", 1);
-					d = this.floorToDay(d, false, rd);					
+					d = this.addAndFloor(d, "day", 1);									
 				}
 			}
 

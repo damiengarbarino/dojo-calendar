@@ -338,6 +338,18 @@ define([
 				datePattern: "w"});
 		},
 		
+		addAndFloor: function(date, unit, steps){
+			// date must be floored!!
+			// unit >= day
+			var d = this.dateModule.add(date, unit, steps);
+			if(d.getHours() == 23){
+				d = this.dateModule.add(d, "hour", 2); // go to 1am
+			}else{
+				d = timeUtil.floorToDay(d, true, this.dateClassObj);
+			}										
+			return d;
+		},
+		
 		floorToDay: function(date, reuse){
 			// summary:
 			//		Floors the specified date to the start of day.
@@ -345,8 +357,8 @@ define([
 			//		The date to floor.
 			// reuse: Boolean
 			//		Whether use the specified instance or create a new one. Default is false.
-			// returns: Date
-			return timeUtil.floorToDay(date, reuse, this.dateClassObj);
+			// returns: Date			
+			return timeUtil.floorToDay(date, reuse, this.dateClassObj);			
 		},
 		
 		floorToMonth: function(date, reuse){
@@ -1168,8 +1180,7 @@ define([
 			
 			while(cal.compare(startDate, renderData.endTime) == -1 && items.length > 0){
 			
-				endDate = cal.add(startDate, this._layoutUnit, this._layoutStep);
-				endDate = this.floorToDay(endDate, true, renderData);
+				endDate = this.addAndFloor(startDate, this._layoutUnit, this._layoutStep);											
 				
 				var endTime = lang.clone(endDate);
 				
