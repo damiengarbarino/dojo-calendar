@@ -266,16 +266,12 @@ function(
 			rd.endTime = new rd.dateClassObj(rd.dates[rd.columnCount-1]);
 			rd.endTime.setHours(rd.maxHours);
 			
-			if(this.displayedItemsInvalidated){
-				this.displayedItemsInvalidated = false;
+			if(this.displayedItemsInvalidated && !this._isEditing){
+				 // while editing in no live layout we must not to recompute items (duplicate renderers)
 				this._computeVisibleItems(rd);
-				
-				if(this._isEditing){					
-					this._endItemEditing(null, false);
-				}
-				
-			}else if (this.rd){
-				rd.items = this.rd.items;
+								
+			}else if (this.renderData){
+				rd.items = this.renderData.items;
 			}
 			
 			return rd;
