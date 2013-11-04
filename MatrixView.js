@@ -237,18 +237,14 @@ function(
 			}
 
 			rd.startTime = this.newDate(rd.dates[0][0], rd);
-			rd.endTime = this.newDate(rd.dates[rd.rowCount-1][rd.columnCount-1], rd);
+			rd.endTime = this.newDate(rd.dates[rd.rowCount-1][rd.columnCount-1], rd);			
 			rd.endTime = rd.dateModule.add(rd.endTime, "day", 1);
 			rd.endTime = this.floorToDay(rd.endTime, true);
 			
-			if(this.displayedItemsInvalidated){
+			if(this.displayedItemsInvalidated && !this._isEditing){
 				this.displayedItemsInvalidated = false;
 				this._computeVisibleItems(rd);
-				
-				if(this._isEditing){
-					this._endItemEditing(null, false);
-				}
-				
+								
 			}else if(this.renderData){
 				rd.items = this.renderData.items;
 			}

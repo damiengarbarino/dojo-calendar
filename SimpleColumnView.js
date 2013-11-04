@@ -224,14 +224,10 @@ function(
 			renderData.endTime = new renderData.dateClassObj(renderData.dates[renderData.columnCount-1]);
 			renderData.endTime.setHours(renderData.maxHours);
 			
-			if(this.displayedItemsInvalidated){
-				this.displayedItemsInvalidated = false;
+			if(this.displayedItemsInvalidated && !this._isEditing){
+				 // while editing in no live layout we must not to recompute items (duplicate renderers)
 				this._computeVisibleItems(renderData);
-				
-				if(this._isEditing){					
-					this._endItemEditing(null, false);
-				}
-				
+								
 			}else if (this.renderData){
 				renderData.items = this.renderData.items;
 			}
