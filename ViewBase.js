@@ -1712,6 +1712,7 @@ define([
 					if(renderer){
 						// trigger editing
 						this._onRendererHandleMouseDown(e, renderer.renderer, "resizeEnd");
+						this._startItemEditing(newRenderItem, "mouse");	
 					}					
 				}
 			}
