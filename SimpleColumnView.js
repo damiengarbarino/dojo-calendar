@@ -1586,10 +1586,11 @@ function(
 		showTimeIndicator: true,
 
 		// timeIndicatorRefreshInterval: Integer
-		//		Maximal interval between two refreshes of time indicator.
+		//		Maximal interval between two refreshes of time indicator, in milliseconds.
 		timeIndicatorRefreshInterval: 60000,
 		
 		_setShowTimeIndicatorAttr: function(value){
+			this._set("showTimeIndicator", value);
 			this._layoutTimeIndicator(this.renderData);
 		},
 		
@@ -1602,7 +1603,9 @@ function(
 				
 				var now = new Date();
 				
-				var visible = this.isOverlapping(renderData, renderData.startTime, renderData.endTime, now, now);
+				var visible = this.isOverlapping(renderData, renderData.startTime, renderData.endTime, now, now) &&
+				 	now.getHours() >= this.get("minHours") && 
+					(now.getHours()*60+now.getMinutes() < this.get("maxHours")*60);
 															
 				if(visible){
 					
@@ -1613,14 +1616,18 @@ function(
 					
 					var node = this._timeIndicator;
 					
-					var offset = this.dateModule.difference(renderData.startTime, now, "day");
-													
+					for(var column=0; column<this.renderData.columnCount; column++){
+						if(this.isSameDay(now, this.renderData.dates[column])){
+							break;
+						}
+					}
+					
 					var top = this.computeProjectionOnDate(renderData, this.floorToDay(now), now, renderData.sheetHeight);
 					
 					if(top != renderData.sheetHeight){
 						
 						domStyle.set(node, {top: top+"px", display: "block"});
-						var parentNode = renderData.cells[offset*renderData.subColumnCount].parentNode.parentNode;
+						var parentNode = renderData.cells[column*renderData.subColumnCount].parentNode.parentNode;
 						if(parentNode != node.parentNode){
 							if(node.parentNode != null){
 								node.parentNode.removeChild(node);
