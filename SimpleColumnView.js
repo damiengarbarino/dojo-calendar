@@ -1613,7 +1613,7 @@ function(
 					
 					var node = this._timeIndicator;
 					
-					var offset = this.dateModule.difference(renderData.startTime, now, "day");
+					var offset = Math.floor(this.dateModule.difference(renderData.startTime, now, "hour") / 24);
 													
 					var top = this.computeProjectionOnDate(renderData, this.floorToDay(now), now, renderData.sheetHeight);
 					
