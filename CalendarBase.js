@@ -542,13 +542,12 @@ _nls){
 					view.afterActivate();
 				}
 			}else{
-				if(this.currentView){
-					oldView.beforeDeactivate();
-					
+				if(oldView){
+					oldView.beforeDeactivate();					
 				}
 				view.beforeActivate();
 				this._applyViewChange(view, index, timeInterval, duration);
-				if(this.currentView){
+				if(oldView){
 					oldView.afterDeactivate();
 				}
 				view.afterActivate();
