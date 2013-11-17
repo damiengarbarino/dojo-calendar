@@ -295,14 +295,14 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 					return renderItem;
 				}));
 				
-				this.onStoreQuery(when(results, lang.hitch(this, 
+				this.onDataQuery(when(results, lang.hitch(this, 
 					function(items){
 						this.onDataLoaded(items);
 					})));
 			}						
 		},
 		
-		onStoreQuery: function(promise){
+		onDataQuery: function(promise){
 			// summary:
 			//		Event dispatched when a query is sent.
 			// promise:
