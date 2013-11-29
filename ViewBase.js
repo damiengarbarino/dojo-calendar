@@ -2511,19 +2511,19 @@ define([
 			// tags:
 			//		private
 			var p = this._edProps;
-			var cal = this.renderData.dateModule;
+			
 			var item = p.editedItem;
 			var dates = e.dates;
-								
-			var refTime = this.newDate(p.editKind == "resizeEnd" ? item.endTime : item.startTime);
 			
-			// difference between the clicked position and the start/end time
-			// to be applied when resizing or moving.
-			p.deltaFix = -cal.difference(refTime, dates[0], "millisecond");
+			p.editingTimeFrom = [];			
+			p.editingTimeFrom[0] = dates[0];			
+			
+			p.editingItemRefTime = [];
+			p.editingItemRefTime[0] = this.newDate(p.editKind == "resizeEnd" ? item.endTime : item.startTime);
 			
 			if (p.editKind == "resizeBoth"){
-				refTime = this.newDate(item.endTime);
-				p.deltaFix2 = -cal.difference(refTime, dates[1], "millisecond");
+				p.editingTimeFrom[1] = dates[1];
+				p.editingItemRefTime[1] = this.newDate(item.endTime);				
 			}		
 			
 			var cal = this.renderData.dateModule;
@@ -2590,13 +2590,12 @@ define([
 			// tags:
 			//		private
 
+			var cal = this.renderData.dateModule;
 			var p = this._edProps;
-			
-			times[0] = this._waDojoxAddIssue(times[0], "millisecond", p.deltaFix);
-			
-			if(editKind == "resizeBoth"){
-				times[1] = this._waDojoxAddIssue(times[1], "millisecond", p.deltaFix2); 
-			}
+			if(editKind == "move"){
+				var diff = cal.difference(p.editingTimeFrom[0], times[0], "millisecond");
+				times[0] = this._waDojoxAddIssue(p.editingItemRefTime[0], "millisecond", diff);
+			}					
 			return times;
 		},
 		
