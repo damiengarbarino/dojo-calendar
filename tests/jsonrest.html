@@ -87,8 +87,23 @@
 							return item;							
 						};
 						
-						calendar.set("createOnGridClick", true);
-						calendar.set("createItemFunc", createItem);		
+						var interactive = false;
+						
+						if(interactive){
+							calendar.set("createOnGridClick", true);
+							calendar.set("createItemFunc", createItem);
+						}else{
+						
+							var count = 0;
+							calendar.on("gridDoubleClick", function(e){
+								var item = createItem(calendar.columnView, e.date, e.triggerEvent);	
+								if(item){
+									// no id set here and not temporary id in options.
+									calendar.get("store").add(item, {temporaryId:"toto"});
+								}
+								
+							});
+						}
 																		
 						// Hide loading panel when application is ready
 						fx.fadeOut({

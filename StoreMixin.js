@@ -192,22 +192,24 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 				var tempId = object.temporaryId;
 				if(tempId){
 					// this item had a temporary id that was changed
-					var l = this.items.length; 
+					var l = this.items ? this.items.length : 0; 
 					for(var i=l-1; i>=0; i--){
 						if(this.items[i].id == tempId){
 							this.items[i] = newItem;
 							break;
 						}
 					}
+					// clean to temp id state and reset the item with new id to its current state.
+					var stateObj =  this._getItemStoreStateObj({id: tempId});					
 					this._cleanItemStoreState(tempId);
-					this._setItemStoreState(newItem, "storing");
+					this._setItemStoreState(newItem, stateObj ? stateObj.state : null);
 				}
 				
 				var s = this._getItemStoreStateObj(newItem);
-				if(s){
+				if(s && s.state === "storing"){
 					// if the item is at the correct index (creation)
 					// we must fix it. Should not occur but ensure integrity.
-					if(this.items[newIndex].id != newItem.id){						
+					if(this.items && this.items[newIndex] && this.items[newIndex].id != newItem.id){						
 						var l = this.items.length; 
 						for(var i=l-1; i>=0; i--){
 							if(this.items[i].id == newItem.id){
@@ -317,6 +319,10 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			
 			if(this.owner){
 				return this.owner._cleanItemStoreState(id);				
+			}
+			
+			if(!this._itemStoreState){
+				return;
 			}
 			
 			var s = this._itemStoreState[id];
