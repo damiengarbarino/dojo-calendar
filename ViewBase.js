@@ -148,11 +148,13 @@ define([
 		
 		_cssDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 				
-		_getFormatItemTimeFuncAttr: function(){
+		_getFormatItemTimeFuncAttr: function(){			
+			if(this.formatItemTimeFunc){
+				return this.formatItemTimeFunc;
+			}			
 			if(this.owner != null){
 				return this.owner.get("formatItemTimeFunc");
-			}
-			return this.formatItemTimeFunc;			
+			}					
 		},
 		
 		// The listeners added by the view itself.
@@ -2645,14 +2647,14 @@ define([
 			var allowSwap = p.eventSource == "keyboard" ? false : this.allowStartEndSwap;
 
 			// Update the Calendar with the edited value.
-			if(editKind == "move"){				
+			if(editKind == "move"){
 				if(subColumn != null && item.subColumn != subColumn && this.allowSubColumnMove){
 					// TODO abstract change?
 					item.subColumn = subColumn;
 					// refresh the other properties that depends on this one (especially cssClass)
 					var store = this.get("store");
 					var storeItem = this.renderItemToItem(item, store);
-					lang.mixin(item, this.itemToRenderItem(storeItem, store));					
+					lang.mixin(item, this.itemToRenderItem(storeItem, store));
 					moveOrResizeDone = true;
 				}
 				if(cal.compare(item.startTime, newTime) != 0){
