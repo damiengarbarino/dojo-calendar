@@ -222,7 +222,7 @@ _nls){
 		
 		// formatItemTimeFunc: Function?
 		//		Optional function to format the time of day of the item renderers.
-		//		The function takes the date and render data object as arguments and returns a String.
+		//		The function takes the date, the render data object, the view and the data item as arguments and returns a String.
 		formatItemTimeFunc: null,
 		
 		// editable: Boolean
