@@ -2401,7 +2401,7 @@ define([
 					}else{ // creation canceled
 						// cleanup items list
 						
-						this.removeRenderItem(s.id);					
+						this._removeRenderItem(s.id);					
 					}									
 					
 				} else if(e.completed){
