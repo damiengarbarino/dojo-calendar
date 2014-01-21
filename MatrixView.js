@@ -1118,7 +1118,7 @@ function(
 					});
 					this._expandAnimation.play();
 				}else{
-					this._expandRowImpl(size)
+					this._expandRowImpl(size, true);
 				}
 			}			
 		},
