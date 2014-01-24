@@ -1851,6 +1851,11 @@ function(
 				
 				if(list != null){
 					
+					// sort according to start time the list of label renderers
+					list.sort(lang.hitch(this, function(a, b){						
+						return this.dateModule.compare(a.range[0], b.range[0]);						
+					}));
+					
 					var maxH = this.expandRenderer ? (hasHiddenItems[i] ? cellH - this.expandRendererHeight: cellH) : cellH;
 					posY = hOffsets == null || hOffsets[i] == null ? this.cellPaddingTop : hOffsets[i] + this.verticalGap;
 					var celPos = domGeometry.position(this._getCellAt(index, i));
