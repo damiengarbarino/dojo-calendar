@@ -976,7 +976,10 @@ function(
 
 			if(rd.sheetHeight != this.itemContainer.offsetHeight){
 				// refresh values
-				rd.sheetHeight = this.itemContainer.offsetHeight;
+				if (rd.sheetHeight > this.itemContainer.offsetHeight) {
+					rd.sheetHeight = this.itemContainer.offsetHeight;
+				}
+
 				var expRow = this.getExpandedRowIndex();
 				if(expRow == -1){
 					this._computeRowsHeight();
