@@ -24,21 +24,19 @@
 			require(["dojo/_base/declare", "dojo/ready", "dojo/_base/fx", "dojo/on", "dojo/Deferred", "dojo/when",
 			         "dojo/date/locale", "dojo/parser",	"dojo/store/JsonRest", 
 			         "dojo/store/Memory", "dojo/store/Observable", "dojo/store/Cache", 
-			         "dojox/calendar/Calendar",
+			         "dojox/calendar/Calendar", "dojo/date/stamp",
 			         "dijit/layout/BorderContainer", "dijit/layout/ContentPane" ],
 
-				function(declare, ready, fx, on, Deferred, when, locale, parser, JsonRest, Memory, Observable, Cache, Calendar){
+				function(declare, ready, fx, on, Deferred, when, locale, parser, JsonRest, Memory, Observable, Cache, Calendar, stamp){
 
 					ready(function(){
 												
 						var startOfWeek = calendar.floorToWeek(new calendar.dateClassObj());
-																					
-						calendar.set("date", startOfWeek);
 						
 						// Subclass to handle the ID problem
 						// If the server is generating an ID, the calendar needs the temporary ID
 						// to synchronize its internal state.
-						var ExtJsonStore = declare(JsonRest, {
+						var ExtJsonRest = declare(JsonRest, {
 							add: function(object, options){
 								var tempId = options && options.temporaryId;
 								var def = new Deferred();
@@ -54,8 +52,15 @@
 						// This sample needs a service that hosts REST service that can answer to the Jsonrest store !! 
 						// WARNING
 						
-						calendar.set("store", new Observable(new ExtJsonStore({target: "/cal/calendar/"})));
-						
+						calendar.on("timeIntervalChange", function(e){
+							var startTimeStr = stamp.toISOString(e.startTime, {zulu: true, milliseconds: true});
+							var endTimeStr = stamp.toISOString(e.endTime, {zulu: true, milliseconds: true});
+							calendar.set("store", new Observable(new ExtJsonRest(
+									{target: "/cal/calendar/?startTime="+startTimeStr+"&endTime="+endTimeStr})));
+						});
+																					
+						calendar.set("date", startOfWeek);											
+												
 						// Enable creation of event interactively by ctrl clicking grid.
 						var createItem = function(view, d, e){
 						
