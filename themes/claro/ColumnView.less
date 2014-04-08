@@ -142,12 +142,23 @@
 	}
 	
 	.dojoxCalendarEventContainerColumn {
-		position: relative;		
-		height:100%;
+		position: absolute;		
+		height: 100%;
+		left:0;
+		top:0;
+		right:0;
 		margin-left: 1px;
 		margin-right: 5px;		
 	}
-
+	
+	.dojoxCalendarDecorationContainerColumn {
+		position: absolute;		
+		height: 100%;
+		left:0;
+		top:0;
+		right:0;	
+	}
+	
 	.dojoxCalendarSubContainerColumn.subColumn {
 		border-right: @sub-column-border;		
 	}
@@ -390,6 +401,12 @@
 		tr:first-child td	{
 			border-top: 1px solid @row-color;
 		}
+	}
+	
+	.dojoxCalendarDecoration {
+		position:absolute;
+		background-color: rgb(167, 233, 68);
+		.opacity(20);
 	}
  
 	.dojoxCalendarEvent {

@@ -125,6 +125,10 @@ function(
 		// verticalRenderer: Class
 		//		The class use to create vertical renderers.
 		verticalRenderer: null,
+
+		// decorationRenderer: Class
+		//		The class use to create decoration renderers.
+		decorationRenderer: null,
 		
 		// minColumnWidth: Integer
 		//		The minimum column width. If the number of columns and sub columns displayed makes the
@@ -268,10 +272,18 @@ function(
 			
 			if(this.displayedItemsInvalidated && !this._isEditing){
 				 // while editing in no live layout we must not to recompute items (duplicate renderers)
-				this._computeVisibleItems(rd);
+				rd.items = this.storeManager._computeVisibleItems(rd);
 								
 			}else if (this.renderData){
 				rd.items = this.renderData.items;
+			}
+			
+			if(this.displayedDecorationItemsInvalidated){
+				 // while editing in no live layout we must not to recompute items (duplicate renderers)
+				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd);
+								
+			}else if (this.renderData){
+				rd.decorationItems = this.renderData.decorationItems;
 			}
 			
 			return rd;
@@ -663,6 +675,7 @@ function(
 			this.renderData = rd;
 			this._createRendering(rd, oldRd);
 			this._layoutRenderers(rd);
+			this._layoutDecorationRenderers(rd);
 		},
 		
 		_createRendering: function(/*Object*/renderData, /*Object*/oldRenderData){
@@ -1490,7 +1503,7 @@ function(
 				return;
 			}
 			
-			var bgCols = [];
+			var bgCols = [], decoCols = [];
 	
 			domStyle.set(table, "height", renderData.sheetHeight + "px");			
 			var oldCount = oldRenderData ? oldRenderData.columnCount : 0;
@@ -1559,6 +1572,7 @@ function(
 						}						
 						for(var j=0; j<subCount; j++){
 							var subdiv = domConstruct.create("div", {"className": "dojoxCalendarSubContainerColumn"}, div);
+							domConstruct.create("div", {"className": "dojoxCalendarDecorationContainerColumn"}, subdiv);
 							domConstruct.create("div", {"className": "dojoxCalendarEventContainerColumn"}, subdiv);
 						}
 					}
@@ -1569,16 +1583,23 @@ function(
 					var col = subCount == 1 ? i : Math.floor(i / subCount);
 					subColIdx = subCount == 1 ? 0 : i - col * subCount;					
 					domStyle.set(div, {width: colW, left: ((subColIdx * 100)/subCount)+"%"});
-					domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");			
+					domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");	
+					
+					query(".dojoxCalendarEventContainerColumn", div).forEach(function(eventContainer, i){						
+						bgCols.push(eventContainer);
+					}, this);
+					
+					query(".dojoxCalendarDecorationContainerColumn", div).forEach(function(decoContainer, i){						
+						decoCols.push(decoContainer);
+					}, this);
 				}, this);
 				
-				query(".dojoxCalendarEventContainerColumn", td).forEach(function(div, i){						
-					bgCols.push(div);
-				}, this);				
+							
 				
 			}, this);
 																											
 			renderData.cells = bgCols;
+			renderData.decorationCells = decoCols;
 		},
 		
 		// showTimeIndicator: Boolean
@@ -1727,52 +1748,69 @@ function(
 			return "vertical"; // String
 		},
 		
-		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items){
+		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items, /*String*/itemsType){
 			// tags:
 			//		private
 
 			var verticalItems = [];
+			
 			renderData.colW = this.itemContainer.offsetWidth / renderData.columnCount;
 			
-			for(var i=0; i<items.length; i++){
-				var item = items[i];
-				if(this._itemToRendererKind(item) == "vertical"){
-					verticalItems.push(item);
+			if(itemsType === "dataItems"){
+				
+				for(var i=0; i<items.length; i++){
+					var item = items[i];
+					var kind = this._itemToRendererKind(item);
+					if(kind === "vertical"){
+						verticalItems.push(item);
+					}
 				}
-			}
+				
+				this._layoutRendererWithSubColumns(renderData, "vertical", true, index, start, end, verticalItems, itemsType);		
 			
-			if(verticalItems.length > 0){
+			}else{ // itemsType === "decorationItems"
+			
+				// no different rendererKind for decoration yet
+				this._layoutRendererWithSubColumns(renderData, "decoration", false, index, start, end, items, itemsType);
+			}							
+		},
+		
+		_layoutRendererWithSubColumns: function(renderData, rendererKind, computeOverlap, index, start, end, items, itemsType){
+			if(items.length > 0){
 				if(renderData.subColumnCount > 1){
 					var subColumnItems = {};
 					arr.forEach(this.subColumns, function(subCol){
 						subColumnItems[subCol] = [];
 					});
-					arr.forEach(verticalItems, function(item){
+					arr.forEach(items, function(item){
 						subColumnItems[item.subColumn].push(item);
 					});
 					var subColIndex = 0;
 					arr.forEach(this.subColumns, function(subCol){
-						this._layoutVerticalItems(renderData, index, subColIndex++, start, end, subColumnItems[subCol]);
+						this._layoutVerticalItems(renderData, rendererKind, computeOverlap, index, subColIndex++, start, end, subColumnItems[subCol], itemsType);
 					}, this);
 				}else{
-					this._layoutVerticalItems(renderData, index, 0, start, end, verticalItems);
+					this._layoutVerticalItems(renderData, rendererKind, computeOverlap, index, 0, start, end, items, itemsType);
 				}							
 			}
 		},
 		
-		_getColumn: function(renderData, index, subIndex){
-			return renderData.cells[index * renderData.subColumnCount + subIndex];
+		_getColumn: function(renderData, index, subIndex, itemsType){
+			var cols = itemsType === "dataItems" ? renderData.cells : renderData.decorationCells;
+			return cols[index * renderData.subColumnCount + subIndex];
 		},
 
-		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Integer*/subIndex, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+		_layoutVerticalItems: function(/*Object*/renderData, /*String*/ rendererKind, /*boolean*/ computeOverlap, 
+				/*Integer*/index, /*Integer*/subIndex, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items, /*String*/itemsType){
 			// tags:
 			//		private
 
-			if(this.verticalRenderer == null){
+			if(itemsType === "dataItems" && this.verticalRenderer == null || 
+				itemsType === "decorationItems" && this.decorationRenderer == null){
 				return;
 			}
 			
-			var cell = this._getColumn(renderData, index, subIndex);
+			var cell = this._getColumn(renderData, index, subIndex, itemsType);
 			
 			var layoutItems = [];			
 			
@@ -1797,60 +1835,68 @@ function(
 			}
 			
 			// step 2: compute overlapping layout
-			var numLanes = this.computeOverlapping(layoutItems, this._overlapLayoutPass2).numLanes;
+			var numLanes = itemsType === "dataItems" ? this.computeOverlapping(layoutItems, this._overlapLayoutPass2).numLanes : 1;
 
 			var hOverlap = this.percentOverlap / 100;
 
 			// step 3: create renderers and apply layout
 			for(i=0; i<layoutItems.length; i++){
 
-				item = layoutItems[i];					
-				var lane = item.lane;
-				var extent = item.extent;
+				item = layoutItems[i];
+				var w, posX, ir, renderer;
+				
+				if(itemsType === "dataItems"){
+					
+					var lane = item.lane;
+					var extent = item.extent;
 
-				var w;
-				var posX;				
+					if(hOverlap == 0) {
+						//no overlap and a padding between each event
+						w = numLanes == 1 ? renderData.colW : ((renderData.colW - (numLanes - 1) * this.horizontalGap)/ numLanes);
+						posX = lane * (w + this.horizontalGap);
+						w = extent == 1 ? w : w * extent + (extent-1) * this.horizontalGap;
+						w = 100 * w / renderData.colW;
+						posX = 100 * posX / renderData.colW; 
+					} else {
+						// an overlap
+						w = numLanes == 1 ? 100 : (100 / (numLanes - (numLanes - 1) * hOverlap));
+						posX = lane * (w - hOverlap*w);
+						w = extent == 1 ? w : w * ( extent - (extent-1) * hOverlap);
+					}
+	
+					ir = this._createRenderer(item, "vertical", this.verticalRenderer, "dojoxCalendarVertical");
+				
+					var edited = this.isItemBeingEdited(item);
+					var selected = this.isItemSelected(item);
+					var hovered = this.isItemHovered(item);
+					var focused = this.isItemFocused(item);
+					
+					renderer = ir.renderer;
+	
+					renderer.set("hovered", hovered);
+					renderer.set("selected", selected);
+					renderer.set("edited", edited);
+					renderer.set("focused", this.showFocus ? focused : false);
+					renderer.set("storeState", this.getItemStoreState(item));
+					
+					renderer.set("moveEnabled", this.isItemMoveEnabled(item._item, "vertical"));
+					renderer.set("resizeEnabled", this.isItemResizeEnabled(item._item, "vertical"));
+					
+					this.applyRendererZIndex(item, ir, hovered, selected, edited, focused);
 
-				if(hOverlap == 0) {
-					//no overlap and a padding between each event
-					w = numLanes == 1 ? renderData.colW : ((renderData.colW - (numLanes - 1) * this.horizontalGap)/ numLanes);
-					posX = lane * (w + this.horizontalGap);
-					w = extent == 1 ? w : w * extent + (extent-1) * this.horizontalGap;
-					w = 100 * w / renderData.colW;
-					posX = 100 * posX / renderData.colW; 
 				} else {
-					// an overlap
-					w = numLanes == 1 ? 100 : (100 / (numLanes - (numLanes - 1) * hOverlap));
-					posX = lane * (w - hOverlap*w);
-					w = extent == 1 ? w : w * ( extent - (extent-1) * hOverlap);
+					w = 100;
+					posX = 0;
+					ir = this.decorationRendererManager.createRenderer(item, "decoration", this.decorationRenderer, "dojoxCalendarDecoration");
+					renderer = ir.renderer;
 				}
-
-				var ir = this._createRenderer(item, "vertical", this.verticalRenderer, "dojoxCalendarVertical");
-
+				
 				domStyle.set(ir.container, {
 					"top": item.start + "px",
 					"left": posX + "%",
 					"width": w + "%",
 					"height": (item.end-item.start+1) + "px"
 				});
-
-				var edited = this.isItemBeingEdited(item);
-				var selected = this.isItemSelected(item);
-				var hovered = this.isItemHovered(item);
-				var focused = this.isItemFocused(item);
-				
-				var renderer = ir.renderer;
-
-				renderer.set("hovered", hovered);
-				renderer.set("selected", selected);
-				renderer.set("edited", edited);
-				renderer.set("focused", this.showFocus ? focused : false);
-				renderer.set("storeState", this.getItemStoreState(item));
-				
-				renderer.set("moveEnabled", this.isItemMoveEnabled(item._item, "vertical"));
-				renderer.set("resizeEnabled", this.isItemResizeEnabled(item._item, "vertical"));
-
-				this.applyRendererZIndex(item, ir, hovered, selected, edited, focused);
 
 				if(renderer.updateRendering){
 					renderer.updateRendering(w, item.end-item.start+1);

@@ -20,7 +20,9 @@ define([
 	"dojox/widget/_Invalidating",
 	"dojox/widget/Selection",
 	"dojox/calendar/time",
-	"./StoreMixin"],
+	"./StoreMixin",
+	"./StoreManager",
+	"./RendererManager"],
 
 	function(
 		declare,
@@ -44,7 +46,9 @@ define([
 		_Invalidating,
 		Selection,
 		timeUtil,
-		StoreMixin){
+		StoreMixin,
+		StoreManager,
+		RendererManager){
 	
 	/*=====
 	var __GridClickEventArgs = {
@@ -113,7 +117,7 @@ define([
 		//		The item that will be displayed by the renderer for the "rendererCreated" and "rendererReused" events. 
 	};
 	=====*/
-
+		
 	return declare("dojox.calendar.ViewBase", [_WidgetBase, StoreMixin, _Invalidating, Selection], {
 		
 		// summary:
@@ -171,26 +175,35 @@ define([
 			this.dateModule = args.datePackage ? lang.getObject(args.datePackage, false) : date; 
 			this.dateClassObj = this.dateModule.Date || Date; 
 			this.dateLocaleModule = args.datePackage ? lang.getObject(args.datePackage+".locale", false) : locale; 
-			
-			this.rendererPool = [];
-			this.rendererList = [];
-			this.itemToRenderer = {};
+						
 			this._viewHandles = [];
+			
+			this.storeManager = new StoreManager({owner: this});
+			this.storeManager.on("dataLoaded", lang.hitch(this, function(items){
+				this.set("items", items);
+			}));
+					
+			this.rendererManager = new RendererManager({owner: this});
+			this.rendererManager.on("rendererCreated", lang.hitch(this, this._onRendererCreated));
+			this.rendererManager.on("rendererReused", lang.hitch(this, this._onRendererReused));
+			this.rendererManager.on("rendererRecycled", lang.hitch(this, this._onRendererRecycled));
+			this.rendererManager.on("rendererDestroyed", lang.hitch(this, this._onRendererDestroyed));
+			this.rendererManager.on("layoutInvalidated", lang.hitch(this, this._refreshItemsRendering));
+			this.rendererManager.on("renderersInvalidated", lang.hitch(this, function(item){
+				this.updateRenderers(item);}
+			));
+			
+			this.decorationStoreManager = new StoreManager({owner: this});
+			this.decorationStoreManager.on("layoutInvalidated", lang.hitch(this, this._refreshDecorationItemsRendering));
+			this.decorationStoreManager.on("dataLoaded", lang.hitch(this, function(items){
+				this.set("decorationItems", items);
+			}));
+			this.decorationRendererManager = new RendererManager({owner: this});
 		},
 		
 		destroy: function(preserveDom){
-			// renderers
-			while(this.rendererList.length > 0){
-				this._destroyRenderer(this.rendererList.pop());
-			}			
-			for(var kind in this._rendererPool){
-				var pool = this._rendererPool[kind];
-				if(pool){
-					while(pool.length > 0){
-						this._destroyRenderer(pool.pop());
-					}
-				}
-			}
+			
+			this.rendererManager.destroy();
 			
 			while(this._viewHandles.length > 0){
 				this._viewHandles.pop().remove();
@@ -1030,10 +1043,34 @@ define([
 			this._layoutRenderers(rd);
 		},
 		
+		_refreshDecorationItemsRendering: function(){
+			var rd = this.renderData;
+			this._computeVisibleItems(rd, "decorationItems");
+			this._layoutDecorationRenderers(rd);
+		},
+		
 		invalidateLayout: function(){
 			// summary:
 			//		Triggers a re-layout of the renderers.
 			this._layoutRenderers(this.renderData);
+			this._layoutDecorationRenderers(this.renderData);
+		},
+		
+		_setDecorationItemsAttr: function(value){
+			this._set("decorationItems", value);
+			this.displayedDecorationItemsInvalidated = true;
+		},
+					
+		_getDecorationStoreAttr: function(){
+			if(this.owner){
+				return this.owner.get("decorationStore");
+			}
+			return this.decorationStore;
+		},
+		
+		_setDecorationStoreAttr: function(value){
+			this.decorationStore = value;
+			this.decorationStoreManager.set("store", value);
 		},
 		
 		////////////////////////////////////////////////////////
@@ -1149,19 +1186,28 @@ define([
 			return res;
 		},
 		
+		
 		_layoutRenderers: function(renderData){
+			this._layoutRenderersImpl(renderData, this.rendererManager, renderData.items, "dataItems");
+		},
+		
+		_layoutDecorationRenderers: function(renderData){
+			this._layoutRenderersImpl(renderData, this.decorationRendererManager, renderData.decorationItems, "decorationItems");
+		},
+		
+		_layoutRenderersImpl: function(renderData, rendererManager, items, itemType){
 			// summary:
 			//		Renders the data items. This method will call the _layoutInterval() method.
 			// renderData: Object
 			//		The render data.
 			// tags:
 			//		protected
-			if(!renderData.items){
+			if(!items){
 				return;
 			}
 						
 			// recycle renderers first
-			this._recycleItemRenderers();
+			rendererManager._recycleItemRenderers();
 			
 			var cal = renderData.dateModule; 
 			
@@ -1173,7 +1219,7 @@ define([
 			
 			var endDate;
 			
-			var items = renderData.items.concat();
+			var items = items.concat();
 
 			var itemsTemp = [], events;
 			var processing = {};
@@ -1221,7 +1267,7 @@ define([
 				if(events.length > 0){
 					// Sort the item according a sorting function, by default start time then end time comparison are used.
 					events.sort(lang.hitch(this, this.layoutPriorityFunction ? this.layoutPriorityFunction : this._sortItemsFunction));
-					this._layoutInterval(renderData, index, startTime, endTime, events);
+					this._layoutInterval(renderData, index, startTime, endTime, events, itemType);
 				}
 
 				startDate = endDate;
@@ -1240,31 +1286,10 @@ define([
 		////////////////////////////////////////////////////////////////
 		
 		_recycleItemRenderers: function(remove){
-			// summary:
-			//		Recycles all the item renderers.
-			// remove: Boolean
-			//		Whether remove the DOM node from it parent.
-			// tags:
-			//		protected
-			while(this.rendererList.length>0){
-				this._recycleRenderer(this.rendererList.pop(), remove);
-			}
-			this.itemToRenderer = {};
+			this.rendererManager._recycleItemRenderers(remove);
 		},
-				
-		// rendererPool: [protected] Array
-		//		The stack of recycled renderers available.
-		rendererPool: null,
-		
-		// rendererList: [protected] Array
-		//		The list of used renderers
-		rendererList: null,
-		
-		// itemToRenderer: [protected] Object
-		//		The associated array item to renderer list.
-		itemToRenderer: null,
-		
-		getRenderers: function(item){
+							
+		getRenderers: function(item){			
 			// summary:
 			//		Returns the renderers that are currently used to displayed the speficied item.
 			//		Returns an array of objects that contains two properties:
@@ -1274,15 +1299,10 @@ define([
 			// item: Object
 			//		The data or render item.
 			// returns: Object[]
-			if(item == null || item.id == null){
-				return null;
-			}
-			var list = this.itemToRenderer[item.id];
-			return list == null ? null : list.concat();
+			
+			return this.rendererManager.getRenderers(item);			
 		},
-		
-		_rendererHandles: {},
-		
+				
 		// itemToRendererKindFunc: Function
 		//		An optional function to associate a kind of renderer ("horizontal", "label" or null) with the specified item.
 		//		By default, if an item is lasting more that 24 hours an horizontal item is used, otherwise a label is used.
@@ -1321,48 +1341,7 @@ define([
 			// tags:
 			//		protected				
 						
-			if(item != null && kind != null && rendererClass != null){
-				
-				var res=null, renderer=null;
-				
-				var pool = this.rendererPool[kind];
-				
-				if(pool != null){
-					res = pool.shift();
-				}
-
-				if (res == null){
-
-					renderer = new rendererClass;
-									
-					res = {
-						renderer: renderer,
-						container: renderer.domNode,
-						kind: kind
-					};
-
-					this._onRendererCreated({renderer:res, source:this, item:item});
-					
-				} else {
-					renderer = res.renderer; 
-					
-					this._onRendererReused({renderer:renderer, source:this, item:item});
-				}
-				
-				renderer.owner = this;
-				renderer.set("rendererKind", kind);
-				renderer.set("item", item);
-				
-				var list = this.itemToRenderer[item.id];
-				if (list == null) {
-					this.itemToRenderer[item.id] = list = [];
-				}
-				list.push(res);
-				
-				this.rendererList.push(res);
-				return res;	
-			}
-			return null;
+			return this.rendererManager.createRenderer(item, kind, rendererClass, cssClass);
 		},
 		
 		_onRendererCreated: function(e){
@@ -1463,24 +1442,7 @@ define([
 			// tags:
 			//		protected			
 								
-			this._onRendererRecycled({renderer:renderer, source:this});
-			
-			var pool = this.rendererPool[renderer.kind];
-			
-			if(pool == null){
-				this.rendererPool[renderer.kind] = [renderer];
-			}else{
-				pool.push(renderer);
-			}
-								
-			if(remove){
-				renderer.container.parentNode.removeChild(renderer.container);
-			}
-
-			domStyle.set(renderer.container, "display", "none");
-
-			renderer.renderer.owner = null;
-			renderer.renderer.set("item", null);
+			this.rendererManager.recycleRenderer(renderer, remove);
 		},
 							
 		_destroyRenderer: function(renderer){
@@ -1490,40 +1452,15 @@ define([
 			//		The item renderer to destroy.
 			// tags:
 			//		protected
-			this._onRendererDestroyed({renderer:renderer, source:this});
 			
-			var ir = renderer.renderer;		
-			
-			if(ir["destroy"]){
-				ir.destroy();
-			}
-			
-			html.destroy(renderer.container);	
+			this.rendererManager.destroyRenderer(renderer);					
 		},
 		
 		_destroyRenderersByKind: function(kind){
 			// tags:
 			//		private
 
-			var list = [];
-			for(var i=0;i<this.rendererList.length;i++){
-				var ir = this.rendererList[i];
-				if(ir.kind == kind){
-					this._destroyRenderer(ir);
-				}else{
-					list.push(ir);
-				}
-			}
-			
-			this.rendererList = list;
-			
-			var pool = this.rendererPool[kind];
-			if(pool){
-				while(pool.length > 0){
-					this._destroyRenderer(pool.pop());
-				}
-			}
-			
+			this.rendererManager.destroyRenderersByKind(kind);			
 		},
 				
 					
@@ -1579,7 +1516,7 @@ define([
 					continue;
 				}
 						
-				var list = this.itemToRenderer[item.id];
+				var list = this.rendererManager.itemToRenderer[item.id];
 				
 				if(list == null){
 					continue;
@@ -2109,7 +2046,7 @@ define([
 			//		protected
 
 
-			var list = this.itemToRenderer[item.id];
+			var list = this.rendererManager.itemToRenderer[item.id];
 
 			if(list == null){
 				return null;
@@ -2253,26 +2190,26 @@ define([
 				p.editSaveStartTime = item.startTime;
 				p.editSaveEndTime = item.endTime;
 				
-				p.editItemToRenderer = this.itemToRenderer;
+				p.editItemToRenderer = this.rendererManager.itemToRenderer;
 				p.editItems = this.renderData.items;
-				p.editRendererList = this.rendererList;
+				p.editRendererList = this.rendererManager.rendererList;
 				
 				this.renderData.items = [p.editedItem];
 				var id = p.editedItem.id;
 			
-				this.itemToRenderer = {};
-				this.rendererList = [];
+				this.rendererManager.itemToRenderer = {};
+				this.rendererManager.rendererList = [];
 				var list = p.editItemToRenderer[id];
 				
 				p.editRendererIndices = [];
 				
 				arr.forEach(list, lang.hitch(this, function(ir, i){
-					if(this.itemToRenderer[id] == null){
-						this.itemToRenderer[id] = [ir];
+					if(this.rendererManager.itemToRenderer[id] == null){
+						this.rendererManager.itemToRenderer[id] = [ir];
 					}else{
-						this.itemToRenderer[id].push(ir);
+						this.rendererManager.itemToRenderer[id].push(ir);
 					}
-					this.rendererList.push(ir);
+					this.rendererManager.rendererList.push(ir);
 				}));
 				
 				// remove in old map & list the occurrence used by the edited item
@@ -2336,8 +2273,8 @@ define([
 						
 			if (!p.liveLayout){
 				this.renderData.items = p.editItems;
-				this.rendererList = p.editRendererList.concat(this.rendererList);
-				lang.mixin(this.itemToRenderer, p.editItemToRenderer);
+				this.rendererManager.rendererList = p.editRendererList.concat(this.rendererManager.rendererList);
+				lang.mixin(this.rendererManager.itemToRenderer, p.editItemToRenderer);
 			}
 
 			this._onItemEditEnd(lang.mixin(this._createItemEditEvent(), {
