@@ -125,6 +125,10 @@ function(
 		//		The class use to create drill down renderers.		
 		expandRenderer: null,
 		
+		// expandRenderer: Class
+		//		The class use to create horizontal decoration renderers.
+		horizontalDecorationRenderer: null,
+		
 		// percentOverlap: Integer
 		//		The percentage of the renderer width used to superimpose one item renderers on another 
 		//		when two events are overlapping. By default 0.
@@ -241,11 +245,19 @@ function(
 			rd.endTime = this.floorToDay(rd.endTime, true);
 			
 			if(this.displayedItemsInvalidated && !this._isEditing){
+				// while editing in no live layout we must not to recompute items (duplicate renderers)
 				this.displayedItemsInvalidated = false;
 				this._computeVisibleItems(rd);
 								
 			}else if(this.renderData){
 				rd.items = this.renderData.items;
+			}
+			
+			if(this.displayedDecorationItemsInvalidated){				 
+				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd, "decorationStoreManager");
+								
+			}else if (this.renderData){
+				rd.decorationItems = this.renderData.decorationItems;
 			}
 			
 			rd.rtl = !this.isLeftToRight();
@@ -418,6 +430,7 @@ function(
 			this._createRendering(this.renderData, oldRd);
 			
 			this._layoutRenderers(this.renderData);						
+			this._layoutDecorationRenderers(this.renderData);
 		},
 		
 		_createRendering: function(renderData, oldRenderData){
@@ -1494,6 +1507,24 @@ function(
 						
 			domStyle.set(renderer.container, {"zIndex": edited || selected ? renderer.renderer.mobile ? 100 : 0: item.lane == undefined ? 1 : item.lane+1});
 		},
+		
+		_layoutDecorationRenderers: function(renderData){
+			// tags:
+			//		private
+			if(renderData == null || renderData.items == null || renderData.rowHeight <= 0){
+				return;
+			}					
+			
+			if(!this.gridTable || this._expandAnimation != null || 
+				this.horizontalDecorationRenderer == null){
+				this.decorationRendererManager.recycleItemRenderers();
+				return;
+			}
+			
+			this._layoutStep = renderData.columnCount;
+			
+			this.inherited(arguments);
+		},
 
 		_layoutRenderers: function(renderData){
 			// tags:
@@ -1520,63 +1551,75 @@ function(
 
 		_offsets: null,
 
-		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items){
+		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items, /*String*/itemsType){
 			// tags:
 			//		private
 			
 			if(this.renderData.cells == null){
 				return;
 			}
-			var horizontalItems = [];
-			var labelItems = [];
-
-			for(var i=0; i<items.length; i++){
-				var item = items[i];
-				var kind = this._itemToRendererKind(item);
-				if(kind == "horizontal"){
-					horizontalItems.push(item);
-				}else if(kind == "label"){
-					labelItems.push(item);
+			
+			if(itemsType === "dataItems"){
+				
+				var horizontalItems = [];
+				var labelItems = [];
+	
+				for(var i=0; i<items.length; i++){
+					var item = items[i];
+					var kind = this._itemToRendererKind(item);
+					if(kind == "horizontal"){
+						horizontalItems.push(item);
+					}else if(kind == "label"){
+						labelItems.push(item);
+					}
+				}
+				
+				var expIndex = this.getExpandedRowIndex();
+				
+				if(expIndex != -1 && expIndex != index){
+					return; // when row is expanded, layout only expanded row
+				}
+				
+				var offsets;
+				
+				var hiddenItems = [];
+				
+				var hItems = null;
+				var hOffsets = [];
+				if(horizontalItems.length > 0 && this.horizontalRenderer){
+					var hItems = this._createHorizontalLayoutItems(index, start, end, horizontalItems);
+					var hOverlapLayout = this._computeHorizontalOverlapLayout(hItems, hOffsets);
+				}
+				
+				var lItems;
+				var lOffsets = [];
+				if(labelItems.length > 0 && this.labelRenderer){
+					lItems = this._createLabelLayoutItems(index, start, end, labelItems);
+					this._computeLabelOffsets(lItems, lOffsets);
+				}
+				
+				var hasHiddenItems = this._computeColHasHiddenItems(index, hOffsets, lOffsets);
+				
+				if(hItems != null){
+					this._layoutHorizontalItemsImpl(index, hItems, hOverlapLayout, hasHiddenItems, hiddenItems, itemsType);
+				}
+				
+				if(lItems != null){
+					this._layoutLabelItemsImpl(index, lItems, hasHiddenItems, hiddenItems, hOffsets, itemsType);
+				}
+				
+				this._layoutExpandRenderers(index, hasHiddenItems, hiddenItems);
+				
+				this._hiddenItems[index] = hiddenItems;
+			}else{ // itemsType === "decorationItems"
+				
+				if(this.horizontalDecorationRenderer){
+					var hItems = this._createHorizontalLayoutItems(index, start, end, items);
+					if(hItems != null){					
+						this._layoutHorizontalItemsImpl(index, hItems, null, false, null, itemsType);
+					}
 				}
 			}
-			
-			var expIndex = this.getExpandedRowIndex();
-			
-			if(expIndex != -1 && expIndex != index){
-				return; // when row is expanded, layout only expanded row
-			}
-			
-			var offsets;
-			
-			var hiddenItems = [];
-			
-			var hItems = null;
-			var hOffsets = [];
-			if(horizontalItems.length > 0 && this.horizontalRenderer){
-				var hItems = this._createHorizontalLayoutItems(index, start, end, horizontalItems);
-				var hOverlapLayout = this._computeHorizontalOverlapLayout(hItems, hOffsets);
-			}
-			
-			var lItems;
-			var lOffsets = [];
-			if(labelItems.length > 0 && this.labelRenderer){
-				lItems = this._createLabelLayoutItems(index, start, end, labelItems);
-				this._computeLabelOffsets(lItems, lOffsets);
-			}
-			
-			var hasHiddenItems = this._computeColHasHiddenItems(index, hOffsets, lOffsets);
-			
-			if(hItems != null){
-				this._layoutHorizontalItemsImpl(index, hItems, hOverlapLayout, hasHiddenItems, hiddenItems);
-			}
-			
-			if(lItems != null){
-				this._layoutLabelItemsImpl(index, lItems, hasHiddenItems, hiddenItems, hOffsets);
-			}
-			
-			this._layoutExpandRenderers(index, hasHiddenItems, hiddenItems);
-			
-			this._hiddenItems[index] = hiddenItems;
 		},
 
 		_createHorizontalLayoutItems: function(/*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
@@ -1774,7 +1817,7 @@ function(
 			return res;
 		},
 
-		_layoutHorizontalItemsImpl: function(index, layoutItems, hOverlapLayout, hasHiddenItems, hiddenItems){
+		_layoutHorizontalItemsImpl: function(index, layoutItems, hOverlapLayout, hasHiddenItems, hiddenItems, itemsType){
 			
 			// tags:
 			//		private
@@ -1789,58 +1832,80 @@ function(
 
 				var item = layoutItems[i];
 				var lane = item.lane;
-
-				var posY = this.cellPaddingTop;
-
-				if(vOverlap == 0) {
-					//no overlap and a padding between each event
-					posY += lane * (irHeight + this.verticalGap);
-				} else {
-					// an overlap	
-					posY += lane * (irHeight - vOverlap * irHeight);
-				}
 				
-				var exp = false;
-				var maxH = cellH;
-				if(this.expandRenderer){				
-					for(var off=item.startOffset; off<=item.endOffset; off++){
-						if(hasHiddenItems[off]){
-							exp = true;
-							break;
+				if(itemsType === "dataItems"){
+					
+					var posY = this.cellPaddingTop;
+	
+					if(vOverlap == 0) {
+						//no overlap and a padding between each event
+						posY += lane * (irHeight + this.verticalGap);
+					} else {
+						// an overlap	
+						posY += lane * (irHeight - vOverlap * irHeight);
+					}
+					
+					var exp = false;
+					var maxH = cellH;
+					if(this.expandRenderer){				
+						for(var off=item.startOffset; off<=item.endOffset; off++){
+							if(hasHiddenItems[off]){
+								exp = true;
+								break;
+							}
+						}
+						maxH = exp ? cellH - this.expandRendererHeight : cellH;
+					}
+					
+					if(posY + irHeight <= maxH){
+	
+						var ir = this._createRenderer(item, "horizontal", this.horizontalRenderer, "dojoxCalendarHorizontal");
+		
+						var fullHeight = this.isItemBeingEdited(item) && !this.liveLayout && this._isEditing;
+						var h = fullHeight ? cellH - this.cellPaddingTop : irHeight;
+						var w = item.end - item.start;
+						if (has("ie") >= 9 && item.start + w < this.itemContainer.offsetWidth) {
+							w++;
+						}
+	
+						domStyle.set(ir.container, {
+							"top": (fullHeight ? this.cellPaddingTop : posY) + "px",
+							"left": item.start + "px",
+							"width": w + "px",
+							"height": h + "px"
+						});
+	
+						this._applyRendererLayout(item, ir, cell, w, h, "horizontal");
+	
+					}else{
+						// The items does not fit in view, fill hidden items per column
+						for(var d=item.startOffset;d<item.endOffset;d++){
+							if(hiddenItems[d] == null){
+								hiddenItems[d] = [item.item];
+							}else{
+								hiddenItems[d].push(item.item);
+							}
 						}
 					}
-					maxH = exp ? cellH - this.expandRendererHeight : cellH;
-				}
 				
-				if(posY + irHeight <= maxH){
-
-					var ir = this._createRenderer(item, "horizontal", this.horizontalRenderer, "dojoxCalendarHorizontal");
-	
-					var fullHeight = this.isItemBeingEdited(item) && !this.liveLayout && this._isEditing;
-					var h = fullHeight ? cellH - this.cellPaddingTop : irHeight;
+				}else{ //itemsType === "decorationItems"
+					var ir = this.decorationRendererManager.createRenderer(item, "horizontal", this.horizontalDecorationRenderer, "dojoxCalendarDecoration");
+										
+					var h = cellH;
 					var w = item.end - item.start;
 					if (has("ie") >= 9 && item.start + w < this.itemContainer.offsetWidth) {
 						w++;
 					}
 
 					domStyle.set(ir.container, {
-						"top": (fullHeight ? this.cellPaddingTop : posY) + "px",
+						"top": "0",
 						"left": item.start + "px",
 						"width": w + "px",
 						"height": h + "px"
 					});
 
-					this._applyRendererLayout(item, ir, cell, w, h, "horizontal");
-
-				}else{
-					// The items does not fit in view, fill hidden items per column
-					for(var d=item.startOffset;d<item.endOffset;d++){
-						if(hiddenItems[d] == null){
-							hiddenItems[d] = [item.item];
-						}else{
-							hiddenItems[d].push(item.item);
-						}
-					}
+					domConstruct.place(ir.container, cell);
+					domStyle.set(ir.container, "display", "block");
 				}
 			}
 		},

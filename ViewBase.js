@@ -204,6 +204,7 @@ define([
 		destroy: function(preserveDom){
 			
 			this.rendererManager.destroy();
+			this.decorationRendererManager.destroy();
 			
 			while(this._viewHandles.length > 0){
 				this._viewHandles.pop().remove();

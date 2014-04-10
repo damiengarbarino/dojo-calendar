@@ -34,13 +34,17 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			this.emit("dataLoaded", value);
 		},
 		
-		_computeVisibleItems: function(renderData){
+		_computeVisibleItems: function(renderData, managerProp){
 			// summary:
 			//		Computes the data items that are in the displayed interval.
 			// renderData: Object
 			//		The renderData that contains the start and end time of the displayed interval.
 			// tags:
 			//		protected
+			
+			if(this.owner.owner){
+				return this.owner.owner[managerProp]._computeVisibleItems(renderData);
+			}
 
 			var startTime = renderData.startTime;
 			var endTime = renderData.endTime;

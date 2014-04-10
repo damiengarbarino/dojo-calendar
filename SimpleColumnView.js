@@ -126,9 +126,9 @@ function(
 		//		The class use to create vertical renderers.
 		verticalRenderer: null,
 
-		// decorationRenderer: Class
+		// verticalDecorationRenderer: Class
 		//		The class use to create decoration renderers.
-		decorationRenderer: null,
+		verticalDecorationRenderer: null,
 		
 		// minColumnWidth: Integer
 		//		The minimum column width. If the number of columns and sub columns displayed makes the
@@ -1806,7 +1806,7 @@ function(
 			//		private
 
 			if(itemsType === "dataItems" && this.verticalRenderer == null || 
-				itemsType === "decorationItems" && this.decorationRenderer == null){
+				itemsType === "decorationItems" && this.verticalDecorationRenderer == null){
 				return;
 			}
 			
@@ -1887,7 +1887,7 @@ function(
 				} else {
 					w = 100;
 					posX = 0;
-					ir = this.decorationRendererManager.createRenderer(item, "decoration", this.decorationRenderer, "dojoxCalendarDecoration");
+					ir = this.decorationRendererManager.createRenderer(item, "vertical", this.verticalDecorationRenderer, "dojoxCalendarDecoration");
 					renderer = ir.renderer;
 				}
 				

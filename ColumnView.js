@@ -177,6 +177,13 @@ function(
 			}
 		},
 		
+		_setDecorationItemsAttr: function(value){
+			this.inherited(arguments);
+			if(this.secondarySheet){
+				this.secondarySheet.set("decorationItems", value);
+			}
+		},
+		
 		_setStartDateAttr: function(value){
 			this.inherited(arguments);
 			if(this.secondarySheet){
@@ -195,7 +202,7 @@ function(
 			if(this.secondarySheet){
 				this.secondarySheet.set("horizontalRenderer", value);
 			}
-		},
+		},		
 		
 		_getHorizontalRendererAttr: function(){
 			if(this.secondarySheet){
@@ -204,6 +211,20 @@ function(
             return null;
 		},
 		
+		_setHorizontalDecorationRendererAttr: function(value){
+			this.inherited(arguments);
+			if(this.secondarySheet){
+				this.secondarySheet.set("horizontalDecorationRenderer", value);
+			}
+		},
+		
+		_getHorizontalRendererAttr: function(){
+			if(this.secondarySheet){
+				return this.secondarySheet.get("horizontalDecorationRenderer");
+			}
+            return null;
+		},
+
 		_setExpandRendererAttr: function(value){
 			if(this.secondarySheet){
 				this.secondarySheet.set("expandRenderer", value);
@@ -284,6 +305,15 @@ function(
 			if(!this.secondarySheet._domReady){
 				this.secondarySheet._domReady = true;
 				this.secondarySheet._layoutRenderers(this.secondarySheet.renderData);
+			}
+			
+			this.inherited(arguments);
+		},
+		
+		_layoutDecorationRenderers: function(renderData){
+			if(!this.secondarySheet._decDomReady){
+				this.secondarySheet._decDomReady = true;
+				this.secondarySheet._layoutDecorationRenderers(this.secondarySheet.renderData);
 			}
 			
 			this.inherited(arguments);
