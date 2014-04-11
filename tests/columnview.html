@@ -135,16 +135,13 @@
 						
 						var itemsData = createModel(dataItemsTemplate);
 						var decorationItemsData = createModel(decorationItemsTemplate);
-						
-						
+												
 						var subColumnsLabels = {
 								"cal1": "Calendar 1",
 								"cal2": "Calendar 2"
 						};
-
 						
-						// Calendar creation & configuration
-						
+						// Calendar creation & configuration						
 						var secondarySheetClass = declare([ColumnViewSecondarySheet, CalendarKeyboard, CalendarMouse]);
 						
 						colView = declare([ColumnView, CalendarKeyboard, CalendarMouse])({

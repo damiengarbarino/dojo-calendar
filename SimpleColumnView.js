@@ -150,7 +150,7 @@ function(
 		_columnHeaderHandlers: null,
 		
 		constructor: function(){
-			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer",
+			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer", "verticalDecorationRenderer",
 				"rowHeaderTimePattern", "columnHeaderDatePattern", "timeSlotDuration", "rowHeaderGridSlotDuration", "rowHeaderLabelSlotDuration", 
 				"rowHeaderLabelOffset", "rowHeaderFirstLabelOffset","percentOverlap", "horizontalGap", "scrollBarRTLPosition","itemToRendererKindFunc", 
 				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items", "subColumns", "minColumnWidth"];

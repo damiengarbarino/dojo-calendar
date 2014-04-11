@@ -30,6 +30,11 @@
 		position: absolute;
 		left: @row-header-width;
 		right: 0;
+		overflow: hidden;
+	}
+	
+	.dojoxCalendarGrid.dojoxCalendarHorizontalScroll {
+		border-right: @outer-border;
 	}
 
 	.dojoxCalendarGridTable {
@@ -101,8 +106,13 @@
 		left: @row-header-width;
 		right: 0;
 		cursor: default;
+		overflow: hidden;
 	}
-
+	
+	.dojoxCalendarContainer.dojoxCalendarHorizontalScroll {
+		border-right: @outer-border;
+	}
+	
 	.dojoxCalendarContainerTable {
 		border-collapse: collapse;
 		table-layout: fixed;
@@ -132,12 +142,23 @@
 	}
 	
 	.dojoxCalendarEventContainerColumn {
-		position: relative;		
-		height:100%;
+		position: absolute;		
+		height: 100%;
+		left:0;
+		top:0;
+		right:0;
 		margin-left: 1px;
 		margin-right: 5px;		
 	}
-
+	
+	.dojoxCalendarDecorationContainerColumn {
+		position: absolute;		
+		height: 100%;
+		left:0;
+		top:0;
+		right:0;	
+	}
+	
 	.dojoxCalendarSubContainerColumn.subColumn {
 		border-right: @sub-column-border;		
 	}
@@ -180,8 +201,13 @@
 		right: 0;
 		top: 0;
 		cursor: default;
+		overflow: hidden;
 	}
-
+	
+	.dojoxCalendarColumnHeader.dojoxCalendarHorizontalScroll {
+		border-right: @outer-border;
+	}
+	
 	.dojoxCalendarColumnHeaderTable {
 		border-collapse: collapse;
 		table-layout: fixed;
@@ -237,7 +263,7 @@
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
-		display: none;		
+		display: none;
 	}
 	
 	.dojoxCalendarSubColumnHeader {
@@ -247,8 +273,13 @@
 		right: 0;
 		top: 0px;
 		cursor: default;
+		overflow: hidden;
 	}
 	
+	.dojoxCalendarSubColumnHeader.dojoxCalendarHorizontalScroll {
+		border-right: @outer-border;
+	}
+		
 	.dojoxCalendarSubColumnHeaderTable {
 		border-collapse: collapse;
 		table-layout: fixed;
@@ -279,14 +310,14 @@
 		}
 		td.dojoxCalendarWeekend {
 			background-color: @week-end-color;
-		}
+		}					
 	}
-		
+	
 	.dojoxCalendarSubHeaderContainer {			
 		position: relative;
 		width:100%;		
-		height: @sub-column-header-height - 1px;
-	}
+		height: @sub-column-header-height - 2px;
+	}	
 	
 	.dojoxCalendarSubHeaderCell {
 		position: absolute;		
@@ -325,7 +356,7 @@
 				background-color: #efefef;  
 			}			
 		}
-	}	
+	}
 
 	.dojoxCalendarRowHeader {
 		position: absolute;
@@ -371,6 +402,12 @@
 			border-top: 1px solid @row-color;
 		}
 	}
+	
+	.dojoxCalendarDecoration {
+		position:absolute;
+		background-color: rgb(167, 233, 68);
+		.opacity(20);
+	}
  
 	.dojoxCalendarEvent {
 		position: absolute;	
@@ -386,7 +423,7 @@
 			top: 0;
 			bottom: 0;
 			z-index: -1;
-			border: @event-border;			
+			border: @event-border;
 			.rounded-corners;
 			background-color: @event-bg-color;
 			.opacity(90);
@@ -468,9 +505,9 @@
 	}
 	
 	.dojoxCalendarEvent .startTime {
-		.event-header;
+		.event-header;	
 		background-color: @event-header-bg-color;	
-		.top-left-right-border(@event-border);				
+		.top-left-right-border(@event-border);
 	}
 
 	.dojoxCalendarEvent.Focused .startTime {
@@ -496,6 +533,14 @@
 		bottom: 0;
 		overflow-y: scroll;
 		overflow-x: hidden;
+	}
+	
+	.dojoxCalendarHScrollBar {
+		position: absolute;		
+		bottom: 0;
+		left: @row-header-width;		
+		overflow-x: scroll;
+		overflow-y: hidden;
 	}
 
 	.dojoxCalendarMatrixView {	
@@ -656,7 +701,8 @@
 	}
 	.dojoxCalendarVScrollBar {
 		top: @sheet-top-subcolumns;
-	}
+	}	
+		
 }
 
 .soria .dojoxCalendarColumnView.secondarySheet {

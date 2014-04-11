@@ -24,14 +24,14 @@
 			require(["dojo/ready", "dojo/_base/declare", "dojo/on", "dojo/date/locale", "dojo/parser", "dojo/date", "dojo/_base/lang",
 					"dojo/dom", "dojo/dom-construct", "dojo/dom-class", "dojo/_base/window",
 					"dijit/registry", "dojo/query", "dojox/calendar/MatrixView", "dojox/calendar/Keyboard", "dojox/calendar/Mouse", 
-					"dojox/calendar/HorizontalRenderer", "dojox/calendar/LabelRenderer", "dojox/calendar/ExpandRenderer", "dojo/store/Memory", "dojo/store/Observable",
+					"dojox/calendar/HorizontalRenderer", "dojox/calendar/DecorationRenderer", "dojox/calendar/LabelRenderer", "dojox/calendar/ExpandRenderer", "dojo/store/Memory", "dojo/store/Observable",
 					"dijit/form/VerticalSlider", "dijit/form/NumberSpinner", 
 					"dijit/form/ComboBox", "dijit/form/DateTextBox", "dijit/form/TimeTextBox", "dijit/form/TextBox", 
 					"dijit/form/Button", "dijit/TitlePane", "dijit/Tooltip", 
 					"dijit/form/CheckBox", "dojo/_base/fx"],
 
 				function(ready, declare, on, locale, parser, date, lang, dom, domConstruct, domClass, win, registry, query,
-					MatrixView, CalendarKeyboard, CalendarMouse, HorizontalRenderer, LabelRenderer, ExpandRenderer, Memory, Observable, VerticalSlider, 
+					MatrixView, CalendarKeyboard, CalendarMouse, HorizontalRenderer, DecorationRenderer, LabelRenderer, ExpandRenderer, Memory, Observable, VerticalSlider, 
 					NumberSpinner, ComboBox, DateTextBox, TimeTextBox, TextBox, Button, TitlePane, Tooltip, CheckBox, fx){
 
 					ready(function(){
@@ -66,7 +66,7 @@
 						
 						var dateClassObj = Date;
 						
-						var modelBase = [
+						var dataItemsTemplate = [
 							{day: 0, start: [0,0], duration: 1440, allDay:true},
 							{day: 1, start: [6,0], duration: 240},
 							{day: 1, start: [10,0], duration: 240},
@@ -79,6 +79,15 @@
 							{day: 6, start: [0,0], duration: 2*1440, allDay:true}
 						];
 						
+						var decorationItemsTemplate = [
+   							{day: 2, start: [10,0], duration: 600, calendar: "cal1"},
+   							{day: 3, start: [10,0], duration: 500, calendar: "cal1"},
+   							{day: 4, start: [11,0], duration: 200, calendar: "cal1"},
+   							{day: 2, start: [9,0], duration: 500, calendar: "cal2"},
+   							{day: 3, start: [11,0], duration: 500, calendar: "cal2"},
+   							{day: 4, start: [11,0], duration: 500, calendar: "cal2"}
+   						];
+						
 						// TODO manage first day of week
 						var floorToWeek= function(d){
 							d.setHours(0);
@@ -89,48 +98,57 @@
 							return d;
 						};
 						
-						var someData = [];
+						var createModel = function(modelBase){
 						
-						var startOfWeek = new dateClassObj();
-						startOfWeek = floorToWeek(startOfWeek);
-												
-						startDateEditor.set("value", startOfWeek);
-						
-						var id;
-						for (var w=0; w<5; w++) {
-							for (var i=0; i<modelBase.length; i++) {
-								id = (w*modelBase.length)+i;
-								var newObj = {
-									id: id,
-									summary: "New Event " + id,
-									startTime: new dateClassObj(startOfWeek.getTime()),
-									endTime: new dateClassObj(startOfWeek.getTime()),
-									calendar: i%2 == 0 ? "cal1" : "cal2"
-								};
-	
-								newObj.startTime = date.add(newObj.startTime, "day", Math.floor(Math.random()*7));
-								newObj.startTime.setHours(modelBase[i].start[0]);
-								newObj.startTime.setMinutes(modelBase[i].start[1]);
-	
-								newObj.endTime = date.add(newObj.startTime, "minute", modelBase[i].duration);
-								
-								if(modelBase[i].allDay != undefined){
-									newObj.allDay = modelBase[i].allDay; 
+							var someData = [];
+							
+							var startOfWeek = new dateClassObj();
+							startOfWeek = floorToWeek(startOfWeek);
+													
+							startDateEditor.set("value", startOfWeek);
+							
+							var id;
+							for (var w=0; w<5; w++) {
+								for (var i=0; i<modelBase.length; i++) {
+									id = (w*modelBase.length)+i;
+									var newObj = {
+										id: id,
+										summary: "New Event " + id,
+										startTime: new dateClassObj(startOfWeek.getTime()),
+										endTime: new dateClassObj(startOfWeek.getTime()),
+										calendar: modelBase[i].calendar ? modelBase[i].calendar : i%2 == 0 ? "cal1" : "cal2"
+									};
+		
+									newObj.startTime = date.add(newObj.startTime, "day", Math.floor(Math.random()*7));
+									newObj.startTime.setHours(modelBase[i].start[0]);
+									newObj.startTime.setMinutes(modelBase[i].start[1]);
+		
+									newObj.endTime = date.add(newObj.startTime, "minute", modelBase[i].duration);
+									
+									if(modelBase[i].allDay != undefined){
+										newObj.allDay = modelBase[i].allDay; 
+									}
+		
+									someData.push(newObj);
 								}
-	
-								someData.push(newObj);
+								startOfWeek = date.add(startOfWeek, "day", 7);
 							}
-							startOfWeek = date.add(startOfWeek, "day", 7);
+							
+							return someData;
+						
 						}
 						
-						id++;
+						var itemsData = createModel(dataItemsTemplate);
+						var decorationItemsData = createModel(decorationItemsTemplate);
 						
 						// Calendar creation & configuration
 						
 						matrixView = declare([MatrixView, CalendarKeyboard, CalendarMouse])({
 							
-							store: new Observable(new Memory({data: someData})),		
+							store: new Observable(new Memory({data: itemsData})),
+							decorationStore: new Observable(new Memory({data: decorationItemsData})),
 							horizontalRenderer: HorizontalRenderer,
+							horizontalDecorationRenderer: DecorationRenderer,
 							labelRenderer: LabelRenderer,
 							expandRenderer: ExpandRenderer,
 							verticalGap:4,
