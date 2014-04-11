@@ -521,11 +521,11 @@ function(
 			this._validateProperties();
 
 			var oldRd = this.renderData;
-			var rd = this._createRenderData();
-			this.renderData = rd;			
+			var rd = this.renderData = this._createRenderData();
+
 			this._createRendering(rd, oldRd);
-			this._layoutRenderers(rd);
 			this._layoutDecorationRenderers(rd);
+			this._layoutRenderers(rd);
 		},
 		
 		_createRendering: function(/*Object*/renderData, /*Object*/oldRenderData){

@@ -427,12 +427,12 @@ function(
 			this._validateProperties();
 
 			var oldRd = this.renderData;
-			this.renderData = this._createRenderData();
+			var rd = this.renderData = this._createRenderData();
 
-			this._createRendering(this.renderData, oldRd);
+			this._createRendering(rd, oldRd);
 			
-			this._layoutRenderers(this.renderData);						
-			this._layoutDecorationRenderers(this.renderData);
+			this._layoutDecorationRenderers(rd);
+			this._layoutRenderers(rd);
 		},
 		
 		_createRendering: function(renderData, oldRenderData){
@@ -1524,6 +1524,7 @@ function(
 			}
 			
 			this._layoutStep = renderData.columnCount;
+			this.renderData.gridTablePosX = domGeometry.position(this.gridTable).x;	
 			
 			this.inherited(arguments);
 		},
@@ -1589,7 +1590,7 @@ function(
 				var hItems = null;
 				var hOffsets = [];
 				if(horizontalItems.length > 0 && this.horizontalRenderer){
-					var hItems = this._createHorizontalLayoutItems(index, start, end, horizontalItems);
+					var hItems = this._createHorizontalLayoutItems(index, start, end, horizontalItems, itemsType);
 					var hOverlapLayout = this._computeHorizontalOverlapLayout(hItems, hOffsets);
 				}
 				
@@ -1616,7 +1617,7 @@ function(
 			}else{ // itemsType === "decorationItems"
 				
 				if(this.horizontalDecorationRenderer){
-					var hItems = this._createHorizontalLayoutItems(index, start, end, items);
+					var hItems = this._createHorizontalLayoutItems(index, start, end, items, itemsType);
 					if(hItems != null){					
 						this._layoutHorizontalItemsImpl(index, hItems, null, false, null, itemsType);
 					}
@@ -1624,18 +1625,15 @@ function(
 			}
 		},
 
-		_createHorizontalLayoutItems: function(/*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+		_createHorizontalLayoutItems: function(/*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items, /*String*/itemsType){
 			// tags:
 			//		private
 			
-			if(this.horizontalRenderer == null){
-				return;
-			}
-
-			var rd = this.renderData;
+						var rd = this.renderData;
 			var cal = rd.dateModule;
 			var sign = rd.rtl ? -1 : 1;
 			var layoutItems = [];
+			var isDecoration = itemsType === "decorationItems";
 
 			// step 1: compute projected position and size
 			for(var i = 0; i < items.length; i++){
@@ -1652,7 +1650,7 @@ function(
 					start += celPos.w;
 				}
 				
-				if(!this.roundToDay && !item.allDay){
+				if(isDecoration && !item.isAllDay || !isDecoration && !this.roundToDay && !item.allDay){
 					start += sign * this.computeProjectionOnDate(rd, dayStart, overlap[0], celPos.w);
 				}
 				

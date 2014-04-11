@@ -674,8 +674,8 @@ function(
 			var rd = this._createRenderData();
 			this.renderData = rd;
 			this._createRendering(rd, oldRd);
-			this._layoutRenderers(rd);
 			this._layoutDecorationRenderers(rd);
+			this._layoutRenderers(rd);
 		},
 		
 		_createRendering: function(/*Object*/renderData, /*Object*/oldRenderData){
