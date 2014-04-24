@@ -179,10 +179,11 @@ define([
 			this._viewHandles = [];
 			
 			this.storeManager = new StoreManager({owner: this});
+			this.storeManager.on("layoutInvalidated", lang.hitch(this, this._refreshItemsRendering));
 			this.storeManager.on("dataLoaded", lang.hitch(this, function(items){
 				this.set("items", items);
 			}));
-					
+			
 			this.rendererManager = new RendererManager({owner: this});
 			this.rendererManager.on("rendererCreated", lang.hitch(this, this._onRendererCreated));
 			this.rendererManager.on("rendererReused", lang.hitch(this, this._onRendererReused));
