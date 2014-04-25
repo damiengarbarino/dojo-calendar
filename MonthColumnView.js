@@ -251,7 +251,7 @@ function(
 			
 			if(this.displayedItemsInvalidated && !this._isEditing){
 				this.displayedItemsInvalidated = false;
-				this._computeVisibleItems(rd);
+				this._computeVisibleItems(rd, "storeManager");
 								
 			}else if (this.renderData){
 				rd.items = this.renderData.items;
@@ -259,7 +259,7 @@ function(
 			
 			if(this.displayedDecorationItemsInvalidated){
 				 // while editing in no live layout we must not to recompute items (duplicate renderers)
-				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd);
+				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd, "decorationStoreManager");
 								
 			}else if (this.renderData){
 				rd.decorationItems = this.renderData.decorationItems;

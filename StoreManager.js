@@ -43,13 +43,13 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			//		protected
 			
 			if(this.owner.owner){
-				return this.owner.owner[managerProp]._computeVisibleItems(renderData);
+				return this.owner.owner[managerProp]._computeVisibleItems(renderData, managerProp);
 			}
 
 			var startTime = renderData.startTime;
 			var endTime = renderData.endTime;
 			var res = null;
-			if(this.items){		
+			if(this.items){
 				res = arr.filter(this.items, function(item){
 					return this.owner.isOverlapping(renderData, item.startTime, item.endTime, startTime, endTime);
 				}, this);

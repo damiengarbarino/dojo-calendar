@@ -442,21 +442,8 @@ define([
 			// includeLimits: Boolean
 			//		Whether include the end time or not.
 			// returns: Boolean
-			if(start1 == null || start2 == null || end1 == null || end2 == null){
-				return false;
-			}
-			
-			var cal = renderData.dateModule;
-			
-			if(includeLimits){
-				if(cal.compare(start1, end2) == 1 || cal.compare(start2, end1) == 1){
-					return false;
-				}					
-			}else if(cal.compare(start1, end2) != -1 || cal.compare(start2, end1) != -1){
-				return false;
-			}
-			return true; 
-		},			 
+			return timeUtil.isOverlapping(renderData, start1, end1, start2, end2, includeLimits);
+		},
 			 
 		computeRangeOverlap: function(renderData, start1, end1, start2, end2, includeLimits){
 			// summary:

@@ -7,21 +7,19 @@
 		<title>Calendar Sample: Desktop</title>				
 		<style type="text/css">
 			@import "../themes/claro/Calendar.css";
-			@import "../themes/nihilo/Calendar.css";
 			@import "calendar.css";
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/dijit.css";
 			@import "../../../dijit/themes/claro/claro.css";
+			
 			.dijitCalendar .Highlighted {
 				background-color: #fff0b4;
-					
 			}
 			.dijitCalendar .Highlighted .dijitCalendarDateLabel {
 				color: red !important;
-				border: solid 1px #fff0b4;				
-			}					
-			
-		</style>			
+				border: solid 1px #fff0b4;
+			}
+		</style>
 	</head>
 	
 	<body class="claro">
@@ -69,42 +67,59 @@
 							return item.calendar == "cal1" ? "Calendar1" : "Calendar2"
 						});
 						
-						// Calendar model creation						
-						var modelBase = [
-							{day: 1, start: [10,0], duration: 1400},
-							{day: 2, start: [10,30], duration: 120},
-							{day: 2, start: [12,0], duration: 240},
-							{day: 3, start: [6,0], duration: 180},
-							{day: 3, start: [0,0], duration: 2880, allDay: true}
+						// Calendar model creation
+						var dataItemsTemplate = [
+							{day: 1, start: [10,0], duration: 1400, calendar: "cal1"},
+							{day: 2, start: [10,30], duration: 120, calendar: "cal2"},
+							{day: 2, start: [12,0], duration: 240, calendar: "cal1"},
+							{day: 3, start: [6,0], duration: 180, calendar: "cal2"},
+							{day: 3, start: [0,0], duration: 2880, allDay: true, calendar: "cal1"}
+						];
+						var decorationItemsTemplate = [
+							{day: 4, start: [10,10], duration: 360}
 						];
 						
-						var someData = [];
+						var dateClassObj = calendar.dateClassObj;
 												
-						var startOfWeek = calendar.floorToWeek(new calendar.dateClassObj());
+						var startOfWeek = calendar.floorToWeek(new dateClassObj());
 						
-						for (var id=0; id<modelBase.length; id++) {
-							var newObj = {
-								id: id,
-								summary: "New Event " + id,
-								startTime: new calendar.dateClassObj(startOfWeek.getTime()),
-								endTime: new calendar.dateClassObj(startOfWeek.getTime()),
-								calendar: id%2 == 0 ? "cal1" : "cal2",
-								allDay: modelBase[id].allDay
-							};
+						var createModel = function(modelTemplate){
+							
+							var someData = [];
+														
+							for (var id=0; id<modelTemplate.length; id++) {
+								
+								var evtTmpl = modelTemplate[id];
+								var newObj = {
+									id: id,
+									summary: "New Event " + id,
+									startTime: new dateClassObj(startOfWeek.getTime()),
+									endTime: new dateClassObj(startOfWeek.getTime()),
+									calendar: evtTmpl.calendar,
+									allDay: evtTmpl.allDay
+								};
 
-							newObj.startTime = calendar.dateModule.add(newObj.startTime, "day", modelBase[id].day);
-							newObj.startTime.setHours(modelBase[id].start[0]);
-							newObj.startTime.setMinutes(modelBase[id].start[1]);
+								newObj.startTime = calendar.dateModule.add(newObj.startTime, "day", evtTmpl.day);
+								newObj.startTime.setHours(evtTmpl.start[0]);
+								newObj.startTime.setMinutes(evtTmpl.start[1]);
 
-							newObj.endTime = calendar.dateModule.add(newObj.startTime, "minute", modelBase[id].duration);
+								newObj.endTime = calendar.dateModule.add(newObj.startTime, "minute", evtTmpl.duration);
 
-							someData.push(newObj);
+								someData.push(newObj);
+							}
+							
+							return someData;
 						}
 						
 						
-						var store = new Observable(new Memory({data: someData}));
+						var itemsData = createModel(dataItemsTemplate);
+						var decorationItemsData = createModel(decorationItemsTemplate);
+						
+						var store = new Observable(new Memory({data: itemsData}));
+						var decorationStore = new Observable(new Memory({data: decorationItemsData}));
 												
 						calendar.set("store", store);
+						calendar.set("decorationStore", decorationStore);
 						calendar.set("date", startOfWeek);
 						
 						// Enable creation of event interactively by ctrl clicking grid.

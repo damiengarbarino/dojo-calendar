@@ -20,7 +20,7 @@
 			.dojoxCalendarDecoration.Calendar2 {
 				background-color: blue !important;
 			}
-		</style>			
+		</style>
 	</head>
 	
 	<body class="claro">
@@ -99,13 +99,13 @@
 							return d;
 						};
 						
+						var startOfWeek = new dateClassObj();
+						startOfWeek = floorToWeek(startOfWeek);
+						
 						var createModel = function(modelTemplate){
 							
 							var someData = [];
-							
-							var startOfWeek = new dateClassObj();
-							startOfWeek = floorToWeek(startOfWeek);
-							
+
 							startDateEditor.set("value", startOfWeek);
 							
 							for (var id=0; id<modelTemplate.length; id++) {

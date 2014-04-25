@@ -249,7 +249,7 @@ function(
 			if(this.displayedItemsInvalidated && !this._isEditing){
 				// while editing in no live layout we must not to recompute items (duplicate renderers)
 				this.displayedItemsInvalidated = false;
-				this._computeVisibleItems(rd);
+				this._computeVisibleItems(rd, "storeManager");
 								
 			}else if(this.renderData){
 				rd.items = this.renderData.items;
@@ -1675,7 +1675,7 @@ function(
 						end += celPos.w;
 					}
 					
-					if(this.roundToDay){
+					if(!isDecoration && this.roundToDay){
 						if(!this.isStartOfDay(overlap[1])){
 							end += sign * celPos.w;
 						}
