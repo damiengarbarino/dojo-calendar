@@ -1196,7 +1196,7 @@ define([
 			}
 						
 			// recycle renderers first
-			rendererManager._recycleItemRenderers();
+			rendererManager.recycleItemRenderers();
 			
 			var cal = renderData.dateModule; 
 			
@@ -1275,7 +1275,7 @@ define([
 		////////////////////////////////////////////////////////////////
 		
 		_recycleItemRenderers: function(remove){
-			this.rendererManager._recycleItemRenderers(remove);
+			this.rendererManager.recycleItemRenderers(remove);
 		},
 							
 		getRenderers: function(item){			

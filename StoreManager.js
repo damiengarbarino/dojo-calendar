@@ -49,8 +49,8 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			var startTime = renderData.startTime;
 			var endTime = renderData.endTime;
 			var res = null;
-			if(this.items){
-				res = arr.filter(this.items, function(item){
+			if(this.owner.items){
+				res = arr.filter(this.owner.items, function(item){
 					return this.owner.isOverlapping(renderData, item.startTime, item.endTime, startTime, endTime);
 				}, this);
 			}

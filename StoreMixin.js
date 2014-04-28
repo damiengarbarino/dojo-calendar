@@ -158,7 +158,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		_getItemStoreStateObj: function(/*Object*/item){
 			// tags
 			//		private
-			this.storeManager._getItemStoreStateObj(item);			
+			return this.storeManager._getItemStoreStateObj(item);			
 		},
 		
 		getItemStoreState: function(item){

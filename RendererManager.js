@@ -62,7 +62,7 @@ define([
 			}
 		},
 		
-		_recycleItemRenderers: function(remove){
+		recycleItemRenderers: function(remove){
 			// summary:
 			//		Recycles all the item renderers.
 			// remove: Boolean

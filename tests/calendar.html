@@ -83,11 +83,12 @@
 												
 						var startOfWeek = calendar.floorToWeek(new dateClassObj());
 						
+						var id = 0;
 						var createModel = function(modelTemplate){
 							
 							var someData = [];
 														
-							for (var id=0; id<modelTemplate.length; id++) {
+							for (id=0; id<modelTemplate.length; id++) {
 								
 								var evtTmpl = modelTemplate[id];
 								var newObj = {
