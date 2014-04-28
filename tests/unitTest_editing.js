@@ -141,7 +141,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 			o._endItemEditingGesture("mouse");
 			o._endItemEditing("mouse", false); // validate changes
 			
-			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 9, 53)), 0);
+			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 10, 23)), 0);
 			doh.is(cal.compare(item.endTime, new Date(2011, 0, 5, 11)), 0);
 			
 			renderItem = o.itemToRenderItem(item, o.store);
@@ -160,8 +160,8 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 			o._endItemEditingGesture("mouse");
 			o._endItemEditing("mouse", false); // validate changes
 			
-			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 9, 53)), 0);
-			doh.is(cal.compare(item.endTime, new Date(2011, 0, 5, 11, 8)), 0); // 7 + 1 as end is moved
+			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 10, 23)), 0);
+			doh.is(cal.compare(item.endTime, new Date(2011, 0, 5, 10, 38)), 0); // 7 + 1 as end is moved
 			
 			o.validateRendering();
 			o.destroyRecursive();
@@ -196,7 +196,7 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 			o._endItemEditingGesture("mouse");
 			o._endItemEditing("mouse", false); // validate changes
 			
-			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 9, 50)), 0);
+			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 10, 20)), 0);
 			doh.is(cal.compare(item.endTime, new Date(2011, 0, 5, 11)), 0);
 			
 			renderItem = o.itemToRenderItem(item, o.store);
@@ -215,8 +215,8 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 			o._endItemEditingGesture("mouse");
 			o._endItemEditing("mouse", false); // validate changes
 			
-			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 9, 50)), 0);
-			doh.is(cal.compare(item.endTime, new Date(2011, 0, 5, 11, 10)), 0);
+			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 10, 20)), 0);
+			doh.is(cal.compare(item.endTime, new Date(2011, 0, 5, 10, 40)), 0);
 			
 			o.validateRendering();
 			o.destroyRecursive();
@@ -248,12 +248,12 @@ define(["doh", "../ColumnView", "../MatrixView", "dojo/store/Memory", "dojo/stor
 			};
 			
 			o._startItemEditing(item, "mouse");
-			o._startItemEditingGesture([new Date(2011, 0, 5, 10, 0)], "resizeEnd", "mouse");
-			o._moveOrResizeItemGesture([new Date(2011, 0, 5, 9, 10)], "mouse"); //- 50 min 
+			o._startItemEditingGesture([new Date(2011, 0, 5, 11, 0)], "resizeEnd", "mouse");
+			o._moveOrResizeItemGesture([new Date(2011, 0, 5, 10, 10)], "mouse"); //- 50 min 
 			o._endItemEditingGesture("mouse");
 			o._endItemEditing("mouse", false); // validate changes
 			
-			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 10)), 0);
+			doh.is(cal.compare(item.startTime, new Date(2011, 0, 5, 10, 0)), 0);
 			doh.is(cal.compare(item.endTime, new Date(2011, 0, 5, 10, 15)), 0);					
 			
 			o.validateRendering();
