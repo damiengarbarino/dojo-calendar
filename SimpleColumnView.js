@@ -272,7 +272,7 @@ function(
 			
 			if(this.displayedItemsInvalidated && !this._isEditing){
 				 // while editing in no live layout we must not to recompute items (duplicate renderers)
-				rd.items = this.storeManager._computeVisibleItems(rd, "storeManager");
+				rd.items = this.storeManager._computeVisibleItems(rd);
 								
 			}else if (this.renderData){
 				rd.items = this.renderData.items;
@@ -280,7 +280,7 @@ function(
 			
 			if(this.displayedDecorationItemsInvalidated){
 				 // while editing in no live layout we must not to recompute items (duplicate renderers)
-				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd, "decorationStoreManager");
+				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd);
 								
 			}else if (this.renderData){
 				rd.decorationItems = this.renderData.decorationItems;

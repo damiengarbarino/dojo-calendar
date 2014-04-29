@@ -249,14 +249,14 @@ function(
 			if(this.displayedItemsInvalidated && !this._isEditing){
 				// while editing in no live layout we must not to recompute items (duplicate renderers)
 				this.displayedItemsInvalidated = false;
-				this._computeVisibleItems(rd, "storeManager");
+				this._computeVisibleItems(rd);
 								
 			}else if(this.renderData){
 				rd.items = this.renderData.items;
 			}
 			
 			if(this.displayedDecorationItemsInvalidated){				 
-				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd, "decorationStoreManager");
+				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd);
 								
 			}else if (this.renderData){
 				rd.decorationItems = this.renderData.decorationItems;
@@ -1013,6 +1013,7 @@ function(
 				// Use a time for FF (at least). In FF the cell size and position info are not ready yet. 
 				setTimeout(lang.hitch(this, function(){
 					this._layoutRenderers(this.renderData);
+					this._layoutDecorationRenderers(this.renderData);
 				  }), 20);
 								
 			}else{
@@ -1026,6 +1027,7 @@ function(
 					delete this._resizeTimer;
 					this._resizeRowsImpl(this.itemContainer, "tr");
 					this._layoutRenderers(this.renderData);
+					this._layoutDecorationRenderers(this.renderData);
 					if(this.resizeAnimationDuration == 0){
 						domStyle.set(this.itemContainer, "opacity", 1);
 					}else{
@@ -1513,7 +1515,7 @@ function(
 		_layoutDecorationRenderers: function(renderData){
 			// tags:
 			//		private
-			if(renderData == null || renderData.items == null || renderData.rowHeight <= 0){
+			if(renderData == null || renderData.decorationItems == null || renderData.rowHeight <= 0){
 				return;
 			}					
 			

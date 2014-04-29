@@ -299,13 +299,13 @@ _nls){
 								
 			this.invalidateRendering();
 			
-			this.storeManager = new StoreManager({owner: this});
+			this.storeManager = new StoreManager({owner: this, _ownerItemsProperty: "items"});
 			this.storeManager.on("layoutInvalidated", lang.hitch(this, this._refreshItemsRendering));
 			this.storeManager.on("dataLoaded", lang.hitch(this, function(items){
 				this.set("items", items);
 			}));
 			
-			this.decorationStoreManager = new StoreManager({owner: this});
+			this.decorationStoreManager = new StoreManager({owner: this, _ownerItemsProperty: "decorationItems"});
 			this.decorationStoreManager.on("layoutInvalidated", lang.hitch(this, this._refreshDecorationItemsRendering));
 			this.decorationStoreManager.on("dataLoaded", lang.hitch(this, function(items){
 				this.set("decorationItems", items);

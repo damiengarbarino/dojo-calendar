@@ -15,6 +15,8 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 		//		The store that contains the events to display.
 		store: null,
 		
+		_ownerItemsProperty: null,
+		
 		_getParentStoreManager: function(){
 			if(this.owner && this.owner.owner){
 				return this.owner.owner.get("storeManager");
@@ -34,7 +36,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			this.emit("dataLoaded", value);
 		},
 		
-		_computeVisibleItems: function(renderData, managerProp){
+		_computeVisibleItems: function(renderData){
 			// summary:
 			//		Computes the data items that are in the displayed interval.
 			// renderData: Object
@@ -42,15 +44,12 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			// tags:
 			//		protected
 			
-			if(this.owner.owner){
-				return this.owner.owner[managerProp]._computeVisibleItems(renderData, managerProp);
-			}
-
 			var startTime = renderData.startTime;
 			var endTime = renderData.endTime;
 			var res = null;
-			if(this.owner.items){
-				res = arr.filter(this.owner.items, function(item){
+			var items = this.owner[this._ownerItemsProperty];
+			if(items){
+				res = arr.filter(items, function(item){
 					return this.owner.isOverlapping(renderData, item.startTime, item.endTime, startTime, endTime);
 				}, this);
 			}
