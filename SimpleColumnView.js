@@ -1772,18 +1772,31 @@ function(
 			
 				// no different rendererKind for decoration yet
 				this._layoutRendererWithSubColumns(renderData, "decoration", false, index, start, end, items, itemsType);
-			}							
+			}
 		},
 		
 		_layoutRendererWithSubColumns: function(renderData, rendererKind, computeOverlap, index, start, end, items, itemsType){
 			if(items.length > 0){
 				if(renderData.subColumnCount > 1){
 					var subColumnItems = {};
-					arr.forEach(this.subColumns, function(subCol){
+					var subCols = this.subColumns;
+					arr.forEach(subCols, function(subCol){
 						subColumnItems[subCol] = [];
 					});
 					arr.forEach(items, function(item){
-						subColumnItems[item.subColumn].push(item);
+						if(itemsType === "decorationItems"){
+							if(item.subColumn){
+								subColumnItems[item.subColumn].push(item);
+							}else{ // for decorations, if no sub column is set, apply to all sub columns
+								arr.forEach(subCols, function(subCol){
+									var clonedItem = lang.mixin({}, item);
+									clonedItem.subColumn = subCol;
+									subColumnItems[subCol].push(clonedItem);
+								});
+							}
+						}else if(item.subColumn){
+							subColumnItems[item.subColumn].push(item);
+						}
 					});
 					var subColIndex = 0;
 					arr.forEach(this.subColumns, function(subCol){
@@ -1791,7 +1804,7 @@ function(
 					}, this);
 				}else{
 					this._layoutVerticalItems(renderData, rendererKind, computeOverlap, index, 0, start, end, items, itemsType);
-				}							
+				}
 			}
 		},
 		

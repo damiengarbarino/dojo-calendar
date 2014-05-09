@@ -68,18 +68,15 @@
 						
 						var dataItemsTemplate = [
 							{day: 1, start: [10,0], duration: 1400, calendar: "cal1"},
-							{day: 2, start: [10,30], duration: 120, calendar: "cal2"},
+							{day: 2, start: [10,30], duration: 120}, // not displayed if sub columns are set
 							{day: 2, start: [12,0], duration: 240, calendar: "cal1"},
 							{day: 3, start: [6,0], duration: 180, calendar: "cal2"},
 							{day: 3, start: [0,0], duration: 2880, allDay: true, calendar: "cal1"}
 						];
 						var decorationItemsTemplate = [
-							{day: 2, start: [10,0], duration: 600, calendar: "cal1"},
-							{day: 3, start: [10,0], duration: 500, calendar: "cal1"},
-							{day: 4, start: [11,0], duration: 200, calendar: "cal1"},
-							{day: 2, start: [9,0], duration: 500, calendar: "cal2"},
-							{day: 3, start: [11,0], duration: 500, calendar: "cal2"},
-							{day: 4, start: [11,0], duration: 500, calendar: "cal2"}
+							{day: 2, start: [10,0], duration: 600}, // both columns
+							{day: 4, start: [8,0], duration: 200, calendar: "cal1"},
+							{day: 4, start: [9,0], duration: 300, calendar: "cal2"}
 						];
 						
 						// TODO manage first day of week
