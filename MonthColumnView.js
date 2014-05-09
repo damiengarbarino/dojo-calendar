@@ -649,7 +649,7 @@ function(
 					var h = [];
 					h.push(on(td, "click", lang.hitch(this, this._columnHeaderClick)));
 										
-					if(has("touch")){					
+					if(has("touch-events")){
 						h.push(on(td, "touchstart", function(e){
 							event.stop(e);
 							domClass.add(e.currentTarget, "Active");
