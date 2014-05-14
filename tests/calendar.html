@@ -80,15 +80,14 @@
 						];
 						
 						var dateClassObj = calendar.dateClassObj;
-												
+
 						var startOfWeek = calendar.floorToWeek(new dateClassObj());
-						
-						var id = 0;
+
 						var createModel = function(modelTemplate){
 							
 							var someData = [];
-														
-							for (id=0; id<modelTemplate.length; id++) {
+
+							for (var id=0; id<modelTemplate.length; id++) {
 								
 								var evtTmpl = modelTemplate[id];
 								var newObj = {
@@ -115,10 +114,10 @@
 						
 						var itemsData = createModel(dataItemsTemplate);
 						var decorationItemsData = createModel(decorationItemsTemplate);
-						
+						var id = itemsData.length;
 						var store = new Observable(new Memory({data: itemsData}));
 						var decorationStore = new Observable(new Memory({data: decorationItemsData}));
-												
+
 						calendar.set("store", store);
 						calendar.set("decorationStore", decorationStore);
 						calendar.set("date", startOfWeek);

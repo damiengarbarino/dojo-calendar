@@ -394,6 +394,12 @@ _nls){
 			}
 		},
 		
+		_refreshDecorationItemsRendering: function(){
+			if(this.currentView){
+				this.currentView._refreshDecorationItemsRendering();
+			}
+		},
+		
 		resize: function(changeSize){
 			if(changeSize){
 				domGeometry.setMarginBox(this.domNode, changeSize);

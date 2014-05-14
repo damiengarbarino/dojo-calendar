@@ -58,9 +58,9 @@
 							calendar.set("store", new Observable(new ExtJsonRest(
 									{target: "/cal/calendar/?startTime="+startTimeStr+"&endTime="+endTimeStr})));
 						});
-																					
-						calendar.set("date", startOfWeek);											
-												
+
+						calendar.set("date", startOfWeek);
+
 						// Enable creation of event interactively by ctrl clicking grid.
 						var createItem = function(view, d, e){
 						
@@ -82,14 +82,14 @@
 								end = cal.add(start, "day", 1);
 							}
 							
-							var item = {								
+							var item = {
 								summary: "New event ",
 								startTime: start,
-								endTime: end,								
+								endTime: end,
 								allDay: view.viewKind == "matrix"
 							};
 							
-							return item;							
+							return item;
 						};
 						
 						var interactive = true;

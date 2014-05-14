@@ -116,14 +116,13 @@
 							
 							return someData;
 						}
-						
-						
+
 						var itemsData = createModel(dataItemsTemplate);
 						var decorationItemsData = createModel(decorationItemsTemplate);
+						var id = itemsData.length;
 
-						
 						// Calendar creation & configuration
-						
+
 						colView = declare([MonthColumnView, CalendarKeyboard, CalendarMouse])({
 							store: new Observable(new Memory({data: itemsData})),
 							decorationStore: new Observable(new Memory({data: decorationItemsData})),

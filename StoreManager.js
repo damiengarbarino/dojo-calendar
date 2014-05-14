@@ -68,8 +68,10 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			// keep a reference on the store data item. 
 			newItem._item = object;
 			
-			// set the item as in the store
+			// get back the items from the owner that can contain the item created interactively.
+			this.items = this.owner[this._ownerItemsProperty];
 			
+			// set the item as in the store
 			if(previousIndex!==-1){
 				if(newIndex!==previousIndex){
 					// this is a remove or a move
@@ -135,10 +137,8 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 			if(!this.owner._isEditing){
 				if(layoutCanChange){
 					this.emit("layoutInvalidated");
-					//this.owner._refreshItemsRendering();			
 				}else{
 					// just update the item
-					//this.owner.updateRenderers(oldItem);
 					this.emit("renderersInvalidated", oldItem);
 				}
 			}

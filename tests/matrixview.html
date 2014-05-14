@@ -104,7 +104,7 @@
 							
 							var startOfWeek = new dateClassObj();
 							startOfWeek = floorToWeek(startOfWeek);
-													
+
 							startDateEditor.set("value", startOfWeek);
 							
 							var id;
@@ -140,6 +140,7 @@
 						
 						var itemsData = createModel(dataItemsTemplate);
 						var decorationItemsData = createModel(decorationItemsTemplate);
+						var id = itemsData.length;
 						
 						// Calendar creation & configuration
 						
