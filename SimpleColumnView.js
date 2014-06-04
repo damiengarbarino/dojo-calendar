@@ -398,10 +398,6 @@ function(
 		// Time of day management
 		//
 		//////////////////////////////////////////
-		
-		// startTimeOfDay: Object
-		//		The scroll position of the view. The value is an object made of "hours" and "minutes" properties.
-		startTimeOfDay: null,
 				
 		// scrollBarRTLPosition: String
 		//		Position of the scroll bar in right-to-left display.
@@ -1786,7 +1782,9 @@ function(
 					arr.forEach(items, function(item){
 						if(itemsType === "decorationItems"){
 							if(item.subColumn){
-								subColumnItems[item.subColumn].push(item);
+								if(subColumnItems[item.subColumn]){
+									subColumnItems[item.subColumn].push(item);
+								}
 							}else{ // for decorations, if no sub column is set, apply to all sub columns
 								arr.forEach(subCols, function(subCol){
 									var clonedItem = lang.mixin({}, item);
@@ -1794,7 +1792,7 @@ function(
 									subColumnItems[subCol].push(clonedItem);
 								});
 							}
-						}else if(item.subColumn){
+						}else if(item.subColumn && subColumnItems[item.subColumn]){
 							subColumnItems[item.subColumn].push(item);
 						}
 					});
