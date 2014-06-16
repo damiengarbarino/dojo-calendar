@@ -399,7 +399,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 			var hasResizeEnd = irs[1] != null && irs[1].resizeEndHandle != null;
 			var len = 0;
 			var touched = false;			
-			var list = this.itemToRenderer[item.id];
+			var list = this.rendererManager.itemToRenderer[item.id];
 														
 			for(var i=0; i<e.touches.length; i++){
 				

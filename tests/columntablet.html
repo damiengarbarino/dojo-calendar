@@ -78,17 +78,6 @@
 									timeSlotDuration: 30
 								}, "calendarNode");
 								
-								window.onresize = window.onorientationchange = function(e){
-									var n = colView.domNode;
-									if(n.offsetWidth > n.offsetHeight){
-										colView.set("columnCount", 5);
-									}else{
-										colView.set("columnCount", 1);
-									}
-								};
-								
-								window.onresize();								
-								
 								var goNextRange = function(direction){
 									var days = (direction == "left" ? 1 : -1) * colView.get("columnCount");
 									var startDate = colView.get("startDate");									
