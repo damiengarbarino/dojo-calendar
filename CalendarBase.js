@@ -9,6 +9,7 @@ define([
 "dojo/dom-class", 
 "dojo/dom-style",
 "dojo/dom-construct", 
+"dojo/dom-geometry",
 "dojo/date", 
 "dojo/date/locale", 
 "dojo/_base/fx", 
@@ -17,7 +18,8 @@ define([
 "dijit/_WidgetBase", 
 "dijit/_TemplatedMixin", 
 "dijit/_WidgetsInTemplateMixin", 
-"./StoreMixin", 
+"./StoreMixin",
+"./StoreManager", 
 "dojox/widget/_Invalidating", 
 "dojox/widget/Selection", 
 "dojox/calendar/time", 
@@ -33,6 +35,7 @@ dom,
 domClass, 
 domStyle,
 domConstruct, 
+domGeometry,
 date, 
 locale,
 coreFx,
@@ -41,7 +44,8 @@ on,
 _WidgetBase, 
 _TemplatedMixin, 
 _WidgetsInTemplateMixin, 
-StoreMixin, 
+StoreMixin,
+StoreManager,
 _Invalidating, 
 Selection, 
 timeUtil,
@@ -220,7 +224,7 @@ _nls){
 		
 		// formatItemTimeFunc: Function?
 		//		Optional function to format the time of day of the item renderers.
-		//		The function takes the date and render data object as arguments and returns a String.
+		//		The function takes the date, the render data object, the view and the data item as arguments and returns a String.
 		formatItemTimeFunc: null,
 		
 		// editable: Boolean
@@ -294,8 +298,20 @@ _nls){
 			this.dateLocaleModule = args.datePackage ? lang.getObject(args.datePackage+".locale", false) : locale;
 								
 			this.invalidateRendering();
+			
+			this.storeManager = new StoreManager({owner: this, _ownerItemsProperty: "items"});
+			this.storeManager.on("layoutInvalidated", lang.hitch(this, this._refreshItemsRendering));
+			this.storeManager.on("dataLoaded", lang.hitch(this, function(items){
+				this.set("items", items);
+			}));
+			
+			this.decorationStoreManager = new StoreManager({owner: this, _ownerItemsProperty: "decorationItems"});
+			this.decorationStoreManager.on("layoutInvalidated", lang.hitch(this, this._refreshDecorationItemsRendering));
+			this.decorationStoreManager.on("dataLoaded", lang.hitch(this, function(items){
+				this.set("decorationItems", items);
+			}));
 		},
-				
+
 		buildRendering: function(){
 			this.inherited(arguments);
 			if(this.views == null || this.views.length == 0){
@@ -378,9 +394,19 @@ _nls){
 			}
 		},
 		
-		resize: function(){
+		_refreshDecorationItemsRendering: function(){
 			if(this.currentView){
-				this.currentView.resize();
+				this.currentView._refreshDecorationItemsRendering();
+			}
+		},
+		
+		resize: function(changeSize){
+			if(changeSize){
+				domGeometry.setMarginBox(this.domNode, changeSize);
+			}
+			if(this.currentView){
+				// must not pass the size, children are sized depending on the parent by CSS.
+				this.currentView.resize();  
 			}
 		},
 				
@@ -504,26 +530,47 @@ _nls){
 					return;
 				}
 				
-				if(this.animateRange && (!has("ie") || has("ie")>8) ){
-					if(this.currentView){ // there's a view to animate
-						var ltr = this.isLeftToRight();
-						var inLeft = this._animRangeInDir=="left" || this._animRangeInDir == null; 
-						var outLeft = this._animRangeOutDir=="left" || this._animRangeOutDir == null;
-						this._animateRange(this.currentView.domNode, outLeft && ltr, false, 0, outLeft ? -100 : 100, 
-							lang.hitch(this, function(){
-								this.animateRangeTimer = setTimeout(lang.hitch(this, function(){
-									this._applyViewChange(view, index, timeInterval, duration);
-									this._animateRange(this.currentView.domNode, inLeft && ltr, true, inLeft ? -100 : 100, 0);
-									this._animRangeInDir = null;
-									this._animRangeOutDir = null;
-								}), 100);	// setTimeout give time for layout of view.							
-							}));
-					}else{
-						this._applyViewChange(view, index, timeInterval, duration);						
-					}
-				}else{					
-					this._applyViewChange(view, index, timeInterval, duration);
+				this._performViewTransition(view, index, timeInterval, duration);							
+			}
+		},
+		
+		_performViewTransition: function(view, index, timeInterval, duration){
+			var oldView = this.currentView;
+			
+			if(this.animateRange && (!has("ie") || has("ie")>8) ){
+				if(oldView){ // there's a view to animate
+					oldView.beforeDeactivate();
+					var ltr = this.isLeftToRight();
+					var inLeft = this._animRangeInDir=="left" || this._animRangeInDir == null; 
+					var outLeft = this._animRangeOutDir=="left" || this._animRangeOutDir == null;						
+					this._animateRange(this.currentView.domNode, outLeft && ltr, false, 0, outLeft ? -100 : 100, 
+						lang.hitch(this, function(){
+							oldView.afterDeactivate();
+							view.beforeActivate();
+							this.animateRangeTimer = setTimeout(lang.hitch(this, function(){
+								this._applyViewChange(view, index, timeInterval, duration);
+								this._animateRange(this.currentView.domNode, inLeft && ltr, true, inLeft ? -100 : 100, 0, function(){
+									view.afterActivate();
+								});
+								this._animRangeInDir = null;
+								this._animRangeOutDir = null;
+							}), 100);	// setTimeout give time for layout of view.							
+						}));
+				}else{
+					view.beforeActivate();
+					this._applyViewChange(view, index, timeInterval, duration);	
+					view.afterActivate();
 				}
+			}else{
+				if(oldView){
+					oldView.beforeDeactivate();					
+				}
+				view.beforeActivate();
+				this._applyViewChange(view, index, timeInterval, duration);
+				if(oldView){
+					oldView.afterDeactivate();
+				}
+				view.afterActivate();
 			}
 		},
 		
@@ -558,23 +605,26 @@ _nls){
 			if(index != this._currentViewIndex){
 				if(this.currentView == null){
 					view.set("items", this.items);
-					this.set("currentView", view);			
-				}else{					
+					view.set("decorationItems", this.decorationItems);
+					this.set("currentView", view);
+				}else{
 					if(this.items == null || this.items.length == 0){
 						this.set("currentView", view);
 						if(this.animateRange && (!has("ie") || has("ie")>8) ){
 							domStyle.set(this.currentView.domNode, "opacity", 0);
 						}
 						view.set("items", this.items);
+						view.set("decorationItems", this.decorationItems);
 					}else{
 						this.currentView = view;
 						view.set("items", this.items);
+						view.set("decorationItems", this.decorationItems);
 						this.set("currentView", view);
 						if(this.animateRange && (!has("ie") || has("ie")>8) ){
 							domStyle.set(this.currentView.domNode, "opacity", 0);
 						}
-					}																	
-				}											
+					}
+				}
 			}
 		},
 		
@@ -964,6 +1014,20 @@ _nls){
 			}
 		},
 		
+		_setDecorationItemsAttr: function(value){
+			this._set("decorationItems", value);
+			if(this.currentView){
+				this.currentView.set("decorationItems", value);
+				this.currentView.invalidateRendering();
+			}
+		},
+		
+		_setDecorationStoreAttr: function(value){
+			this._set("decorationStore", value);
+			this.decorationStore = value;
+			this.decorationStoreManager.set("store", value);
+		},
+		
 		/////////////////////////////////////////////////////
 		//
 		// Time utilities
@@ -1033,6 +1097,26 @@ _nls){
 			//		Whether use the specified instance or create a new one. Default is false.			
 			// returns: Date
 			return timeUtil.floor(date, unit, steps, reuse, this.classFuncObj);
+		},
+		
+		isOverlapping: function(renderData, start1, end1, start2, end2, includeLimits){
+			// summary:
+			//		Computes if the first time range defined by the start1 and end1 parameters 
+			//		is overlapping the second time range defined by the start2 and end2 parameters.
+			// renderData: Object
+			//		The render data.
+			// start1: Date
+			//		The start time of the first time range.
+			// end1: Date
+			//		The end time of the first time range.
+			// start2: Date
+			//		The start time of the second time range.
+			// end2: Date
+			//		The end time of the second time range.
+			// includeLimits: Boolean
+			//		Whether include the end time or not.
+			// returns: Boolean
+			return timeUtil.isOverlapping(renderData, start1, end1, start2, end2, includeLimits);
 		},
 		
 		/////////////////////////////////////////////////////

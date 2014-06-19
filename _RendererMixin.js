@@ -215,8 +215,8 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/dom-style", "dojo/dom-cla
 			//		protected
 			if(this.owner){
 				var f = this.owner.get("formatItemTimeFunc");
-				if(f != null){
-					return this.owner.formatItemTimeFunc(d, rd);
+				if(f != null && typeof f === "function"){
+					return f(d, rd, this.owner, this.item);
 				}
 			}
 			return rd.dateLocaleModule.format(d, {selector: 'time'});

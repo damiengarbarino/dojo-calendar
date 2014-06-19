@@ -23,13 +23,13 @@
 
 			require(["dojo/ready", "dojo/_base/declare", "dojo/_base/fx", "dojo/on", "dojo/date/locale", "dojo/parser", "dojo/date", "dojo/_base/lang",
 					"dojo/dom", "dojo/dom-construct", "dojo/dom-class", "dojo/_base/window", "dijit/registry", "dojo/query", "dojox/calendar/MonthColumnView", 
-					"dojox/calendar/Keyboard", "dojox/calendar/Mouse",	"dojox/calendar/VerticalRenderer", 
+					"dojox/calendar/Keyboard", "dojox/calendar/Mouse",	"dojox/calendar/VerticalRenderer", "dojox/calendar/DecorationRenderer", 
 					"dojo/store/Memory", "dojo/store/Observable",
 					"dijit/form/VerticalSlider", "dijit/form/NumberSpinner", "dijit/form/ComboBox", "dijit/form/DateTextBox", "dijit/form/TimeTextBox", 
 					"dijit/form/TextBox", "dijit/form/Button", "dijit/TitlePane", "dijit/Tooltip", "dijit/form/CheckBox"],
 
 				function(ready, declare, fx,on, locale, parser, date, lang, dom, domConstruct, domClass, win, registry, query,
-					MonthColumnView, CalendarKeyboard, CalendarMouse, VerticalRenderer, Memory, Observable, VerticalSlider, 
+					MonthColumnView, CalendarKeyboard, CalendarMouse, VerticalRenderer, DecorationRenderer, Memory, Observable, VerticalSlider, 
 					NumberSpinner, ComboBox, DateTextBox, TimeTextBox, TextBox, Button, TitlePane, Tooltip, CheckBox){
 
 					ready(function(){
@@ -64,10 +64,15 @@
 						
 						var dateClassObj = Date;
 						
-						var modelBase = [
-							{day: 1, start: [0,0], duration: 1440*4, allDay: true},
-							{day: 3, start: [0,0], duration: 2880, allDay: true}
+						var dataItemsTemplate = [
+							{day: 1, start: [0,0], duration: 1440*4, allDay: true, calendar: "cal1"},
+							{day: 3, start: [0,0], duration: 2880, allDay: true, calendar: "cal2"}
 						];
+						
+						var decorationItemsTemplate = [
+   							{day: -2, start: [12,0], duration: 1440 * 14, calendar: "cal1", allDay:true},
+   							{day: 40, start: [0,0], duration: 1440 * 4, calendar: "cal2", allDay:true}
+   						];
 						
 						// TODO manage first day of week
 						var floorToWeek= function(d){
@@ -79,38 +84,50 @@
 							return d;
 						};
 						
-						var someData = [];
-						
-						var startOfWeek = new dateClassObj();
-						startOfWeek = floorToWeek(startOfWeek);
-						
-						startDateEditor.set("value", startOfWeek);
-						
-						for (var id=0; id<modelBase.length; id++) {
-							var newObj = {
-								id: id,
-								summary: "New Event " + id,
-								startTime: new dateClassObj(startOfWeek.getTime()),
-								endTime: new dateClassObj(startOfWeek.getTime()),
-								calendar: id%2 == 0 ? "cal1" : "cal2",
-								allDay: modelBase[id].allDay
-							};
+						var createModel = function(modelTemplate){
+							
+							var someData = [];
+							
+							var startOfWeek = new dateClassObj();
+							startOfWeek = floorToWeek(startOfWeek);
+							
+							startDateEditor.set("value", startOfWeek);
+							
+							for (var id=0; id<modelTemplate.length; id++) {
+								
+								var evtTmpl = modelTemplate[id];
+								var newObj = {
+									id: id,
+									summary: "New Event " + id,
+									startTime: new dateClassObj(startOfWeek.getTime()),
+									endTime: new dateClassObj(startOfWeek.getTime()),
+									calendar: evtTmpl.calendar,
+									allDay: evtTmpl.allDay
+								};
 
-							newObj.startTime = date.add(newObj.startTime, "day", modelBase[id].day);
-							newObj.startTime.setHours(modelBase[id].start[0]);
-							newObj.startTime.setMinutes(modelBase[id].start[1]);
+								newObj.startTime = date.add(newObj.startTime, "day", evtTmpl.day);
+								newObj.startTime.setHours(evtTmpl.start[0]);
+								newObj.startTime.setMinutes(evtTmpl.start[1]);
 
-							newObj.endTime = date.add(newObj.startTime, "minute", modelBase[id].duration);
+								newObj.endTime = date.add(newObj.startTime, "minute", evtTmpl.duration);
 
-							someData.push(newObj);
+								someData.push(newObj);
+							}
+							
+							return someData;
 						}
 
-						
+						var itemsData = createModel(dataItemsTemplate);
+						var decorationItemsData = createModel(decorationItemsTemplate);
+						var id = itemsData.length;
+
 						// Calendar creation & configuration
-						
+
 						colView = declare([MonthColumnView, CalendarKeyboard, CalendarMouse])({
-							store: new Observable(new Memory({data: someData})),
+							store: new Observable(new Memory({data: itemsData})),
+							decorationStore: new Observable(new Memory({data: decorationItemsData})),
 							verticalRenderer: VerticalRenderer,
+							verticalDecorationRenderer: DecorationRenderer,
 							cssClassFunc: function(item){
 								return item.calendar == "cal1" ? "Calendar1" : "Calendar2"
 							},

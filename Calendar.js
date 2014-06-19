@@ -1,10 +1,34 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView", "./ColumnViewSecondarySheet", 
-				"./VerticalRenderer", "./MatrixView",	"./HorizontalRenderer", "./LabelRenderer", 
-				"./ExpandRenderer", "./Keyboard", "./Mouse", "dojo/text!./templates/Calendar.html", 
-				"dijit/form/Button", "dijit/Toolbar", "dijit/ToolbarSeparator"],
+define(["dojo/_base/declare", 
+		"dojo/_base/lang", 
+		"./CalendarBase", 
+		"./ColumnView", 
+		"./ColumnViewSecondarySheet", 
+		"./VerticalRenderer", 
+		"./DecorationRenderer", 
+		"./MatrixView", 
+		"./HorizontalRenderer", 
+		"./LabelRenderer", 
+		"./ExpandRenderer", 
+		"./Keyboard", 
+		"./Mouse", 
+		"dojo/text!./templates/Calendar.html", 
+		"dijit/form/Button", "dijit/Toolbar", "dijit/ToolbarSeparator"],
 	
-	function(declare, lang, CalendarBase, ColumnView, ColumnViewSecondarySheet, VerticalRenderer, 
-					 MatrixView, HorizontalRenderer, LabelRenderer, ExpandRenderer, Keyboard, Mouse, template){
+	function(
+		declare, 
+		lang, 
+		CalendarBase, 
+		ColumnView, 
+		ColumnViewSecondarySheet, 
+		VerticalRenderer, 
+		DecorationRenderer, 
+		MatrixView, 
+		HorizontalRenderer, 
+		LabelRenderer, 
+		ExpandRenderer, 
+		Keyboard, 
+		Mouse, 
+		template){
 	
 	return declare("dojox.calendar.Calendar", CalendarBase, {
 		
@@ -26,15 +50,18 @@ define(["dojo/_base/declare", "dojo/_base/lang", "./CalendarBase", "./ColumnView
 				secondarySheetClass: secondarySheetClass,
 				verticalRenderer: VerticalRenderer,
 				horizontalRenderer: HorizontalRenderer,
-				expandRenderer: ExpandRenderer
+				expandRenderer: ExpandRenderer,
+				horizontalDecorationRenderer: DecorationRenderer,
+				verticalDecorationRenderer: DecorationRenderer
 			}, this.columnViewProps));
 			
 			var matrixView = declare([MatrixView, Keyboard, Mouse])(lang.mixin({
 				horizontalRenderer: HorizontalRenderer,
+				horizontalDecorationRenderer: DecorationRenderer,
 				labelRenderer: LabelRenderer,
 				expandRenderer: ExpandRenderer
 			}, this.matrixViewProps));
-								
+
 			this.columnView = colView;
 			this.matrixView = matrixView;
 			

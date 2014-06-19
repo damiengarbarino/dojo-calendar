@@ -95,13 +95,14 @@ function(
 		},
 		
 		
-		resize: function(e){
+		resize: function(changedSize){
 			// tags:
 			//		private
 			
 			this.inherited(arguments);
 			if(this.secondarySheet){
-				this.secondarySheet.resize(e);
+				// secondary sheet is sized by CSS
+				this.secondarySheet.resize();
 			}
 		},
 
@@ -123,6 +124,23 @@ function(
 
 		},
 		
+		_setSubColumnsAttr: function(value){
+			var old = this.get("subColumns");
+			if(old != value){
+				this._secondaryHeightInvalidated = true;
+			}
+			this._set("subColumns", value);					
+		},
+		
+		refreshRendering: function(){
+			this.inherited(arguments);
+			if(this._secondaryHeightInvalidated){
+				this._secondaryHeightInvalidated = false;
+				var h = domGeometry.getMarginBox(this.secondarySheetNode).h;
+				this.resizeSecondarySheet(h);
+			}
+		},
+		
 		resizeSecondarySheet: function(height){
 			// summary:
 			//		Resizes the secondary sheet header and relayout the other sub components according this new height.
@@ -133,10 +151,14 @@ function(
 				var headerH = domGeometry.getMarginBox(this.header).h;
 				domStyle.set(this.secondarySheetNode, "height", height+"px");
 				this.secondarySheet._resizeHandler(null, true);
-				var top = (height + headerH + this.headerPadding)+"px";
-				domStyle.set(this.scrollContainer, "top", top);
+				var top = (height + headerH + this.headerPadding);
+				if(this.subHeader && this.subColumns){
+					domStyle.set(this.subHeader, "top", top+"px");
+					top += domGeometry.getMarginBox(this.subHeader).h;
+				}
+				domStyle.set(this.scrollContainer, "top", top+"px");
 				if(this.vScrollBar){
-					domStyle.set(this.vScrollBar, "top", top);
+					domStyle.set(this.vScrollBar, "top", top+"px");
 				}
 			}
 		},
@@ -152,6 +174,13 @@ function(
 			this.inherited(arguments);
 			if(this.secondarySheet){
 				this.secondarySheet.set("items", value);
+			}
+		},
+		
+		_setDecorationItemsAttr: function(value){
+			this.inherited(arguments);
+			if(this.secondarySheet){
+				this.secondarySheet.set("decorationItems", value);
 			}
 		},
 		
@@ -173,7 +202,7 @@ function(
 			if(this.secondarySheet){
 				this.secondarySheet.set("horizontalRenderer", value);
 			}
-		},
+		},		
 		
 		_getHorizontalRendererAttr: function(){
 			if(this.secondarySheet){
@@ -182,6 +211,20 @@ function(
             return null;
 		},
 		
+		_setHorizontalDecorationRendererAttr: function(value){
+			this.inherited(arguments);
+			if(this.secondarySheet){
+				this.secondarySheet.set("horizontalDecorationRenderer", value);
+			}
+		},
+		
+		_getHorizontalRendererAttr: function(){
+			if(this.secondarySheet){
+				return this.secondarySheet.get("horizontalDecorationRenderer");
+			}
+            return null;
+		},
+
 		_setExpandRendererAttr: function(value){
 			if(this.secondarySheet){
 				this.secondarySheet.set("expandRenderer", value);
@@ -262,6 +305,15 @@ function(
 			if(!this.secondarySheet._domReady){
 				this.secondarySheet._domReady = true;
 				this.secondarySheet._layoutRenderers(this.secondarySheet.renderData);
+			}
+			
+			this.inherited(arguments);
+		},
+		
+		_layoutDecorationRenderers: function(renderData){
+			if(!this.secondarySheet._decDomReady){
+				this.secondarySheet._decDomReady = true;
+				this.secondarySheet._layoutDecorationRenderers(this.secondarySheet.renderData);
 			}
 			
 			this.inherited(arguments);

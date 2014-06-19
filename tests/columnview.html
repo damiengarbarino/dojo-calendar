@@ -12,7 +12,8 @@
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/dijit.css";
 			@import "../../../dijit/themes/claro/claro.css";
-		</style>			
+			
+		</style>
 	</head>
 	
 	<body class="claro">
@@ -23,14 +24,15 @@
 			<script type="text/javascript">
 
 			require(["dojo/ready", "dojo/_base/declare", "dojo/_base/fx", "dojo/on", "dojo/date/locale", "dojo/parser", "dojo/date", "dojo/_base/lang",
-					"dojo/dom", "dojo/dom-construct", "dojo/dom-class", "dojo/_base/window", "dijit/registry", "dojo/query", "dojox/calendar/SimpleColumnView", 
+					"dojo/dom", "dojo/dom-construct", "dojo/dom-class", "dojo/_base/window", "dijit/registry", "dojo/query", "dojox/calendar/ColumnView", 
 					"dojox/calendar/ColumnViewSecondarySheet", "dojox/calendar/Keyboard", "dojox/calendar/Mouse",	"dojox/calendar/VerticalRenderer", 
+					"dojox/calendar/DecorationRenderer", 
 					"dojox/calendar/HorizontalRenderer", "dojox/calendar/ExpandRenderer", "dojo/store/Memory", "dojo/store/Observable",
 					"dijit/form/VerticalSlider", "dijit/form/NumberSpinner", "dijit/form/ComboBox", "dijit/form/DateTextBox", "dijit/form/TimeTextBox", 
 					"dijit/form/TextBox", "dijit/form/Button", "dijit/TitlePane", "dijit/Tooltip", "dijit/form/CheckBox"],
 
 				function(ready, declare, fx,on, locale, parser, date, lang, dom, domConstruct, domClass, win, registry, query,
-					ColumnView, ColumnViewSecondarySheet, CalendarKeyboard, CalendarMouse, VerticalRenderer, HorizontalRenderer, ExpandRenderer, Memory, Observable, VerticalSlider, 
+					ColumnView, ColumnViewSecondarySheet, CalendarKeyboard, CalendarMouse, VerticalRenderer, DecorationRenderer, HorizontalRenderer, ExpandRenderer, Memory, Observable, VerticalSlider, 
 					NumberSpinner, ComboBox, DateTextBox, TimeTextBox, TextBox, Button, TitlePane, Tooltip, CheckBox){
 
 					ready(function(){
@@ -64,12 +66,17 @@
 						
 						var dateClassObj = Date;
 						
-						var modelBase = [
-							{day: 1, start: [10,0], duration: 1400},
-							{day: 2, start: [10,30], duration: 120},
-							{day: 2, start: [12,0], duration: 240},
-							{day: 3, start: [6,0], duration: 180},
-							{day: 3, start: [0,0], duration: 2880, allDay: true}
+						var dataItemsTemplate = [
+							{day: 1, start: [10,0], duration: 1400, calendar: "cal1"},
+							{day: 2, start: [10,30], duration: 120}, // not displayed if sub columns are set
+							{day: 2, start: [12,0], duration: 240, calendar: "cal1"},
+							{day: 3, start: [6,0], duration: 180, calendar: "cal2"},
+							{day: 3, start: [0,0], duration: 2880, allDay: true, calendar: "cal1"}
+						];
+						var decorationItemsTemplate = [
+							{day: 2, start: [10,0], duration: 600}, // both columns
+							{day: 4, start: [8,0], duration: 200, calendar: "cal1"},
+							{day: 4, start: [9,0], duration: 300, calendar: "cal2"}
 						];
 						
 						// TODO manage first day of week
@@ -82,44 +89,54 @@
 							return d;
 						};
 						
-						var someData = [];
-						
 						var startOfWeek = new dateClassObj();
 						startOfWeek = floorToWeek(startOfWeek);
 						
-						startDateEditor.set("value", startOfWeek);
-						
-						for (var id=0; id<modelBase.length; id++) {
-							var newObj = {
-								id: id,
-								summary: "New Event " + id,
-								startTime: new dateClassObj(startOfWeek.getTime()),
-								endTime: new dateClassObj(startOfWeek.getTime()),
-								calendar: id%2 == 0 ? "cal1" : "cal2",
-								allDay: modelBase[id].allDay
-							};
+						var createModel = function(modelTemplate){
+							
+							var someData = [];
 
-							newObj.startTime = date.add(newObj.startTime, "day", modelBase[id].day);
-							newObj.startTime.setHours(modelBase[id].start[0]);
-							newObj.startTime.setMinutes(modelBase[id].start[1]);
+							startDateEditor.set("value", startOfWeek);
+							
+							for (var id=0; id<modelTemplate.length; id++) {
+								
+								var evtTmpl = modelTemplate[id];
+								var newObj = {
+									id: id,
+									summary: "New Event " + id,
+									startTime: new dateClassObj(startOfWeek.getTime()),
+									endTime: new dateClassObj(startOfWeek.getTime()),
+									calendar: evtTmpl.calendar,
+									allDay: evtTmpl.allDay
+								};
 
-							newObj.endTime = date.add(newObj.startTime, "minute", modelBase[id].duration);
+								newObj.startTime = date.add(newObj.startTime, "day", evtTmpl.day);
+								newObj.startTime.setHours(evtTmpl.start[0]);
+								newObj.startTime.setMinutes(evtTmpl.start[1]);
 
-							someData.push(newObj);
+								newObj.endTime = date.add(newObj.startTime, "minute", evtTmpl.duration);
+
+								someData.push(newObj);
+							}
+							
+							return someData;
 						}
+						
+						var itemsData = createModel(dataItemsTemplate);
+						var decorationItemsData = createModel(decorationItemsTemplate);
+						var id = itemsData.length;
 						
 						var subColumnsLabels = {
 								"cal1": "Calendar 1",
 								"cal2": "Calendar 2"
 						};
-
 						
-						// Calendar creation & configuration
-						
+						// Calendar creation & configuration						
 						var secondarySheetClass = declare([ColumnViewSecondarySheet, CalendarKeyboard, CalendarMouse]);
 						
 						colView = declare([ColumnView, CalendarKeyboard, CalendarMouse])({
-							store: new Observable(new Memory({data: someData})),
+							store: new Observable(new Memory({data: itemsData})),
+							decorationStore: new Observable(new Memory({data: decorationItemsData})),
 							subColumns: ["cal1", "cal2"],
 							subColumnLabelFunc: function(v){
 								return subColumnsLabels[v];
@@ -129,7 +146,9 @@
 								horizontalRendererHeight: 18
 							},	
 							verticalRenderer: VerticalRenderer,
+							verticalDecorationRenderer: DecorationRenderer,							
 							horizontalRenderer: HorizontalRenderer,
+							horizontalDecorationRenderer: DecorationRenderer,
 							expandRenderer: ExpandRenderer,							
 							cssClassFunc: function(item){
 								return item.calendar == "cal1" ? "Calendar1" : "Calendar2"
@@ -165,7 +184,7 @@
 								summary: "New event " + id,
 								startTime: start,
 								endTime: end,
-								calendar: subColumn,
+								calendar: subColumn || "cal1",								
 								allDay: view.viewKind == "matrix"
 							};
 							

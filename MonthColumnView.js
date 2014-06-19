@@ -106,6 +106,10 @@ function(
 		//		The class use to create vertical renderers.
 		verticalRenderer: null,
 		
+		// verticalDecorationRenderer: Class
+		//		The class use to create vertical decoration renderers.
+		verticalDecorationRenderer: null,
+		
 		// percentOverlap: Integer
 		//		The percentage of the renderer width used to superimpose one item renderer on another 
 		//		when two events are overlapping.
@@ -133,7 +137,7 @@ function(
 		_columnHeaderHandlers: null,
 		
 		constructor: function(){
-			this.invalidatingProperties = ["columnCount", "startDate", "daySize", "percentOverlap", "verticalRenderer",
+			this.invalidatingProperties = ["columnCount", "startDate", "daySize", "percentOverlap", "verticalRenderer", "verticalDecorationRenderer",
 				"columnHeaderDatePattern", "horizontalGap", "scrollBarRTLPosition", "itemToRendererKindFunc", 
 				"layoutPriorityFunction", "textDir", "items", "showCellLabel", "showHiddenItems"];
 			this._columnHeaderHandlers = [];
@@ -228,8 +232,7 @@ function(
 				
 				while(d.getMonth() == currentMonth){							
 					dates.push(d);
-					d = rd.dateModule.add(d, "day", 1);
-					d = this.floorToDay(d, false, rd);					
+					d = this.addAndFloor(d, "day", 1);									
 				}
 				
 				currentMonth = d.getMonth();
@@ -246,16 +249,20 @@ function(
 			rd.maxDayCount = maxDayCount;
 			rd.sheetHeight = rd.daySize * maxDayCount;
 			
-			if(this.displayedItemsInvalidated){
+			if(this.displayedItemsInvalidated && !this._isEditing){
 				this.displayedItemsInvalidated = false;
 				this._computeVisibleItems(rd);
-				
-				if(this._isEditing){					
-					this._endItemEditing(null, false);
-				}
-				
+								
 			}else if (this.renderData){
 				rd.items = this.renderData.items;
+			}
+			
+			if(this.displayedDecorationItemsInvalidated){
+				 // while editing in no live layout we must not to recompute items (duplicate renderers)
+				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd);
+								
+			}else if (this.renderData){
+				rd.decorationItems = this.renderData.decorationItems;
 			}
 			
 			return rd;
@@ -315,6 +322,11 @@ function(
 			
 			return months[d.getMonth()];
 		},
+		
+		// gridCellDatePattern: String
+		//		Custom date/time pattern for cell labels to override default one coming from the CLDR.
+		//		See dojo/date/locale documentation for format string.
+		gridCellDatePattern: null,
 		
 		_formatGridCellLabel: function(d, row, col){
 			// summary:
@@ -509,9 +521,10 @@ function(
 			this._validateProperties();
 
 			var oldRd = this.renderData;
-			var rd = this._createRenderData();
-			this.renderData = rd;			
+			var rd = this.renderData = this._createRenderData();
+
 			this._createRendering(rd, oldRd);
+			this._layoutDecorationRenderers(rd);
 			this._layoutRenderers(rd);
 		},
 		
@@ -636,7 +649,7 @@ function(
 					var h = [];
 					h.push(on(td, "click", lang.hitch(this, this._columnHeaderClick)));
 										
-					if(has("touch")){					
+					if(has("touch-events")){
 						h.push(on(td, "touchstart", function(e){
 							event.stop(e);
 							domClass.add(e.currentTarget, "Active");
@@ -1066,7 +1079,7 @@ function(
 			this.inherited(arguments);
 		},
 		
-		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items){
+		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items, /*String*/itemsType){
 			// tags:
 			//		private
 
@@ -1074,20 +1087,25 @@ function(
 			var hiddenItems = [];
 			renderData.colW = this.itemContainer.offsetWidth / renderData.columnCount;
 			
-			for(var i=0; i<items.length; i++){
-				var item = items[i];
-				if(this._itemToRendererKind(item) == "vertical"){
-					verticalItems.push(item);
-				}else if(this.showHiddenItems){	
-					hiddenItems.push(item);					
-				}
-			}
+			if(itemsType === "dataItems"){
 			
-			if(verticalItems.length > 0){
-				this._layoutVerticalItems(renderData, index, start, end, verticalItems);
-			}
-			if(hiddenItems.length > 0){
-				this._layoutBgItems(renderData, index, start, end, hiddenItems);
+				for(var i=0; i<items.length; i++){
+					var item = items[i];
+					if(this._itemToRendererKind(item) == "vertical"){
+						verticalItems.push(item);
+					}else if(this.showHiddenItems){	
+						hiddenItems.push(item);					
+					}
+				}
+				
+				if(verticalItems.length > 0){
+					this._layoutVerticalItems(renderData, index, start, end, verticalItems, itemsType);
+				}
+				if(hiddenItems.length > 0){
+					this._layoutBgItems(renderData, index, start, end, hiddenItems);
+				}
+			}else{ // itemsType === "decorationItems"
+				this._layoutVerticalItems(renderData, index, start, end, items, itemsType);
 			}
 		},
 		
@@ -1107,7 +1125,7 @@ function(
 			return pos;
 		},
 		
-		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items, /*String*/itemsType){
 			// tags:
 			//		private
 
@@ -1138,8 +1156,10 @@ function(
 				}
 			}
 			
+			
+			
 			// step 2: compute overlapping layout
-			var numLanes = this.computeOverlapping(layoutItems, this._overlapLayoutPass2).numLanes;
+			var numLanes = itemsType === "dataItems" ? this.computeOverlapping(layoutItems, this._overlapLayoutPass2).numLanes : 1;
 
 			var hOverlap = this.percentOverlap / 100;
 
@@ -1150,53 +1170,68 @@ function(
 				var lane = item.lane;
 				var extent = item.extent;
 
-				var w;
-				var posX;				
-
-				if(hOverlap == 0) {
-					//no overlap and a padding between each event
-					w = numLanes == 1 ? renderData.colW : ((renderData.colW - (numLanes - 1) * this.horizontalGap)/ numLanes);
-					posX = lane * (w + this.horizontalGap);
-					w = extent == 1 ? w : w * extent + (extent-1) * this.horizontalGap;
-					w = 100 * w / renderData.colW;
-					posX = 100 * posX / renderData.colW; 
-				} else {
-					// an overlap
-					w = numLanes == 1 ? 100 : (100 / (numLanes - (numLanes - 1) * hOverlap));
-					posX = lane * (w - hOverlap*w);
-					w = extent == 1 ? w : w * ( extent - (extent-1) * hOverlap);
-				}
-
-				var ir = this._createRenderer(item, "vertical", this.verticalRenderer, "dojoxCalendarVertical");
-
-				domStyle.set(ir.container, {
-					"top": item.start + "px",
-					"left": posX + "%",
-					"width": w + "%",
-					"height": (item.end-item.start+1) + "px"
-				});
-
-				var edited = this.isItemBeingEdited(item);
-				var selected = this.isItemSelected(item);
-				var hovered = this.isItemHovered(item);
-				var focused = this.isItemFocused(item);
+				var ir = null;
 				
-				var renderer = ir.renderer;
+				if(itemsType === "dataItems"){
+					var w;
+					var posX;
+					
+					if(hOverlap == 0) {
+						//no overlap and a padding between each event
+						w = numLanes == 1 ? renderData.colW : ((renderData.colW - (numLanes - 1) * this.horizontalGap)/ numLanes);
+						posX = lane * (w + this.horizontalGap);
+						w = extent == 1 ? w : w * extent + (extent-1) * this.horizontalGap;
+						w = 100 * w / renderData.colW;
+						posX = 100 * posX / renderData.colW; 
+					} else {
+						// an overlap
+						w = numLanes == 1 ? 100 : (100 / (numLanes - (numLanes - 1) * hOverlap));
+						posX = lane * (w - hOverlap*w);
+						w = extent == 1 ? w : w * ( extent - (extent-1) * hOverlap);
+					}
+	
+					ir = this._createRenderer(item, "vertical", this.verticalRenderer, "dojoxCalendarVertical");
+	
+					domStyle.set(ir.container, {
+						"top": item.start + "px",
+						"left": posX + "%",
+						"width": w + "%",
+						"height": (item.end-item.start+1) + "px"
+					});
+	
+					var edited = this.isItemBeingEdited(item);
+					var selected = this.isItemSelected(item);
+					var hovered = this.isItemHovered(item);
+					var focused = this.isItemFocused(item);
+					
+					var renderer = ir.renderer;
+	
+					renderer.set("hovered", hovered);
+					renderer.set("selected", selected);
+					renderer.set("edited", edited);
+					renderer.set("focused", this.showFocus ? focused : false);
+					
+					renderer.set("storeState", this.getItemStoreState(item));
+					
+					renderer.set("moveEnabled", this.isItemMoveEnabled(item._item, "vertical"));
+					renderer.set("resizeEnabled", this.isItemResizeEnabled(item._item, "vertical"));
+					
+					this.applyRendererZIndex(item, ir, hovered, selected, edited, focused);
+	
+					if(renderer.updateRendering){
+						renderer.updateRendering(w, item.end-item.start+1);
+					}
+					
+				}else{ //itemsType === "decorationItems"
 
-				renderer.set("hovered", hovered);
-				renderer.set("selected", selected);
-				renderer.set("edited", edited);
-				renderer.set("focused", this.showFocus ? focused : false);
-				
-				renderer.set("storeState", this.getItemStoreState(item));
-				
-				renderer.set("moveEnabled", this.isItemMoveEnabled(item._item, "vertical"));
-				renderer.set("resizeEnabled", this.isItemResizeEnabled(item._item, "vertical"));
-				
-				this.applyRendererZIndex(item, ir, hovered, selected, edited, focused);
-
-				if(renderer.updateRendering){
-					renderer.updateRendering(w, item.end-item.start+1);
+					ir = this.decorationRendererManager.createRenderer(item, "vertical", this.verticalDecorationRenderer, "dojoxCalendarDecoration");
+					
+					domStyle.set(ir.container, {
+						"top": item.start + "px",
+						"left": "0",
+						"width": "100%",
+						"height": (item.end-item.start+1) + "px"
+					});
 				}
 
 				domConstruct.place(ir.container, cell);

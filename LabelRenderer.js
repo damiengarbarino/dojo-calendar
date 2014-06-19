@@ -25,8 +25,8 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 		_isElementVisible: function(elt, startHidden, endHidden, size){
 			switch(elt){
 				case "startTimeLabel":
-					var d = this.item.startTime;
-					if(this.item.isAllDay || d.getHours() == 0 && d.getMinutes() == 0 && d.getSeconds() == 0 && d.getMilliseconds() == 0){
+					// hide hour part of all day events on subsequent days
+					if(this.item.allDay && this.item.range[0].getTime() !== this.item.startTime.getTime()){
 						return false;
 					}
 					break;

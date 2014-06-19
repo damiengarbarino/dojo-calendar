@@ -125,6 +125,10 @@ function(
 		// verticalRenderer: Class
 		//		The class use to create vertical renderers.
 		verticalRenderer: null,
+
+		// verticalDecorationRenderer: Class
+		//		The class use to create decoration renderers.
+		verticalDecorationRenderer: null,
 		
 		// minColumnWidth: Integer
 		//		The minimum column width. If the number of columns and sub columns displayed makes the
@@ -146,7 +150,7 @@ function(
 		_columnHeaderHandlers: null,
 		
 		constructor: function(){
-			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer",
+			this.invalidatingProperties = ["columnCount", "startDate", "minHours", "maxHours", "hourSize", "verticalRenderer", "verticalDecorationRenderer",
 				"rowHeaderTimePattern", "columnHeaderDatePattern", "timeSlotDuration", "rowHeaderGridSlotDuration", "rowHeaderLabelSlotDuration", 
 				"rowHeaderLabelOffset", "rowHeaderFirstLabelOffset","percentOverlap", "horizontalGap", "scrollBarRTLPosition","itemToRendererKindFunc", 
 				"layoutPriorityFunction", "formatItemTimeFunc", "textDir", "items", "subColumns", "minColumnWidth"];
@@ -211,75 +215,78 @@ function(
 				
 		_createRenderData: function(){
 			
-			var renderData = {};
+			var rd = {};
 
-			renderData.minHours = this.get("minHours");		
-			renderData.maxHours = this.get("maxHours");
-			renderData.hourSize = this.get("hourSize");
-			renderData.hourCount = renderData.maxHours - renderData.minHours;		
-			renderData.slotDuration = this.get("timeSlotDuration"); // must be consistent with previous statement
-			renderData.rowHeaderGridSlotDuration = this.get("rowHeaderGridSlotDuration");
-			renderData.slotSize = Math.ceil(renderData.hourSize / (60 / renderData.slotDuration));
-			renderData.hourSize = renderData.slotSize * (60 / renderData.slotDuration);			
-			renderData.sheetHeight = renderData.hourSize * renderData.hourCount;
+			rd.minHours = this.get("minHours");		
+			rd.maxHours = this.get("maxHours");
+			rd.hourSize = this.get("hourSize");
+			rd.hourCount = rd.maxHours - rd.minHours;		
+			rd.slotDuration = this.get("timeSlotDuration"); // must be consistent with previous statement
+			rd.rowHeaderGridSlotDuration = this.get("rowHeaderGridSlotDuration");
+			rd.slotSize = Math.ceil(rd.hourSize / (60 / rd.slotDuration));
+			rd.hourSize = rd.slotSize * (60 / rd.slotDuration);			
+			rd.sheetHeight = rd.hourSize * rd.hourCount;
 			
 			if(!this._rowHeaderWidth){
 				this._rowHeaderWidth = domGeometry.getMarginBox(this.rowHeader).w;
 			}			
-			renderData.rowHeaderWidth = this._rowHeaderWidth;
+			rd.rowHeaderWidth = this._rowHeaderWidth;
 			
 			var sbMetrics = metrics.getScrollbar();
-			renderData.scrollbarWidth = sbMetrics.w + 1;
-			renderData.scrollbarHeight = sbMetrics.h + 1;
+			rd.scrollbarWidth = sbMetrics.w + 1;
+			rd.scrollbarHeight = sbMetrics.h + 1;
 			
-			renderData.dateLocaleModule = this.dateLocaleModule;
-			renderData.dateClassObj = this.dateClassObj;
-			renderData.dateModule = this.dateModule; // arithmetics on Dates
+			rd.dateLocaleModule = this.dateLocaleModule;
+			rd.dateClassObj = this.dateClassObj;
+			rd.dateModule = this.dateModule; // arithmetics on Dates
 					
-			renderData.dates = [];
+			rd.dates = [];
 						
-			renderData.columnCount = this.get("columnCount");
-			renderData.subColumns = this.get("subColumns");
-			renderData.subColumnCount =  renderData.subColumns ? renderData.subColumns.length : 1;
+			rd.columnCount = this.get("columnCount");
+			rd.subColumns = this.get("subColumns");
+			rd.subColumnCount =  rd.subColumns ? rd.subColumns.length : 1;
 			
-			renderData.hScrollPaneWidth = domGeometry.getMarginBox(this.grid).w;
-			renderData.minSheetWidth = this.minColumnWidth < 0 ? -1 : this.minColumnWidth * renderData.subColumnCount * renderData.columnCount;
-			renderData.hScrollBarEnabled = this.minColumnWidth > 0 && renderData.hScrollPaneWidth < renderData.minSheetWidth;
+			rd.hScrollPaneWidth = domGeometry.getMarginBox(this.grid).w;
+			rd.minSheetWidth = this.minColumnWidth < 0 ? -1 : this.minColumnWidth * rd.subColumnCount * rd.columnCount;
+			rd.hScrollBarEnabled = this.minColumnWidth > 0 && rd.hScrollPaneWidth < rd.minSheetWidth;
 
 			var d = this.get("startDate");
 		
 			if (d == null){
-				d = new renderData.dateClassObj();
+				d = new rd.dateClassObj();
 			}
 
-			d = this.floorToDay(d, false, renderData);
+			d = this.floorToDay(d, false, rd);
 			
 			this.startDate = d;
 			
-			for(var col = 0; col < renderData.columnCount ; col++){
-				renderData.dates.push(d);
-				d = renderData.dateModule.add(d, "day", 1);
-				d = this.floorToDay(d, false, renderData);
+			for(var col = 0; col < rd.columnCount ; col++){
+				rd.dates.push(d);
+				d = this.addAndFloor(d, "day", 1);			
 			}
 
-			renderData.startTime = new renderData.dateClassObj(renderData.dates[0]);
-			renderData.startTime.setHours(renderData.minHours);
-			renderData.endTime = new renderData.dateClassObj(renderData.dates[renderData.columnCount-1]);
-			renderData.endTime.setHours(renderData.maxHours);
+			rd.startTime = new rd.dateClassObj(rd.dates[0]);
+			rd.startTime.setHours(rd.minHours);
+			rd.endTime = new rd.dateClassObj(rd.dates[rd.columnCount-1]);
+			rd.endTime.setHours(rd.maxHours);
 			
-			if(this.displayedItemsInvalidated){
-				this.displayedItemsInvalidated = false;
-				this._computeVisibleItems(renderData);
-				
-				if(this._isEditing){					
-					this._endItemEditing(null, false);
-				}
-				
+			if(this.displayedItemsInvalidated && !this._isEditing){
+				 // while editing in no live layout we must not to recompute items (duplicate renderers)
+				rd.items = this.storeManager._computeVisibleItems(rd);
+								
 			}else if (this.renderData){
-				renderData.items = this.renderData.items;
+				rd.items = this.renderData.items;
 			}
 			
-			return renderData;
+			if(this.displayedDecorationItemsInvalidated){
+				 // while editing in no live layout we must not to recompute items (duplicate renderers)
+				rd.decorationItems = this.decorationStoreManager._computeVisibleItems(rd);
+								
+			}else if (this.renderData){
+				rd.decorationItems = this.renderData.decorationItems;
+			}
+			
+			return rd;
 		},
 		
 		_validateProperties: function() {
@@ -345,6 +352,11 @@ function(
 		//
 		//////////////////////////////////////////
 		
+		// rowHeaderTimePattern: String
+		//		Custom date/time pattern for the row header labels to override default one coming from the CLDR.
+		//		See dojo/date/locale documentation for format string.
+		rowHeaderTimePattern: null,
+		
 		_formatRowHeaderLabel: function(/*Date*/d){
 			// summary:
 			//		Computes the row header label for the specified time of day.
@@ -359,7 +371,12 @@ function(
 				timePattern: this.rowHeaderTimePattern
 			});
 		},
-	
+		
+		// columnHeaderDatePattern: String
+		//		Custom date/time pattern for column header labels to override default one coming from the CLDR.
+		//		See dojo/date/locale documentation for format string.
+		columnHeaderDatePattern: null,
+
 		_formatColumnHeaderLabel: function(/*Date*/d){			
 			// summary:
 			//		Computes the column header label for the specified date.
@@ -381,10 +398,6 @@ function(
 		// Time of day management
 		//
 		//////////////////////////////////////////
-		
-		// startTimeOfDay: Object
-		//		The scroll position of the view. The value is an object made of "hours" and "minutes" properties.
-		startTimeOfDay: null,
 				
 		// scrollBarRTLPosition: String
 		//		Position of the scroll bar in right-to-left display.
@@ -396,7 +409,7 @@ function(
 			//		Returns the visible first time of day.
 			// tags:
 			//		protected
-			// returns: Integer[]
+			// returns: Object
 
 			var v = (this.get("maxHours") - this.get("minHours")) * 
 				this._getScrollPosition() / this.renderData.sheetHeight;
@@ -412,7 +425,7 @@ function(
 			//		Returns the visible last time of day.
 			// tags:
 			//		protected
-			// returns: Integer[]
+			// returns: Integer[]					
 
 			var v = (this.get("maxHours") - this.get("minHours")) * 
 				(this._getScrollPosition() + this.scrollContainer.offsetHeight) / this.renderData.sheetHeight;
@@ -423,12 +436,27 @@ function(
 			};
 		},
 		
+		// startTimeOfDay: Object
+		//		First time (hour/minute) of day displayed, if reachable. 
+		//		An object containing "hours" and "minutes" properties.
+		startTimeOfDay: 0,
+			
 		_setStartTimeOfDayAttr: function(value){
-			this._setStartTimeOfDay(value.hours, value.minutes, value.duration, value.easing);
+			if(this.renderData){
+				this._setStartTimeOfDay(value.hours, value.minutes, value.duration, value.easing);
+			}else{
+				this._startTimeOfDayInvalidated = true;
+			}
+			this._set("startTimeOfDay", value);
+			
 		},
 		
 		_getStartTimeOfDayAttr: function(){
-			return this._getStartTimeOfDay();
+			if(this.renderData){
+				return this._getStartTimeOfDay();
+			}else{
+				return this._get("startTimeOfDay");
+			}
 		},
 		
 		_setStartTimeOfDay: function(hour, minutes, maxDuration, easing){
@@ -642,6 +670,7 @@ function(
 			var rd = this._createRenderData();
 			this.renderData = rd;
 			this._createRendering(rd, oldRd);
+			this._layoutDecorationRenderers(rd);
 			this._layoutRenderers(rd);
 		},
 		
@@ -657,6 +686,8 @@ function(
 			this._buildRowHeader(renderData, oldRenderData);
 			this._buildGrid(renderData, oldRenderData);
 			this._buildItemContainer(renderData, oldRenderData);
+			this._layoutTimeIndicator(renderData);	
+			this._commitProperties(renderData);
 		},
 		
 		_configureVisibleParts: function(renderData){
@@ -666,9 +697,17 @@ function(
 			}
 			
 			domClass[this.subColumns == null?"remove":"add"](this.domNode, "subColumns");
-			domClass[this._showSecondarySheet?"add":"remove"](this.domNode, "secondarySheet");					
-			
-			// TODO configure sub elemts position/size
+			domClass[this._showSecondarySheet?"add":"remove"](this.domNode, "secondarySheet");										
+		},
+		
+		_commitProperties: function(renderData){
+			if(this._startTimeOfDayInvalidated){
+				this._startTimeOfDayInvalidated = false;
+				var v = this.startTimeOfDay;
+				if(v != null){
+					this._setStartTimeOfDay(v.hours, v.minutes == undefined ? 0 : v.minutes); // initial position, no animation
+				}
+			}
 		},
 				
 		_configureScrollBar: function(renderData){
@@ -860,7 +899,7 @@ function(
 					var h = [];
 					h.push(on(td, "click", lang.hitch(this, this._columnHeaderClick)));
 										
-					if(has("touch")){					
+					if(has("touch-events")){
 						h.push(on(td, "touchstart", function(e){
 							event.stop(e);
 							domClass.add(e.currentTarget, "Active");
@@ -981,7 +1020,7 @@ function(
 				return;
 			}
 					
-			var count = renderData.columnCount - query(".subHeaderCell", table).length;
+			var count = renderData.columnCount - query("td", table).length;
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -1023,20 +1062,8 @@ function(
 			// Build HTML structure (incremental)
 			if(count > 0){ // creation				
 				for(var i=0; i < count; i++){
-					td = domConstruct.create("td", null, tr);
-					domClass.add(td, "subHeaderCell");
-					var sTable = domConstruct.create("table", {
-						cellpadding:"0", cellspacing:"0"
-					}, td);
-					domClass.add(sTable, "subColumn");
-					var sBody = html.create("tbody", null, sTable);
-					var sTr = domConstruct.create("tr", null, sBody);
-					
-					for(var j=0; j < subCount; j++){
-						var sTd = domConstruct.create("td", null, sTr);
-						var sSpan = domConstruct.create("span", null, sTd);						
-						domClass.add(sSpan, "subColumnLabel");
-					}
+					td = domConstruct.create("td", null, tr);									
+					domConstruct.create("div", {"className": "dojoxCalendarSubHeaderContainer"}, td);
 				}
 			}else{ // deletion
 				count = -count;
@@ -1048,22 +1075,46 @@ function(
 			}
 			
 			// fill & configure		
-			query(".subHeaderCell", table).forEach(function(td, i){
-				td.className = "subHeaderCell";											
+			query("td", table).forEach(function(td, i){
+				td.className = "";											
 				if(i == 0){
 					domClass.add(td, "first-child");
 				}else if(i == this.renderData.columnCount-1){
 					domClass.add(td, "last-child");
 				}
+				
+				query(".dojoxCalendarSubHeaderContainer", td).forEach(function(div, i){
+								
+					var count = query(".dojoxCalendarSubHeaderContainer", div).length - subCount;
+					if(count != 0){
+						var len = div.childNodes.length;
+						for(var i=0; i<len; i++){
+							div.removeChild(div.lastChild);
+						}						
+						for(var j=0; j<subCount; j++){
+							domConstruct.create("div", {"className": "dojoxCalendarSubHeaderCell dojoxCalendarSubHeaderLabel"}, div);
+						}
+					}
+					
+					var colW = (100/subCount) + "%";
+					query(".dojoxCalendarSubHeaderCell", div).forEach(function(div, i){
+						div.className = "dojoxCalendarSubHeaderCell dojoxCalendarSubHeaderLabel";
+						var col = subCount == 1 ? i : Math.floor(i / subCount);
+						subColIdx = subCount == 1 ? 0 : i - col * subCount;					
+						domStyle.set(div, {width: colW, left: ((subColIdx * 100)/subCount)+"%"});
+						domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");
+						domClass.add(div, this.subColumns[subColIdx]);
+						this._setText(div, this.subColumnLabelFunc(this.subColumns[subColIdx]));
+					}, this);
+													
+				}, this);
+				
 				var d = renderData.dates[i];
-				this.styleSubColumnHeaderCell(td, d, renderData);						
+
+				this.styleSubColumnHeaderCell(td, d, renderData);
+				
 			}, this);
 			
-			query(".subColumnLabel", table).forEach(function(span, i){
-				var col = subCount == 1 ? i : Math.floor(i / subCount);
-				var subColIdx = subCount == 1 ? 0 : i - col *subCount;
-				this._setText(span, this.subColumnLabelFunc(this.subColumns[subColIdx]));
-			}, this);					
 		},
 		
 		
@@ -1448,11 +1499,11 @@ function(
 				return;
 			}
 			
-			var bgCols = [];
+			var bgCols = [], decoCols = [];
 	
 			domStyle.set(table, "height", renderData.sheetHeight + "px");			
-			var oldCount = oldRenderData ? oldRenderData.columnCount * oldRenderData.subColumnCount : 0;
-			var count = (renderData.subColumnCount * renderData.columnCount) - oldCount;
+			var oldCount = oldRenderData ? oldRenderData.columnCount : 0;
+			var count = renderData.columnCount - oldCount;					
 			
 			if(has("ie") == 8){
 				// workaround Internet Explorer 8 bug.
@@ -1487,55 +1538,151 @@ function(
 				tr = trs[0];
 			}else{ 
 				tr = domConstruct.create("tr", null, tbody);
-			}					
+			}		
+			
+			var subCount = renderData.subColumnCount;
 								
 			// Build HTML structure (incremental)
 			if(count>0){ // creation
 				for(var i=0; i < count; i++){
 					td = domConstruct.create("td", null, tr);
-					var div = domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);									
-					domConstruct.create("div", {"className": "dojoxCalendarSubColumnBorder"}, div);
-					domConstruct.create("div", {"className": "dojoxCalendarEventContainerColumn"}, div);
+					domConstruct.create("div", {"className": "dojoxCalendarContainerColumn"}, td);					
 				}
 			}else{ // deletion		 
 				count = -count;
 				for(var i=0; i < count; i++){
 					tr.removeChild(tr.lastChild);
 				}
-			}
-			var subCount = renderData.subColumnCount;
+			}					
+			
 			
 			query("td", table).forEach(function(td, i){
 				
-				var subColIdx = 0;
-				if(subCount == 1){
-					domStyle.set(td, "border-right", "1px solid transparent");
-				}else{
-					var col = subCount == 1 ? i : Math.floor(i / subCount);
-					subColIdx = subCount == 1 ? 0 : i - col *subCount;					
-					if(subColIdx == subCount-1){
-						domStyle.set(td, "border-right", "1px solid transparent");
-					}else{
-						domStyle.set(td, "border-right", "none");
-					}					
-				}
-				
 				query(".dojoxCalendarContainerColumn", td).forEach(function(div, i){
 					domStyle.set(div, "height", renderData.sheetHeight + "px");
+					var count = query(".dojoxCalendarSubContainerColumn", td).length - subCount;
+					if(count != 0){
+						var len = div.childNodes.length;
+						for(var i=0; i<len; i++){
+							div.removeChild(div.lastChild);
+						}						
+						for(var j=0; j<subCount; j++){
+							var subdiv = domConstruct.create("div", {"className": "dojoxCalendarSubContainerColumn"}, div);
+							domConstruct.create("div", {"className": "dojoxCalendarDecorationContainerColumn"}, subdiv);
+							domConstruct.create("div", {"className": "dojoxCalendarEventContainerColumn"}, subdiv);
+						}
+					}
 				}, this);
 				
-				query(".dojoxCalendarEventContainerColumn", td).forEach(function(div, i){						
-					bgCols.push(div);		
+				var colW = (100/subCount) + "%";
+				query(".dojoxCalendarSubContainerColumn", td).forEach(function(div, i){						
+					var col = subCount == 1 ? i : Math.floor(i / subCount);
+					subColIdx = subCount == 1 ? 0 : i - col * subCount;					
+					domStyle.set(div, {width: colW, left: ((subColIdx * 100)/subCount)+"%"});
+					domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");	
+					
+					query(".dojoxCalendarEventContainerColumn", div).forEach(function(eventContainer, i){						
+						bgCols.push(eventContainer);
+					}, this);
+					
+					query(".dojoxCalendarDecorationContainerColumn", div).forEach(function(decoContainer, i){						
+						decoCols.push(decoContainer);
+					}, this);
 				}, this);
 				
-				query(".dojoxCalendarSubColumnBorder", td).forEach(function(div, i){																		
-					domClass[subColIdx<subCount-1 && subCount !== 1?"add":"remove"](div, "subColumn");					
-				}, this);
+							
 				
 			}, this);
 																											
 			renderData.cells = bgCols;
-		},			
+			renderData.decorationCells = decoCols;
+		},
+		
+		// showTimeIndicator: Boolean
+		//		Whether show or not an indicator (default a red line) at the current time.
+		showTimeIndicator: true,
+
+		// timeIndicatorRefreshInterval: Integer
+		//		Maximal interval between two refreshes of time indicator, in milliseconds.
+		timeIndicatorRefreshInterval: 60000,
+		
+		_setShowTimeIndicatorAttr: function(value){
+			this._set("showTimeIndicator", value);
+			this._layoutTimeIndicator(this.renderData);
+		},
+		
+		_layoutTimeIndicator: function(renderData){
+			if(!renderData){
+				return;
+			}
+			
+			if(this.showTimeIndicator){
+				
+				var now = new Date();
+				
+				var visible = this.isOverlapping(renderData, renderData.startTime, renderData.endTime, now, now) &&
+				 	now.getHours() >= this.get("minHours") && 
+					(now.getHours()*60+now.getMinutes() < this.get("maxHours")*60);
+															
+				if(visible){
+					
+					if(!this._timeIndicator){
+						this._timeIndicator = domConstruct.create("div", 
+								{"className": "dojoxCalendarTimeIndicator"});
+					}	
+					
+					var node = this._timeIndicator;
+					
+					for(var column=0; column<this.renderData.columnCount; column++){
+						if(this.isSameDay(now, this.renderData.dates[column])){
+							break;
+						}
+					}
+					
+					var top = this.computeProjectionOnDate(renderData, this.floorToDay(now), now, renderData.sheetHeight);
+					
+					if(top != renderData.sheetHeight){
+						
+						domStyle.set(node, {top: top+"px", display: "block"});
+						var parentNode = renderData.cells[column*renderData.subColumnCount].parentNode.parentNode;
+						if(parentNode != node.parentNode){
+							if(node.parentNode != null){
+								node.parentNode.removeChild(node);
+							}
+							parentNode.appendChild(node);	
+						}						
+																				
+						if(this._timeIndicatorTimer == null){
+							this._timeIndicatorTimer = setInterval(lang.hitch(this, function(){
+								this._layoutTimeIndicator(this.renderData);
+							}), this.timeIndicatorRefreshInterval);
+						}
+						return;
+					}													
+				}
+											
+			}
+			
+			// not visible or specifically not shown fallback
+				
+			if(this._timeIndicatorTimer){
+				clearInterval(this._timeIndicatorTimer);
+				this._timeIndicatorTimer = null;
+			}
+			if(this._timeIndicator){
+				domStyle.set(this._timeIndicator, "display", "none");
+			}							
+			
+		},
+		
+		beforeDeactivate: function(){
+			if(this._timeIndicatorTimer){				
+				clearInterval(this._timeIndicatorTimer);
+				this._timeIndicatorTimer = null;
+			}
+		},
+		
+		
 		
 		///////////////////////////////////////////////////////////////
 		//
@@ -1597,52 +1744,84 @@ function(
 			return "vertical"; // String
 		},
 		
-		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items){
+		_layoutInterval: function(/*Object*/renderData, /*Integer*/index, /*Date*/start, /*Date*/end, /*Object[]*/items, /*String*/itemsType){
 			// tags:
 			//		private
 
 			var verticalItems = [];
+			
 			renderData.colW = this.itemContainer.offsetWidth / renderData.columnCount;
 			
-			for(var i=0; i<items.length; i++){
-				var item = items[i];
-				if(this._itemToRendererKind(item) == "vertical"){
-					verticalItems.push(item);
+			if(itemsType === "dataItems"){
+				
+				for(var i=0; i<items.length; i++){
+					var item = items[i];
+					var kind = this._itemToRendererKind(item);
+					if(kind === "vertical"){
+						verticalItems.push(item);
+					}
 				}
-			}
+				
+				this._layoutRendererWithSubColumns(renderData, "vertical", true, index, start, end, verticalItems, itemsType);		
 			
-			if(verticalItems.length > 0){
-				if(renderData.subColumnCount > 1){
-					var subColumnItems = {};
-					arr.forEach(this.subColumns, function(subCol){
-						subColumnItems[subCol] = [];
-					});
-					arr.forEach(verticalItems, function(item){
-						subColumnItems[item.subColumn].push(item);
-					});
-					var subColIndex = 0;
-					arr.forEach(this.subColumns, function(subCol){
-						this._layoutVerticalItems(renderData, index, subColIndex++, start, end, subColumnItems[subCol]);
-					}, this);
-				}else{
-					this._layoutVerticalItems(renderData, index, 0, start, end, verticalItems);
-				}							
+			}else{ // itemsType === "decorationItems"
+			
+				// no different rendererKind for decoration yet
+				this._layoutRendererWithSubColumns(renderData, "decoration", false, index, start, end, items, itemsType);
 			}
 		},
 		
-		_getColumn: function(renderData, index, subIndex){
-			return renderData.cells[index * renderData.subColumnCount + subIndex];
+		_layoutRendererWithSubColumns: function(renderData, rendererKind, computeOverlap, index, start, end, items, itemsType){
+			if(items.length > 0){
+				if(renderData.subColumnCount > 1){
+					var subColumnItems = {};
+					var subCols = this.subColumns;
+					arr.forEach(subCols, function(subCol){
+						subColumnItems[subCol] = [];
+					});
+					arr.forEach(items, function(item){
+						if(itemsType === "decorationItems"){
+							if(item.subColumn){
+								if(subColumnItems[item.subColumn]){
+									subColumnItems[item.subColumn].push(item);
+								}
+							}else{ // for decorations, if no sub column is set, apply to all sub columns
+								arr.forEach(subCols, function(subCol){
+									var clonedItem = lang.mixin({}, item);
+									clonedItem.subColumn = subCol;
+									subColumnItems[subCol].push(clonedItem);
+								});
+							}
+						}else if(item.subColumn && subColumnItems[item.subColumn]){
+							subColumnItems[item.subColumn].push(item);
+						}
+					});
+					var subColIndex = 0;
+					arr.forEach(this.subColumns, function(subCol){
+						this._layoutVerticalItems(renderData, rendererKind, computeOverlap, index, subColIndex++, start, end, subColumnItems[subCol], itemsType);
+					}, this);
+				}else{
+					this._layoutVerticalItems(renderData, rendererKind, computeOverlap, index, 0, start, end, items, itemsType);
+				}
+			}
+		},
+		
+		_getColumn: function(renderData, index, subIndex, itemsType){
+			var cols = itemsType === "dataItems" ? renderData.cells : renderData.decorationCells;
+			return cols[index * renderData.subColumnCount + subIndex];
 		},
 
-		_layoutVerticalItems: function(/*Object*/renderData, /*Integer*/index, /*Integer*/subIndex, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items){
+		_layoutVerticalItems: function(/*Object*/renderData, /*String*/ rendererKind, /*boolean*/ computeOverlap, 
+				/*Integer*/index, /*Integer*/subIndex, /*Date*/startTime, /*Date*/endTime, /*Object[]*/items, /*String*/itemsType){
 			// tags:
 			//		private
 
-			if(this.verticalRenderer == null){
+			if(itemsType === "dataItems" && this.verticalRenderer == null || 
+				itemsType === "decorationItems" && this.verticalDecorationRenderer == null){
 				return;
 			}
 			
-			var cell = this._getColumn(renderData, index, subIndex);
+			var cell = this._getColumn(renderData, index, subIndex, itemsType);
 			
 			var layoutItems = [];			
 			
@@ -1667,60 +1846,68 @@ function(
 			}
 			
 			// step 2: compute overlapping layout
-			var numLanes = this.computeOverlapping(layoutItems, this._overlapLayoutPass2).numLanes;
+			var numLanes = itemsType === "dataItems" ? this.computeOverlapping(layoutItems, this._overlapLayoutPass2).numLanes : 1;
 
 			var hOverlap = this.percentOverlap / 100;
 
 			// step 3: create renderers and apply layout
 			for(i=0; i<layoutItems.length; i++){
 
-				item = layoutItems[i];					
-				var lane = item.lane;
-				var extent = item.extent;
+				item = layoutItems[i];
+				var w, posX, ir, renderer;
+				
+				if(itemsType === "dataItems"){
+					
+					var lane = item.lane;
+					var extent = item.extent;
 
-				var w;
-				var posX;				
+					if(hOverlap == 0) {
+						//no overlap and a padding between each event
+						w = numLanes == 1 ? renderData.colW : ((renderData.colW - (numLanes - 1) * this.horizontalGap)/ numLanes);
+						posX = lane * (w + this.horizontalGap);
+						w = extent == 1 ? w : w * extent + (extent-1) * this.horizontalGap;
+						w = 100 * w / renderData.colW;
+						posX = 100 * posX / renderData.colW; 
+					} else {
+						// an overlap
+						w = numLanes == 1 ? 100 : (100 / (numLanes - (numLanes - 1) * hOverlap));
+						posX = lane * (w - hOverlap*w);
+						w = extent == 1 ? w : w * ( extent - (extent-1) * hOverlap);
+					}
+	
+					ir = this._createRenderer(item, "vertical", this.verticalRenderer, "dojoxCalendarVertical");
+				
+					var edited = this.isItemBeingEdited(item);
+					var selected = this.isItemSelected(item);
+					var hovered = this.isItemHovered(item);
+					var focused = this.isItemFocused(item);
+					
+					renderer = ir.renderer;
+	
+					renderer.set("hovered", hovered);
+					renderer.set("selected", selected);
+					renderer.set("edited", edited);
+					renderer.set("focused", this.showFocus ? focused : false);
+					renderer.set("storeState", this.getItemStoreState(item));
+					
+					renderer.set("moveEnabled", this.isItemMoveEnabled(item._item, "vertical"));
+					renderer.set("resizeEnabled", this.isItemResizeEnabled(item._item, "vertical"));
+					
+					this.applyRendererZIndex(item, ir, hovered, selected, edited, focused);
 
-				if(hOverlap == 0) {
-					//no overlap and a padding between each event
-					w = numLanes == 1 ? renderData.colW : ((renderData.colW - (numLanes - 1) * this.horizontalGap)/ numLanes);
-					posX = lane * (w + this.horizontalGap);
-					w = extent == 1 ? w : w * extent + (extent-1) * this.horizontalGap;
-					w = 100 * w / renderData.colW;
-					posX = 100 * posX / renderData.colW; 
 				} else {
-					// an overlap
-					w = numLanes == 1 ? 100 : (100 / (numLanes - (numLanes - 1) * hOverlap));
-					posX = lane * (w - hOverlap*w);
-					w = extent == 1 ? w : w * ( extent - (extent-1) * hOverlap);
+					w = 100;
+					posX = 0;
+					ir = this.decorationRendererManager.createRenderer(item, "vertical", this.verticalDecorationRenderer, "dojoxCalendarDecoration");
+					renderer = ir.renderer;
 				}
-
-				var ir = this._createRenderer(item, "vertical", this.verticalRenderer, "dojoxCalendarVertical");
-
+				
 				domStyle.set(ir.container, {
 					"top": item.start + "px",
 					"left": posX + "%",
 					"width": w + "%",
 					"height": (item.end-item.start+1) + "px"
 				});
-
-				var edited = this.isItemBeingEdited(item);
-				var selected = this.isItemSelected(item);
-				var hovered = this.isItemHovered(item);
-				var focused = this.isItemFocused(item);
-				
-				var renderer = ir.renderer;
-
-				renderer.set("hovered", hovered);
-				renderer.set("selected", selected);
-				renderer.set("edited", edited);
-				renderer.set("focused", this.showFocus ? focused : false);
-				renderer.set("storeState", this.getItemStoreState(item));
-				
-				renderer.set("moveEnabled", this.isItemMoveEnabled(item._item, "vertical"));
-				renderer.set("resizeEnabled", this.isItemResizeEnabled(item._item, "vertical"));
-
-				this.applyRendererZIndex(item, ir, hovered, selected, edited, focused);
 
 				if(renderer.updateRendering){
 					renderer.updateRendering(w, item.end-item.start+1);
