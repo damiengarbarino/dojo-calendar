@@ -21,7 +21,7 @@ time.newDate = function(obj, dateClassObj){
 	var d;
 	
 	if(typeof(obj) == "number"){
-		return new dateClassObj(time);
+		return new dateClassObj(obj);
 	}else if(obj.getTime){
 		return new dateClassObj(obj.getTime());
 	}else if(obj.toGregorian){
