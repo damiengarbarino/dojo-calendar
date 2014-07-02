@@ -200,6 +200,8 @@ define([
 				this.set("decorationItems", items);
 			}));
 			this.decorationRendererManager = new RendererManager({owner: this});
+			
+			this._setupDayRefresh();
 		},
 		
 		destroy: function(preserveDom){
@@ -212,6 +214,26 @@ define([
 			}
 		
 			this.inherited(arguments);
+		},
+		
+		_setupDayRefresh: function(){
+			// Refresh the view when the current day changes.
+			var now = new Date();
+			var d = timeUtil.floor(now, "day", 1);
+			var d = this.dateModule.add(d, "day", 1);
+			// manages DST at 24h
+			if(d.getHours() == 23){
+				d = this.dateModule.add(d, "hour", 2); // go to 1am
+			}else{
+				d = timeUtil.floorToDay(d, true, this.dateClassObj);
+			}
+			setTimeout(lang.hitch(this, function(){
+				if(!this._isEditing){
+					this.refreshRendering(true); // recursive refresh
+				}
+				this._setupDayRefresh();
+			}), d.getTime()-now.getTime() + 5000);
+			// add 5 seconds to be sure to be tommorrow
 		},
 		
 		resize: function(changeSize){
@@ -363,7 +385,7 @@ define([
 				d = this.dateModule.add(d, "hour", 2); // go to 1am
 			}else{
 				d = timeUtil.floorToDay(d, true, this.dateClassObj);
-			}										
+			}
 			return d;
 		},
 		

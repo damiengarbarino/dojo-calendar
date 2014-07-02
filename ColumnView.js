@@ -76,6 +76,13 @@ function(
 				this.secondarySheetNode = this.secondarySheet.domNode;				
 			}
 		},
+		
+		refreshRendering: function(recursive){
+			this.inherited(arguments);
+			if(recursive && this.secondarySheet){
+				this.secondarySheet.refreshRendering(true);
+			}
+		},
 			
 		destroy: function(preserveDom){
 			if(this.secondarySheet){
