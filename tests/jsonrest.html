@@ -55,8 +55,11 @@
 						calendar.on("timeIntervalChange", function(e){
 							var startTimeStr = stamp.toISOString(e.startTime, {zulu: true, milliseconds: true});
 							var endTimeStr = stamp.toISOString(e.endTime, {zulu: true, milliseconds: true});
-							calendar.set("store", new Observable(new ExtJsonRest(
-									{target: "/cal/calendar/?startTime="+startTimeStr+"&endTime="+endTimeStr})));
+							calendar.query = {
+								startTime: startTimeStr,
+								endTime:endTimeStr
+							};
+							calendar.set("store", new Observable(new ExtJsonRest({target: "/cal/calendar/"})));
 						});
 
 						calendar.set("date", startOfWeek);
