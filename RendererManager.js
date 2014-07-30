@@ -1,57 +1,57 @@
 define([
-	"dojo/_base/declare", 
-	"dojo/_base/array", 
-	"dojo/_base/html", 
-	"dojo/_base/lang", 
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"dojo/_base/lang",
 	"dojo/dom-class",
 	"dojo/dom-style",
-	"dojo/Stateful", 
+	"dojo/Stateful",
 	"dojo/Evented"],
-	
+
 	function(
-		declare, 
-		arr, 
-		html, 
-		lang, 
-		domClass, 
+		declare,
+		arr,
+		html,
+		lang,
+		domClass,
 		domStyle,
-		Stateful, 
-		Evented, 
+		Stateful,
+		Evented,
 		when){
 
 	return declare("dojox.calendar.RendererManager", [Stateful, Evented], {
-		
+
 		// summary:
 		//		This mixin contains the store management.
-		
+
 		// owner: Object
 		//	The owner of the store manager: a view or a calendar widget.
 		owner: null,
-		
+
 		// rendererPool: [protected] Array
 		//		The stack of recycled renderers available.
 		rendererPool: null,
-		
+
 		// rendererList: [protected] Array
 		//		The list of used renderers
 		rendererList: null,
-		
+
 		// itemToRenderer: [protected] Object
 		//		The associated array item to renderer list.
 		itemToRenderer: null,
-				
+
 		constructor: function(/*Object*/ args){
 			args = args || {};
-			
+
 			this.rendererPool = [];
 			this.rendererList = [];
 			this.itemToRenderer = {};
 		},
-		
+
 		destroy: function(){
 			while(this.rendererList.length > 0){
 				this.destroyRenderer(this.rendererList.pop());
-			}			
+			}
 			for(var kind in this._rendererPool){
 				var pool = this._rendererPool[kind];
 				if(pool){
@@ -61,7 +61,7 @@ define([
 				}
 			}
 		},
-		
+
 		recycleItemRenderers: function(remove){
 			// summary:
 			//		Recycles all the item renderers.
@@ -75,7 +75,7 @@ define([
 			}
 			this.itemToRenderer = {};
 		},
-		
+
 		getRenderers: function(item){
 			// summary:
 			//		Returns the renderers that are currently used to displayed the speficied item.
@@ -92,9 +92,9 @@ define([
 			var list = this.itemToRenderer[item.id];
 			return list == null ? null : list.concat();
 		},
-		
-		createRenderer: function(item, kind, rendererClass, cssClass){			
-			// summary: 
+
+		createRenderer: function(item, kind, rendererClass, cssClass){
+			// summary:
 			//		Creates an item renderer of the specified kind. A renderer is an object with the "container" and "instance" properties.
 			// item: Object
 			//		The data item.
@@ -104,14 +104,14 @@ define([
 			//		The class to instantiate to create the renderer.
 			// returns: Object
 			// tags:
-			//		protected				
-						
+			//		protected
+
 			if(item != null && kind != null && rendererClass != null){
-				
+
 				var res=null, renderer=null;
-				
+
 				var pool = this.rendererPool[kind];
-				
+
 				if(pool != null){
 					res = pool.shift();
 				}
@@ -119,7 +119,7 @@ define([
 				if (res == null){
 
 					renderer = new rendererClass;
-									
+
 					res = {
 						renderer: renderer,
 						container: renderer.domNode,
@@ -127,47 +127,47 @@ define([
 					};
 
 					this.emit("rendererCreated", {renderer:res, source:this.owner, item:item});
-					
+
 				} else {
-					renderer = res.renderer; 
-					
+					renderer = res.renderer;
+
 					this.emit("rendererReused", {renderer:renderer, source:this.owner, item:item});
 				}
-				
+
 				renderer.owner = this.owner;
 				renderer.set("rendererKind", kind);
 				renderer.set("item", item);
-				
+
 				var list = this.itemToRenderer[item.id];
 				if (list == null) {
 					this.itemToRenderer[item.id] = list = [];
 				}
 				list.push(res);
-				
+
 				this.rendererList.push(res);
-				return res;	
+				return res;
 			}
 			return null;
 		},
-		
+
 		recycleRenderer: function(renderer, remove){
-			// summary: 
+			// summary:
 			//		Recycles the item renderer to be reused in the future.
 			// renderer: dojox/calendar/_RendererMixin
 			//		The item renderer to recycle.
 			// tags:
-			//		protected			
-								
+			//		protected
+
 			this.emit("rendererRecycled", {renderer:renderer, source:this.owner});
-			
+
 			var pool = this.rendererPool[renderer.kind];
-			
+
 			if(pool == null){
 				this.rendererPool[renderer.kind] = [renderer];
 			}else{
 				pool.push(renderer);
 			}
-								
+
 			if(remove){
 				renderer.container.parentNode.removeChild(renderer.container);
 			}
@@ -177,25 +177,25 @@ define([
 			renderer.renderer.owner = null;
 			renderer.renderer.set("item", null);
 		},
-							
+
 		destroyRenderer: function(renderer){
-			// summary: 
+			// summary:
 			//		Destroys the item renderer.
 			// renderer: dojox/calendar/_RendererMixin
 			//		The item renderer to destroy.
 			// tags:
 			//		protected
 			this.emit("rendererDestroyed", {renderer:renderer, source:this.owner});
-			
-			var ir = renderer.renderer;		
-			
+
+			var ir = renderer.renderer;
+
 			if(ir["destroy"]){
 				ir.destroy();
 			}
-			
-			html.destroy(renderer.container);	
+
+			html.destroy(renderer.container);
 		},
-		
+
 		destroyRenderersByKind: function(kind){
 			// tags:
 			//		private
@@ -209,17 +209,17 @@ define([
 					list.push(ir);
 				}
 			}
-			
+
 			this.rendererList = list;
-			
+
 			var pool = this.rendererPool[kind];
 			if(pool){
 				while(pool.length > 0){
 					this.destroyRenderer(pool.pop());
 				}
 			}
-			
-		}	
+
+		}
 	});
 
 });

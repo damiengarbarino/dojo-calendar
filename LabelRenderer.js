@@ -1,19 +1,19 @@
 define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 	"dojox/calendar/_RendererMixin", "dojo/text!./templates/LabelRenderer.html"],
-	 
+
 	function(declare, _WidgetBase, _TemplatedMixin, _RendererMixin, template){
-	
+
 	return declare("dojox.calendar.LabelRenderer", [_WidgetBase, _TemplatedMixin, _RendererMixin], {
-		
+
 		// summary:
-		//		The default item label renderer. 
-		
+		//		The default item label renderer.
+
 		templateString: template,
-		
+
 		_orientation: "horizontal",
-		
+
 		resizeEnabled: false,
-		
+
 		visibilityLimits: {
 			resizeStartHandle: 50,
 			resizeEndHandle: -1,
@@ -21,7 +21,7 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 			startTimeLabel: 45,
 			endTimeLabel: 30
 		},
-		
+
 		_isElementVisible: function(elt, startHidden, endHidden, size){
 			switch(elt){
 				case "startTimeLabel":
@@ -33,9 +33,9 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
 			}
 			return this.inherited(arguments);
 		},
-		
+
 		_displayValue: "inline",
-		
+
 		postCreate: function() {
 			this.inherited(arguments);
 			this._applyAttributes();

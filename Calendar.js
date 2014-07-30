@@ -1,42 +1,42 @@
-define(["dojo/_base/declare", 
-		"dojo/_base/lang", 
-		"./CalendarBase", 
-		"./ColumnView", 
-		"./ColumnViewSecondarySheet", 
-		"./VerticalRenderer", 
-		"./DecorationRenderer", 
-		"./MatrixView", 
-		"./HorizontalRenderer", 
-		"./LabelRenderer", 
-		"./ExpandRenderer", 
-		"./Keyboard", 
-		"./Mouse", 
-		"dojo/text!./templates/Calendar.html", 
+define(["dojo/_base/declare",
+		"dojo/_base/lang",
+		"./CalendarBase",
+		"./ColumnView",
+		"./ColumnViewSecondarySheet",
+		"./VerticalRenderer",
+		"./DecorationRenderer",
+		"./MatrixView",
+		"./HorizontalRenderer",
+		"./LabelRenderer",
+		"./ExpandRenderer",
+		"./Keyboard",
+		"./Mouse",
+		"dojo/text!./templates/Calendar.html",
 		"dijit/form/Button", "dijit/Toolbar", "dijit/ToolbarSeparator"],
-	
+
 	function(
-		declare, 
-		lang, 
-		CalendarBase, 
-		ColumnView, 
-		ColumnViewSecondarySheet, 
-		VerticalRenderer, 
-		DecorationRenderer, 
-		MatrixView, 
-		HorizontalRenderer, 
-		LabelRenderer, 
-		ExpandRenderer, 
-		Keyboard, 
-		Mouse, 
+		declare,
+		lang,
+		CalendarBase,
+		ColumnView,
+		ColumnViewSecondarySheet,
+		VerticalRenderer,
+		DecorationRenderer,
+		MatrixView,
+		HorizontalRenderer,
+		LabelRenderer,
+		ExpandRenderer,
+		Keyboard,
+		Mouse,
 		template){
-	
+
 	return declare("dojox.calendar.Calendar", CalendarBase, {
-		
+
 		templateString: template,
-		
+
 		// summary:
 		//		This class defines a calendar widget that display events in time.
-		
+
 		_createDefaultViews: function(){
 			// summary:
 			//		Creates the default views:
@@ -45,7 +45,7 @@ define(["dojo/_base/declare",
 			//		The views are mixed with Mouse and Keyboard to allow editing items using mouse and keyboard.
 
 			var secondarySheetClass = declare([ColumnViewSecondarySheet, Keyboard, Mouse]);
-			
+
 			var colView = declare([ColumnView, Keyboard, Mouse])(lang.mixin({
 				secondarySheetClass: secondarySheetClass,
 				verticalRenderer: VerticalRenderer,
@@ -54,7 +54,7 @@ define(["dojo/_base/declare",
 				horizontalDecorationRenderer: DecorationRenderer,
 				verticalDecorationRenderer: DecorationRenderer
 			}, this.columnViewProps));
-			
+
 			var matrixView = declare([MatrixView, Keyboard, Mouse])(lang.mixin({
 				horizontalRenderer: HorizontalRenderer,
 				horizontalDecorationRenderer: DecorationRenderer,
@@ -64,14 +64,14 @@ define(["dojo/_base/declare",
 
 			this.columnView = colView;
 			this.matrixView = matrixView;
-			
+
 			var views = [colView, matrixView];
-			
+
 			this.installDefaultViewsActions(views);
-			
+
 			return views;
 		},
-		
+
 		installDefaultViewsActions: function(views){
 			// summary:
 			//		Installs the default actions on newly created default views.
@@ -81,6 +81,6 @@ define(["dojo/_base/declare",
 			this.matrixView.on("rowHeaderClick", lang.hitch(this, this.matrixViewRowHeaderClick));
 			this.columnView.on("columnHeaderClick", lang.hitch(this, this.columnViewColumnHeaderClick));
 		}
-		
+
 	});
 });

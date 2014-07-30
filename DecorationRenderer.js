@@ -1,18 +1,18 @@
 define([
 	"dojo/_base/declare",
 	"dojo/dom-class",
-	"dijit/_WidgetBase", 
+	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin"],
-	
+
 	function(declare, domClass, _WidgetBase, _TemplatedMixin, template){
-	
+
 	return declare("dojox.calendar.DecorationRenderer", [_WidgetBase, _TemplatedMixin], {
-		
+
 		// summary:
-		//		The default item vertical renderer.		
-		
+		//		The default item vertical renderer.
+
 		templateString: "<div class=\"dojoxCalendarDecoration\"></div>",
-		
+
 		_setItemAttr: function(value){
 			if(value == null){
 				if(this.item && this.item.cssClass){
@@ -38,12 +38,12 @@ define([
 				}
 			}
 		},
-		
+
 		postCreate: function() {
 			this.inherited(arguments);
 			this._applyAttributes();
 		}
-	
-		
+
+
 	});
 });
