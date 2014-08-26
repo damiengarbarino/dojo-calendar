@@ -1618,7 +1618,7 @@ function(
 
 			if(this.showTimeIndicator){
 
-				var now = new Date();
+				var now = new renderData.dateClassObj();
 
 				var visible = this.isOverlapping(renderData, renderData.startTime, renderData.endTime, now, now) &&
 				 	now.getHours() >= this.get("minHours") &&
@@ -1681,8 +1681,6 @@ function(
 				this._timeIndicatorTimer = null;
 			}
 		},
-
-
 
 		///////////////////////////////////////////////////////////////
 		//
