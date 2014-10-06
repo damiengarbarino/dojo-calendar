@@ -76,11 +76,12 @@ function(arr,
 				return;
 			}
 			var h = domGeometry.getMarginBox(this.domNode).h;
-			if(this._defaultHeight == -1){
+			if(this._defaultHeight == -1 ||  // not set
+				this._defaultHeight === 0){  // initialized at 0, must be reset
 				this._defaultHeight = h;
 			}
 
-			if(this._defaultHeight != -1 && this._defaultHeight != h && h >= this._getExpandedHeight() ||
+			if(this._defaultHeight != h && h >= this._getExpandedHeight() ||
 				this._expandedRowCol !== undefined && this._expandedRowCol !== -1){
 				var col = this._expandedRowCol;
 				if(col >= this.renderData.columnCount){
