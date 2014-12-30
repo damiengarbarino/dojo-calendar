@@ -169,8 +169,13 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom",
 					this.selectFromEvent(e, null, null, false);
 				}
 			}
-
-			p.touchMoved = true;
+			
+			// 10px tolerance to select the item (#105)
+			if(!p.touchMoved &&
+				(Math.abs(touch.x - p.start.x) > 10 ||
+				 Math.abs(touch.y - p.start.y) > 10)) {
+				p.touchMoved = true;
+			}
 
 			if(this._editingGesture){
 
