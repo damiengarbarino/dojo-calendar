@@ -160,6 +160,9 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "dojo/_base
 				}
 				results = results.map(lang.hitch(this, function(item){
 					var renderItem = owner.itemToRenderItem(item, value);
+					if(renderItem.id == null){
+						console.err("The data item " + item.summary + " must have an unique identifier from the store.getIdentity(). The calendar will NOT work properly.");
+					}
 					// keep a reference on the store data item.
 					renderItem._item = item;
 					return renderItem;
