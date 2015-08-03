@@ -316,7 +316,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/on", 
 							this._endItemEditing("keyboard", false);
 						}else{
 
-							var renderers = this.itemToRenderer[focusedItem.id];
+							var renderers = this.rendererManager.itemToRenderer[focusedItem.id];
 
 							if(renderers && renderers.length > 0 && this.isItemEditable(focusedItem, renderers[0].kind)){
 
