@@ -183,16 +183,15 @@ define([
 			this.storeManager.on("dataLoaded", lang.hitch(this, function(items){
 				this.set("items", items);
 			}));
+			this.storeManager.on("renderersInvalidated", lang.hitch(this, function(item){
+				this.updateRenderers(item);
+			}));
 			
 			this.rendererManager = new RendererManager({owner: this});
 			this.rendererManager.on("rendererCreated", lang.hitch(this, this._onRendererCreated));
 			this.rendererManager.on("rendererReused", lang.hitch(this, this._onRendererReused));
 			this.rendererManager.on("rendererRecycled", lang.hitch(this, this._onRendererRecycled));
 			this.rendererManager.on("rendererDestroyed", lang.hitch(this, this._onRendererDestroyed));
-			this.rendererManager.on("layoutInvalidated", lang.hitch(this, this._refreshItemsRendering));
-			this.rendererManager.on("renderersInvalidated", lang.hitch(this, function(item){
-				this.updateRenderers(item);}
-			));
 			
 			this.decorationStoreManager = new StoreManager({owner: this, _ownerItemsProperty: "decorationItems"});
 			this.decorationStoreManager.on("layoutInvalidated", lang.hitch(this, this._refreshDecorationItemsRendering));

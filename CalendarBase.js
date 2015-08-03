@@ -301,6 +301,7 @@ _nls){
 
 			this.storeManager = new StoreManager({owner: this, _ownerItemsProperty: "items"});
 			this.storeManager.on("layoutInvalidated", lang.hitch(this, this._refreshItemsRendering));
+			this.storeManager.on("renderersInvalidated", lang.hitch(this, this._updateRenderers));
 			this.storeManager.on("dataLoaded", lang.hitch(this, function(items){
 				this.set("items", items);
 			}));
@@ -391,6 +392,12 @@ _nls){
 		_refreshItemsRendering: function(){
 			if(this.currentView){
 				this.currentView._refreshItemsRendering();
+			}
+		},
+		
+		_updateRenderers: function(item){
+			if(this.currentView){
+				this.currentView.updateRenderers(item);
 			}
 		},
 
