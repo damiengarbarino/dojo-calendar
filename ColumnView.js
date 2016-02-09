@@ -77,13 +77,6 @@ function(
 			}
 		},
 
-		refreshRendering: function(recursive){
-			this.inherited(arguments);
-			if(recursive && this.secondarySheet){
-				this.secondarySheet.refreshRendering(true);
-			}
-		},
-
 		destroy: function(preserveDom){
 			if(this.secondarySheet){
 				this.secondarySheet.destroy(preserveDom);
@@ -139,12 +132,15 @@ function(
 			this._set("subColumns", value);
 		},
 
-		refreshRendering: function(){
+		refreshRendering: function(recursive){
 			this.inherited(arguments);
 			if(this._secondaryHeightInvalidated){
 				this._secondaryHeightInvalidated = false;
 				var h = domGeometry.getMarginBox(this.secondarySheetNode).h;
 				this.resizeSecondarySheet(h);
+			}
+			if(recursive && this.secondarySheet){
+				this.secondarySheet.refreshRendering(true);
 			}
 		},
 
