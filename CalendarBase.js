@@ -22,7 +22,7 @@ define([
 "./StoreManager",
 "dojox/widget/_Invalidating",
 "dojox/widget/Selection",
-"dojox/calendar/time",
+"./time",
 "dojo/i18n!./nls/buttons"],
 function(
 declare,
