@@ -14,7 +14,6 @@ define([
 "dojo/date",
 "dojo/date/locale",
 "dojo/query",
-"dojox/html/metrics",
 "./SimpleColumnView",
 "dojo/text!./templates/ColumnView.html",
 "./ColumnViewSecondarySheet"],
@@ -35,7 +34,6 @@ function(
 	date,
 	locale,
 	query,
-	metrics,
 	SimpleColumnView,
 	template,
 	ColumnViewSecondarySheet){
