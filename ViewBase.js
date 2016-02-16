@@ -19,7 +19,7 @@ define([
 	"dijit/_WidgetBase",
 	"dojox/widget/_Invalidating",
 	"dojox/widget/Selection",
-	"dojox/calendar/time",
+	"./time",
 	"./StoreMixin",
 	"./StoreManager",
 	"./RendererManager"],

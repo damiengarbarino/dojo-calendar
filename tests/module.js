@@ -1,7 +1,7 @@
 define([
-	"dojox/calendar/tests/unitTest_TimeRanges",
-	"dojox/calendar/tests/unitTest_editing",
-	"dojox/calendar/tests/unitTest_Store",
-	"dojox/calendar/tests/unitTest_Time",
-	"dojox/calendar/tests/unitTest_proj"
+	"./unitTest_TimeRanges",
+	"./unitTest_editing",
+	"./unitTest_Store",
+	"./unitTest_Time",
+	"./unitTest_proj"
 ], 1);
