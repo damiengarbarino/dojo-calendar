@@ -217,9 +217,9 @@ define([
 
 		_setupDayRefresh: function(){
 			// Refresh the view when the current day changes.
-			var now = new Date();
-			var d = timeUtil.floor(now, "day", 1);
-			var d = this.dateModule.add(d, "day", 1);
+			var now = this.newDate(new Date());
+			var d = timeUtil.floor(now, "day", 1, this.dateClassObj);
+			var d = this.dateModule.add(d, "day", 1, this.dateClassObj);
 			// manages DST at 24h
 			if(d.getHours() == 23){
 				d = this.dateModule.add(d, "hour", 2); // go to 1am
