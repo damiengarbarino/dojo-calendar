@@ -281,8 +281,6 @@ _nls){
 
 		_currentViewIndex: -1,
 
-		views: null,
-
 		_calendar: "gregorian",
 
 		constructor: function(/*Object*/args){
@@ -1176,14 +1174,6 @@ _nls){
 				fadeFunc({node: node, duration: this.animationRangeDuration/2})
 			]).play();
 		},
-
-		// _animRangeOutDir: Boolean
-		//		Direction of the range animation when the view 'leaving' the screen.
-		//		Valid values are:
-		//		- null: auto value,
-		//		- "left": hides to left side (right in right to left).
-		//		- "right": hides to right side (left in right to left).
-		_animRangeOutDir: null,
 
 		// _animRangeInDir: Boolean
 		//		Direction of the range animation when the view 'entering' the screen.

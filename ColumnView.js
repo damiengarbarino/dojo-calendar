@@ -219,7 +219,7 @@ function(
 			}
 		},
 
-		_getHorizontalRendererAttr: function(){
+		_getHorizontalDecorationRendererAttr: function(){
 			if(this.secondarySheet){
 				return this.secondarySheet.get("horizontalDecorationRenderer");
 			}
