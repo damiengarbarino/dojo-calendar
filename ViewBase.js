@@ -359,7 +359,7 @@ define([
 			//		dojox.date.XXXX calendars are not supporting this method.
 			// date: Date
 			//		The date to test.
-			return locale.isWeekend(date);
+			return this.dateLocaleModule.isWeekend(date);
 		},
 
 		getWeekNumberLabel: function(date){
@@ -371,7 +371,7 @@ define([
 			if(date.toGregorian){
 				date = date.toGregorian();
 			}
-			return locale.format(date, {
+			return this.dateLocaleModule.format(date, {
 				selector: "date",
 				datePattern: "w"});
 		},
