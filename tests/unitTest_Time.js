@@ -1,5 +1,5 @@
-define(["doh", "../time", "dojo/date", "dojo/date/locale", "dojox/date/hebrew/Date", "dojox/date/hebrew", "dojox/date/hebrew/locale", "dojox/calendar/time"],
-	function(doh, time, date, dateLocale, hDate, h, hLocale, time){
+define(["doh", "../time", "dojo/date", "dojo/date/locale", "dojox/date/hebrew/Date", "dojox/date/hebrew", "dojox/date/hebrew/locale"],
+	function(doh, time, date, dateLocale, hDate, h, hLocale){
 	doh.register("tests.unitTest_Time", [
 		function test_decodeDate(doh){
 			var d = new Date(2009, 2, 20, 5, 27, 30, 0);

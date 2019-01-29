@@ -164,10 +164,6 @@ define([
 		// The listeners added by the view itself.
 		_viewHandles: null,
 
-		// doubleTapDelay: Integer
-		//		The maximum time amount in milliseconds between to touchstart events that trigger a double-tap event.
-		doubleTapDelay: 300,
-
 		constructor: function(/*Object*/ args){
 			args = args || {};
 
