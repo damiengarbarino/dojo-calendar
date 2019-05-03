@@ -1221,7 +1221,9 @@ function(
 
 			var rd = this.renderData;
 			var size = Math.ceil(renderData.hourSize / (60 / renderData.rowHeaderGridSlotDuration));
-			var d = new Date(2000, 0, 1, 0, 0, 0);
+			var d = this.newDate(new Date());
+			d.setFullYear(2000,0,1);
+			d.setHours(0,0,0,0);
 
 			query("tr", rowHeaderTable).forEach(function(tr, i){
 				var td = query("td", tr)[0];
