@@ -19,7 +19,7 @@ define([
 	"dijit/_WidgetBase",
 	"dojox/widget/_Invalidating",
 	"dojox/widget/Selection",
-	"dojox/calendar/time",
+	"./time",
 	"./StoreMixin",
 	"./StoreManager",
 	"./RendererManager"],
@@ -163,10 +163,6 @@ define([
 
 		// The listeners added by the view itself.
 		_viewHandles: null,
-
-		// doubleTapDelay: Integer
-		//		The maximum time amount in milliseconds between to touchstart events that trigger a double-tap event.
-		doubleTapDelay: 300,
 
 		constructor: function(/*Object*/ args){
 			args = args || {};
@@ -1813,7 +1809,7 @@ define([
 				}
 
 				// calendar needs an ID to work with
-				if(store.getIdentity(newItem) == undefined){
+				if(store.getIdentity(newItem) == null){
 					var id = "_tempId_" + (this._tempIdCount++);
 					newItem[store.idProperty] = id;
 					if(this._tempItemsMap == null){
@@ -2314,7 +2310,7 @@ define([
 
 				var s = this._getItemStoreStateObj(e.item);
 
-				if(s != null && s.state == "unstored"){
+				if(s != null && s.state === "unstored"){
 
 					if(e.completed){
 						// renderItemToItem cannot find the original data item
@@ -2340,7 +2336,7 @@ define([
 								id = res;
 							}
 
-							if(id != oldID){
+							if(id !== oldID){
 								this._removeRenderItem(oldID);
 							}
 						}));

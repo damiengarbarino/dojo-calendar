@@ -1,5 +1,5 @@
 define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
-	"dojox/calendar/_RendererMixin", "dojo/text!./templates/VerticalRenderer.html"],
+	"./_RendererMixin", "dojo/text!./templates/VerticalRenderer.html"],
 
 	function(declare, _WidgetBase, _TemplatedMixin, _RendererMixin, template){
 

@@ -123,10 +123,6 @@ function(
 		//		Length of the column labels. Valid values are "wide" or "abbr".
 		columnHeaderFormatLength: null,
 
-		// gridCellDatePattern: String
-		//		The date pattern of the cell labels. By default a custom function is used to compute the label.
-		gridCellDatePattern: null,
-
 		// roundToDay: [private] Boolean
 		roundToDay: true,
 
@@ -348,7 +344,7 @@ function(
 				return "";
 			}
 
-			if(this.gridCellPattern){
+			if(this.gridCellDatePattern){
 				return this.renderData.dateLocaleModule.format(d, {
 					selector: 'date',
 					datePattern: this.gridCellDatePattern
